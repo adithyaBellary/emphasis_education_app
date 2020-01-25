@@ -1,8 +1,0 @@
-{
-  "name": "emphasis_education_app",
-  "version": "1.0.0",
-  "main": "index.ts",
-  "repository": "git@github.com:adithyabellary/emphasis_education_app",
-  "author": "Adithya <adithya.bellary@gmail.com>",
-  "license": "MIT"
-}
