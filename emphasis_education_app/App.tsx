@@ -26,7 +26,9 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-declare var global: {HermesInternal: null | {}};
+declare var global: { HermesInternal: null | {} };
+
+const test = 'this should throw an error';
 
 const App = () => {
   return (
