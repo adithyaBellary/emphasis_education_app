@@ -28,8 +28,6 @@ import {
 
 declare var global: { HermesInternal: null | {} };
 
-const test = 'this should throw an error';
-
 const App = () => {
   return (
     <>
