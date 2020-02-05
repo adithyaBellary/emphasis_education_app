@@ -16,6 +16,7 @@ import {
   View,
   Text,
   StatusBar,
+  TouchableHighlight,
 } from 'react-native';
 
 import {
@@ -57,7 +58,9 @@ const App = () => {
               </Text>
             </View>
             <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>DEBUG</Text>
+              <TouchableHighlight>
+                <Text style={styles.sectionTitle}>DEBUG</Text>
+              </TouchableHighlight>
               <Text style={styles.sectionDescription}>
                 <DebugInstructions />
               </Text>
