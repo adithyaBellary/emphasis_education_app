@@ -53,8 +53,5 @@
       "<rootDir>/node_modules/"
     ],
     "cacheDirectory": ".jest/cache"
-  },
-  "presets": [
-    "@babel/preset-react"
-  ]
+  }
 }
