@@ -65,7 +65,7 @@ const App = () => {
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionTitle}>Learn More</Text>
               <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next!!!
+                Read the docs to discover what to do next DUDE
               </Text>
             </View>
             <LearnMoreLinks />
