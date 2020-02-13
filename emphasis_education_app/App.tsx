@@ -29,10 +29,6 @@ import {
 
 import styled from 'styled-components';
 
-const MyView = styled.View`
-  background: yellow;
-`
-
 declare var global: { HermesInternal: null | {} };
 
 const App = () => {
@@ -50,13 +46,13 @@ const App = () => {
             </View>
           )}
           <View style={styles.body}>
-            <MyView style={styles.sectionContainer}>
+            <View style={styles.sectionContainer}>
               <Text style={styles.sectionTitle}>Step One hundred</Text>
               <Text style={styles.sectionDescription}>
                 Edit <Text style={styles.highlight}>App.tsx</Text> to change
                 this screen and then come back to see your edits. like this one
               </Text>
-            </MyView>
+            </View>
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionTitle}>See Your Changes</Text>
               <Text style={styles.sectionDescription}>
