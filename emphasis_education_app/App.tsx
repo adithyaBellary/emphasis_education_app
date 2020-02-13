@@ -16,6 +16,7 @@ import {
   View,
   Text,
   StatusBar,
+  TouchableHighlight,
 } from 'react-native';
 
 import {
@@ -25,6 +26,8 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+
+import styled from 'styled-components';
 
 declare var global: { HermesInternal: null | {} };
 
@@ -44,7 +47,7 @@ const App = () => {
           )}
           <View style={styles.body}>
             <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
+              <Text style={styles.sectionTitle}>Step One hundred</Text>
               <Text style={styles.sectionDescription}>
                 Edit <Text style={styles.highlight}>App.tsx</Text> to change
                 this screen and then come back to see your edits. like this one
@@ -57,7 +60,9 @@ const App = () => {
               </Text>
             </View>
             <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>DEBUG</Text>
+              <TouchableHighlight>
+                <Text style={styles.sectionTitle}>DEBUG</Text>
+              </TouchableHighlight>
               <Text style={styles.sectionDescription}>
                 <DebugInstructions />
               </Text>
