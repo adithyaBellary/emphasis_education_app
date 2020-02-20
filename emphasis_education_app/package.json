@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@types/styled-components": "^4.4.3",
+    "aws-amplify": "^2.2.5",
+    "aws-amplify-react-native": "^3.2.2",
     "react": "16.9.0",
     "react-native": "0.61.5",
     "styled-components": "^5.0.1"
