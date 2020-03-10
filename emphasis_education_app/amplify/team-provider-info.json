@@ -1,15 +1,15 @@
 {
-    "dev": {
+    "env": {
         "awscloudformation": {
-            "AuthRoleName": "amplify-emphasiseducationapp-dev-154625-authRole",
-            "UnauthRoleArn": "arn:aws:iam::380091697319:role/amplify-emphasiseducationapp-dev-154625-unauthRole",
-            "AuthRoleArn": "arn:aws:iam::380091697319:role/amplify-emphasiseducationapp-dev-154625-authRole",
+            "AuthRoleName": "amplify-emphasiseducationapp-env-154236-authRole",
+            "UnauthRoleArn": "arn:aws:iam::380091697319:role/amplify-emphasiseducationapp-env-154236-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::380091697319:role/amplify-emphasiseducationapp-env-154236-authRole",
             "Region": "us-east-2",
-            "DeploymentBucketName": "amplify-emphasiseducationapp-dev-154625-deployment",
-            "UnauthRoleName": "amplify-emphasiseducationapp-dev-154625-unauthRole",
-            "StackName": "amplify-emphasiseducationapp-dev-154625",
-            "StackId": "arn:aws:cloudformation:us-east-2:380091697319:stack/amplify-emphasiseducationapp-dev-154625/a2e52a30-4217-11ea-b71f-0a569e9f7d94",
-            "AmplifyAppId": "d2v7v0iqw1nc61"
+            "DeploymentBucketName": "amplify-emphasiseducationapp-env-154236-deployment",
+            "UnauthRoleName": "amplify-emphasiseducationapp-env-154236-unauthRole",
+            "StackName": "amplify-emphasiseducationapp-env-154236",
+            "StackId": "arn:aws:cloudformation:us-east-2:380091697319:stack/amplify-emphasiseducationapp-env-154236/a46b3930-60bc-11ea-92a7-02d970724e3a",
+            "AmplifyAppId": "d1k4ocbgbrih5u"
         }
     }
 }

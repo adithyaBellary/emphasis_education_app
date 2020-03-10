@@ -27,8 +27,6 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import styled from 'styled-components';
-
 declare var global: { HermesInternal: null | {} };
 
 const App = () => {
