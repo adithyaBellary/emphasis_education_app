@@ -14,11 +14,13 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import Login from './src/components/screens/Login';
 
-// interface RootStackProps {
+type RootStackProps ={
+  Login: undefined;
+}
 
-// }
 // let us create the navigator
-// const nav = createStackNavigator();
+// const Navigation: any = createStackNavigator<RootStackProps>();
+
 
 
 const App = () => {
