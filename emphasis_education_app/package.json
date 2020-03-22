@@ -10,12 +10,15 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
+    "@types/react-navigation": "^3.4.0",
     "@types/styled-components": "^4.4.3",
     "apollo-server": "^2.11.0",
     "aws-amplify": "^2.2.5",
     "aws-amplify-react-native": "^3.2.2",
     "react": "16.9.0",
     "react-native": "0.61.5",
+    "react-native-gifted-chat": "^0.13.0",
+    "react-navigation": "^4.3.2",
     "styled-components": "^5.0.1"
   },
   "devDependencies": {
