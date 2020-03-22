@@ -9,14 +9,16 @@
  */
 
 import React from 'react';
-// import { createStackNavigator } from 'react-navigation'
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import Login from './src/components/screens/Login';
 
+// interface RootStackProps {
+
+// }
 // let us create the navigator
-// const nav = createStackNavigator({
-//   Login: { screen: Login }
-// });
+// const nav = createStackNavigator();
 
 
 const App = () => {

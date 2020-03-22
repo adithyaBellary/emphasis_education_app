@@ -47,7 +47,7 @@ const Login = () => (
     <TitleContain>
       <CenteredDiv>
         <TitleText>
-          Emphasis Education
+          Emphasis Education App
         </TitleText>
       </CenteredDiv>
     </TitleContain>
