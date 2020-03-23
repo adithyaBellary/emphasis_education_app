@@ -19,7 +19,7 @@ type RootStackProps ={
 }
 
 // let us create the navigator
-// const Navigation: any = createStackNavigator<RootStackProps>();
+const Navigation = createStackNavigator<RootStackProps>();
 
 
 
