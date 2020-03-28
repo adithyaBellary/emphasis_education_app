@@ -1,6 +1,6 @@
 import firebase from 'firebase';
 
-import { firebaseConfig } from './src/config/firebase';
+import { firebaseConfig } from './config/firebase';
 
 class FireBaseSvc {
   constructor() {
