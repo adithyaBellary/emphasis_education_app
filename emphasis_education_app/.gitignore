@@ -78,4 +78,4 @@ amplifyconfiguration.json
 amplify-gradle-config.json
 amplifyxc.config
 
-src/config/
+config/
