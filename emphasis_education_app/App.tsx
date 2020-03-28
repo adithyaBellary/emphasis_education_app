@@ -13,19 +13,49 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import Login from './src/components/screens/Login';
+import Welcome from './src/components/screens/Welcome';
+import Chat from './src/components/Chat';
 
-type RootStackProps ={
+
+// looks like i need to define all the routes here?
+// TODO figure out the typing here
+type RootStackProps = {
   Login: undefined;
+  Welcome: undefined;
+  Chat: undefined;
 }
 
 // let us create the navigator
-const Navigation = createStackNavigator<RootStackProps>();
-
-
+const stack = createStackNavigator<RootStackProps>();
 
 const App = () => {
   return (
-    <Login />
+    <>
+      <NavigationContainer>
+        <stack.Navigator initialRouteName='Login'>
+          <stack.Screen
+            name="Login"
+            component={Login}
+            options={{
+              title: '',
+              headerStyle: {
+                backgroundColor: 'white'
+              }
+            }}
+          />
+          <stack.Screen
+            name="Welcome"
+            component={Welcome}
+            options={{ title: '' }}
+          />
+          <stack.Screen
+            name="Chat"
+            component={Chat}
+            options={{ title: '' }}
+          />
+        </stack.Navigator>
+      </NavigationContainer>
+    </>
   );
 };
 

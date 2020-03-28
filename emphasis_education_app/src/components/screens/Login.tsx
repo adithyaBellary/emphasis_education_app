@@ -1,11 +1,15 @@
 import React from 'react';
+import firebase from 'firebase';
+
+import fireBaseSvc from '../../../FireBaseSvc';
 
 import {
   Alert,
   View,
   Text,
   SafeAreaView,
-  TouchableOpacity
+  TouchableOpacity,
+  TextInput
 } from 'react-native';
 
 import styled from 'styled-components';
@@ -42,8 +46,78 @@ const TitleContain = styled(View)`
   padding-top: 200px;
 `;
 
-const Login = () => (
-  <SafeAreaView>
+const MytextInput = styled(TextInput)`
+  border: black;
+  padding: 10px;
+`;
+
+interface ILoginProps {
+  // TODO type this shit
+  navigation: any;
+}
+
+interface ILoginState {
+  error: boolean;
+  userName: string;
+  password: string;
+}
+
+const ErrorText = styled(Text)`
+  color: red;
+  font-size: 16px;
+`;
+
+const Errorlogin: React.FC = () => (
+  <ErrorText>there was an issue logging in</ErrorText>
+);
+
+class Login extends React.Component<ILoginProps, ILoginState> {
+
+  constructor(props: ILoginProps) {
+    super(props);
+    this.state = {
+      error: false,
+      userName: 'test01@gmail.com',
+      password: 'test01'
+    }
+  }
+
+  onChangeUsername = (userName: string) => this.setState({ userName });
+  onChangePassword = (password: string) => this.setState({ password });
+
+  successLogin = () => {
+    console.log('log in was successful');
+    this.props.navigation.navigate(
+      'Chat',
+      // need to pass in props to the chat screen
+      {}
+    );
+  }
+
+  errorLogin = () => {
+    console.log('there was an issue logging in');
+    this.setState({ error: true })
+  }
+
+  // login with firebase
+  my_login = async () => {
+    console.log('we are logging in rn');
+    // need to add more fields prob
+    const user = {
+      email: this.state.userName,
+      password: this.state.password
+    }
+
+    const resp = fireBaseSvc.login(
+      user,
+      this.successLogin,
+      this.errorLogin
+    )
+  }
+
+  public render () {
+    return (
+      <SafeAreaView>
     <TitleContain>
       <CenteredDiv>
         <TitleText>
@@ -53,9 +127,23 @@ const Login = () => (
     </TitleContain>
     <PositionDiv>
       <CenteredDiv>
+        <MytextInput
+          placeholder='username'
+          value={this.state.userName}
+          onChangeText={this.onChangeUsername}
+        />
+        <MytextInput
+          placeholder='password'
+          value={this.state.password}
+          onChangeText={this.onChangePassword}
+        />
+        {this.state.error &&
+          <Errorlogin />
+        }
         <ButtonContainer>
           <MyButton
-            onPress={() => Alert.alert('run auth')}
+            // onPress={() => Alert.alert('run auth')}
+            onPress={this.my_login}
             >
             <MyButtonText>Login</MyButtonText>
           </MyButton>
@@ -74,9 +162,21 @@ const Login = () => (
             <MyButtonText>Forgot Password?</MyButtonText>
           </MyButton>
         </ButtonContainer>
+        <ButtonContainer>
+          <MyButton
+            // onPress={() => Alert.alert('take me home')}
+            // this is how we can navigate
+            onPress={() => this.props.navigation.navigate('Chat')}
+            >
+            <MyButtonText>go to the chat</MyButtonText>
+          </MyButton>
+        </ButtonContainer>
       </CenteredDiv>
     </PositionDiv>
   </SafeAreaView>
-);
+
+    )
+  }
+};
 
 export default Login;
