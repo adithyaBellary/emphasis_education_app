@@ -112,7 +112,7 @@ class FireBaseSvc {
       const message = {
         text,
         user,
-        createdAt: this.timeStamp
+        createdAt: this.timeStamp()
       };
       console.log('sending a message');
       this._ref().push(message);
