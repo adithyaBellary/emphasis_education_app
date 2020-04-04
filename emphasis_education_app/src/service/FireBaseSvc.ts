@@ -1,8 +1,11 @@
-import firebase from 'firebase';
-import uuid from 'uuid';
+// import firebase from 'firebase';
+const firebase = require('firebase');
+// import uuid from 'uuid';
+// const { uuid } = require('uuid');
 
-import { firebaseConfig } from '../../config/firebase';
-import { userType } from 'src/types/userType';
+// import { firebaseConfig } from '../../config/firebase';
+const { firebaseConfig } = require('../../config/firebase.ts');
+// import { userType } from 'src/types/userType';
 
 class FireBaseSvc {
   constructor() {
@@ -17,7 +20,7 @@ class FireBaseSvc {
   }
 
   // need to make sure that these users are present in the firebase database
-  login = async (user: userType, success_callback, error_callback) => {
+  login = async (user, success_callback, error_callback) => {
     console.log('logging in');
     const output = await firebase.auth().signInWithEmailAndPassword(
       user.email,
@@ -32,7 +35,7 @@ class FireBaseSvc {
 
   // TODO figure out typing for all this shit
   // might need to combine this firebase.User and my own userType
-  onAuthStateChanged = (user: firebase.User | null) => {
+  onAuthStateChanged = (user) => {
     if ( !user ) {
       try {
         this.login(
@@ -104,7 +107,7 @@ class FireBaseSvc {
   refOn = callBack => {
     this._ref()
       .limitToLast(20)
-      .on('child_added', (snapshot: any) => callBack(this.parse(snapshot)))
+      .on('child_added', (snapshot) => callBack(this.parse(snapshot)))
   }
 
   timeStamp() {
@@ -131,4 +134,5 @@ class FireBaseSvc {
 }
 
 const fireBaseSvc = new FireBaseSvc();
-export default fireBaseSvc;
+// export default fireBaseSvc;
+module.exports = fireBaseSvc;

@@ -1,7 +1,7 @@
-// const { gql } = require('react-apollo');
-import { gql } from 'apollo-server';
+// const { gql } = require('apollo-server');
+// import { gql } from 'apollo-server';
 
-export const typeDefs = gql`
+const typeDefs = gql`
   type Query {
     getMessage(id: ID): message
     # gotta work on this me query
@@ -75,4 +75,4 @@ export const typeDefs = gql`
 
 `;
 
-// module.exports = typeDefs;
+module.exports = typeDefs;
