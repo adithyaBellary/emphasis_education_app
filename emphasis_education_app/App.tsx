@@ -12,22 +12,28 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import Login from './src/components/screens/Login';
+import Login from './src/components/Login';
 import Welcome from './src/components/screens/Welcome';
 import Chat from './src/components/Chat';
 
 
 // looks like i need to define all the routes here?
-// TODO figure out the typing here
+// TODO add typing that each route needs
 type RootStackProps = {
   Login: undefined;
   Welcome: undefined;
-  Chat: undefined;
+  Chat: {
+    name: string,
+    email: string
+  };
+  ChatPicker: undefined;
 }
 
 // let us create the navigator
 const stack = createStackNavigator<RootStackProps>();
 
+// TODO might need to wrap this all in an
+// <ApolloProvider /> tag so that everything can access graphQL
 const App = () => {
   return (
     <>

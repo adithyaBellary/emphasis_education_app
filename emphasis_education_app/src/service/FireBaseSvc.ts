@@ -1,7 +1,8 @@
 import firebase from 'firebase';
 import uuid from 'uuid';
 
-import { firebaseConfig } from './config/firebase';
+import { firebaseConfig } from '../../config/firebase';
+import { userType } from 'src/types/userType';
 
 class FireBaseSvc {
   constructor() {
@@ -13,11 +14,10 @@ class FireBaseSvc {
     // }
     firebase.initializeApp(firebaseConfig);
     console.log('we are initializing');
-    console.log('num apps: ' + firebase.app.length);
   }
 
   // need to make sure that these users are present in the firebase database
-  login = async (user, success_callback, error_callback) => {
+  login = async (user: userType, success_callback, error_callback) => {
     console.log('logging in');
     const output = await firebase.auth().signInWithEmailAndPassword(
       user.email,
@@ -31,7 +31,8 @@ class FireBaseSvc {
   }
 
   // TODO figure out typing for all this shit
-  onAuthStateChanged = user => {
+  // might need to combine this firebase.User and my own userType
+  onAuthStateChanged = (user: firebase.User | null) => {
     if ( !user ) {
       try {
         this.login(
@@ -48,7 +49,7 @@ class FireBaseSvc {
   }
 
   // TODO type this shit
-  onLogout = user => {
+  onLogout = () => {
     firebase.auth().signOut().then(() => {
       console.log('sign out is successful')
     }).catch((e) => {
@@ -68,15 +69,12 @@ class FireBaseSvc {
     }
   }
 
-  // _ref () {
-  //   return firebase.database().ref('Messages');
-  // }
-
   _ref() {
     return firebase.database().ref('Messages');
   }
 
   // TODO type this shit
+  // define typing of the snapshot
   parse = snapshot => {
     const { timestamp: numberStamp, text, user } = snapshot.val();
     const { key: id } = snapshot;
@@ -93,6 +91,13 @@ class FireBaseSvc {
     };
 
     return message;
+  }
+
+  get_stuff() {
+    this._ref()
+    .on('value', snapshot => {
+      return snapshot.val()
+    })
   }
 
   // need to know more about this function
@@ -116,6 +121,7 @@ class FireBaseSvc {
       };
       console.log('sending a message');
       this._ref().push(message);
+      console.log('message was pushed');
     });
   }
 

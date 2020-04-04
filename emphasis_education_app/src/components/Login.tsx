@@ -1,6 +1,6 @@
 import React from 'react';
 
-import fireBaseSvc from '../../../FireBaseSvc';
+import fireBaseSvc from '../service/FireBaseSvc';
 
 import {
   Alert,
@@ -12,6 +12,8 @@ import {
 } from 'react-native';
 
 import styled from 'styled-components';
+
+import { userType } from '../types/userType';
 
 const MyButton = styled(TouchableOpacity)`
   background-color: lightskyblue;
@@ -58,6 +60,7 @@ interface ILoginProps {
 interface ILoginState {
   error: boolean;
   userName: string;
+  email: string;
   password: string;
 }
 
@@ -77,6 +80,7 @@ class Login extends React.Component<ILoginProps, ILoginState> {
     this.state = {
       error: false,
       userName: 'test01@gmail.com',
+      email: 'test_email@gmail.com',
       password: 'test01'
     }
   }
@@ -89,7 +93,10 @@ class Login extends React.Component<ILoginProps, ILoginState> {
     this.props.navigation.navigate(
       'Chat',
       // need to pass in props to the chat screen
-      {}
+      {
+        name: this.state.userName,
+        email: this.state.email
+      }
     );
   }
 
@@ -102,7 +109,7 @@ class Login extends React.Component<ILoginProps, ILoginState> {
   my_login = async () => {
     console.log('we are logging in rn');
     // need to add more fields prob
-    const user = {
+    const user: userType = {
       email: this.state.userName,
       password: this.state.password
     }

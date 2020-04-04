@@ -1,15 +1,16 @@
 import React from 'react';
 import { GiftedChat } from 'react-native-gifted-chat';
+import firebase from 'firebase';
 
-import firebaseSvc from '../../FireBaseSvc';
+import firebaseSvc from '../service/FireBaseSvc';
 
 interface IChatProps {
   // TODO should the ID be of type number or ID
   id: number;
-  name: string;
+  userName: string;
   email: string;
-  subject: string;
   navigation: any;
+  route: any;
 }
 
 interface IChatState {
@@ -17,10 +18,6 @@ interface IChatState {
   messages: Array<any>;
 }
 
-const test_user = {
-  name: 'test user',
-  email: 'test@gmail.com'
-}
 class Chat extends React.Component<IChatProps, IChatState> {
   constructor (props: IChatProps) {
     super(props)
@@ -59,23 +56,24 @@ class Chat extends React.Component<IChatProps, IChatState> {
   }
 
   user() {
+    const { navigation, route } = this.props;
+
     return {
-      name: this.props.name,
-      email: this.props.email,
+      name: route.params.name,
+      email: route.params.email,
       id: firebaseSvc.uid(),
       _id: firebaseSvc.uid()
     };
   }
 
   public render () {
+
     return (
       <GiftedChat
         messages={this.state.messages}
         onSend={firebaseSvc.send}
-        user={{
-          _id: 1,
-          // name: 'another test'
-        }}
+        // we have a firebase.User if we need it
+        user={this.user()}
       />
     )
   }

@@ -4,6 +4,26 @@ import { gql } from 'apollo-server';
 export const typeDefs = gql`
   type Query {
     getMessage(id: ID): message
+    # gotta work on this me query
+    me: User
+  }
+
+  type Mutation {
+    # not sure about this
+    writeMessage(id: number): writeMessageResponse!
+  }
+
+  # good practice for a mutation to return whatever it is updating so
+  # that the client can update cache and stuff
+  type writeMessageResponse {
+    success: Boolean!
+    message: String!
+  }
+
+  type User {
+    name: String!
+    email: String!
+    password: String!
   }
 
   type student {
