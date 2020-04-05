@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 
-// import fireBaseSvc from '../service/FireBaseSvc';
 import {useMutation} from '@apollo/react-hooks';
-
 import {
   Alert,
   View,
@@ -11,10 +9,7 @@ import {
   TouchableOpacity,
   TextInput
 } from 'react-native';
-
 import styled from 'styled-components';
-
-import { userType } from '../types/userType';
 
 import Test_q from './test_q';
 import gql from 'graphql-tag';
@@ -91,19 +86,12 @@ const Login: React.FC<ILoginProps> = props => {
       // props are going to be what is returned from the mutation
       onCompleted: ({ login }) => {
         console.log(login);
-        // !!resp ? successLogin() : errorLogin()
-        if (login) {
-          successLogin()
-        } else {
-          errorLogin()
-        }
+        login ? successLogin() : errorLogin()
       }
     }
   )
 
   if (error) console.log('ERROR');
-
-  // console.log(data);
 
   const onChangeUsername = (userName: string) => setState({
     ...curState,
@@ -134,27 +122,15 @@ const Login: React.FC<ILoginProps> = props => {
     })
   }
 
-  // login with firebase
   const my_login = () => {
     console.log('we are logging in rn');
-    // need to add more fields prob
-    // const user: userType = {
-    //   email: curState.userName,
-    //   password: curState.password
-    // }
-
-    // const resp = fireBaseSvc.login(
-    //   user,
-    //   successLogin,
-    //   errorLogin
-    // )
 
     doLogin({
       variables: {
         email: curState.userName,
         password: curState.password,
       }
-    }).then((res) => console.log(res))
+    })
   }
     return (
       <SafeAreaView>
@@ -182,12 +158,6 @@ const Login: React.FC<ILoginProps> = props => {
         }
         <ButtonContainer>
           <MyButton
-            // onPress={() => doLogin({
-            //   variables: {
-            //     email: curState.userName,
-            //     password: curState.password
-            //   }
-            // })}
             onPress={my_login}
             >
             <MyButtonText>Login</MyButtonText>
