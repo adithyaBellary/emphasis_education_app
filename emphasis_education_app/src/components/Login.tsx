@@ -15,6 +15,8 @@ import styled from 'styled-components';
 
 import { userType } from '../types/userType';
 
+import Test_q from './test_q';
+
 const MyButton = styled(TouchableOpacity)`
   background-color: lightskyblue;
   width: 100px;
@@ -161,13 +163,17 @@ class Login extends React.Component<ILoginProps, ILoginState> {
             <MyButtonText>First time user?</MyButtonText>
           </MyButton>
         </ButtonContainer>
-        <ButtonContainer>
+        {/* <ButtonContainer>
           <MyButton
             onPress={() => Alert.alert('run forgot password')}
             >
             <MyButtonText>Forgot Password?</MyButtonText>
           </MyButton>
-        </ButtonContainer>
+        </ButtonContainer> */}
+        <Test_q />
+        {/* <Text>
+          {Test_q(}
+        </Text> */}
         <ButtonContainer>
           <MyButton
             // onPress={() => Alert.alert('take me home')}
