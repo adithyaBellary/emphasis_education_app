@@ -16,17 +16,18 @@ const resolvers = {
     login: (_, {email, password}, { dataSources }) => {
       console.log('we in the mutation')
       console.log(dataSources)
-      dataSources.f.login(
+      // let res: boolean = false;
+      const res: boolean = dataSources.f.login(
         {
           email,
           password
         },
-        () => console.log('success'),
-        () => console.log('fail')
+        // () => res = true,
+        // () => res = false
         // success_callback,
         // error_callback
       )
-      return 'done logging in???'
+      return res
     }
   }
 }

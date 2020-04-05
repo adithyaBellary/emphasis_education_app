@@ -13,14 +13,17 @@ class dataSource extends RESTDataSource {
     console.log(resp);
   }
 
-  async login(user, success_callback, error_callback) {
+  async login(user) {
     console.log(user)
+    let res: boolean = true;
     await firebaseSvc.login(
       user,
-      success_callback,
-      error_callback
+      () => res = true,
+      () => res = false
     )
     console.log('in the data source');
+    console.log(res);
+    return res
   }
 }
 

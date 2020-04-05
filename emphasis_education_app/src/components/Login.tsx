@@ -89,7 +89,15 @@ const Login: React.FC<ILoginProps> = props => {
     LOGIN,
     {
       // props are going to be what is returned from the mutation
-      onCompleted: (props) => console.log(props)
+      onCompleted: ({ login }) => {
+        console.log(login);
+        // !!resp ? successLogin() : errorLogin()
+        if (login) {
+          successLogin()
+        } else {
+          errorLogin()
+        }
+      }
     }
   )
 
@@ -145,9 +153,8 @@ const Login: React.FC<ILoginProps> = props => {
       variables: {
         email: curState.userName,
         password: curState.password,
-        // success
       }
-    })
+    }).then((res) => console.log(res))
   }
     return (
       <SafeAreaView>
@@ -177,7 +184,7 @@ const Login: React.FC<ILoginProps> = props => {
           <MyButton
             // onPress={() => doLogin({
             //   variables: {
-            //     email: curState.email,
+            //     email: curState.userName,
             //     password: curState.password
             //   }
             // })}

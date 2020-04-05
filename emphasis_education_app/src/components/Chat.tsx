@@ -83,11 +83,16 @@ const Chat: React.FC<IChatProps> = props => {
   const user = () => {
     const { navigation, route } = props;
 
+    // not sure what the type of these ids need to be
+    const test: number = 1
+
     return {
       name: route.params.name,
       email: route.params.email,
-      id: firebaseSvc.uid(),
-      _id: firebaseSvc.uid()
+      // id: firebaseSvc.uid(),
+      // _id: firebaseSvc.uid()
+      id: test,
+      _id: test
     };
   }
   return (
