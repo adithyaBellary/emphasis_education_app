@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import fireBaseSvc from '../service/FireBaseSvc';
+// import fireBaseSvc from '../service/FireBaseSvc';
+import {useMutation} from '@apollo/react-hooks';
 
 import {
   Alert,
@@ -16,6 +17,7 @@ import styled from 'styled-components';
 import { userType } from '../types/userType';
 
 import Test_q from './test_q';
+import gql from 'graphql-tag';
 
 const MyButton = styled(TouchableOpacity)`
   background-color: lightskyblue;
@@ -59,13 +61,6 @@ interface ILoginProps {
   navigation: any;
 }
 
-interface ILoginState {
-  error: boolean;
-  userName: string;
-  email: string;
-  password: string;
-}
-
 const ErrorText = styled(Text)`
   color: red;
   font-size: 16px;
@@ -75,55 +70,85 @@ const Errorlogin: React.FC = () => (
   <ErrorText>there was an issue logging in</ErrorText>
 );
 
-class Login extends React.Component<ILoginProps, ILoginState> {
-
-  constructor(props: ILoginProps) {
-    super(props);
-    this.state = {
-      error: false,
-      userName: 'test01@gmail.com',
-      email: 'test_email@gmail.com',
-      password: 'test01'
-    }
+const LOGIN = gql`
+  mutation login($email: String!, $password: String!) {
+    login(email: $email, password: $password)
   }
+`;
 
-  onChangeUsername = (userName: string) => this.setState({ userName });
-  onChangePassword = (password: string) => this.setState({ password });
+const Login: React.FC<ILoginProps> = props => {
 
-  successLogin = () => {
+  const [curState, setState] = useState({
+    error: false,
+    userName: 'test01@gmail.com',
+    email: 'test_email@gmail.com',
+    password: 'test01',
+  })
+
+  const [doLogin, { loading, error }] = useMutation(
+    LOGIN,
+    {
+      // props are going to be what is returned from the mutation
+      onCompleted: (props) => console.log(props)
+    }
+  )
+
+  if (error) console.log('ERROR');
+
+  // console.log(data);
+
+  const onChangeUsername = (userName: string) => setState({
+    ...curState,
+    userName
+  });
+  const onChangePassword = (password: string) => setState({
+    ...curState,
+    password
+  });
+
+  const successLogin = () => {
     console.log('log in was successful');
-    this.props.navigation.navigate(
+    props.navigation.navigate(
       'Chat',
       // need to pass in props to the chat screen
       {
-        name: this.state.userName,
-        email: this.state.email
+        name: curState.userName,
+        email: curState.email
       }
     );
   }
 
-  errorLogin = () => {
+  const errorLogin = () => {
     console.log('there was an issue logging in');
-    this.setState({ error: true })
+    setState({
+      ...curState,
+      error: true
+    })
   }
 
   // login with firebase
-  my_login = async () => {
+  const my_login = () => {
     console.log('we are logging in rn');
     // need to add more fields prob
-    const user: userType = {
-      email: this.state.userName,
-      password: this.state.password
-    }
+    // const user: userType = {
+    //   email: curState.userName,
+    //   password: curState.password
+    // }
 
-    const resp = fireBaseSvc.login(
-      user,
-      this.successLogin,
-      this.errorLogin
-    )
+    // const resp = fireBaseSvc.login(
+    //   user,
+    //   successLogin,
+    //   errorLogin
+    // )
+
+    doLogin({
+      variables: {
+        email: curState.userName,
+        password: curState.password,
+        // success
+      }
+    })
   }
-
-  public render () {
     return (
       <SafeAreaView>
     <TitleContain>
@@ -137,21 +162,26 @@ class Login extends React.Component<ILoginProps, ILoginState> {
       <CenteredDiv>
         <MytextInput
           placeholder='username'
-          value={this.state.userName}
-          onChangeText={this.onChangeUsername}
+          value={curState.userName}
+          onChangeText={onChangeUsername}
         />
         <MytextInput
           placeholder='password'
-          value={this.state.password}
-          onChangeText={this.onChangePassword}
+          value={curState.password}
+          onChangeText={onChangePassword}
         />
-        {this.state.error &&
+        {curState.error &&
           <Errorlogin />
         }
         <ButtonContainer>
           <MyButton
-            // onPress={() => Alert.alert('run auth')}
-            onPress={this.my_login}
+            // onPress={() => doLogin({
+            //   variables: {
+            //     email: curState.email,
+            //     password: curState.password
+            //   }
+            // })}
+            onPress={my_login}
             >
             <MyButtonText>Login</MyButtonText>
           </MyButton>
@@ -178,7 +208,7 @@ class Login extends React.Component<ILoginProps, ILoginState> {
           <MyButton
             // onPress={() => Alert.alert('take me home')}
             // this is how we can navigate
-            onPress={() => this.props.navigation.navigate('Chat')}
+            onPress={() => props.navigation.navigate('Chat')}
             >
             <MyButtonText>go to the chat</MyButtonText>
           </MyButton>
@@ -189,6 +219,5 @@ class Login extends React.Component<ILoginProps, ILoginState> {
 
     )
   }
-};
 
 export default Login;

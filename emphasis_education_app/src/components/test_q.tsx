@@ -27,9 +27,9 @@ const test: React.FC = () => {
   if (!data) return <Text>no data dude</Text>
 
   // yuck dont like this
-  console.log(data["test_q"].name);
+  console.log(data.test_q.name);
 
-  return <Text>hey</Text>
+  return <Text>{data.test_q.name}</Text>
 };
 
 

@@ -13,11 +13,20 @@ const resolvers = {
   },
 
   Mutation: {
-    login: (_, { email, password }, { dataSource }) => {
-      // this is where we need to use the firebase functions
-      dataSource.login(
-
+    login: (_, {email, password}, { dataSources }) => {
+      console.log('we in the mutation')
+      console.log(dataSources)
+      dataSources.f.login(
+        {
+          email,
+          password
+        },
+        () => console.log('success'),
+        () => console.log('fail')
+        // success_callback,
+        // error_callback
       )
+      return 'done logging in???'
     }
   }
 }

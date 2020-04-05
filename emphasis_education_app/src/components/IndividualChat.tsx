@@ -1,6 +1,7 @@
 import React from 'react';
 import {
-  TouchableOpacity
+  TouchableOpacity,
+  View
 } from 'react-native';
 
 interface IIndChatProps {
@@ -8,8 +9,12 @@ interface IIndChatProps {
   subject: string;
 }
 
-const IndChat: React.FC<IIndChatProps> = () => {
-
-}
+const IndChat: React.FC<IIndChatProps> = () => (
+  <>
+    <View>
+      hi
+    </View>
+  </>
+)
 
 export default IndChat;

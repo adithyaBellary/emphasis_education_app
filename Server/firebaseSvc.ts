@@ -125,3 +125,4 @@ class FireBaseSVC {
 const firebaseSvc = new FireBaseSVC();
 
 export default firebaseSvc;
+// export default FireBaseSVC;
