@@ -78,6 +78,7 @@ const Login: React.FC<ILoginProps> = props => {
     userName: 'test01@gmail.com',
     email: 'test_email@gmail.com',
     password: 'test01',
+    name: 'Test User'
   })
 
   const [doLogin, { loading, error }] = useMutation(
@@ -108,7 +109,7 @@ const Login: React.FC<ILoginProps> = props => {
       'Chat',
       // need to pass in props to the chat screen
       {
-        name: curState.userName,
+        name: curState.name,
         email: curState.email
       }
     );

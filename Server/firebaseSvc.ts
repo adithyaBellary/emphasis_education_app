@@ -2,6 +2,8 @@
 import * as firebase from 'firebase';
 
 import { firebaseConfig } from './config/firebase';
+
+const MESSAGES_REF: string = 'Messages';
 class FireBaseSVC {
   constructor() {
     firebase.initializeApp(firebaseConfig);
@@ -61,7 +63,7 @@ class FireBaseSVC {
   }
 
   _ref() {
-    return firebase.database().ref('Messages');
+    return firebase.database().ref(MESSAGES_REF);
   }
 
   // TODO type this shit
@@ -102,8 +104,10 @@ class FireBaseSVC {
     return firebase.database.ServerValue.TIMESTAMP;
   }
 
-  send = messages => {
-    messages.forEach(element => {
+  send = async messages => {
+    console.log('messages');
+    console.log(messages);
+    messages.forEach(async element => {
       const { text, user } = element;
       const message = {
         text,
@@ -111,7 +115,7 @@ class FireBaseSVC {
         createdAt: this.timeStamp()
       };
       console.log('sending a message');
-      this._ref().push(message);
+      await this._ref().push(message);
       console.log('message was pushed');
     });
   }
@@ -119,10 +123,7 @@ class FireBaseSVC {
   refOff () {
     this._ref().off();
   }
-
 }
 
 const firebaseSvc = new FireBaseSVC();
-
 export default firebaseSvc;
-// export default FireBaseSVC;

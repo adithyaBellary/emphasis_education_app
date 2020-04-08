@@ -1,14 +1,24 @@
 import { gql } from 'apollo-server';
 
 const typeDefs = gql`
-  type Query {
-    getMessages(id: ID): message
-    test_q: User!
+
+  input MessageTypeInput {
+    id: String!
+    text: String!
+    user: UserInput!
+    # createdAt: Date!
   }
 
-  type message {
+  input UserInput {
+    name: String!
+    email: String!
+  }
+
+  type MessageType {
     id: ID!
     text: String!
+    user: User!
+    # createdAt: Date!
   }
 
   type User {
@@ -16,9 +26,16 @@ const typeDefs = gql`
     email: String!
   }
 
+  type Query {
+    getMessages(id: ID): MessageType
+    test_q: User!
+  }
+
   type Mutation {
     login(email: String!, password: String!): Boolean
     signup(email: String!, password: String!): User
+
+    sendMessage(messages: [MessageTypeInput]): Boolean
   }
 `;
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { GiftedChat } from 'react-native-gifted-chat';
-
+import { useMutation } from '@apollo/react-hooks';
+import gql from 'graphql-tag'
 
 interface IChatProps {
   // TODO should the ID be of type number or ID
@@ -13,21 +14,23 @@ interface IChatProps {
 
 const Chat: React.FC<IChatProps> = props => {
 
+  const t: number = new Date().getTime();
+
   const messages =  [
     {
       _id: 1,
       text: 'this is a test message',
-      createdAt: new Date(),
+      createdAt: new Date().getTime(),
       user: {
         _id: 2,
         name: 'Test User',
-        avatar: 'https://placeimg.com/140/140/any'
+        // avatar: 'https://placeimg.com/140/140/any'
       }
     },
     {
       _id: 2,
       text: 'this is another test message',
-      createdAt: new Date(),
+      createdAt: new Date().getTime(),
       user: {
         _id: 3,
         name: 'diff Test User',
@@ -37,6 +40,21 @@ const Chat: React.FC<IChatProps> = props => {
   ]
 
   const [curState, setState] = useState({messages})
+
+  const SEND_MESSAGE = gql`
+    mutation sendMessage($messages: [MessageTypeInput]) {
+      sendMessage(messages: $messages)
+    }
+  `;
+
+  const [sendMessage, {loading, error}] = useMutation(
+    SEND_MESSAGE,
+    {
+      onCompleted: ({ props }) => console.log(props)
+    }
+  )
+
+  if (error) console.log('ERROR in CHAT rip');
 
   const user = () => {
     const { navigation, route } = props;
@@ -49,6 +67,8 @@ const Chat: React.FC<IChatProps> = props => {
       email: route.params.email,
       // id: firebaseSvc.uid(),
       // _id: firebaseSvc.uid()
+
+      // query for this shit
       id: test,
       _id: test
     };
@@ -56,7 +76,36 @@ const Chat: React.FC<IChatProps> = props => {
   return (
     <GiftedChat
       messages={curState.messages}
-      onSend={()=> console.log('send')}
+      // onSend={(props)=> console.log(props)}
+      // onSend={(props)=> {
+      //   sendMessage({
+      //     variables: {
+      //       messages: {
+      //         name: 'test',
+      //         email: 'test email'
+      //       }
+      //     }
+      //   })
+      // }}
+      onSend={(props) => {
+        sendMessage({
+          variables: {
+            messages: [
+              {
+                id: props[0]._id,
+                text: props[0].text,
+                // createdAt: props[0].createdAt,
+                user: {
+                  // _id: props[0].user._id,
+                  name: props[0].user.name,
+                  email: 'test_email'
+                }
+
+              }
+            ]
+          }
+      })
+      }}
       // we have a firebase.User if we need it
       user={user()}
     />

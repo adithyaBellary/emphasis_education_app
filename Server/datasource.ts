@@ -2,6 +2,8 @@
 import firebaseSvc from './firebaseSvc';
 import { RESTDataSource } from 'apollo-datasource-rest';
 
+import { messageType } from './types/messageType';
+
 class dataSource extends RESTDataSource {
   constructor() {
     super();
@@ -21,9 +23,15 @@ class dataSource extends RESTDataSource {
       () => res = true,
       () => res = false
     )
-    console.log('in the data source');
-    console.log(res);
+    // console.log('in the data source');
+    // console.log(res);
     return res
+  }
+
+  async sendMessages(message: [messageType]) {
+    console.log('in data source sending messages');
+    console.log(message)
+    await firebaseSvc.send(message)
   }
 }
 
