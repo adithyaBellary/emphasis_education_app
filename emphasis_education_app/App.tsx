@@ -9,115 +9,72 @@
  */
 
 import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-  TouchableHighlight,
-} from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { ApolloClient } from 'apollo-client';
+import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
+import { HttpLink } from 'apollo-link-http';
+import { ApolloProvider } from '@apollo/react-hooks';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import Login from './src/components/Login';
+import Welcome from './src/components/screens/Welcome';
+import Chat from './src/components/Chat';
 
-import styled from 'styled-components';
-
-declare var global: { HermesInternal: null | {} };
-
-const App = () => {
-  return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>ENGINE HERMES</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One hundred</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.tsx</Text> to change
-                this screen and then come back to see your edits. like this one
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <TouchableHighlight>
-                <Text style={styles.sectionTitle}>DEBUG</Text>
-              </TouchableHighlight>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next DUDE
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
-  );
-};
-
-const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
+const cache = new InMemoryCache();
+const link = new HttpLink({
+  uri: 'http://localhost:4000'
 });
+
+const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
+  cache,
+  link
+});
+
+
+// looks like i need to define all the routes here?
+// TODO add typing that each route needs
+type RootStackProps = {
+  Login: undefined;
+  Welcome: undefined;
+  Chat: {
+    name: string,
+    email: string
+  };
+  ChatPicker: undefined;
+}
+
+// let us create the navigator
+const stack = createStackNavigator<RootStackProps>();
+
+// TODO might need to wrap this all in an
+// <ApolloProvider /> tag so that everything can access graphQL
+const App = () => (
+  <ApolloProvider client={client}>
+    <NavigationContainer>
+      <stack.Navigator initialRouteName='Login'>
+        <stack.Screen
+          name="Login"
+          component={Login}
+          options={{
+            title: '',
+            headerStyle: {
+              backgroundColor: 'white'
+            }
+          }}
+        />
+        <stack.Screen
+          name="Welcome"
+          component={Welcome}
+          options={{ title: '' }}
+        />
+        <stack.Screen
+          name="Chat"
+          component={Chat}
+          options={{ title: '' }}
+        />
+      </stack.Navigator>
+    </NavigationContainer>
+  </ApolloProvider>
+);
 
 export default App;
