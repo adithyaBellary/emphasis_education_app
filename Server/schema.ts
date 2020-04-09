@@ -29,13 +29,17 @@ const typeDefs = gql`
   type Query {
     getMessages(id: ID): MessageType
     test_q: User!
+    # getting the UID
+    # getting the current user
   }
 
   type Mutation {
     login(email: String!, password: String!): Boolean
-    signup(email: String!, password: String!): User
 
     sendMessage(messages: [MessageTypeInput]): Boolean
+    # what needs to be written still
+    signup(email: String!, password: String!): User
+
   }
 `;
 

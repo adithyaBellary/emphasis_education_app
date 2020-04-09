@@ -50,7 +50,10 @@ const Chat: React.FC<IChatProps> = props => {
   const [sendMessage, {loading, error}] = useMutation(
     SEND_MESSAGE,
     {
-      onCompleted: ({ props }) => console.log(props)
+      onCompleted: ({ props }) => {
+        // this should update the chat UI?
+        console.log(props)
+      }
     }
   )
 
@@ -77,22 +80,12 @@ const Chat: React.FC<IChatProps> = props => {
     <GiftedChat
       messages={curState.messages}
       // onSend={(props)=> console.log(props)}
-      // onSend={(props)=> {
-      //   sendMessage({
-      //     variables: {
-      //       messages: {
-      //         name: 'test',
-      //         email: 'test email'
-      //       }
-      //     }
-      //   })
-      // }}
       onSend={(props) => {
         sendMessage({
           variables: {
             messages: [
               {
-                id: props[0]._id,
+                id: 'props[0]._id',
                 text: props[0].text,
                 // createdAt: props[0].createdAt,
                 user: {

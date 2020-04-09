@@ -14,9 +14,6 @@ const resolvers = {
 
   Mutation: {
     login: async (_, { email, password }, { dataSources }) => {
-      // console.log('we in the mutation')
-      // console.log(dataSources)
-      // let res: boolean = false;
       const res: boolean = await dataSources.f.login(
         {
           email,

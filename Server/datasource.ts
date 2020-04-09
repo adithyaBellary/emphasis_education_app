@@ -23,8 +23,6 @@ class dataSource extends RESTDataSource {
       () => res = true,
       () => res = false
     )
-    // console.log('in the data source');
-    // console.log(res);
     return res
   }
 
