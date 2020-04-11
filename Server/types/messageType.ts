@@ -6,7 +6,3 @@ export interface messageType {
   user: userType;
   // createdAt: Date;
 }
-
-// type test = {
-//   t: Date
-// }
