@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { GiftedChat } from 'react-native-gifted-chat';
 import { useMutation } from '@apollo/react-hooks';
 import gql from 'graphql-tag'
+import { cursorTo } from 'readline';
 
 interface IChatProps {
   // TODO should the ID be of type number or ID
@@ -52,12 +53,31 @@ const Chat: React.FC<IChatProps> = props => {
     {
       onCompleted: ({ props }) => {
         // this should update the chat UI?
-        console.log(props)
+        console.log(props);
+        setState({
+          messages: [
+            ...curState.messages,
+            {
+              // IDs need to be unique
+              _id: 400,
+              text: 'this is a confirmation',
+              createdAt: new Date().getTime(),
+              user: {
+                _id: 4,
+                name: 'Adithya Bellary'
+              }
+            }
+          ]
+        })
       }
     }
   )
 
   if (error) console.log('ERROR in CHAT rip');
+
+  useEffect(() => {
+    console.log('in use effect')
+  })
 
   const user = () => {
     const { navigation, route } = props;
@@ -79,13 +99,14 @@ const Chat: React.FC<IChatProps> = props => {
   return (
     <GiftedChat
       messages={curState.messages}
+      inverted={false}
       // onSend={(props)=> console.log(props)}
       onSend={(props) => {
         sendMessage({
           variables: {
             messages: [
               {
-                id: 'props[0]._id',
+                id: 'has to be a string',
                 text: props[0].text,
                 // createdAt: props[0].createdAt,
                 user: {
