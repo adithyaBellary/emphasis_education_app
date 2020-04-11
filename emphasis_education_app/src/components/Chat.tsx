@@ -3,10 +3,6 @@ import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 import { useMutation } from '@apollo/react-hooks';
 import gql from 'graphql-tag'
 import { cursorTo } from 'readline';
-import {
-  View,
-  Text
-} from 'react-native';
 
 import styled from 'styled-components';
 
@@ -32,7 +28,7 @@ const Chat: React.FC<IChatProps> = props => {
         _id: 2,
         name: 'Test User',
         // avatar: 'https://placeimg.com/140/140/any'
-      }
+      },
     },
     {
       _id: 2,
@@ -42,7 +38,7 @@ const Chat: React.FC<IChatProps> = props => {
         _id: 3,
         name: 'diff Test User',
         // avatar: 'https://placeimg.com/140/140/any'
-      }
+      },
     }
   ]
 
@@ -71,7 +67,7 @@ const Chat: React.FC<IChatProps> = props => {
               user: {
                 _id: 500,
                 name: 'Adithya Bellary'
-              }
+              },
             }
           ]
         })
@@ -150,11 +146,10 @@ const MyBubble = styled(Bubble)`
               {
                 id: 'has to be a string',
                 text: props[0].text,
-                // createdAt: props[0].createdAt,
                 user: {
                   // _id: 400,
                   name: props[0].user.name,
-                  email: 'test_email'
+                  email: 'test_email',
                 }
 
               }
