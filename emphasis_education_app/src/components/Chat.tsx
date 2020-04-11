@@ -2,9 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 import { useMutation } from '@apollo/react-hooks';
 import gql from 'graphql-tag'
-import { cursorTo } from 'readline';
-
-import styled from 'styled-components';
 
 interface IChatProps {
   // TODO should the ID be of type number or ID
@@ -54,7 +51,6 @@ const Chat: React.FC<IChatProps> = props => {
     SEND_MESSAGE,
     {
       onCompleted: ({ props }) => {
-        // this should update the chat UI?
         console.log(props);
         setState({
           messages: [
@@ -81,18 +77,6 @@ const Chat: React.FC<IChatProps> = props => {
     console.log('in use effect')
   })
 
-const MyBubble = styled(Bubble)`
-   {
-    background-color: red;
-  }
-`
-
-  const renderFn = () => (
-    <MyBubble>
-
-    </MyBubble>
-  )
-
 
   const user = () => {
     const { navigation, route } = props;
@@ -114,7 +98,6 @@ const MyBubble = styled(Bubble)`
     <GiftedChat
       messages={curState.messages}
       inverted={false}
-      // renderBubble={renderFn}
       renderBubble={(props) => (
         <Bubble
           {...props}
