@@ -87,7 +87,7 @@ const Login: React.FC<ILoginProps> = props => {
   });
 
   const successLogin = () => {
-    console.log('log in was successful');
+    // console.log('log in was successful');
     props.navigation.navigate(
       'Chat',
       // need to pass in props to the chat screen
@@ -99,7 +99,7 @@ const Login: React.FC<ILoginProps> = props => {
   }
 
   const errorLogin = () => {
-    console.log('there was an issue logging in');
+    // console.log('there was an issue logging in');
     setState({
       ...curState,
       error: true
@@ -107,7 +107,7 @@ const Login: React.FC<ILoginProps> = props => {
   }
 
   const my_login = () => {
-    console.log('we are logging in rn');
+    // console.log('we are logging in rn');
 
     doLogin({
       variables: {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag'
 
 interface IChatProps {
@@ -73,25 +73,33 @@ const Chat: React.FC<IChatProps> = props => {
 
   if (error) console.log('ERROR in CHAT rip');
 
-  useEffect(() => {
-    console.log('in use effect')
-  })
+  // useEffect(() => {
+  //   console.log('in use effect')
+  // })
 
+  const GET_ID = gql`
+    {
+      getUserID
+    }
+  `;
+
+  const getID = (): string => {
+    const { data } = useQuery(GET_ID);
+    return data;
+  }
 
   const user = () => {
     const { navigation, route } = props;
-
+    const { data } = useQuery(GET_ID);
+    // const data = getID();
+    console.log('the ID data: ', data);
     // not sure what the type of these ids need to be
-    const test: number = 500
+    // const test: number = 500
 
     return {
       name: route.params.name,
       email: route.params.email,
-      // id: firebaseSvc.uid(),
-      // _id: firebaseSvc.uid()
-
-      // query for this shit
-      _id: test
+      _id: data
     };
   }
   return (

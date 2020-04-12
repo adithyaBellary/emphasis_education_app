@@ -29,12 +29,12 @@ const typeDefs = gql`
   type Query {
     getMessages(id: ID): MessageType
     test_q: User!
+    getUserID: String
     # still have to write
 
     # make an enum for the classes?
     # sounds like a good idea because they should be a part of a predetermined list
     getClasses: [String]
-    # getting the UID
     # getting the current user
   }
 

@@ -9,6 +9,9 @@ const resolvers = {
         name: 'hi',
         email: 'hihi'
       }
+    },
+    getUserID: (_, __, { dataSources }) => {
+      return dataSources.f.getID();
     }
   },
 
