@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useSubscription } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import {
-  View, Alert
+  View, Alert, Text
 } from 'react-native'
 
 import {
@@ -16,6 +16,11 @@ const CREATE_USER = gql`
   }
 `;
 
+const SUB = gql`
+  subscription somethingChanged($test: String) {
+    somethingChanged(test: $test)
+  }
+`
 
 const CreateUser: React.FC = () => {
 
@@ -42,6 +47,20 @@ const CreateUser: React.FC = () => {
       }
     }
   )
+
+  const runSub = () => {
+    const { data, loading } = useSubscription(
+      SUB,
+      {
+        variables: {
+          test: 'hi'
+        }
+      }
+    )
+    // console.log('the sub data');
+    // console.log(data);
+    return data
+  }
 
   const createUser = () => {
     console.log('running create user mutation')
@@ -91,8 +110,9 @@ const CreateUser: React.FC = () => {
           </MyButtonText>
         </MyButton>
       </ButtonContainer>
-
-
+      <Text>
+        {runSub()}
+      </Text>
 
     </View>
   )

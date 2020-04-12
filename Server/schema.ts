@@ -45,7 +45,10 @@ const typeDefs = gql`
     sendMessage(messages: [MessageTypeInput]): Boolean
     # what needs to be written still
     createUser(email: String!, password: String!): Boolean
+  }
 
+  type Subscription {
+    somethingChanged: User
   }
 `;
 

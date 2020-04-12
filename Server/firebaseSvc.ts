@@ -1,5 +1,6 @@
 // import firebase from 'firebase';
 import * as firebase from 'firebase';
+import pubsub from './pubsub';
 
 import { firebaseConfig } from './config/firebase';
 
@@ -9,6 +10,7 @@ class FireBaseSVC {
   constructor() {
     firebase.initializeApp(firebaseConfig);
     console.log('we are initializing');
+    this.test_listen();
   }
 
   login = async (user, success_callback, error_callback) => {
@@ -121,7 +123,15 @@ class FireBaseSVC {
   refOn = callBack => {
     this._refMessage()
       .limitToLast(20)
-      .on('child_added', (snapshot) => callBack(this.parse(snapshot)))
+      .on('value', (snapshot) => callBack(this.parse(snapshot)))
+  }
+
+  test_listen() {
+    this._refMessage()
+    .on('child_added', () => {
+      pubsub.publish("somethingChanged", { somethingChanged: { name: 'nameeee', email: 'emaillll'} })
+      console.log('published to pubsub')
+    })
   }
 
   timeStamp() {
@@ -141,6 +151,7 @@ class FireBaseSVC {
       console.log('sending a message');
       await this._refMessage().push(message);
       console.log('message was pushed');
+      // this.test_listen();
     });
   }
 
@@ -150,6 +161,13 @@ class FireBaseSVC {
 
   genID() {
     return Math.round(Math.random() * 1000000);
+  }
+
+  async push_test() {
+    await this._refMessage().push({
+      name: 'name',
+      email: 'email'
+    })
   }
 }
 
