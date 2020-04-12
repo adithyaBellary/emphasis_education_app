@@ -50,6 +50,21 @@ class FireBaseSVC {
     })
   }
 
+  createUser = async (user) => {
+    firebase.auth()
+      .createUserWithEmailAndPassword(user.email, user.password)
+      .then(() => {
+        console.log('successfully created the user');
+        const newUser = firebase.auth().currentUser
+        newUser.updateProfile({ displayName: user.name})
+          .then(() => {
+            console.log('all done creating the user');
+          }), e => console.log('an error updating the display name');
+      }), e => {
+        console.log('there was an error creating the user', e);
+      }
+  }
+
   // figure out this uuid business
   uid () {
     const curUser = firebase.auth().currentUser;

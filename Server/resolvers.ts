@@ -23,9 +23,14 @@ const resolvers = {
       return res
     },
     sendMessage: async (_, { messages }, { dataSources }) => {
-      console.log('in resolver sending message');
+      // console.log('in resolver sending message');
       await dataSources.f.sendMessages(messages);
 
+      return true;
+    },
+    createUser: async (_, { email, password }, { dataSources }) => {
+      console.log('in resolver creaging user');
+      await dataSources.f.createUser({email, password});
       return true;
     }
 

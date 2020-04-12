@@ -29,6 +29,11 @@ const typeDefs = gql`
   type Query {
     getMessages(id: ID): MessageType
     test_q: User!
+    # still have to write
+
+    # make an enum for the classes?
+    # sounds like a good idea because they should be a part of a predetermined list
+    getClasses: [String]
     # getting the UID
     # getting the current user
   }
@@ -37,7 +42,7 @@ const typeDefs = gql`
     login(email: String!, password: String!): Boolean
     sendMessage(messages: [MessageTypeInput]): Boolean
     # what needs to be written still
-    signup(email: String!, password: String!): User
+    createUser(email: String!, password: String!): Boolean
 
   }
 `;

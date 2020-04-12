@@ -19,6 +19,7 @@ import { ApolloProvider } from '@apollo/react-hooks';
 import Login from './src/components/Login';
 import Welcome from './src/components/screens/Welcome';
 import Chat from './src/components/Chat';
+import CreateUser from './src/components/CreateUser';
 
 const cache = new InMemoryCache();
 const link = new HttpLink({
@@ -41,6 +42,8 @@ type RootStackProps = {
     email: string
   };
   ChatPicker: undefined;
+  CreateUser: undefined
+
 }
 
 // let us create the navigator
@@ -70,6 +73,11 @@ const App = () => (
         <stack.Screen
           name="Chat"
           component={Chat}
+          options={{ title: '' }}
+        />
+        <stack.Screen
+          name="CreateUser"
+          component={CreateUser}
           options={{ title: '' }}
         />
       </stack.Navigator>
