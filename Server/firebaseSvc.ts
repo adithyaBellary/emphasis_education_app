@@ -3,7 +3,8 @@ import * as firebase from 'firebase';
 
 import { firebaseConfig } from './config/firebase';
 
-const MESSAGES_REF: string = 'Messages';
+const MESSAGES_REFMessage: string = 'Messages';
+const User_REF_BASE: string = 'Users';
 class FireBaseSVC {
   constructor() {
     firebase.initializeApp(firebaseConfig);
@@ -23,7 +24,7 @@ class FireBaseSVC {
     firebase.auth().onAuthStateChanged(this.onAuthStateChanged);
   }
 
-  // TODO figure out typing for all this shit
+  // TODO figure out typing for all this
   // might need to combine this firebase.User and my own userType
   onAuthStateChanged = (user) => {
     if ( !user ) {
@@ -41,7 +42,6 @@ class FireBaseSVC {
     }
   }
 
-  // TODO type this shit
   onLogout = () => {
     firebase.auth().signOut().then(() => {
       console.log('sign out is successful')
@@ -77,8 +77,17 @@ class FireBaseSVC {
     }
   }
 
-  _ref() {
-    return firebase.database().ref(MESSAGES_REF);
+  _refMessage() {
+    return firebase.database().ref(MESSAGES_REFMessage);
+  }
+
+  _refUser(ID: number) {
+    return firebase.database().ref(`${User_REF_BASE}/${ID}`);
+    // return firebase.database().ref(`${User_REF_BASE}/adi@gmail`);
+  }
+
+  async pushUser(user, ID) {
+    await this._refUser(ID).push(user);
   }
 
   // TODO type this shit
@@ -102,7 +111,7 @@ class FireBaseSVC {
   }
 
   get_stuff() {
-    this._ref()
+    this._refMessage()
     .on('value', snapshot => {
       return snapshot.val()
     })
@@ -110,7 +119,7 @@ class FireBaseSVC {
 
   // need to know more about this function
   refOn = callBack => {
-    this._ref()
+    this._refMessage()
       .limitToLast(20)
       .on('child_added', (snapshot) => callBack(this.parse(snapshot)))
   }
@@ -130,13 +139,17 @@ class FireBaseSVC {
         createdAt: this.timeStamp()
       };
       console.log('sending a message');
-      await this._ref().push(message);
+      await this._refMessage().push(message);
       console.log('message was pushed');
     });
   }
 
   refOff () {
-    this._ref().off();
+    this._refMessage().off();
+  }
+
+  genID() {
+    return Math.round(Math.random() * 1000000);
   }
 }
 

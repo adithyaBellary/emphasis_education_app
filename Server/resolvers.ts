@@ -33,7 +33,9 @@ const resolvers = {
     },
     createUser: async (_, { email, password }, { dataSources }) => {
       console.log('in resolver creaging user');
+      // this adds the user to the firebase list of users
       await dataSources.f.createUser({email, password});
+      await dataSources.f.pushUser({email, password});
       return true;
     }
 

@@ -92,14 +92,14 @@ const Chat: React.FC<IChatProps> = props => {
     const { navigation, route } = props;
     const { data } = useQuery(GET_ID);
     // const data = getID();
-    console.log('the ID data: ', data);
+    // console.log('the ID data: ', data);
     // not sure what the type of these ids need to be
-    // const test: number = 500
+    const test: number = 500;
 
     return {
       name: route.params.name,
       email: route.params.email,
-      _id: data
+      _id: test
     };
   }
   return (

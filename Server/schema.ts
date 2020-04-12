@@ -36,6 +36,8 @@ const typeDefs = gql`
     # sounds like a good idea because they should be a part of a predetermined list
     getClasses: [String]
     # getting the current user
+    # get ID when we query on email
+    queryUserID(email: String): Int
   }
 
   type Mutation {

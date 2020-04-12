@@ -21,8 +21,8 @@ const CreateUser: React.FC = () => {
 
   const [curState, setState] = useState({
     name: 'test name',
-    email: 'test02@gmail.com',
-    password: 'test02',
+    email: 'test03@gmail.com',
+    password: 'test03',
     confirmPassword: 'test02',
     phone_number: '',
     classes: 'Math'
