@@ -44,6 +44,7 @@ const typeDefs = gql`
     login(email: String!, password: String!): Boolean
     sendMessage(messages: [MessageTypeInput]): Boolean
     # what needs to be written still
+    # do i need to write a mutation to
     createUser(email: String!, password: String!): Boolean
   }
 

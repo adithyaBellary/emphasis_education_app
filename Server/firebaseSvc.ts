@@ -127,6 +127,7 @@ class FireBaseSVC {
   }
 
   test_listen() {
+    console.log('listener is on')
     this._refMessage()
     .on('child_added', () => {
       pubsub.publish("somethingChanged", { somethingChanged: { name: 'nameeee', email: 'emaillll'} })

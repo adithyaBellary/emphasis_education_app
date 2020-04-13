@@ -6,13 +6,6 @@ import {
   Text
 } from 'react-native'
 
-// const SUB = gql`
-//   subscription somethingChanged($test: String) {
-//     somethingChanged(test: $test) {
-//       name
-//     }
-//   }
-// `
 const SUB = gql`
   subscription {
     somethingChanged {
@@ -31,8 +24,8 @@ const test_s: React.FC = () => {
     // }
   )
 
-  console.log('the sub data');
-  console.log('hi' || data.somethingChanged);
+  // console.log('the sub data');
+  // console.log('hi' || data.somethingChanged);
 
   if (error) {
     return <Text>error</Text>
