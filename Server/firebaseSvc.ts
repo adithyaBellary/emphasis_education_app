@@ -87,22 +87,16 @@ class FireBaseSVC {
 
   _refUser(ID: string) {
     return firebase.database().ref(`${User_REF_BASE}/${ID}`);
-    // return firebase.database().ref(`${User_REF_BASE}/adi@gmail`);
   }
 
-  async pushUser({ email, password}, hash) {
+  async pushUser({ email, password}, hash, userType) {
     const user_and_id = {
       email,
       password,
-      _id: hash
+      _id: hash,
+      userType: userType
     }
-    // create hash
     await this._refUser(hash).push(user_and_id);
-    // TODO figure out how to link email with ID
-    // await firebase.database().ref('UsersMap').push({
-    //   email,
-    //   _id: ID
-    // })
   }
 
   // TODO type this shit

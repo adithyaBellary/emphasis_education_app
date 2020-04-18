@@ -35,12 +35,9 @@ class dataSource extends RESTDataSource {
     await firebaseSvc.createUser(user);
   }
 
-  async pushUser(user) {
-    const ID: number = Math.round(Math.random() * 1000000);
-    console.log(MD5('hi').toString());
-    // const hash: string = MD5(user.email).toString();
-    const hash: string = 'hash'
-    await firebaseSvc.pushUser(user, hash);
+  async pushUser(user, userType) {
+    const hash: string = MD5(user.email).toString();
+    await firebaseSvc.pushUser(user, hash, userType);
   }
 
   getID() {

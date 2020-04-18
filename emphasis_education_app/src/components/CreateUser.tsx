@@ -11,8 +11,8 @@ import {
 } from './shared';
 
 const CREATE_USER = gql`
-  mutation createUser($email: String!, $password: String!) {
-    createUser(email: $email, password: $password)
+  mutation createUser($email: String!, $password: String!, $userType: Permission!) {
+    createUser(email: $email, password: $password, userType: $userType)
   }
 `;
 
@@ -28,8 +28,9 @@ const CreateUser: React.FC = () => {
     name: 'test name',
     email: 'test01@gmail.com',
     password: 'test01',
-    confirmPassword: 'test02',
+    confirmPassword: 'test01',
     phone_number: '',
+    userType: '',
     classes: 'Math'
   });
 
@@ -39,6 +40,7 @@ const CreateUser: React.FC = () => {
   const onPasswordChange = (password: string) => setState({ ...curState, password });
   const onPasswordConfirmChange= (confirmPassword: string) => setState({ ...curState, confirmPassword });
   const onClassChange = (classes: string) => setState({ ...curState, classes });
+  const onTypeChange = (userType: string) => setState({ ...curState, userType });
 
   const [createUserMut, { loading, error }] = useMutation(
     CREATE_USER,
@@ -68,7 +70,8 @@ const CreateUser: React.FC = () => {
     createUserMut({
       variables: {
         email: curState.email,
-        password: curState.password
+        password: curState.password,
+        userType: curState.userType
       }
     })
   }
@@ -96,6 +99,11 @@ const CreateUser: React.FC = () => {
         onChangeText={onPasswordConfirmChange}
       />
       <MytextInput
+        placeholder='user type'
+        value={curState.userType}
+        onChangeText={onTypeChange}
+      />
+      <MytextInput
         placeholder='classes'
         value={curState.classes}
         onChangeText={onClassChange}
@@ -103,7 +111,6 @@ const CreateUser: React.FC = () => {
 
       <ButtonContainer>
         <MyButton
-          // onPress={() => Alert.alert('run mutation')}
           onPress={createUser}
         >
           <MyButtonText>

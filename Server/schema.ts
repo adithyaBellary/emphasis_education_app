@@ -29,6 +29,13 @@ const typeDefs = gql`
     _id: String!
     email: String!
     password: String!
+    userType: Permission!
+  }
+
+  enum Permission {
+    Student
+    Tutor
+    Admin
   }
 
   type Query {
@@ -51,7 +58,7 @@ const typeDefs = gql`
     sendMessage(messages: [MessageTypeInput]): Boolean
     # what needs to be written still
     # do i need to write a mutation to
-    createUser(email: String!, password: String!): Boolean
+    createUser(email: String!, password: String!, userType: Permission!): Boolean
   }
 
   type Subscription {
