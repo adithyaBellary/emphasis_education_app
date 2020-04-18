@@ -18,7 +18,6 @@ const typeDefs = gql`
     id: ID!
     text: String!
     user: User!
-    # createdAt: Date!
   }
 
   type User {
@@ -26,10 +25,17 @@ const typeDefs = gql`
     email: String!
   }
 
+  type TestUser {
+    _id: String!
+    email: String!
+    password: String!
+  }
+
   type Query {
     getMessages(id: ID): MessageType
     test_q: User!
     getUserID: String
+    getUser(id: String!): TestUser
     # still have to write
 
     # make an enum for the classes?

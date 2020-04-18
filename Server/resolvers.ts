@@ -14,6 +14,9 @@ const resolvers = {
     },
     getUserID: (_, __, { dataSources }) => {
       return dataSources.f.getID();
+    },
+    getUser: (_, { id }, { dataSources }) => {
+      return dataSources.f.getUser(id);
     }
   },
 

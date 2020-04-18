@@ -26,13 +26,14 @@ const CreateUser: React.FC = () => {
 
   const [curState, setState] = useState({
     name: 'test name',
-    email: 'test03@gmail.com',
-    password: 'test03',
+    email: 'test01@gmail.com',
+    password: 'test01',
     confirmPassword: 'test02',
     phone_number: '',
     classes: 'Math'
   });
 
+  // TODO generalize input handler functions
   const onNameChange = (name: string) => setState({ ...curState, name });
   const onEmailChange = (email: string) => setState({ ...curState, email });
   const onPasswordChange = (password: string) => setState({ ...curState, password });
