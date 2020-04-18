@@ -9,6 +9,7 @@ import {
 import styled from 'styled-components';
 
 import Test_q from './test_q';
+import Test_s from './test_s';
 import gql from 'graphql-tag';
 
 import {
@@ -163,7 +164,8 @@ const Login: React.FC<ILoginProps> = props => {
             <MyButtonText>Forgot Password?</MyButtonText>
           </MyButton>
         </ButtonContainer> */}
-        <Test_q />
+        {/* <Test_q /> */}
+        <Test_s />
         {/* <Text>
           {Test_q(}
         </Text> */}

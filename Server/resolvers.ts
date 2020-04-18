@@ -1,4 +1,6 @@
 // fieldName: (parent, args, context, info) => data;
+import pubsub from './pubsub';
+
 const resolvers = {
   Query: {
     getMessages: (_, { id }, { dataSources }) => {
@@ -12,6 +14,9 @@ const resolvers = {
     },
     getUserID: (_, __, { dataSources }) => {
       return dataSources.f.getID();
+    },
+    getUser: (_, { id }, { dataSources }) => {
+      return dataSources.f.getUser(id);
     }
   },
 
@@ -38,7 +43,15 @@ const resolvers = {
       await dataSources.f.pushUser({email, password});
       return true;
     }
+  },
 
+  Subscription: {
+    somethingChanged: {
+      subscribe: () => {
+        console.log('in the sub resolver')
+        return pubsub.asyncIterator('somethingChanged')
+      },
+    }
   }
 }
 

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useSubscription } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import {
-  View, Alert
+  View, Alert, Text
 } from 'react-native'
 
 import {
@@ -16,18 +16,24 @@ const CREATE_USER = gql`
   }
 `;
 
+const SUB = gql`
+  subscription somethingChanged($test: String) {
+    somethingChanged(test: $test)
+  }
+`
 
 const CreateUser: React.FC = () => {
 
   const [curState, setState] = useState({
     name: 'test name',
-    email: 'test03@gmail.com',
-    password: 'test03',
+    email: 'test01@gmail.com',
+    password: 'test01',
     confirmPassword: 'test02',
     phone_number: '',
     classes: 'Math'
   });
 
+  // TODO generalize input handler functions
   const onNameChange = (name: string) => setState({ ...curState, name });
   const onEmailChange = (email: string) => setState({ ...curState, email });
   const onPasswordChange = (password: string) => setState({ ...curState, password });
@@ -42,6 +48,20 @@ const CreateUser: React.FC = () => {
       }
     }
   )
+
+  const runSub = () => {
+    const { data, loading } = useSubscription(
+      SUB,
+      {
+        variables: {
+          test: 'hi'
+        }
+      }
+    )
+    // console.log('the sub data');
+    // console.log(data);
+    return data
+  }
 
   const createUser = () => {
     console.log('running create user mutation')
@@ -91,8 +111,9 @@ const CreateUser: React.FC = () => {
           </MyButtonText>
         </MyButton>
       </ButtonContainer>
-
-
+      <Text>
+        {runSub()}
+      </Text>
 
     </View>
   )

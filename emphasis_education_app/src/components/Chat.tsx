@@ -22,7 +22,7 @@ const Chat: React.FC<IChatProps> = props => {
       text: 'this is a test message',
       createdAt: new Date().getTime(),
       user: {
-        _id: 2,
+        _id: "2",
         name: 'Test User',
         // avatar: 'https://placeimg.com/140/140/any'
       },
@@ -32,7 +32,7 @@ const Chat: React.FC<IChatProps> = props => {
       text: 'this is another test message',
       createdAt: new Date().getTime(),
       user: {
-        _id: 3,
+        _id: "3",
         name: 'diff Test User',
         // avatar: 'https://placeimg.com/140/140/any'
       },
@@ -61,7 +61,7 @@ const Chat: React.FC<IChatProps> = props => {
               text: 'this is a confirmation',
               createdAt: new Date().getTime(),
               user: {
-                _id: 500,
+                _id: "500",
                 name: 'Adithya Bellary'
               },
             }
@@ -94,7 +94,7 @@ const Chat: React.FC<IChatProps> = props => {
     // const data = getID();
     // console.log('the ID data: ', data);
     // not sure what the type of these ids need to be
-    const test: number = 500;
+    const test: string = "500";
 
     return {
       name: route.params.name,

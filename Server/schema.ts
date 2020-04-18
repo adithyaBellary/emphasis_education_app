@@ -18,7 +18,6 @@ const typeDefs = gql`
     id: ID!
     text: String!
     user: User!
-    # createdAt: Date!
   }
 
   type User {
@@ -26,10 +25,17 @@ const typeDefs = gql`
     email: String!
   }
 
+  type TestUser {
+    _id: String!
+    email: String!
+    password: String!
+  }
+
   type Query {
     getMessages(id: ID): MessageType
     test_q: User!
     getUserID: String
+    getUser(id: String!): TestUser
     # still have to write
 
     # make an enum for the classes?
@@ -44,8 +50,12 @@ const typeDefs = gql`
     login(email: String!, password: String!): Boolean
     sendMessage(messages: [MessageTypeInput]): Boolean
     # what needs to be written still
+    # do i need to write a mutation to
     createUser(email: String!, password: String!): Boolean
+  }
 
+  type Subscription {
+    somethingChanged: User
   }
 `;
 

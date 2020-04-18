@@ -1,6 +1,7 @@
 // import * as firebase from 'firebase';
 import firebaseSvc from './firebaseSvc';
 import { RESTDataSource } from 'apollo-datasource-rest';
+import { SHA256, MD5 } from "crypto-js"
 
 import { messageType } from './types/messageType';
 
@@ -27,23 +28,27 @@ class dataSource extends RESTDataSource {
   }
 
   async sendMessages(message: [messageType]) {
-    // console.log('in data source sending messages');
-    // console.log(message)
     await firebaseSvc.send(message)
   }
 
   async createUser(user) {
-    // console.log('in data source creating the user')
     await firebaseSvc.createUser(user);
   }
 
   async pushUser(user) {
     const ID: number = Math.round(Math.random() * 1000000);
-    await firebaseSvc.pushUser(user, ID);
+    console.log(MD5('hi').toString());
+    // const hash: string = MD5(user.email).toString();
+    const hash: string = 'hash'
+    await firebaseSvc.pushUser(user, hash);
   }
 
   getID() {
     return firebaseSvc.genID();
+  }
+
+  getUser(id: string) {
+    return firebaseSvc.getUser(id);
   }
 }
 

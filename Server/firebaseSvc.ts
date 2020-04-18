@@ -1,7 +1,10 @@
 // import firebase from 'firebase';
 import * as firebase from 'firebase';
+import pubsub from './pubsub';
 
 import { firebaseConfig } from './config/firebase';
+import { URLSearchParams } from 'url';
+import dataSource from './datasource';
 
 const MESSAGES_REFMessage: string = 'Messages';
 const User_REF_BASE: string = 'Users';
@@ -9,6 +12,7 @@ class FireBaseSVC {
   constructor() {
     firebase.initializeApp(firebaseConfig);
     console.log('we are initializing');
+    this.test_listen();
   }
 
   login = async (user, success_callback, error_callback) => {
@@ -81,13 +85,24 @@ class FireBaseSVC {
     return firebase.database().ref(MESSAGES_REFMessage);
   }
 
-  _refUser(ID: number) {
+  _refUser(ID: string) {
     return firebase.database().ref(`${User_REF_BASE}/${ID}`);
     // return firebase.database().ref(`${User_REF_BASE}/adi@gmail`);
   }
 
-  async pushUser(user, ID) {
-    await this._refUser(ID).push(user);
+  async pushUser({ email, password}, hash) {
+    const user_and_id = {
+      email,
+      password,
+      _id: hash
+    }
+    // create hash
+    await this._refUser(hash).push(user_and_id);
+    // TODO figure out how to link email with ID
+    // await firebase.database().ref('UsersMap').push({
+    //   email,
+    //   _id: ID
+    // })
   }
 
   // TODO type this shit
@@ -121,7 +136,16 @@ class FireBaseSVC {
   refOn = callBack => {
     this._refMessage()
       .limitToLast(20)
-      .on('child_added', (snapshot) => callBack(this.parse(snapshot)))
+      .on('value', (snapshot) => callBack(this.parse(snapshot)))
+  }
+
+  test_listen() {
+    console.log('listener is on')
+    this._refMessage()
+    .on('child_added', () => {
+      pubsub.publish("somethingChanged", { somethingChanged: { name: 'nameeee', email: 'emaillll'} })
+      console.log('published to pubsub')
+    })
   }
 
   timeStamp() {
@@ -141,6 +165,7 @@ class FireBaseSVC {
       console.log('sending a message');
       await this._refMessage().push(message);
       console.log('message was pushed');
+      // this.test_listen();
     });
   }
 
@@ -150,6 +175,21 @@ class FireBaseSVC {
 
   genID() {
     return Math.round(Math.random() * 1000000);
+  }
+
+  async push_test() {
+    await this._refMessage().push({
+      name: 'name',
+      email: 'email'
+    })
+  }
+
+  getUser(id: string) {
+    return firebase.database().ref(`Users/${id}`).once('value').then(snap => {
+      const val = snap.val()
+      const key = Object.keys(val)[0];
+      return val[key]
+    })
   }
 }
 
