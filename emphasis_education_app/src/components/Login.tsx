@@ -9,7 +9,6 @@ import {
 import styled from 'styled-components';
 import { SHA256, MD5 } from "crypto-js"
 
-import Test_q from './test_q';
 import Test_s from './test_s';
 import gql from 'graphql-tag';
 

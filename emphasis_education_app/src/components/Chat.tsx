@@ -62,7 +62,6 @@ const Chat: React.FC<IChatProps> = props => {
           messages: [
             ...curState.messages,
             {
-              // IDs need to be unique
               _id: props.sendMessage.MessageId,
               text: props.sendMessage.text,
               createdAt: new Date().getTime(),
@@ -91,31 +90,6 @@ const Chat: React.FC<IChatProps> = props => {
     email: props.route.params.email,
   }
 
-  const GET_ID = gql`
-    {
-      getUserID
-    }
-  `;
-
-  const getID = (): string => {
-    const { data } = useQuery(GET_ID);
-    return data;
-  }
-
-  const user = () => {
-    const { navigation, route } = props;
-    const { data } = useQuery(GET_ID);
-    // const data = getID();
-    // console.log('the ID data: ', data);
-    // not sure what the type of these ids need to be
-    const test: string = "500";
-
-    return {
-      name: route.params.name,
-      email: route.params.email,
-      _id: route.params._id
-    };
-  }
   return (
     <GiftedChat
       messages={curState.messages}
@@ -129,9 +103,6 @@ const Chat: React.FC<IChatProps> = props => {
             },
             left: {}
           }}
-          // user={{
-          //   _id:400
-          // }}
           wrapperStyle={{
             left: {
               backgroundColor: 'pink',
@@ -143,7 +114,6 @@ const Chat: React.FC<IChatProps> = props => {
         />
 
       )}
-      // onSend={(props)=> console.log(props)}
       onSend={(props) => {
         // console.log(props)
         sendMessage({
