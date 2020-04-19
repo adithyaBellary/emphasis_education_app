@@ -41,7 +41,10 @@ const Home: React.FC<IHomeProps> = ( props ) => {
             props.navigation.navigate(
               'ChatPicker',
               {
-                chatIDs: props.route.params.chatIDs
+                chatIDs: props.route.params.chatIDs,
+                name: props.route.params.name,
+                email: props.route.params.email,
+                _id: props.route.params._id
               }
             )
           }}

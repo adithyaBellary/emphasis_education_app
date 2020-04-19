@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag'
+// import console = require('console');
 
 interface IChatProps {
   // TODO should the ID be of type number or ID
@@ -13,6 +14,7 @@ interface IChatProps {
 }
 
 const Chat: React.FC<IChatProps> = props => {
+  console.log(props);
 
   const t: number = new Date().getTime();
 

@@ -9,7 +9,7 @@ import {
 import styled from 'styled-components';
 
 interface IChatPickerProps {
-  chats: Array<any>;
+  // chats: Array<any>;
   navigation: any;
   route: any;
 }
@@ -43,7 +43,19 @@ const ChatPicker: React.FC<IChatPickerProps> = props => {
         </IndChat>
         {props.route.params.chatIDs.map((sub) => {
           return (
-            <IndChat>
+            <IndChat
+              onPress={() => {
+                props.navigation.navigate(
+                  'Chat',
+                  {
+                    chatIDs: props.route.params.chatIDs,
+                    name: props.route.params.name,
+                    email: props.route.params.email,
+                    _id: props.route.params._id
+                  }
+                )
+              }}
+            >
               <Text>
                 {sub}
               </Text>
