@@ -6,16 +6,14 @@ import gql from 'graphql-tag'
 
 interface IChatProps {
   // TODO should the ID be of type number or ID
-  id: number;
-  userName: string;
-  email: string;
+  // id: number;
+  // userName: string;
+  // email: string;
   navigation: any;
   route: any;
 }
 
 const Chat: React.FC<IChatProps> = props => {
-  console.log(props);
-
   const t: number = new Date().getTime();
 
   const messages =  [
@@ -58,8 +56,6 @@ const Chat: React.FC<IChatProps> = props => {
     SEND_MESSAGE,
     {
       onCompleted: ( props ) => {
-        // console.log('inc lient, done sending message');
-        // console.log(props.sendMessage);
         setState({
           messages: [
             ...curState.messages,
