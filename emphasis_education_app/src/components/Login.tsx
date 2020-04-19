@@ -2,29 +2,22 @@ import React, { useState } from 'react';
 
 import {useMutation} from '@apollo/react-hooks';
 import {
-  Alert,
   View,
   Text,
   SafeAreaView,
-  TouchableOpacity,
-  TextInput
 } from 'react-native';
 import styled from 'styled-components';
+import { SHA256, MD5 } from "crypto-js"
 
-import Test_q from './test_q';
+import Test_s from './test_s';
 import gql from 'graphql-tag';
 
-const MyButton = styled(TouchableOpacity)`
-  background-color: lightskyblue;
-  width: 100px;
-  height: 20px;
-`;
-
-const MyButtonText = styled(Text)`
-  color: white;
-  text-align: center;
-  font-size: 12px;
-`;
+import {
+  MytextInput,
+  ButtonContainer,
+  MyButton,
+  MyButtonText
+} from './shared';
 
 const CenteredDiv = styled(View)`
   align-items: center;
@@ -34,21 +27,12 @@ const PositionDiv = styled(View)`
   padding-top: 200px;
 `;
 
-const ButtonContainer = styled(View)`
-  padding: 10px;
-`;
-
 const TitleText = styled(Text)`
   font-size: 20px;
 `;
 
 const TitleContain = styled(View)`
   padding-top: 200px;
-`;
-
-const MytextInput = styled(TextInput)`
-  border: black;
-  padding: 10px;
 `;
 
 interface ILoginProps {
@@ -103,20 +87,25 @@ const Login: React.FC<ILoginProps> = props => {
     password
   });
 
+  const getHash = (email: string): string => {
+    return MD5(email).toString();
+  }
+
   const successLogin = () => {
-    console.log('log in was successful');
+    // console.log('log in was successful');
     props.navigation.navigate(
       'Chat',
       // need to pass in props to the chat screen
       {
         name: curState.name,
-        email: curState.email
+        email: curState.email,
+        _id: getHash(curState.email)
       }
     );
   }
 
   const errorLogin = () => {
-    console.log('there was an issue logging in');
+    // console.log('there was an issue logging in');
     setState({
       ...curState,
       error: true
@@ -124,7 +113,7 @@ const Login: React.FC<ILoginProps> = props => {
   }
 
   const my_login = () => {
-    console.log('we are logging in rn');
+    // console.log('we are logging in rn');
 
     doLogin({
       variables: {
@@ -166,7 +155,9 @@ const Login: React.FC<ILoginProps> = props => {
         </ButtonContainer>
         <ButtonContainer>
           <MyButton
-            onPress={() => Alert.alert('go to enter the code')}
+            onPress={() => props.navigation.navigate(
+              'CreateUser'
+            )}
             >
             <MyButtonText>First time user?</MyButtonText>
           </MyButton>
@@ -178,7 +169,8 @@ const Login: React.FC<ILoginProps> = props => {
             <MyButtonText>Forgot Password?</MyButtonText>
           </MyButton>
         </ButtonContainer> */}
-        <Test_q />
+        {/* <Test_q /> */}
+        <Test_s />
         {/* <Text>
           {Test_q(}
         </Text> */}

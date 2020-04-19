@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag'
-import { cursorTo } from 'readline';
-
-import styled from 'styled-components';
 
 interface IChatProps {
   // TODO should the ID be of type number or ID
@@ -25,7 +22,7 @@ const Chat: React.FC<IChatProps> = props => {
       text: 'this is a test message',
       createdAt: new Date().getTime(),
       user: {
-        _id: 2,
+        _id: "2",
         name: 'Test User',
         // avatar: 'https://placeimg.com/140/140/any'
       },
@@ -35,7 +32,7 @@ const Chat: React.FC<IChatProps> = props => {
       text: 'this is another test message',
       createdAt: new Date().getTime(),
       user: {
-        _id: 3,
+        _id: "3",
         name: 'diff Test User',
         // avatar: 'https://placeimg.com/140/140/any'
       },
@@ -46,27 +43,31 @@ const Chat: React.FC<IChatProps> = props => {
 
   const SEND_MESSAGE = gql`
     mutation sendMessage($messages: [MessageTypeInput]) {
-      sendMessage(messages: $messages)
+      sendMessage(messages: $messages) {
+        _id
+        text
+        MessageId
+        name
+      }
     }
   `;
 
   const [sendMessage, {loading, error}] = useMutation(
     SEND_MESSAGE,
     {
-      onCompleted: ({ props }) => {
-        // this should update the chat UI?
-        console.log(props);
+      onCompleted: ( props ) => {
+        // console.log('inc lient, done sending message');
+        // console.log(props.sendMessage);
         setState({
           messages: [
             ...curState.messages,
             {
-              // IDs need to be unique
-              _id: 400,
-              text: 'this is a confirmation',
+              _id: props.sendMessage.MessageId,
+              text: props.sendMessage.text,
               createdAt: new Date().getTime(),
               user: {
-                _id: 500,
-                name: 'Adithya Bellary'
+                _id: props.sendMessage._id,
+                name: props.sendMessage.name
               },
             }
           ]
@@ -77,44 +78,22 @@ const Chat: React.FC<IChatProps> = props => {
 
   if (error) console.log('ERROR in CHAT rip');
 
-  useEffect(() => {
-    console.log('in use effect')
-  })
-
-const MyBubble = styled(Bubble)`
-   {
-    background-color: red;
+  interface IMessageUserType {
+    _id: string,
+    name: string,
+    email: string
   }
-`
-
-  const renderFn = () => (
-    <MyBubble>
-
-    </MyBubble>
-  )
-
-
-  const user = () => {
-    const { navigation, route } = props;
-
-    // not sure what the type of these ids need to be
-    const test: number = 500
-
-    return {
-      name: route.params.name,
-      email: route.params.email,
-      // id: firebaseSvc.uid(),
-      // _id: firebaseSvc.uid()
-
-      // query for this shit
-      _id: test
-    };
+  // create the user here in the useEffect
+  const curUser: IMessageUserType = {
+    _id: props.route.params._id,
+    name: props.route.params.name,
+    email: props.route.params.email,
   }
+
   return (
     <GiftedChat
       messages={curState.messages}
       inverted={false}
-      // renderBubble={renderFn}
       renderBubble={(props) => (
         <Bubble
           {...props}
@@ -123,9 +102,6 @@ const MyBubble = styled(Bubble)`
               color: 'yellow',
             },
             left: {}
-          }}
-          user={{
-            _id:400
           }}
           wrapperStyle={{
             left: {
@@ -138,27 +114,22 @@ const MyBubble = styled(Bubble)`
         />
 
       )}
-      // onSend={(props)=> console.log(props)}
       onSend={(props) => {
+        console.log(props)
         sendMessage({
           variables: {
             messages: [
               {
+                // this works, but i am not too sure about it
                 id: 'has to be a string',
                 text: props[0].text,
-                user: {
-                  // _id: 400,
-                  name: props[0].user.name,
-                  email: 'test_email',
-                }
-
+                user: curUser
               }
             ]
           }
       })
       }}
-      // we have a firebase.User if we need it
-      user={user()}
+      user={curUser}
     />
   )
 

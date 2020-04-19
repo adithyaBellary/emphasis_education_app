@@ -1,13 +1,18 @@
 // import firebase from 'firebase';
 import * as firebase from 'firebase';
+import pubsub from './pubsub';
 
 import { firebaseConfig } from './config/firebase';
+import { URLSearchParams } from 'url';
+import dataSource from './datasource';
 
-const MESSAGES_REF: string = 'Messages';
+const MESSAGES_REFMessage: string = 'Messages';
+const User_REF_BASE: string = 'Users';
 class FireBaseSVC {
   constructor() {
     firebase.initializeApp(firebaseConfig);
     console.log('we are initializing');
+    this.test_listen();
   }
 
   login = async (user, success_callback, error_callback) => {
@@ -23,7 +28,7 @@ class FireBaseSVC {
     firebase.auth().onAuthStateChanged(this.onAuthStateChanged);
   }
 
-  // TODO figure out typing for all this shit
+  // TODO figure out typing for all this
   // might need to combine this firebase.User and my own userType
   onAuthStateChanged = (user) => {
     if ( !user ) {
@@ -41,13 +46,27 @@ class FireBaseSVC {
     }
   }
 
-  // TODO type this shit
   onLogout = () => {
     firebase.auth().signOut().then(() => {
       console.log('sign out is successful')
     }).catch((e) => {
       console.log('an error happened when signing out')
     })
+  }
+
+  createUser = async (user) => {
+    firebase.auth()
+      .createUserWithEmailAndPassword(user.email, user.password)
+      .then(() => {
+        console.log('successfully created the user');
+        const newUser = firebase.auth().currentUser
+        newUser.updateProfile({ displayName: user.name})
+          .then(() => {
+            console.log('all done creating the user');
+          }), e => console.log('an error updating the display name');
+      }), e => {
+        console.log('there was an error creating the user', e);
+      }
   }
 
   // figure out this uuid business
@@ -62,8 +81,22 @@ class FireBaseSVC {
     }
   }
 
-  _ref() {
-    return firebase.database().ref(MESSAGES_REF);
+  _refMessage() {
+    return firebase.database().ref(MESSAGES_REFMessage);
+  }
+
+  _refUser(ID: string) {
+    return firebase.database().ref(`${User_REF_BASE}/${ID}`);
+  }
+
+  async pushUser({ email, password}, hash, userType) {
+    const user_and_id = {
+      email,
+      password,
+      _id: hash,
+      userType: userType
+    }
+    await this._refUser(hash).push(user_and_id);
   }
 
   // TODO type this shit
@@ -87,7 +120,7 @@ class FireBaseSVC {
   }
 
   get_stuff() {
-    this._ref()
+    this._refMessage()
     .on('value', snapshot => {
       return snapshot.val()
     })
@@ -95,9 +128,18 @@ class FireBaseSVC {
 
   // need to know more about this function
   refOn = callBack => {
-    this._ref()
+    this._refMessage()
       .limitToLast(20)
-      .on('child_added', (snapshot) => callBack(this.parse(snapshot)))
+      .on('value', (snapshot) => callBack(this.parse(snapshot)))
+  }
+
+  test_listen() {
+    console.log('listener is on')
+    this._refMessage()
+    .on('child_added', () => {
+      pubsub.publish("somethingChanged", { somethingChanged: { name: 'nameeee', email: 'emaillll'} })
+      console.log('published to pubsub')
+    })
   }
 
   timeStamp() {
@@ -107,21 +149,55 @@ class FireBaseSVC {
   send = async messages => {
     console.log('messages');
     console.log(messages);
+    let myId;
+    let myText;
+    let myMesID;
+    let myName;
     messages.forEach(async element => {
       const { text, user } = element;
+      myMesID = this.genID();
       const message = {
         text,
         user,
-        createdAt: this.timeStamp()
+        createdAt: this.timeStamp(),
+        messageID: myMesID
       };
+      myId = user._id;
+      myText = text;
+      myName = user.name;
       console.log('sending a message');
-      await this._ref().push(message);
+      await this._refMessage().push(message);
       console.log('message was pushed');
     });
+    return {
+      _id: myId,
+      text: myText,
+      name: myName,
+      MessageId: myMesID
+    }
   }
 
   refOff () {
-    this._ref().off();
+    this._refMessage().off();
+  }
+
+  genID() {
+    return Math.round(Math.random() * 10000000);
+  }
+
+  async push_test() {
+    await this._refMessage().push({
+      name: 'name',
+      email: 'email'
+    })
+  }
+
+  getUser(id: string) {
+    return firebase.database().ref(`Users/${id}`).once('value').then(snap => {
+      const val = snap.val()
+      const key = Object.keys(val)[0];
+      return val[key]
+    })
   }
 }
 

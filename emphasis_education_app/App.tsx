@@ -14,16 +14,39 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { ApolloClient } from 'apollo-client';
 import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
+import { WebSocketLink } from 'apollo-link-ws';
+import { split } from 'apollo-link';
 import { ApolloProvider } from '@apollo/react-hooks';
+import { getMainDefinition } from 'apollo-utilities';
+
 
 import Login from './src/components/Login';
 import Welcome from './src/components/screens/Welcome';
 import Chat from './src/components/Chat';
+import CreateUser from './src/components/CreateUser';
 
 const cache = new InMemoryCache();
-const link = new HttpLink({
+const httplink = new HttpLink({
   uri: 'http://localhost:4000'
 });
+
+const wsLink = new WebSocketLink({
+  uri: `ws://localhost:4000/graphql`,
+  options: {
+    reconnect: true,
+    timeout: 20000,
+    lazy: true
+  }
+});
+
+const link = split(({ query }) => {
+  const definition = getMainDefinition(query);
+  return (
+    definition.kind === 'OperationDefinition' &&
+      definition.operation === 'subscription'
+  )
+},wsLink,
+httplink)
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache,
@@ -38,9 +61,12 @@ type RootStackProps = {
   Welcome: undefined;
   Chat: {
     name: string,
-    email: string
+    email: string,
+    _id: string
   };
   ChatPicker: undefined;
+  CreateUser: undefined
+
 }
 
 // let us create the navigator
@@ -70,6 +96,11 @@ const App = () => (
         <stack.Screen
           name="Chat"
           component={Chat}
+          options={{ title: '' }}
+        />
+        <stack.Screen
+          name="CreateUser"
+          component={CreateUser}
           options={{ title: '' }}
         />
       </stack.Navigator>
