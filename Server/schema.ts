@@ -10,8 +10,10 @@ const typeDefs = gql`
   }
 
   type MessagePayload {
-    _id: String
-    test: String!
+    _id: String!
+    text: String!
+    MessageId: Int!
+    name: String!
   }
 
   input UserInput {
@@ -62,8 +64,8 @@ const typeDefs = gql`
 
   type Mutation {
     login(email: String!, password: String!): Boolean
-    sendMessage(messages: [MessageTypeInput]): Boolean
-    # sendMessage(messages: [MessageTypeInput]): MessagePayload
+    # sendMessage(messages: [MessageTypeInput]): Boolean
+    sendMessage(messages: [MessageTypeInput]): MessagePayload
     # what needs to be written still
     # do i need to write a mutation to
     createUser(email: String!, password: String!, userType: Permission!): Boolean

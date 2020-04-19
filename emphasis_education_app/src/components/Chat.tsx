@@ -43,26 +43,32 @@ const Chat: React.FC<IChatProps> = props => {
 
   const SEND_MESSAGE = gql`
     mutation sendMessage($messages: [MessageTypeInput]) {
-      sendMessage(messages: $messages)
+      sendMessage(messages: $messages) {
+        _id
+        text
+        MessageId
+        name
+      }
     }
   `;
 
   const [sendMessage, {loading, error}] = useMutation(
     SEND_MESSAGE,
     {
-      onCompleted: ({ props }) => {
-        // console.log(props);
+      onCompleted: ( props ) => {
+        console.log('inc lient, done sending message');
+        console.log(props.sendMessage);
         setState({
           messages: [
             ...curState.messages,
             {
               // IDs need to be unique
-              _id: 400,
-              text: 'this is a confirmation',
+              _id: props.sendMessage.MessageId,
+              text: props.sendMessage.text,
               createdAt: new Date().getTime(),
               user: {
-                _id: "500",
-                name: 'Adithya Bellary'
+                _id: props.sendMessage._id,
+                name: props.sendMessage.name
               },
             }
           ]
@@ -73,9 +79,17 @@ const Chat: React.FC<IChatProps> = props => {
 
   if (error) console.log('ERROR in CHAT rip');
 
-  // useEffect(() => {
-  //   console.log('in use effect')
-  // })
+  interface IMessageUserType {
+    _id: string,
+    name: string,
+    email: string
+  }
+  // create the user here in the useEffect
+  const curUser: IMessageUserType = {
+    _id: props.route.params._id,
+    name: props.route.params.name,
+    email: props.route.params.email,
+  }
 
   const GET_ID = gql`
     {
@@ -131,26 +145,20 @@ const Chat: React.FC<IChatProps> = props => {
       )}
       // onSend={(props)=> console.log(props)}
       onSend={(props) => {
-        console.log(props)
+        // console.log(props)
         sendMessage({
           variables: {
             messages: [
               {
                 id: 'has to be a string',
                 text: props[0].text,
-                user: {
-                  // _id: 400,
-                  name: props[0].user.name,
-                  email: 'test_email',
-                }
-
+                user: curUser
               }
             ]
           }
       })
       }}
-      // we have a firebase.User if we need it
-      user={user()}
+      user={curUser}
     />
   )
 

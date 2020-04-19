@@ -149,19 +149,32 @@ class FireBaseSVC {
   send = async messages => {
     console.log('messages');
     console.log(messages);
+    let myId;
+    let myText;
+    let myMesID;
+    let myName;
     messages.forEach(async element => {
       const { text, user } = element;
+      myMesID = this.genID();
       const message = {
         text,
         user,
         createdAt: this.timeStamp(),
-        // _id: this.genID()
+        messageID: myMesID
       };
+      myId = user._id;
+      myText = text;
+      myName = user.name;
       console.log('sending a message');
       await this._refMessage().push(message);
       console.log('message was pushed');
-      // return
     });
+    return {
+      _id: myId,
+      text: myText,
+      name: myName,
+      MessageId: myMesID
+    }
   }
 
   refOff () {
