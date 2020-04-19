@@ -21,8 +21,8 @@ import { getMainDefinition } from 'apollo-utilities';
 
 
 import Login from './src/components/Login';
-import Welcome from './src/components/screens/Welcome';
 import Chat from './src/components/Chat';
+import HomePage from './src/components/HomePage';
 import CreateUser from './src/components/CreateUser';
 import ChatPicker from './src/components/ChatPicker';
 
@@ -59,7 +59,7 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 // TODO add typing that each route needs
 type RootStackProps = {
   Login: undefined;
-  Welcome: undefined;
+  Home: undefined;
   Chat: {
     name: string,
     email: string,
@@ -89,8 +89,8 @@ const App = () => (
           }}
         />
         <stack.Screen
-          name="Welcome"
-          component={Welcome}
+          name="Home"
+          component={HomePage}
           options={{ title: '' }}
         />
         <stack.Screen

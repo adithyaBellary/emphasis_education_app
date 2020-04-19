@@ -96,7 +96,7 @@ const Login: React.FC<ILoginProps> = props => {
   const successLogin = (chatIDs: [string]) => {
     // console.log('log in was successful');
     props.navigation.navigate(
-      'Chat',
+      'Home',
       // need to pass in props to the chat screen
       {
         name: curState.name,

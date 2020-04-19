@@ -10,6 +10,8 @@ import styled from 'styled-components';
 
 interface IChatPickerProps {
   chats: Array<any>;
+  navigation: any;
+  route: any;
 }
 
 const IndChat = styled(TouchableOpacity)`
@@ -18,12 +20,12 @@ const IndChat = styled(TouchableOpacity)`
   height: 30px;
 `;
 
-const ChatPicker: React.FC<IChatPickerProps> = () => {
+const ChatPicker: React.FC<IChatPickerProps> = props => {
+  // add dropdown functionality
+  console.log(props.route.params.chatIDs);
   return (
     <>
       <SafeAreaView>
-        {/* would need to render as many chats as subjects */}
-        {/* need to add a map */}
         <IndChat
           onPress={() => Alert.alert('going to the chat')}
         >
@@ -39,6 +41,14 @@ const ChatPicker: React.FC<IChatPickerProps> = () => {
           History
         </Text>
         </IndChat>
+        {props.route.params.chatIDs.map((sub) => {
+          return (
+            <IndChat>
+              <Text>
+                {sub}
+              </Text>
+            </IndChat>)
+        })}
       </SafeAreaView>
     </>
   )

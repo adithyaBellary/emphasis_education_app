@@ -20,7 +20,6 @@ class FireBaseSVC {
   getChatId = async (user) => {
     const hash: string = MD5(user.email).toString();
     const curUser = await this.getUser(hash);
-    console.log('getting ids')
     return curUser.chatIDs;
   }
 
