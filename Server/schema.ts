@@ -47,6 +47,12 @@ const typeDefs = gql`
     Admin
   }
 
+  enum Classes {
+    Math
+    Science
+    History
+  }
+
   type Query {
     getMessages(id: ID): MessageType
     test_q: User!

@@ -56,8 +56,8 @@ const Chat: React.FC<IChatProps> = props => {
     SEND_MESSAGE,
     {
       onCompleted: ( props ) => {
-        console.log('inc lient, done sending message');
-        console.log(props.sendMessage);
+        // console.log('inc lient, done sending message');
+        // console.log(props.sendMessage);
         setState({
           messages: [
             ...curState.messages,
@@ -115,11 +115,12 @@ const Chat: React.FC<IChatProps> = props => {
 
       )}
       onSend={(props) => {
-        // console.log(props)
+        console.log(props)
         sendMessage({
           variables: {
             messages: [
               {
+                // this works, but i am not too sure about it
                 id: 'has to be a string',
                 text: props[0].text,
                 user: curUser
