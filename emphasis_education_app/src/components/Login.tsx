@@ -7,6 +7,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 import styled from 'styled-components';
+import { SHA256, MD5 } from "crypto-js"
 
 import Test_q from './test_q';
 import Test_s from './test_s';
@@ -87,6 +88,10 @@ const Login: React.FC<ILoginProps> = props => {
     password
   });
 
+  const getHash = (email: string): string => {
+    return MD5(email).toString();
+  }
+
   const successLogin = () => {
     // console.log('log in was successful');
     props.navigation.navigate(
@@ -94,7 +99,8 @@ const Login: React.FC<ILoginProps> = props => {
       // need to pass in props to the chat screen
       {
         name: curState.name,
-        email: curState.email
+        email: curState.email,
+        _id: getHash(curState.email)
       }
     );
   }

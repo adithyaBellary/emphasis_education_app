@@ -61,7 +61,8 @@ type RootStackProps = {
   Welcome: undefined;
   Chat: {
     name: string,
-    email: string
+    email: string,
+    _id: string
   };
   ChatPicker: undefined;
   CreateUser: undefined

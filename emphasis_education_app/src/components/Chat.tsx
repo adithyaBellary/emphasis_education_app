@@ -51,7 +51,7 @@ const Chat: React.FC<IChatProps> = props => {
     SEND_MESSAGE,
     {
       onCompleted: ({ props }) => {
-        console.log(props);
+        // console.log(props);
         setState({
           messages: [
             ...curState.messages,
@@ -99,7 +99,7 @@ const Chat: React.FC<IChatProps> = props => {
     return {
       name: route.params.name,
       email: route.params.email,
-      _id: test
+      _id: route.params._id
     };
   }
   return (
@@ -115,9 +115,9 @@ const Chat: React.FC<IChatProps> = props => {
             },
             left: {}
           }}
-          user={{
-            _id:400
-          }}
+          // user={{
+          //   _id:400
+          // }}
           wrapperStyle={{
             left: {
               backgroundColor: 'pink',
@@ -131,6 +131,7 @@ const Chat: React.FC<IChatProps> = props => {
       )}
       // onSend={(props)=> console.log(props)}
       onSend={(props) => {
+        console.log(props)
         sendMessage({
           variables: {
             messages: [

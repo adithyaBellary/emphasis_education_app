@@ -154,12 +154,13 @@ class FireBaseSVC {
       const message = {
         text,
         user,
-        createdAt: this.timeStamp()
+        createdAt: this.timeStamp(),
+        // _id: this.genID()
       };
       console.log('sending a message');
       await this._refMessage().push(message);
       console.log('message was pushed');
-      // this.test_listen();
+      // return
     });
   }
 
@@ -168,7 +169,7 @@ class FireBaseSVC {
   }
 
   genID() {
-    return Math.round(Math.random() * 1000000);
+    return Math.round(Math.random() * 10000000);
   }
 
   async push_test() {
