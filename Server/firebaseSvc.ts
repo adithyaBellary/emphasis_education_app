@@ -6,6 +6,8 @@ import { firebaseConfig } from './config/firebase';
 import { URLSearchParams } from 'url';
 import dataSource from './datasource';
 
+import { SHA256, MD5 } from "crypto-js"
+
 const MESSAGES_REFMessage: string = 'Messages';
 const User_REF_BASE: string = 'Users';
 class FireBaseSVC {
@@ -15,36 +17,53 @@ class FireBaseSVC {
     this.test_listen();
   }
 
-  login = async (user, success_callback, error_callback) => {
+  getChatId = async (user) => {
+    const hash: string = MD5(user.email).toString();
+    const curUser = await this.getUser(hash);
+    console.log('getting ids')
+    return curUser.chatIDs;
+  }
+
+  login = async (user) => {
     console.log('logging in');
+    let res: boolean;
     const output = await firebase.auth().signInWithEmailAndPassword(
       user.email,
       user.password
     )
-    .then(success_callback, error_callback);
+    .then(
+      () => res = true,
+      () => res = false
+    );
+    const chatIDs = await this.getChatId(user);
+    return {
+      res,
+      chatIDs
+    }
+
   }
 
-  observeAuth = () => {
-    firebase.auth().onAuthStateChanged(this.onAuthStateChanged);
-  }
+  // observeAuth = () => {
+  //   firebase.auth().onAuthStateChanged(this.onAuthStateChanged);
+  // }
 
   // TODO figure out typing for all this
   // might need to combine this firebase.User and my own userType
-  onAuthStateChanged = (user) => {
-    if ( !user ) {
-      try {
-        this.login(
-          user,
-          () => console.log('success'),
-          () => console.log('error')
-        );
-      } catch ({ message }) {
-        console.log('failed: ' + message);
-      }
-    } else {
-      console.log('reusing auth');
-    }
-  }
+  // onAuthStateChanged = (user) => {
+  //   if ( !user ) {
+  //     try {
+  //       this.login(
+  //         user,
+  //         () => console.log('success'),
+  //         () => console.log('error')
+  //       );
+  //     } catch ({ message }) {
+  //       console.log('failed: ' + message);
+  //     }
+  //   } else {
+  //     console.log('reusing auth');
+  //   }
+  // }
 
   onLogout = () => {
     firebase.auth().signOut().then(() => {
@@ -90,11 +109,14 @@ class FireBaseSVC {
   }
 
   async pushUser({ email, password}, hash, userType) {
+    // generate type for user
+    const testChatIds: Array<string> = ['test'];
     const user_and_id = {
       email,
       password,
       _id: hash,
-      userType: userType
+      userType: userType,
+      chatIDs: testChatIds
     }
     await this._refUser(hash).push(user_and_id);
   }
@@ -149,6 +171,7 @@ class FireBaseSVC {
   send = async messages => {
     console.log('messages');
     console.log(messages);
+    // TODO refactor all this rip
     let myId;
     let myText;
     let myMesID;
@@ -192,12 +215,15 @@ class FireBaseSVC {
     })
   }
 
-  getUser(id: string) {
-    return firebase.database().ref(`Users/${id}`).once('value').then(snap => {
-      const val = snap.val()
-      const key = Object.keys(val)[0];
-      return val[key]
-    })
+  async getUser(id: string) {
+    // need await!!
+    const user = await firebase.database().ref(`Users/${id}`).once('value')
+      .then(snap => {
+        const val = snap.val()
+        const key = Object.keys(val)[0];
+        return val[key]
+      })
+    return user;
   }
 }
 

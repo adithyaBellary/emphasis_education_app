@@ -51,7 +51,10 @@ const Errorlogin: React.FC = () => (
 
 const LOGIN = gql`
   mutation login($email: String!, $password: String!) {
-    login(email: $email, password: $password)
+    login(email: $email, password: $password) {
+      res
+      chatIDs
+    }
   }
 `;
 
@@ -69,9 +72,8 @@ const Login: React.FC<ILoginProps> = props => {
     LOGIN,
     {
       // props are going to be what is returned from the mutation
-      onCompleted: ({ login }) => {
-        console.log(login);
-        login ? successLogin() : errorLogin()
+      onCompleted: ( {login} ) => {
+        login.res ? successLogin(login.chatIDs) : errorLogin()
       }
     }
   )
@@ -91,7 +93,7 @@ const Login: React.FC<ILoginProps> = props => {
     return MD5(email).toString();
   }
 
-  const successLogin = () => {
+  const successLogin = (chatIDs: [string]) => {
     // console.log('log in was successful');
     props.navigation.navigate(
       'Chat',
@@ -99,7 +101,8 @@ const Login: React.FC<ILoginProps> = props => {
       {
         name: curState.name,
         email: curState.email,
-        _id: getHash(curState.email)
+        _id: getHash(curState.email),
+        chatIDs,
       }
     );
   }
@@ -178,9 +181,9 @@ const Login: React.FC<ILoginProps> = props => {
           <MyButton
             // onPress={() => Alert.alert('take me home')}
             // this is how we can navigate
-            onPress={() => props.navigation.navigate('Chat')}
+            onPress={() => props.navigation.navigate('ChatPicker')}
             >
-            <MyButtonText>go to the chat</MyButtonText>
+            <MyButtonText>go to the chat picker</MyButtonText>
           </MyButton>
         </ButtonContainer>
       </CenteredDiv>

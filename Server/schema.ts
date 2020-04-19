@@ -39,6 +39,11 @@ const typeDefs = gql`
     email: String!
     password: String!
     userType: Permission!
+    chatIDs: [String]!
+  }
+
+  type TestUserwChat {
+    chatIds: [String]!
   }
 
   enum Permission {
@@ -51,6 +56,11 @@ const typeDefs = gql`
     Math
     Science
     History
+  }
+
+  type LoginPayload {
+    res: Boolean!
+    chatIDs: [String]!
   }
 
   type Query {
@@ -66,15 +76,21 @@ const typeDefs = gql`
     # getting the current user
     # get ID when we query on email
     queryUserID(email: String): Int
+
+    # needs to be written
+    # get all classes
   }
 
   type Mutation {
-    login(email: String!, password: String!): Boolean
-    # sendMessage(messages: [MessageTypeInput]): Boolean
+    login(email: String!, password: String!): LoginPayload
     sendMessage(messages: [MessageTypeInput]): MessagePayload
-    # what needs to be written still
-    # do i need to write a mutation to
     createUser(email: String!, password: String!, userType: Permission!): Boolean
+
+    # needs to be written
+    # add chats to a student
+    # change classes
+    # change tutor
+
   }
 
   type Subscription {

@@ -24,6 +24,7 @@ import Login from './src/components/Login';
 import Welcome from './src/components/screens/Welcome';
 import Chat from './src/components/Chat';
 import CreateUser from './src/components/CreateUser';
+import ChatPicker from './src/components/ChatPicker';
 
 const cache = new InMemoryCache();
 const httplink = new HttpLink({
@@ -66,7 +67,6 @@ type RootStackProps = {
   };
   ChatPicker: undefined;
   CreateUser: undefined
-
 }
 
 // let us create the navigator
@@ -101,6 +101,11 @@ const App = () => (
         <stack.Screen
           name="CreateUser"
           component={CreateUser}
+          options={{ title: '' }}
+        />
+        <stack.Screen
+          name="ChatPicker"
+          component={ChatPicker}
           options={{ title: '' }}
         />
       </stack.Navigator>

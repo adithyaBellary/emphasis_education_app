@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   Alert,
-  View,
+  Text,
   SafeAreaView,
   TouchableOpacity
 } from 'react-native';
@@ -27,12 +27,17 @@ const ChatPicker: React.FC<IChatPickerProps> = () => {
         <IndChat
           onPress={() => Alert.alert('going to the chat')}
         >
-          SUbject 1
+          <Text>
+          Math
+          </Text>
+
         </IndChat>
         <IndChat
           onPress={() => Alert.alert('going to the chat')}
         >
-          SUbject 2
+        <Text>
+          History
+        </Text>
         </IndChat>
       </SafeAreaView>
     </>

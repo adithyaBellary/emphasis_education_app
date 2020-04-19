@@ -17,14 +17,8 @@ class dataSource extends RESTDataSource {
   }
 
   async login(user) {
-    console.log(user)
-    let res: boolean = true;
-    await firebaseSvc.login(
-      user,
-      () => res = true,
-      () => res = false
-    )
-    return res
+    const response = await firebaseSvc.login(user)
+    return response
   }
 
   async sendMessages(message: [messageType]) {

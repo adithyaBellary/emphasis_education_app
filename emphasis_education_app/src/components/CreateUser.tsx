@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useMutation } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import {
-  View,
+  View, Alert,
 } from 'react-native'
 
 import {
@@ -30,7 +30,7 @@ const CreateUser: React.FC = () => {
     password: 'test01',
     confirmPassword: 'test01',
     phone_number: '',
-    userType: '',
+    userType: 'Student',
     classes: 'Math'
   });
 
@@ -47,6 +47,7 @@ const CreateUser: React.FC = () => {
     {
       onCompleted: () => {
         console.log('we gucci');
+        Alert.alert('successfully created the user');
       }
     }
   )

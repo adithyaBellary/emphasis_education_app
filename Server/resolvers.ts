@@ -22,13 +22,13 @@ const resolvers = {
 
   Mutation: {
     login: async (_, { email, password }, { dataSources }) => {
-      const res: boolean = await dataSources.f.login(
+      const response = await dataSources.f.login(
         {
           email,
           password
         },
       )
-      return res
+      return response
     },
     sendMessage: async (_, { messages }, { dataSources }) => {
       // console.log('in resolver sending message');
