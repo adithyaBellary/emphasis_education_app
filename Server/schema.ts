@@ -6,7 +6,7 @@ const typeDefs = gql`
     id: String!
     text: String!
     user: UserInput!
-    chatIDs: String!
+    chatID: String!
   }
 
   type MessagePayload {

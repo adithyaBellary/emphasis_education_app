@@ -31,7 +31,7 @@ const resolvers = {
       return response
     },
     sendMessage: async (_, { messages }, { dataSources }) => {
-      // console.log('in resolver sending message');
+      console.log('in resolver sending message');
 
       return await dataSources.f.sendMessages(messages);
     },

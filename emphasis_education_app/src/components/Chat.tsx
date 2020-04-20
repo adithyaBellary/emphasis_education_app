@@ -112,7 +112,8 @@ const Chat: React.FC<IChatProps> = props => {
 
       )}
       onSend={(props) => {
-        console.log(props)
+        console.log(chatID)
+
         sendMessage({
           variables: {
             messages: [
