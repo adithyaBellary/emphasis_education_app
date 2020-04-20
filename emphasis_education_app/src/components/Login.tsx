@@ -72,7 +72,6 @@ const Login: React.FC<ILoginProps> = props => {
     LOGIN,
     {
       onCompleted: ( {login} ) => {
-        console.log('finished')
         login.res ? successLogin(login.chatIDs) : errorLogin()
       }
     }

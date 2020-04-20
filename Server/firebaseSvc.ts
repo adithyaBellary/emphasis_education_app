@@ -24,8 +24,7 @@ class FireBaseSVC {
   }
 
   login = async (user) => {
-    console.log('logging innnnnn');
-    console.log(user)
+    console.log('logging inn');
     let res: boolean;
     const output = await firebase.auth().signInWithEmailAndPassword(
       user.email,
@@ -36,7 +35,6 @@ class FireBaseSVC {
       () => res = false
     );
     const chatIDs = await this.getChatId(user);
-    console.log('hjere')
     return {
       res,
       chatIDs
