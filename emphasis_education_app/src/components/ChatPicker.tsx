@@ -48,7 +48,7 @@ const ChatPicker: React.FC<IChatPickerProps> = props => {
                 props.navigation.navigate(
                   'Chat',
                   {
-                    chatIDs: props.route.params.chatIDs,
+                    chatID: sub,
                     name: props.route.params.name,
                     email: props.route.params.email,
                     _id: props.route.params._id

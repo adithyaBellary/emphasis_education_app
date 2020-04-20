@@ -71,8 +71,8 @@ const Login: React.FC<ILoginProps> = props => {
   const [doLogin, { loading, error }] = useMutation(
     LOGIN,
     {
-      // props are going to be what is returned from the mutation
       onCompleted: ( {login} ) => {
+        console.log('finished')
         login.res ? successLogin(login.chatIDs) : errorLogin()
       }
     }

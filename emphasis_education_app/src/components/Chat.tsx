@@ -14,8 +14,6 @@ interface IChatProps {
 }
 
 const Chat: React.FC<IChatProps> = props => {
-  const t: number = new Date().getTime();
-
   const messages =  [
     {
       _id: 1,
@@ -40,6 +38,7 @@ const Chat: React.FC<IChatProps> = props => {
   ]
 
   const [curState, setState] = useState({messages})
+  const chatID: string = props.route.params.chatID;
 
   const SEND_MESSAGE = gql`
     mutation sendMessage($messages: [MessageTypeInput]) {
@@ -121,7 +120,8 @@ const Chat: React.FC<IChatProps> = props => {
                 // this works, but i am not too sure about it
                 id: 'has to be a string',
                 text: props[0].text,
-                user: curUser
+                user: curUser,
+                chatID: chatID
               }
             ]
           }

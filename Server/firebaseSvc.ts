@@ -8,7 +8,7 @@ import dataSource from './datasource';
 
 import { SHA256, MD5 } from "crypto-js"
 
-const MESSAGES_REFMessage: string = 'Messages';
+const MESSAGE_REF_BASE: string = 'Messages';
 const User_REF_BASE: string = 'Users';
 class FireBaseSVC {
   constructor() {
@@ -24,7 +24,8 @@ class FireBaseSVC {
   }
 
   login = async (user) => {
-    console.log('logging in');
+    console.log('logging innnnnn');
+    console.log(user)
     let res: boolean;
     const output = await firebase.auth().signInWithEmailAndPassword(
       user.email,
@@ -35,6 +36,7 @@ class FireBaseSVC {
       () => res = false
     );
     const chatIDs = await this.getChatId(user);
+    console.log('hjere')
     return {
       res,
       chatIDs
@@ -99,8 +101,8 @@ class FireBaseSVC {
     }
   }
 
-  _refMessage() {
-    return firebase.database().ref(MESSAGES_REFMessage);
+  _refMessage(chatPath: string) {
+    return firebase.database().ref(`${MESSAGE_REF_BASE}/${chatPath}`);
   }
 
   _refUser(ID: string) {
@@ -141,22 +143,22 @@ class FireBaseSVC {
   }
 
   get_stuff() {
-    this._refMessage()
+    this._refMessage('')
     .on('value', snapshot => {
       return snapshot.val()
     })
   }
 
   // need to know more about this function
-  refOn = callBack => {
-    this._refMessage()
-      .limitToLast(20)
-      .on('value', (snapshot) => callBack(this.parse(snapshot)))
-  }
+  // refOn = callBack => {
+  //   this._refMessage()
+  //     .limitToLast(20)
+  //     .on('value', (snapshot) => callBack(this.parse(snapshot)))
+  // }
 
   test_listen() {
     console.log('listener is on')
-    this._refMessage()
+    this._refMessage('')
     .on('child_added', () => {
       pubsub.publish("somethingChanged", { somethingChanged: { name: 'nameeee', email: 'emaillll'} })
       console.log('published to pubsub')
@@ -176,7 +178,7 @@ class FireBaseSVC {
     let myMesID;
     let myName;
     messages.forEach(async element => {
-      const { text, user } = element;
+      const { text, user, chatID } = element;
       myMesID = this.genID();
       const message = {
         text,
@@ -187,8 +189,9 @@ class FireBaseSVC {
       myId = user._id;
       myText = text;
       myName = user.name;
+      const hashChatID: string = MD5(chatID).toString();
       console.log('sending a message');
-      await this._refMessage().push(message);
+      await this._refMessage(hashChatID).push(message);
       console.log('message was pushed');
     });
     return {
@@ -200,15 +203,15 @@ class FireBaseSVC {
   }
 
   refOff () {
-    this._refMessage().off();
+    this._refMessage('').off();
   }
 
   genID() {
     return Math.round(Math.random() * 10000000);
   }
 
-  async push_test() {
-    await this._refMessage().push({
+  async push_test(chatPath: string) {
+    await this._refMessage(chatPath).push({
       name: 'name',
       email: 'email'
     })
