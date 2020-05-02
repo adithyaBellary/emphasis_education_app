@@ -209,7 +209,7 @@ class FireBaseSVC {
       text: myText,
       MessageId: myMesID,
       createdAt: myCreatedAt,
-      currentUser: myUser
+      user: myUser
     }
   }
 

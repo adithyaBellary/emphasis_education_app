@@ -6,9 +6,8 @@ import {
   TouchableOpacity,
   GestureResponderEvent
 } from 'react-native';
-import { useLazyQuery } from '@apollo/react-hooks';
+import { useLazyQuery, useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag'
-
 import styled from 'styled-components';
 
 interface IChatPickerProps {
@@ -27,7 +26,7 @@ const IndChat = styled(TouchableOpacity)`
 
 const GetMessages = gql`
 {
-  getMessages(id: "test") {
+  getMessages(id: $id) {
     text
   }
 }
@@ -36,11 +35,17 @@ const GetMessages = gql`
 const ChatPicker: React.FC<IChatPickerProps> = props => {
   // seems like a good idea to use the useLazyQuery here and then query for the data on buttonCLick
 
-  const [getInitMessages, { data, loading }] = useLazyQuery(GetMessages);
-  const goToChat = (sub: string) => () => {
+  const [getInitmessages, { called, loading, data }] = useLazyQuery(
+    GetMessages,
+    {
+       variables: {id: 'test'}
+    }
+  );
+
+  const goToChat = (sub: string) => async () => {
     // get the initial messages
-
-
+    // await getInitmessages();
+    // console.log(data)
     props.navigation.navigate(
       'Chat',
       {
@@ -80,7 +85,8 @@ const ChatPicker: React.FC<IChatPickerProps> = props => {
               <Text>
                 {sub}
               </Text>
-            </IndChat>)
+            </IndChat>
+            )
         })}
       </SafeAreaView>
     </>

@@ -5,11 +5,8 @@ import {
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag'
-import moment from 'moment';
 
 interface IChatProps {
-  // TODO type this as well
-  initMessages: any
   // TODO type the navagation props
   navigation: any;
   route: any;
@@ -20,7 +17,8 @@ const SEND_MESSAGE = gql`
     sendMessage(messages: $messages) {
       text
       MessageId
-      currentUser {
+      createdAt
+      user {
         name
         _id
       }
@@ -34,42 +32,60 @@ const GetMessages = gql`
     _id
     text
     createdAt
+    user {
+      _id
+      name
+    }
   }
 }
 `;
 
-const Chat: React.FC<IChatProps> = props => {
-  const messages =  [
-    {
-      _id: 1,
-      text: 'this is a test message',
-      createdAt: new Date().getTime(),
-      user: {
-        _id: "2",
-        name: 'Test User',
-        email: 'test_email1',
-        // avatar: 'https://placeimg.com/140/140/any'
-      },
+interface IUser {
+  _id: string;
+  name: string;
+  email: string;
+}
+
+interface IMessage {
+  _id: number;
+  text: string;
+  createdAt: number;
+  user: IUser;
+}
+
+interface IState {
+  messages: IMessage[]
+}
+
+const messages: IMessage[] =  [
+  {
+    _id: 1,
+    text: 'this is a test message',
+    createdAt: new Date().getTime(),
+    user: {
+      _id: "2",
+      name: 'Test User',
+      email: 'test_email1',
+      // avatar: 'https://placeimg.com/140/140/any'
     },
-    {
-      _id: 2,
-      text: 'this is another test message',
-      createdAt: new Date().getTime(),
-      user: {
-        _id: "3",
-        name: 'diff Test User',
-        email: 'test_email1'
-        // avatar: 'https://placeimg.com/140/140/any'
-      },
-    }
-  ]
+  },
+  {
+    _id: 2,
+    text: 'this is another test message boiiiii',
+    createdAt: new Date().getTime(),
+    user: {
+      _id: "3",
+      name: 'diff Test User',
+      email: 'test_email1'
+      // avatar: 'https://placeimg.com/140/140/any'
+    },
+  }
+]
 
-  // we should just populate this from the messages passed in from the props
-  const [curState, setState] = useState({messages})
-  const [callQ, setCallQ] = useState(false);
+const Chat: React.FC<IChatProps> = props => {
 
+  const [curState, setState] = useState<IState>({messages})
   const chatID: string = props.route.params.chatID;
-  console.log(chatID);
 
   const { data, loading } = useQuery(
     GetMessages,
@@ -77,12 +93,10 @@ const Chat: React.FC<IChatProps> = props => {
       variables: {
         id: "test"
       },
-      // skip: callQ,
       onCompleted: ( props ) => {
-        console.log('we are done')
-        console.log(props)
-        // skip the query every time after the first time
-        setCallQ(true)
+        setState({
+          messages: props.getMessages,
+        })
       }
     }
   )
@@ -93,15 +107,17 @@ const Chat: React.FC<IChatProps> = props => {
     SEND_MESSAGE,
     {
       onCompleted: ( props ) => {
+
         console.log(props)
+        console.log(curState)
         setState({
           messages: [
             ...curState.messages,
             {
               _id: props.sendMessage.MessageId,
               text: props.sendMessage.text,
-              createdAt: new Date().getTime(),
-              user: props.sendMessage.currentUser
+              createdAt: props.sendMessage.createdAt,
+              user: props.sendMessage.user
             }
           ]
         })
@@ -113,7 +129,6 @@ const Chat: React.FC<IChatProps> = props => {
     console.log('there was an error getting the messages')
     console.log(error)
   }
-
 
   interface IMessageUserType {
     _id: string,
@@ -132,14 +147,6 @@ const Chat: React.FC<IChatProps> = props => {
     { loading ? <Text>loading</Text> :
     (<GiftedChat
       messages={curState.messages}
-      // messages={data.getMessages}
-      // messages={data.getMessages.map(mes => (
-      //   {
-      //     ...mes,
-      //     createdAt: moment(mes.createdAt).valueOf()
-      //     // createdAt: 1587345202027
-      //   }
-      // ))}
       inverted={false}
       renderBubble={(props) => (
         <Bubble

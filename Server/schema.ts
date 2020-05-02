@@ -15,7 +15,7 @@ const typeDefs = gql`
     MessageId: Int!
     # name: String!
     createdAt: String!
-    currentUser: MessageUser!
+    user: MessageUser!
   }
 
   input UserInput {
