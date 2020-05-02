@@ -47,7 +47,7 @@ const CreateUser: React.FC = () => {
     {
       onCompleted: () => {
         console.log('we gucci');
-        Alert.alert('successfully created the user');
+        Alert.alert('Thank you for joining Emphasis Education');
       }
     }
   )

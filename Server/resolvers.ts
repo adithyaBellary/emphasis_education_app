@@ -3,12 +3,13 @@ import pubsub from './pubsub';
 
 const resolvers = {
   Query: {
-    getMessages: (_, { id }, { dataSources }) => {
-      return dataSources.getEverything();
+    getMessages: async (_, { id }, { dataSources }) => {
+      const resp = await dataSources.f.getMessages(id);
+      return resp;
     },
-    test_q: (_, __, ___) => {
+    test_q: (_, {test}, ___) => {
       return {
-        name: 'hi',
+        name: test ? 'yes' : 'no',
         email: 'hihi'
       }
     },
@@ -32,12 +33,10 @@ const resolvers = {
     },
     sendMessage: async (_, { messages }, { dataSources }) => {
       console.log('in resolver sending message');
-
       return await dataSources.f.sendMessages(messages);
     },
     createUser: async (_, { email, password, userType }, { dataSources }) => {
       console.log('in resolver creaging user');
-      // console.log(typeof userType);
       // this adds the user to the firebase list of users
       await dataSources.f.createUser({email, password});
       await dataSources.f.pushUser({email, password}, userType);
@@ -48,7 +47,6 @@ const resolvers = {
   Subscription: {
     somethingChanged: {
       subscribe: () => {
-        console.log('in the sub resolver')
         return pubsub.asyncIterator('somethingChanged')
       },
     }

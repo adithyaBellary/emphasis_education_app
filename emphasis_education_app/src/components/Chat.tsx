@@ -1,17 +1,40 @@
 import React, { useState, useEffect } from 'react';
+import {
+  Text
+} from 'react-native';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag'
-// import console = require('console');
+import moment from 'moment';
 
 interface IChatProps {
-  // TODO should the ID be of type number or ID
-  // id: number;
-  // userName: string;
-  // email: string;
+  // TODO type this as well
+  initMessages: any
+  // TODO type the navagation props
   navigation: any;
   route: any;
 }
+
+const SEND_MESSAGE = gql`
+  mutation sendMessage($messages: [MessageTypeInput]) {
+    sendMessage(messages: $messages) {
+      _id
+      text
+      MessageId
+      name
+    }
+  }
+`;
+
+const GetMessages = gql`
+{
+  getMessages(id: "test") {
+    _id
+    text
+    createdAt
+  }
+}
+`;
 
 const Chat: React.FC<IChatProps> = props => {
   const messages =  [
@@ -22,6 +45,7 @@ const Chat: React.FC<IChatProps> = props => {
       user: {
         _id: "2",
         name: 'Test User',
+        email: 'test_email1',
         // avatar: 'https://placeimg.com/140/140/any'
       },
     },
@@ -32,29 +56,47 @@ const Chat: React.FC<IChatProps> = props => {
       user: {
         _id: "3",
         name: 'diff Test User',
+        email: 'test_email1'
         // avatar: 'https://placeimg.com/140/140/any'
       },
     }
   ]
 
+  // we should just populate this from the messages passed in from the props
   const [curState, setState] = useState({messages})
-  const chatID: string = props.route.params.chatID;
+  const [callQ, setCallQ] = useState(false);
 
-  const SEND_MESSAGE = gql`
-    mutation sendMessage($messages: [MessageTypeInput]) {
-      sendMessage(messages: $messages) {
-        _id
-        text
-        MessageId
-        name
+  const chatID: string = props.route.params.chatID;
+  console.log(chatID);
+
+  const { data, loading, error } = useQuery(
+    GetMessages,
+    {
+      variables: {
+        id: "test"
+      },
+      // skip: callQ,
+      onCompleted: ( props ) => {
+        console.log('we are done')
+        console.log(props)
+        // skip the query every time after the first time
+        setCallQ(true)
       }
     }
-  `;
+  )
 
-  const [sendMessage, {loading, error}] = useMutation(
+  // debugger;
+
+  if (error) {
+    console.log('there was an error getting the messages')
+    console.log(error)
+  }
+
+  const [sendMessage] = useMutation(
     SEND_MESSAGE,
     {
       onCompleted: ( props ) => {
+        console.log(props)
         setState({
           messages: [
             ...curState.messages,
@@ -64,7 +106,8 @@ const Chat: React.FC<IChatProps> = props => {
               createdAt: new Date().getTime(),
               user: {
                 _id: props.sendMessage._id,
-                name: props.sendMessage.name
+                name: props.sendMessage.name,
+                email: 'dumb'
               },
             }
           ]
@@ -73,14 +116,13 @@ const Chat: React.FC<IChatProps> = props => {
     }
   )
 
-  if (error) console.log('ERROR in CHAT rip');
 
   interface IMessageUserType {
     _id: string,
     name: string,
     email: string
   }
-  // create the user here in the useEffect
+
   const curUser: IMessageUserType = {
     _id: props.route.params._id,
     name: props.route.params.name,
@@ -88,8 +130,18 @@ const Chat: React.FC<IChatProps> = props => {
   }
 
   return (
-    <GiftedChat
-      messages={curState.messages}
+    <>
+    { loading ? <Text>loading</Text> :
+    (<GiftedChat
+      // messages={curState.messages}
+      // messages={data.getMessages}
+      messages={data.getMessages.map(mes => (
+        {
+          ...mes,
+          createdAt: moment(mes.createdAt).valueOf()
+          // createdAt: 1587345202027
+        }
+      ))}
       inverted={false}
       renderBubble={(props) => (
         <Bubble
@@ -113,7 +165,6 @@ const Chat: React.FC<IChatProps> = props => {
       )}
       onSend={(props) => {
         console.log(chatID)
-
         sendMessage({
           variables: {
             messages: [
@@ -129,7 +180,9 @@ const Chat: React.FC<IChatProps> = props => {
       })
       }}
       user={curUser}
-    />
+    />)
+    }
+    </>
   )
 
 }

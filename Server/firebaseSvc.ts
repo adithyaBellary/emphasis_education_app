@@ -5,7 +5,7 @@ import pubsub from './pubsub';
 import { firebaseConfig } from './config/firebase';
 import { URLSearchParams } from 'url';
 import dataSource from './datasource';
-
+import * as moment from 'moment';
 import { SHA256, MD5 } from "crypto-js"
 
 const MESSAGE_REF_BASE: string = 'Messages';
@@ -140,11 +140,23 @@ class FireBaseSVC {
     return message;
   }
 
-  get_stuff() {
-    this._refMessage('')
-    .on('value', snapshot => {
-      return snapshot.val()
-    })
+  getMessages = async (id: string) => {
+    const chatHash: string = MD5(id).toString();
+    return await this._refMessage(chatHash)
+      .once('value')
+      .then(snap => {
+        const val = snap.val();
+        console.log(val);
+        const key = Object.keys(val)
+        const mess = key.map(k => {
+          const {messageID, ...rest} = val[k];
+          return {
+            ...rest,
+            _id: val[k].messageID
+          }
+        })
+        return mess
+      })
   }
 
   // need to know more about this function
@@ -175,18 +187,20 @@ class FireBaseSVC {
     let myText;
     let myMesID;
     let myName;
+    let myCreatedAt;
     messages.forEach(async element => {
       const { text, user, chatID } = element;
       myMesID = this.genID();
       const message = {
         text,
         user,
-        createdAt: this.timeStamp(),
+        createdAt: moment().format(),
         messageID: myMesID
       };
       myId = user._id;
       myText = text;
       myName = user.name;
+      myCreatedAt = message.createdAt
       const hashChatID: string = MD5(chatID).toString();
       console.log('sending a message');
       await this._refMessage(hashChatID).push(message);
@@ -196,7 +210,8 @@ class FireBaseSVC {
       _id: myId,
       text: myText,
       name: myName,
-      MessageId: myMesID
+      MessageId: myMesID,
+      createdAt: myCreatedAt
     }
   }
 

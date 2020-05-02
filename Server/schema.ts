@@ -14,6 +14,7 @@ const typeDefs = gql`
     text: String!
     MessageId: Int!
     name: String!
+    createdAt: String!
   }
 
   input UserInput {
@@ -22,16 +23,22 @@ const typeDefs = gql`
     _id: String
   }
 
+  type MessageUser {
+    _id: String!
+    name: String!
+    email: String!
+  }
+
   type MessageType {
-    id: ID!
+    _id: String!
     text: String!
-    user: User!
+    createdAt: String!
+    user: MessageUser!
   }
 
   type User {
     name: String!
     email: String!
-    # _id: String
   }
 
   type TestUser {
@@ -64,8 +71,8 @@ const typeDefs = gql`
   }
 
   type Query {
-    getMessages(id: ID): MessageType
-    test_q: User!
+    getMessages(id: String): [MessageType]
+    test_q(test: Boolean!): User!
     getUserID: String
     getUser(id: String!): TestUser
     # still have to write
