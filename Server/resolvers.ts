@@ -33,7 +33,8 @@ const resolvers = {
     },
     sendMessage: async (_, { messages }, { dataSources }) => {
       console.log('in resolver sending message');
-      return await dataSources.f.sendMessages(messages);
+      const res =  await dataSources.f.sendMessages(messages);
+      return res;
     },
     createUser: async (_, { email, password, userType }, { dataSources }) => {
       console.log('in resolver creaging user');

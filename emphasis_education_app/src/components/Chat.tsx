@@ -18,10 +18,12 @@ interface IChatProps {
 const SEND_MESSAGE = gql`
   mutation sendMessage($messages: [MessageTypeInput]) {
     sendMessage(messages: $messages) {
-      _id
       text
       MessageId
-      name
+      currentUser {
+        name
+        _id
+      }
     }
   }
 `;
@@ -69,7 +71,7 @@ const Chat: React.FC<IChatProps> = props => {
   const chatID: string = props.route.params.chatID;
   console.log(chatID);
 
-  const { data, loading, error } = useQuery(
+  const { data, loading } = useQuery(
     GetMessages,
     {
       variables: {
@@ -87,12 +89,7 @@ const Chat: React.FC<IChatProps> = props => {
 
   // debugger;
 
-  if (error) {
-    console.log('there was an error getting the messages')
-    console.log(error)
-  }
-
-  const [sendMessage] = useMutation(
+  const [sendMessage, { error }] = useMutation(
     SEND_MESSAGE,
     {
       onCompleted: ( props ) => {
@@ -104,17 +101,18 @@ const Chat: React.FC<IChatProps> = props => {
               _id: props.sendMessage.MessageId,
               text: props.sendMessage.text,
               createdAt: new Date().getTime(),
-              user: {
-                _id: props.sendMessage._id,
-                name: props.sendMessage.name,
-                email: 'dumb'
-              },
+              user: props.sendMessage.currentUser
             }
           ]
         })
       }
     }
   )
+
+  if (error) {
+    console.log('there was an error getting the messages')
+    console.log(error)
+  }
 
 
   interface IMessageUserType {
@@ -133,15 +131,15 @@ const Chat: React.FC<IChatProps> = props => {
     <>
     { loading ? <Text>loading</Text> :
     (<GiftedChat
-      // messages={curState.messages}
+      messages={curState.messages}
       // messages={data.getMessages}
-      messages={data.getMessages.map(mes => (
-        {
-          ...mes,
-          createdAt: moment(mes.createdAt).valueOf()
-          // createdAt: 1587345202027
-        }
-      ))}
+      // messages={data.getMessages.map(mes => (
+      //   {
+      //     ...mes,
+      //     createdAt: moment(mes.createdAt).valueOf()
+      //     // createdAt: 1587345202027
+      //   }
+      // ))}
       inverted={false}
       renderBubble={(props) => (
         <Bubble
@@ -164,7 +162,6 @@ const Chat: React.FC<IChatProps> = props => {
 
       )}
       onSend={(props) => {
-        console.log(chatID)
         sendMessage({
           variables: {
             messages: [

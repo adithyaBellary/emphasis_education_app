@@ -180,14 +180,13 @@ class FireBaseSVC {
   }
 
   send = async messages => {
-    console.log('messages');
-    console.log(messages);
+    // console.log('messages');
+    // console.log(messages);
     // TODO refactor all this rip
-    let myId;
     let myText;
     let myMesID;
-    let myName;
     let myCreatedAt;
+    let myUser;
     messages.forEach(async element => {
       const { text, user, chatID } = element;
       myMesID = this.genID();
@@ -197,21 +196,20 @@ class FireBaseSVC {
         createdAt: moment().format(),
         messageID: myMesID
       };
-      myId = user._id;
       myText = text;
-      myName = user.name;
       myCreatedAt = message.createdAt
+      myUser = user;
+      console.log(myUser);
       const hashChatID: string = MD5(chatID).toString();
       console.log('sending a message');
       await this._refMessage(hashChatID).push(message);
       console.log('message was pushed');
     });
     return {
-      _id: myId,
       text: myText,
-      name: myName,
       MessageId: myMesID,
-      createdAt: myCreatedAt
+      createdAt: myCreatedAt,
+      currentUser: myUser
     }
   }
 

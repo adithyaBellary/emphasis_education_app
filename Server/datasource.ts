@@ -12,8 +12,8 @@ class dataSource extends RESTDataSource {
 
   async getMessages(id) {
     const resp = await firebaseSvc.getMessages(id);
-    console.log('in datasource');
-    console.log(resp);
+    // console.log('in datasource');
+    // console.log(resp);
     return resp
   }
 
@@ -23,7 +23,8 @@ class dataSource extends RESTDataSource {
   }
 
   async sendMessages(message: [messageType]) {
-    return await firebaseSvc.send(message)
+    const res =  await firebaseSvc.send(message)
+    return res;
   }
 
   async createUser(user) {

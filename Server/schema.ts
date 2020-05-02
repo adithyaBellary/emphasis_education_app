@@ -10,11 +10,12 @@ const typeDefs = gql`
   }
 
   type MessagePayload {
-    _id: String!
+    # _id: String!
     text: String!
     MessageId: Int!
-    name: String!
+    # name: String!
     createdAt: String!
+    currentUser: MessageUser!
   }
 
   input UserInput {
@@ -90,7 +91,7 @@ const typeDefs = gql`
 
   type Mutation {
     login(email: String!, password: String!): LoginPayload
-    sendMessage(messages: [MessageTypeInput]): MessagePayload
+    sendMessage(messages: [MessageTypeInput]): MessagePayload!
     createUser(email: String!, password: String!, userType: Permission!): Boolean
 
     # needs to be written
