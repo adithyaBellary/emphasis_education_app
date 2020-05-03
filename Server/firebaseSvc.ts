@@ -5,10 +5,10 @@ import pubsub from './pubsub';
 import { firebaseConfig } from './config/firebase';
 import { URLSearchParams } from 'url';
 import dataSource from './datasource';
-
+import * as moment from 'moment';
 import { SHA256, MD5 } from "crypto-js"
 
-const MESSAGES_REFMessage: string = 'Messages';
+const MESSAGE_REF_BASE: string = 'Messages';
 const User_REF_BASE: string = 'Users';
 class FireBaseSVC {
   constructor() {
@@ -20,12 +20,11 @@ class FireBaseSVC {
   getChatId = async (user) => {
     const hash: string = MD5(user.email).toString();
     const curUser = await this.getUser(hash);
-    console.log('getting ids')
     return curUser.chatIDs;
   }
 
   login = async (user) => {
-    console.log('logging in');
+    console.log('logging inn');
     let res: boolean;
     const output = await firebase.auth().signInWithEmailAndPassword(
       user.email,
@@ -100,8 +99,8 @@ class FireBaseSVC {
     }
   }
 
-  _refMessage() {
-    return firebase.database().ref(MESSAGES_REFMessage);
+  _refMessage(chatPath: string) {
+    return firebase.database().ref(`${MESSAGE_REF_BASE}/${chatPath}`);
   }
 
   _refUser(ID: string) {
@@ -141,23 +140,35 @@ class FireBaseSVC {
     return message;
   }
 
-  get_stuff() {
-    this._refMessage()
-    .on('value', snapshot => {
-      return snapshot.val()
-    })
+  getMessages = async (id: string) => {
+    const chatHash: string = MD5(id).toString();
+    return await this._refMessage(chatHash)
+      .once('value')
+      .then(snap => {
+        const val = snap.val();
+        console.log(val);
+        const key = Object.keys(val)
+        const mess = key.map(k => {
+          const {messageID, ...rest} = val[k];
+          return {
+            ...rest,
+            _id: val[k].messageID
+          }
+        })
+        return mess
+      })
   }
 
   // need to know more about this function
-  refOn = callBack => {
-    this._refMessage()
-      .limitToLast(20)
-      .on('value', (snapshot) => callBack(this.parse(snapshot)))
-  }
+  // refOn = callBack => {
+  //   this._refMessage()
+  //     .limitToLast(20)
+  //     .on('value', (snapshot) => callBack(this.parse(snapshot)))
+  // }
 
   test_listen() {
     console.log('listener is on')
-    this._refMessage()
+    this._refMessage('')
     .on('child_added', () => {
       pubsub.publish("somethingChanged", { somethingChanged: { name: 'nameeee', email: 'emaillll'} })
       console.log('published to pubsub')
@@ -169,47 +180,49 @@ class FireBaseSVC {
   }
 
   send = async messages => {
-    console.log('messages');
-    console.log(messages);
+    // console.log('messages');
+    // console.log(messages);
     // TODO refactor all this rip
-    let myId;
     let myText;
     let myMesID;
-    let myName;
+    let myCreatedAt;
+    let myUser;
     messages.forEach(async element => {
-      const { text, user } = element;
+      const { text, user, chatID } = element;
       myMesID = this.genID();
       const message = {
         text,
         user,
-        createdAt: this.timeStamp(),
+        createdAt: moment().format(),
         messageID: myMesID
       };
-      myId = user._id;
       myText = text;
-      myName = user.name;
+      myCreatedAt = message.createdAt
+      myUser = user;
+      console.log(myUser);
+      const hashChatID: string = MD5(chatID).toString();
       console.log('sending a message');
-      await this._refMessage().push(message);
+      await this._refMessage(hashChatID).push(message);
       console.log('message was pushed');
     });
     return {
-      _id: myId,
       text: myText,
-      name: myName,
-      MessageId: myMesID
+      MessageId: myMesID,
+      createdAt: myCreatedAt,
+      user: myUser
     }
   }
 
   refOff () {
-    this._refMessage().off();
+    this._refMessage('').off();
   }
 
   genID() {
     return Math.round(Math.random() * 10000000);
   }
 
-  async push_test() {
-    await this._refMessage().push({
+  async push_test(chatPath: string) {
+    await this._refMessage(chatPath).push({
       name: 'name',
       email: 'email'
     })

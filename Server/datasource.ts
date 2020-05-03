@@ -10,10 +10,11 @@ class dataSource extends RESTDataSource {
     super();
   }
 
-  getEverything() {
-    const resp = firebaseSvc.get_stuff();
-    console.log('the response');
-    console.log(resp);
+  async getMessages(id) {
+    const resp = await firebaseSvc.getMessages(id);
+    // console.log('in datasource');
+    // console.log(resp);
+    return resp
   }
 
   async login(user) {
@@ -22,7 +23,8 @@ class dataSource extends RESTDataSource {
   }
 
   async sendMessages(message: [messageType]) {
-    return await firebaseSvc.send(message)
+    const res =  await firebaseSvc.send(message)
+    return res;
   }
 
   async createUser(user) {
