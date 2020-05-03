@@ -142,6 +142,9 @@ const Chat: React.FC<IChatProps> = props => {
     email: props.route.params.email,
   }
 
+  console.log('the current user');
+  console.log(curUser);
+
   return (
     <>
     { loading ? <Text>loading</Text> :

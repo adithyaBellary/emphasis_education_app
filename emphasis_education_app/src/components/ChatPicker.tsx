@@ -35,17 +35,7 @@ const GetMessages = gql`
 const ChatPicker: React.FC<IChatPickerProps> = props => {
   // seems like a good idea to use the useLazyQuery here and then query for the data on buttonCLick
 
-  const [getInitmessages, { called, loading, data }] = useLazyQuery(
-    GetMessages,
-    {
-       variables: {id: 'test'}
-    }
-  );
-
   const goToChat = (sub: string) => async () => {
-    // get the initial messages
-    // await getInitmessages();
-    // console.log(data)
     props.navigation.navigate(
       'Chat',
       {

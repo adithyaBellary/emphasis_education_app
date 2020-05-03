@@ -63,7 +63,7 @@ const Login: React.FC<ILoginProps> = props => {
   const [curState, setState] = useState({
     error: false,
     userName: 'test01@gmail.com',
-    email: 'test_email@gmail.com',
+    email: 'test01@gmail.com',
     password: 'test01',
     name: 'Test User'
   })
@@ -71,6 +71,10 @@ const Login: React.FC<ILoginProps> = props => {
   const [doLogin, { loading, error }] = useMutation(
     LOGIN,
     {
+      variables: {
+        email: curState.email,
+        password: curState.password
+      },
       onCompleted: ( {login} ) => {
         login.res ? successLogin(login.chatIDs) : errorLogin()
       }
@@ -79,9 +83,9 @@ const Login: React.FC<ILoginProps> = props => {
 
   if (error) console.log('ERROR');
 
-  const onChangeUsername = (userName: string) => setState({
+  const onChangeEmail = (email: string) => setState({
     ...curState,
-    userName
+    email
   });
   const onChangePassword = (password: string) => setState({
     ...curState,
@@ -94,6 +98,8 @@ const Login: React.FC<ILoginProps> = props => {
 
   const successLogin = (chatIDs: [string]) => {
     // console.log('log in was successful');
+    console.log('the current state')
+    console.log(curState)
     props.navigation.navigate(
       'Home',
       // need to pass in props to the chat screen
@@ -119,7 +125,7 @@ const Login: React.FC<ILoginProps> = props => {
 
     doLogin({
       variables: {
-        email: curState.userName,
+        email: curState.email,
         password: curState.password,
       }
     })
@@ -137,8 +143,8 @@ const Login: React.FC<ILoginProps> = props => {
       <CenteredDiv>
         <MytextInput
           placeholder='username'
-          value={curState.userName}
-          onChangeText={onChangeUsername}
+          value={curState.email}
+          onChangeText={onChangeEmail}
         />
         <MytextInput
           placeholder='password'
