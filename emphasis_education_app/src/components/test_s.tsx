@@ -28,13 +28,16 @@ const test_s: React.FC = () => {
   // console.log('hi' || data.somethingChanged);
 
   if (error) {
+    console.log('error in the sub')
     return <Text>error</Text>
   }
 
   if (loading) {
+    console.log('the sub is loading')
     return <Text>we are still loading</Text>
   }
-  return <Text>{data.somethingChanged.email}</Text>
+  console.log('sub is successful')
+  return <Text>{data.somethingChanged.email || 'hiii'}</Text>
 
 }
 

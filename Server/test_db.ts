@@ -3,11 +3,12 @@ import dataSource from './datasource';
 const test_datasource = new dataSource();
 test_datasource.sendMessages( [
   {
-    id: 0,
-    text: 'test message',
+    _id: 0,
+    text: 'test message round 22',
+    chatID: 'test',
     user: {
-      _id: 0,
-      name: 'tst user'
+      _id: 69,
+      name: 'Adi Bellary'
     }
   }]
 )

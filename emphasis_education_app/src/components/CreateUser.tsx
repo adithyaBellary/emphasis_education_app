@@ -4,10 +4,13 @@ import gql from 'graphql-tag';
 import {
   View, Alert,
 } from 'react-native'
+// import RadioGroup from 'react-native-radio-buttons-group';
 
 import {
-  MytextInput, ButtonContainer, MyButton, MyButtonText,
-
+  MytextInput,
+  ButtonContainer,
+  MyButton,
+  MyButtonText,
 } from './shared';
 
 const CREATE_USER = gql`
@@ -42,15 +45,19 @@ const CreateUser: React.FC = () => {
   const onClassChange = (classes: string) => setState({ ...curState, classes });
   const onTypeChange = (userType: string) => setState({ ...curState, userType });
 
-  const [createUserMut, { loading, error }] = useMutation(
+  const [createUserMut, { error }] = useMutation(
     CREATE_USER,
     {
       onCompleted: () => {
-        console.log('we gucci');
         Alert.alert('Thank you for joining Emphasis Education');
       }
     }
   )
+
+  if (error) {
+    console.log('there was something wrong with creating the user');
+    console.log(error);
+  }
 
   const createUser = () => {
     console.log('running create user mutation')
@@ -63,6 +70,7 @@ const CreateUser: React.FC = () => {
     })
   }
 
+  // maybe split the create user flow up into multiple screens?
   return (
     <View>
       <MytextInput
@@ -105,7 +113,6 @@ const CreateUser: React.FC = () => {
           </MyButtonText>
         </MyButton>
       </ButtonContainer>
-
     </View>
   )
 }

@@ -1,8 +1,9 @@
 import { userType } from './userType';
 
 export interface messageType {
-  id: number;
+  _id: number;
   text: string;
   user: userType;
+  chatID: string;
   // createdAt: Date;
 }

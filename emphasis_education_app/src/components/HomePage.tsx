@@ -8,7 +8,6 @@ import {
 import styled from 'styled-components';
 import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag'
-import { MD5 } from "crypto-js"
 
 import {
   ButtonContainer,
@@ -60,7 +59,6 @@ const Home: React.FC<IHomeProps> = ( props ) => {
       <ButtonContainer>
         <MyButton
           onPress={() => {
-            // console.log(props)
             props.navigation.navigate(
               'ChatPicker',
               {

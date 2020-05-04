@@ -1,17 +1,12 @@
 // fieldName: (parent, args, context, info) => data;
 import pubsub from './pubsub';
+import { MESSAGE_RECEIVED_EVENT } from './constants';
 
 const resolvers = {
   Query: {
     getMessages: async (_, { id }, { dataSources }) => {
       const resp = await dataSources.f.getMessages(id);
       return resp;
-    },
-    test_q: (_, {test}, ___) => {
-      return {
-        name: test ? 'yes' : 'no',
-        email: 'hihi'
-      }
     },
     getUserID: (_, __, { dataSources }) => {
       return dataSources.f.getID();
@@ -48,7 +43,9 @@ const resolvers = {
   Subscription: {
     somethingChanged: {
       subscribe: () => {
+        console.log('in the sub resolver')
         return pubsub.asyncIterator('somethingChanged')
+        // return pubsub.asyncIterator(MESSAGE_RECEIVED_EVENT)
       },
     }
   }

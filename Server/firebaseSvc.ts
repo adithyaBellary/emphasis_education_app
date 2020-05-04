@@ -7,6 +7,7 @@ import { URLSearchParams } from 'url';
 import dataSource from './datasource';
 import * as moment from 'moment';
 import { SHA256, MD5 } from "crypto-js"
+import { MESSAGE_RECEIVED_EVENT } from './constants';
 
 const MESSAGE_REF_BASE: string = 'Messages';
 const User_REF_BASE: string = 'Users';
@@ -170,6 +171,7 @@ class FireBaseSVC {
     console.log('listener is on')
     this._refMessage('')
     .on('child_added', () => {
+      console.log('publishing to pubsub')
       pubsub.publish("somethingChanged", { somethingChanged: { name: 'nameeee', email: 'emaillll'} })
       console.log('published to pubsub')
     })
@@ -180,9 +182,8 @@ class FireBaseSVC {
   }
 
   send = async messages => {
-    // console.log('messages');
-    // console.log(messages);
     // TODO refactor all this rip
+    console.log('sending these messages: ', messages);
     let myText;
     let myMesID;
     let myCreatedAt;
@@ -199,9 +200,7 @@ class FireBaseSVC {
       myText = text;
       myCreatedAt = message.createdAt
       myUser = user;
-      console.log(myUser);
       const hashChatID: string = MD5(chatID).toString();
-      console.log('sending a message');
       await this._refMessage(hashChatID).push(message);
       console.log('message was pushed');
     });

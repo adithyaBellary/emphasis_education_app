@@ -10,10 +10,8 @@ const typeDefs = gql`
   }
 
   type MessagePayload {
-    # _id: String!
     text: String!
     MessageId: Int!
-    # name: String!
     createdAt: String!
     user: MessageUser!
   }
@@ -71,9 +69,15 @@ const typeDefs = gql`
     chatIDs: [String]!
   }
 
+  type UserCreate {
+    email: String!
+    password: String!
+    userType: String!
+    classes: [String!]!
+  }
+
   type Query {
     getMessages(id: String): [MessageType]
-    test_q(test: Boolean!): User!
     getUserID: String
     getUser(id: String!): TestUser
     # still have to write
@@ -98,6 +102,8 @@ const typeDefs = gql`
     # add chats to a student
     # change classes
     # change tutor
+    # add offered classes
+    addClass(subject: String!): Boolean
 
   }
 

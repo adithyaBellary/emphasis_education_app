@@ -3,14 +3,23 @@ import {
   Text
 } from 'react-native';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery, useSubscription } from '@apollo/react-hooks';
 import gql from 'graphql-tag'
+import Test_s from './test_s';
 
 interface IChatProps {
   // TODO type the navagation props
   navigation: any;
   route: any;
 }
+
+const SUB = gql`
+  subscription {
+    somethingChanged {
+      email
+    }
+  }
+`
 
 const SEND_MESSAGE = gql`
   mutation sendMessage($messages: [MessageTypeInput]) {
@@ -82,12 +91,28 @@ const messages: IMessage[] =  [
   }
 ]
 
+interface IsomethingChnaged {
+  somethingChanged: string
+}
+
 const Chat: React.FC<IChatProps> = props => {
 
   const [curState, setState] = useState<IState>({messages})
   const chatID: string = props.route.params.chatID;
 
-  const { data, loading } = useQuery(
+  const { data }  = useSubscription<IsomethingChnaged>(
+    SUB,
+    {
+      onSubscriptionData: () => {
+        console.log('hi')
+      },
+      onSubscriptionComplete: () => {
+        console.log('hello')
+      }
+    }
+  )
+
+  const { loading } = useQuery(
     GetMessages,
     {
       variables: {
@@ -148,7 +173,9 @@ const Chat: React.FC<IChatProps> = props => {
   return (
     <>
     { loading ? <Text>loading</Text> :
-    (<GiftedChat
+    (<>
+    <Test_s />
+    <GiftedChat
       messages={curState.messages}
       inverted={false}
       renderBubble={(props) => (
@@ -187,7 +214,8 @@ const Chat: React.FC<IChatProps> = props => {
       })
       }}
       user={curUser}
-    />)
+    />
+    </>)
     }
     </>
   )
