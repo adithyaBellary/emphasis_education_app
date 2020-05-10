@@ -1,5 +1,6 @@
 import dataSource from './datasource';
 
+// TODO make this work
 const test_datasource = new dataSource();
 test_datasource.sendMessages( [
   {

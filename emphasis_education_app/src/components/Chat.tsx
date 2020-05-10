@@ -5,7 +5,6 @@ import {
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 import { useMutation, useQuery, useSubscription } from '@apollo/react-hooks';
 import gql from 'graphql-tag'
-import Test_s from './test_s';
 
 interface IChatProps {
   // TODO type the navagation props
@@ -15,8 +14,14 @@ interface IChatProps {
 
 const SUB = gql`
   subscription {
-    somethingChanged {
-      email
+    messageReceived {
+      text
+      MessageId
+      createdAt
+      user {
+        name
+        _id
+      }
     }
   }
 `
@@ -69,7 +74,7 @@ interface IState {
 const messages: IMessage[] =  [
   {
     _id: 1,
-    text: 'this is a test message',
+    text: 'test message',
     createdAt: new Date().getTime(),
     user: {
       _id: "2",
@@ -80,7 +85,7 @@ const messages: IMessage[] =  [
   },
   {
     _id: 2,
-    text: 'this is another test message boiiiii',
+    text: 'aniother test message',
     createdAt: new Date().getTime(),
     user: {
       _id: "3",
@@ -91,8 +96,8 @@ const messages: IMessage[] =  [
   }
 ]
 
-interface IsomethingChnaged {
-  somethingChanged: string
+interface IMessageReceived {
+  messageReceived: string
 }
 
 const Chat: React.FC<IChatProps> = props => {
@@ -100,31 +105,52 @@ const Chat: React.FC<IChatProps> = props => {
   const [curState, setState] = useState<IState>({messages})
   const chatID: string = props.route.params.chatID;
 
-  const { data }  = useSubscription<IsomethingChnaged>(
-    SUB,
-    {
-      onSubscriptionData: () => {
-        console.log('hi')
-      },
-      onSubscriptionComplete: () => {
-        console.log('hello')
-      }
-    }
-  )
-
-  const { loading } = useQuery(
+  const { data: getMessages, loading: queryLoading, refetch } = useQuery(
     GetMessages,
     {
       variables: {
         id: "test"
       },
       onCompleted: ( props ) => {
+        console.log('query was complete')
+        console.log(props);
+        setState({messages: props.getMessages})
+      },
+      fetchPolicy: 'no-cache'
+    }
+  )
+
+  const { data: subData } = useSubscription<IMessageReceived>(
+    SUB,
+    {
+      onSubscriptionData: (props) => {
+        // debugger;
+        console.log('the returned data,',props.subscriptionData.data.messageReceived)
         setState({
-          messages: props.getMessages,
+          messages: [
+            ...curState.messages,
+            {
+              _id: props.subscriptionData.data.messageReceived.MessageId,
+              text: props.subscriptionData.data.messageReceived.text,
+              createdAt: props.subscriptionData.data.messageReceived.createdAt,
+              user: props.subscriptionData.data.messageReceived.user
+            }
+          ]
         })
       }
     }
   )
+
+  // console.log('subData:', subData)
+
+  // TODO type useQuery and useMutation
+
+
+  // console.log('getMessagews:', getMessages);
+
+  // useEffect(() => {
+  //   console.log('in use Effect')
+  // })
 
   // debugger;
 
@@ -132,20 +158,19 @@ const Chat: React.FC<IChatProps> = props => {
     SEND_MESSAGE,
     {
       onCompleted: ( props ) => {
+        // this whole state update gets taken care of using the subscription
 
-        console.log(props)
-        console.log(curState)
-        setState({
-          messages: [
-            ...curState.messages,
-            {
-              _id: props.sendMessage.MessageId,
-              text: props.sendMessage.text,
-              createdAt: props.sendMessage.createdAt,
-              user: props.sendMessage.user
-            }
-          ]
-        })
+        // setState({
+        //   messages: [
+        //     ...curState.messages,
+        //     {
+        //       _id: props.sendMessage.MessageId,
+        //       text: props.sendMessage.text,
+        //       createdAt: props.sendMessage.createdAt,
+        //       user: props.sendMessage.user
+        //     }
+        //   ]
+        // })
       }
     }
   )
@@ -167,14 +192,10 @@ const Chat: React.FC<IChatProps> = props => {
     email: props.route.params.email,
   }
 
-  console.log('the current user');
-  console.log(curUser);
-
   return (
     <>
-    { loading ? <Text>loading</Text> :
+    { queryLoading ? <Text>loading</Text> :
     (<>
-    <Test_s />
     <GiftedChat
       messages={curState.messages}
       inverted={false}

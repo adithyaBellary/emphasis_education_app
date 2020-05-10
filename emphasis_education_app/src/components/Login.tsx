@@ -101,8 +101,8 @@ const Login: React.FC<ILoginProps> = props => {
   }
 
   const successLogin = (chatIDs: [string]) => {
-    console.log('the current state')
-    console.log(curState)
+    // console.log('the current state')
+    // console.log(curState)
     props.navigation.navigate(
       'Home',
       {
@@ -157,7 +157,7 @@ const Login: React.FC<ILoginProps> = props => {
           <MyButton
             onPress={my_login}
             >
-            <MyButtonText>LOGINnn</MyButtonText>
+            <MyButtonText>Login</MyButtonText>
           </MyButton>
         </ButtonContainer>
         <ButtonContainer>

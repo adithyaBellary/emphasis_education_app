@@ -27,7 +27,7 @@ const resolvers = {
       return response
     },
     sendMessage: async (_, { messages }, { dataSources }) => {
-      console.log('in resolver sending message');
+      // console.log('in resolver sending message');
       const res =  await dataSources.f.sendMessages(messages);
       return res;
     },
@@ -41,11 +41,10 @@ const resolvers = {
   },
 
   Subscription: {
-    somethingChanged: {
+    messageReceived: {
       subscribe: () => {
-        console.log('in the sub resolver')
+        // console.log('in the sub resolver')
         return pubsub.asyncIterator('somethingChanged')
-        // return pubsub.asyncIterator(MESSAGE_RECEIVED_EVENT)
       },
     }
   }

@@ -76,6 +76,10 @@ const typeDefs = gql`
     classes: [String!]!
   }
 
+  type MessageReceivedPayload {
+    success: Boolean!
+  }
+
   type Query {
     getMessages(id: String): [MessageType]
     getUserID: String
@@ -108,7 +112,7 @@ const typeDefs = gql`
   }
 
   type Subscription {
-    somethingChanged: User
+    messageReceived: MessagePayload!
   }
 `;
 

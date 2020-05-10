@@ -8,8 +8,8 @@ import {
 
 const SUB = gql`
   subscription {
-    somethingChanged {
-      email
+    messageReceived {
+      text
     }
   }
 `
@@ -29,15 +29,16 @@ const test_s: React.FC = () => {
 
   if (error) {
     console.log('error in the sub')
+    console.log(error)
     return <Text>error</Text>
   }
 
   if (loading) {
-    console.log('the sub is loading')
+    // console.log('the sub is loading')
     return <Text>we are still loading</Text>
   }
   console.log('sub is successful')
-  return <Text>{data.somethingChanged.email || 'hiii'}</Text>
+  return <Text>{data.messageReceived.text || 'hiii'}</Text>
 
 }
 
