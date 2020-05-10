@@ -35,21 +35,12 @@ const typeDefs = gql`
     user: MessageUser!
   }
 
-  type User {
-    name: String!
-    email: String!
-  }
-
   type TestUser {
     _id: String!
     email: String!
     password: String!
     userType: Permission!
     chatIDs: [String]!
-  }
-
-  type TestUserwChat {
-    chatIds: [String]!
   }
 
   enum Permission {
@@ -74,10 +65,6 @@ const typeDefs = gql`
     password: String!
     userType: String!
     classes: [String!]!
-  }
-
-  type MessageReceivedPayload {
-    success: Boolean!
   }
 
   type Query {

@@ -43,7 +43,6 @@ const resolvers = {
   Subscription: {
     messageReceived: {
       subscribe: () => {
-        // console.log('in the sub resolver')
         return pubsub.asyncIterator('somethingChanged')
       },
     }

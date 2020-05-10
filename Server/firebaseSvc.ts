@@ -7,6 +7,7 @@ import pubsub from './pubsub';
 import { firebaseConfig } from './config/firebase';
 import { MESSAGE_RECEIVED_EVENT } from './constants';
 import { IMessage } from './types/IMessage';
+import { IMessagePayload } from './types/IMessagePayload';
 
 const MESSAGE_REF_BASE: string = 'Messages';
 const User_REF_BASE: string = 'Users';
@@ -177,8 +178,6 @@ class FireBaseSVC {
       const val = snapshot.val();
       // get the last key
       const key = Object.keys(val).slice(-1)[0]
-      console.log(val[key]);
-      console.log('publishing to pubsub')
       pubsub.publish("somethingChanged", {
         messageReceived: {
           MessageId: val[key].messageID,
@@ -188,15 +187,6 @@ class FireBaseSVC {
         }
       })
       console.log('published to pubsub')
-      // and then we need to push this message to the db
-      // await this.send([
-      //   {
-      //     _id: val[key].messageID,
-      //     text: val[key].text,
-      //     createdAt: val[key].createdAt,
-      //     user: val[key].user
-      //   }
-      // ])
 
     })
 
@@ -224,7 +214,7 @@ class FireBaseSVC {
     return firebase.database.ServerValue.TIMESTAMP;
   }
 
-  send = async (messages: IMessage[]) => {
+  send = (messages: IMessage[]): IMessagePayload => {
     // TODO refactor all this rip
     // console.log('sending these messages: ', messages);
     let myText;
