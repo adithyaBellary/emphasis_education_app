@@ -99,13 +99,23 @@ const messages: IMessage[] =  [
 interface IMessageReceived {
   messageReceived: string
 }
+interface IGetMessages {
+  getMessages: IMessage[];
+}
+
+interface IGetMessagesInput {
+  id: string;
+}
 
 const Chat: React.FC<IChatProps> = props => {
 
   const [curState, setState] = useState<IState>({messages})
   const chatID: string = props.route.params.chatID;
 
-  const { data: getMessages, loading: queryLoading, refetch } = useQuery(
+  const { data: getMessages, loading: queryLoading, refetch } = useQuery<
+      IGetMessages,
+      IGetMessagesInput
+    >(
     GetMessages,
     {
       variables: {
@@ -124,7 +134,6 @@ const Chat: React.FC<IChatProps> = props => {
     SUB,
     {
       onSubscriptionData: (props) => {
-        // debugger;
         console.log('the returned data,',props.subscriptionData.data.messageReceived)
         setState({
           messages: [
@@ -140,40 +149,8 @@ const Chat: React.FC<IChatProps> = props => {
       }
     }
   )
-
-  // console.log('subData:', subData)
-
-  // TODO type useQuery and useMutation
-
-
-  // console.log('getMessagews:', getMessages);
-
-  // useEffect(() => {
-  //   console.log('in use Effect')
-  // })
-
-  // debugger;
-
-  const [sendMessage, { error }] = useMutation(
-    SEND_MESSAGE,
-    {
-      onCompleted: ( props ) => {
-        // this whole state update gets taken care of using the subscription
-
-        // setState({
-        //   messages: [
-        //     ...curState.messages,
-        //     {
-        //       _id: props.sendMessage.MessageId,
-        //       text: props.sendMessage.text,
-        //       createdAt: props.sendMessage.createdAt,
-        //       user: props.sendMessage.user
-        //     }
-        //   ]
-        // })
-      }
-    }
-  )
+  // TODO type this mutation
+  const [sendMessage, { error }] = useMutation(SEND_MESSAGE);
 
   if (error) {
     console.log('there was an error getting the messages')
@@ -194,53 +171,52 @@ const Chat: React.FC<IChatProps> = props => {
 
   return (
     <>
-    { queryLoading ? <Text>loading</Text> :
-    (<>
-    <GiftedChat
-      messages={curState.messages}
-      inverted={false}
-      renderBubble={(props) => (
-        <Bubble
-          {...props}
-          textStyle={{
-            right: {
-              color: 'yellow',
-            },
-            left: {}
-          }}
-          wrapperStyle={{
-            left: {
-              backgroundColor: 'pink',
-            },
-            right: {
-              // backgroundColor: 'yellow'
-            }
-          }}
-        />
-
-      )}
-      onSend={(props) => {
-        sendMessage({
-          variables: {
-            messages: [
-              {
-                // this works, but i am not too sure about it
-                id: 'has to be a string',
-                text: props[0].text,
-                user: curUser,
-                chatID: chatID
+      { queryLoading ?
+        <Text>loading</Text> :
+        (
+        <GiftedChat
+          messages={curState.messages}
+          inverted={false}
+          renderBubble={(props) => (
+            <Bubble
+              {...props}
+              textStyle={{
+                right: {
+                  color: 'yellow',
+                },
+                left: {}
+              }}
+              wrapperStyle={{
+                left: {
+                  backgroundColor: 'pink',
+                },
+                right: {
+                  // backgroundColor: 'yellow'
+                }
+              }}
+            />
+          )}
+          onSend={(props) => {
+            sendMessage({
+              variables: {
+                messages: [
+                  {
+                    // this works, but i am not too sure about it
+                    id: 'has to be a string',
+                    text: props[0].text,
+                    user: curUser,
+                    chatID: chatID
+                  }
+                ]
               }
-            ]
-          }
-      })
-      }}
-      user={curUser}
-    />
-    </>)
-    }
+            })
+          }}
+          user={curUser}
+        />
+        )
+      }
     </>
   )
-
 }
 
 export default Chat;
