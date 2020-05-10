@@ -178,7 +178,7 @@ class FireBaseSVC {
       const val = snapshot.val();
       // get the last key
       const key = Object.keys(val).slice(-1)[0]
-      pubsub.publish("somethingChanged", {
+      pubsub.publish(MESSAGE_RECEIVED_EVENT, {
         messageReceived: {
           MessageId: val[key].messageID,
           text: val[key].text,
@@ -199,7 +199,7 @@ class FireBaseSVC {
         console.log(snapVal)
         console.log(snap.ref.key)
         // publish to the pubsub bring this out
-        pubsub.publish('somethingChanged', {
+        pubsub.publish(MESSAGE_RECEIVED_EVENT, {
           messageReceived: {
             MessageId: snapVal[key].messageID,
             text: snapVal[key].text,

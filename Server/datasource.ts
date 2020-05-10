@@ -22,7 +22,7 @@ class dataSource extends RESTDataSource {
     return response
   }
 
-  async sendMessages(message: IMessage[]) {
+  sendMessages(message: IMessage[]) {
     const res = firebaseSvc.send(message)
     return res;
   }

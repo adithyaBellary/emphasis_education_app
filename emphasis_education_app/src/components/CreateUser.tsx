@@ -19,12 +19,6 @@ const CREATE_USER = gql`
   }
 `;
 
-const SUB = gql`
-  subscription somethingChanged($test: String) {
-    somethingChanged(test: $test)
-  }
-`
-
 const CreateUser: React.FC = () => {
 
   const [curState, setState] = useState({

@@ -27,8 +27,7 @@ const resolvers = {
       return response
     },
     sendMessage: async (_, { messages }, { dataSources }) => {
-      // console.log('in resolver sending message');
-      const res =  await dataSources.f.sendMessages(messages);
+      const res = dataSources.f.sendMessages(messages);
       return res;
     },
     createUser: async (_, { email, password, userType }, { dataSources }) => {
@@ -43,7 +42,7 @@ const resolvers = {
   Subscription: {
     messageReceived: {
       subscribe: () => {
-        return pubsub.asyncIterator('somethingChanged')
+        return pubsub.asyncIterator(MESSAGE_RECEIVED_EVENT)
       },
     }
   }
