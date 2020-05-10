@@ -5,7 +5,7 @@ import { MD5 } from "crypto-js"
 
 import pubsub from './pubsub';
 import { firebaseConfig } from './config/firebase';
-import { MESSAGE_RECEIVED_EVENT } from './constants';
+import { MESSAGE_RECEIVED_EVENT, NUM_INIT_MESSAGES } from './constants';
 import { IMessage } from './types/IMessage';
 import { IMessagePayload } from './types/IMessagePayload';
 
@@ -145,6 +145,7 @@ class FireBaseSVC {
   getMessages = async (id: string) => {
     const chatHash: string = MD5(id).toString();
     return await this._refMessage(chatHash)
+      .limitToLast(NUM_INIT_MESSAGES)
       .once('value')
       .then(snap => {
         const val = snap.val();

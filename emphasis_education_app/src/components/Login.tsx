@@ -14,14 +14,11 @@ import {
   MytextInput,
   ButtonContainer,
   MyButton,
-  MyButtonText
+  MyButtonText,
+  CenteredDiv
 } from './shared';
 
 import Test_s from './test_s';
-
-const CenteredDiv = styled(View)`
-  align-items: center;
-`;
 
 const PositionDiv = styled(View)`
   padding-top: 200px;

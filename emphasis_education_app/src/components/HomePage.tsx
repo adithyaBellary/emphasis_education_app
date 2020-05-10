@@ -3,25 +3,17 @@ import React from 'react';
 // ill need to know the screen dimensions to position all the widgets
 import {
   View,
-  Text
+  Text,
 } from 'react-native';
-import styled from 'styled-components';
 import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag'
 
-import {
-  ButtonContainer,
-  MyButton,
-  MyButtonText
-} from './shared'
+import HomePage from './Presentational/HomePage';
 
-interface IHomeProps {
+interface ILiftedHomeProps {
   navigation: any;
   route: any;
 }
-
-const HomeContainer = styled(View)`
-`;
 
 const GET_USER = gql`
   query GetUser($id: String!) {
@@ -30,52 +22,40 @@ const GET_USER = gql`
     }
   }
 `
+interface UserType {
+  userType: string
+}
 
-const Home: React.FC<IHomeProps> = ( props ) => {
-  const { data, loading, error } = useQuery(
-    GET_USER,
-    {
-      variables: {
-        id: props.route.params._id
-      }
-    }
-  )
+export interface GetUser {
+  getUser: UserType;
+}
+
+interface GetUserInput {
+  id: string;
+}
+
+const Home: React.FC<ILiftedHomeProps> = ( props ) => {
+  const options = { variables: { id: props.route.params._id }}
+  const { data, loading, error } = useQuery<
+    GetUser,
+    GetUserInput
+      >(GET_USER, options)
 
   if (error) {
     console.log('there was an error getting the user')
+    return <Text>There was an error getting the user</Text>
+  }
+
+  if (!data) {
+    return <Text>Could not get the user for some reason</Text>
   }
 
   return (
     <>
-    {loading ? <Text>loading</Text> :
-    (<HomeContainer>
-      <Text>
-        hey guys
-      </Text>
-      <Text>
-        emphasis education home page
-      </Text>
-      <Text>{data.getUser.userType}</Text>
-      <ButtonContainer>
-        <MyButton
-          onPress={() => {
-            props.navigation.navigate(
-              'ChatPicker',
-              {
-                chatIDs: props.route.params.chatIDs,
-                name: props.route.params.name,
-                email: props.route.params.email,
-                _id: props.route.params._id
-              }
-            )
-          }}
-        >
-          <MyButtonText>go to chat picker</MyButtonText>
-        </MyButton>
-      </ButtonContainer>
-
-    </HomeContainer>
-    )}
+    {loading ?
+      <Text>Render a loading animation here or something</Text> :
+      <HomePage data={data} {...props} />
+    }
     </>
   )
 

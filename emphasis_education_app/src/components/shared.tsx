@@ -1,10 +1,12 @@
+import { theme } from './theme';
+
 import {
   TextInput,
   View,
   Text,
   TouchableOpacity
 } from 'react-native';
-import styled from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 
 export const MytextInput = styled(TextInput)`
   border: black;
@@ -20,8 +22,20 @@ width: 100px;
 height: 20px;
 `;
 
+export const MyCircleButton = styled(TouchableOpacity)`
+  background-color: grey;
+  width: 100px;
+  height: 100px;
+  border-radius: 50px;
+  justify-content: center;
+`;
+
 export const MyButtonText = styled(Text)`
 color: white;
 text-align: center;
 font-size: 12px;
+`;
+
+export const CenteredDiv = styled(View)`
+  align-items: center;
 `;
