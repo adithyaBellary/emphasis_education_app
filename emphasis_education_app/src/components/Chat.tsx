@@ -3,7 +3,7 @@ import {
   Text
 } from 'react-native';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery, useSubscription } from '@apollo/react-hooks';
 import gql from 'graphql-tag'
 
 interface IChatProps {
@@ -11,6 +11,20 @@ interface IChatProps {
   navigation: any;
   route: any;
 }
+
+const SUB = gql`
+  subscription {
+    messageReceived {
+      text
+      MessageId
+      createdAt
+      user {
+        name
+        _id
+      }
+    }
+  }
+`
 
 const SEND_MESSAGE = gql`
   mutation sendMessage($messages: [MessageTypeInput]) {
@@ -60,7 +74,7 @@ interface IState {
 const messages: IMessage[] =  [
   {
     _id: 1,
-    text: 'this is a test message',
+    text: 'test message',
     createdAt: new Date().getTime(),
     user: {
       _id: "2",
@@ -71,7 +85,7 @@ const messages: IMessage[] =  [
   },
   {
     _id: 2,
-    text: 'this is another test message boiiiii',
+    text: 'aniother test message',
     createdAt: new Date().getTime(),
     user: {
       _id: "3",
@@ -82,48 +96,61 @@ const messages: IMessage[] =  [
   }
 ]
 
+interface IMessageReceived {
+  messageReceived: string
+}
+interface IGetMessages {
+  getMessages: IMessage[];
+}
+
+interface IGetMessagesInput {
+  id: string;
+}
+
 const Chat: React.FC<IChatProps> = props => {
 
   const [curState, setState] = useState<IState>({messages})
   const chatID: string = props.route.params.chatID;
 
-  const { data, loading } = useQuery(
+  const { data: getMessages, loading: queryLoading, refetch } = useQuery<
+      IGetMessages,
+      IGetMessagesInput
+    >(
     GetMessages,
     {
       variables: {
         id: "test"
       },
       onCompleted: ( props ) => {
-        setState({
-          messages: props.getMessages,
-        })
-      }
+        console.log('query was complete')
+        console.log(props);
+        setState({messages: props.getMessages})
+      },
+      fetchPolicy: 'no-cache'
     }
   )
 
-  // debugger;
-
-  const [sendMessage, { error }] = useMutation(
-    SEND_MESSAGE,
+  const { data: subData } = useSubscription<IMessageReceived>(
+    SUB,
     {
-      onCompleted: ( props ) => {
-
-        console.log(props)
-        console.log(curState)
+      onSubscriptionData: (props) => {
+        console.log('the returned data,',props.subscriptionData.data.messageReceived)
         setState({
           messages: [
             ...curState.messages,
             {
-              _id: props.sendMessage.MessageId,
-              text: props.sendMessage.text,
-              createdAt: props.sendMessage.createdAt,
-              user: props.sendMessage.user
+              _id: props.subscriptionData.data.messageReceived.MessageId,
+              text: props.subscriptionData.data.messageReceived.text,
+              createdAt: props.subscriptionData.data.messageReceived.createdAt,
+              user: props.subscriptionData.data.messageReceived.user
             }
           ]
         })
       }
     }
   )
+  // TODO type this mutation
+  const [sendMessage, { error }] = useMutation(SEND_MESSAGE);
 
   if (error) {
     console.log('there was an error getting the messages')
@@ -142,56 +169,54 @@ const Chat: React.FC<IChatProps> = props => {
     email: props.route.params.email,
   }
 
-  console.log('the current user');
-  console.log(curUser);
-
   return (
     <>
-    { loading ? <Text>loading</Text> :
-    (<GiftedChat
-      messages={curState.messages}
-      inverted={false}
-      renderBubble={(props) => (
-        <Bubble
-          {...props}
-          textStyle={{
-            right: {
-              color: 'yellow',
-            },
-            left: {}
-          }}
-          wrapperStyle={{
-            left: {
-              backgroundColor: 'pink',
-            },
-            right: {
-              // backgroundColor: 'yellow'
-            }
-          }}
-        />
-
-      )}
-      onSend={(props) => {
-        sendMessage({
-          variables: {
-            messages: [
-              {
-                // this works, but i am not too sure about it
-                id: 'has to be a string',
-                text: props[0].text,
-                user: curUser,
-                chatID: chatID
+      { queryLoading ?
+        <Text>loading</Text> :
+        (
+        <GiftedChat
+          messages={curState.messages}
+          inverted={false}
+          renderBubble={(props) => (
+            <Bubble
+              {...props}
+              textStyle={{
+                right: {
+                  color: 'yellow',
+                },
+                left: {}
+              }}
+              wrapperStyle={{
+                left: {
+                  backgroundColor: 'pink',
+                },
+                right: {
+                  // backgroundColor: 'yellow'
+                }
+              }}
+            />
+          )}
+          onSend={(props) => {
+            sendMessage({
+              variables: {
+                messages: [
+                  {
+                    // this works, but i am not too sure about it
+                    id: 'has to be a string',
+                    text: props[0].text,
+                    user: curUser,
+                    chatID: chatID
+                  }
+                ]
               }
-            ]
-          }
-      })
-      }}
-      user={curUser}
-    />)
-    }
+            })
+          }}
+          user={curUser}
+        />
+        )
+      }
     </>
   )
-
 }
 
 export default Chat;

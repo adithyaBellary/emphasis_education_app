@@ -4,10 +4,7 @@ import {
   Text,
   SafeAreaView,
   TouchableOpacity,
-  GestureResponderEvent
 } from 'react-native';
-import { useLazyQuery, useQuery } from '@apollo/react-hooks';
-import gql from 'graphql-tag'
 import styled from 'styled-components';
 
 interface IChatPickerProps {
@@ -22,18 +19,7 @@ const IndChat = styled(TouchableOpacity)`
   height: 30px;
 `;
 
-// this query should only fetch the last N messages
-
-const GetMessages = gql`
-{
-  getMessages(id: $id) {
-    text
-  }
-}
-`;
-
 const ChatPicker: React.FC<IChatPickerProps> = props => {
-  // seems like a good idea to use the useLazyQuery here and then query for the data on buttonCLick
 
   const goToChat = (sub: string) => async () => {
     props.navigation.navigate(
@@ -66,7 +52,7 @@ const ChatPicker: React.FC<IChatPickerProps> = props => {
           History
         </Text>
         </IndChat>
-        {props.route.params.chatIDs.map((sub) => {
+        {props.route.params.chatIDs.map((sub: string) => {
           return (
             <IndChat
               onPress={goToChat(sub)}

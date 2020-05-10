@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
-
 import {useMutation} from '@apollo/react-hooks';
 import {
+  Alert,
   View,
   Text,
   SafeAreaView,
 } from 'react-native';
 import styled from 'styled-components';
-import { SHA256, MD5 } from "crypto-js"
-
-import Test_s from './test_s';
+import { MD5 } from "crypto-js"
 import gql from 'graphql-tag';
 
 import {
@@ -18,6 +16,8 @@ import {
   MyButton,
   MyButtonText
 } from './shared';
+
+import Test_s from './test_s';
 
 const CenteredDiv = styled(View)`
   align-items: center;
@@ -68,7 +68,7 @@ const Login: React.FC<ILoginProps> = props => {
     name: 'Test User'
   })
 
-  const [doLogin, { loading, error }] = useMutation(
+  const [doLogin, { error }] = useMutation(
     LOGIN,
     {
       variables: {
@@ -76,7 +76,11 @@ const Login: React.FC<ILoginProps> = props => {
         password: curState.password
       },
       onCompleted: ( {login} ) => {
-        login.res ? successLogin(login.chatIDs) : errorLogin()
+        if (login.res) {
+          successLogin(login.chatIDs)
+        } else {
+          errorLogin()
+        }
       }
     }
   )
@@ -97,12 +101,10 @@ const Login: React.FC<ILoginProps> = props => {
   }
 
   const successLogin = (chatIDs: [string]) => {
-    // console.log('log in was successful');
-    console.log('the current state')
-    console.log(curState)
+    // console.log('the current state')
+    // console.log(curState)
     props.navigation.navigate(
       'Home',
-      // need to pass in props to the chat screen
       {
         name: curState.name,
         email: curState.email,
@@ -113,7 +115,6 @@ const Login: React.FC<ILoginProps> = props => {
   }
 
   const errorLogin = () => {
-    // console.log('there was an issue logging in');
     setState({
       ...curState,
       error: true
@@ -121,8 +122,6 @@ const Login: React.FC<ILoginProps> = props => {
   }
 
   const my_login = () => {
-    // console.log('we are logging in rn');
-
     doLogin({
       variables: {
         email: curState.email,
@@ -170,27 +169,14 @@ const Login: React.FC<ILoginProps> = props => {
             <MyButtonText>First time user?</MyButtonText>
           </MyButton>
         </ButtonContainer>
-        {/* <ButtonContainer>
+        <ButtonContainer>
           <MyButton
             onPress={() => Alert.alert('run forgot password')}
             >
             <MyButtonText>Forgot Password?</MyButtonText>
           </MyButton>
-        </ButtonContainer> */}
-        {/* <Test_q /> */}
-        <Test_s />
-        {/* <Text>
-          {Test_q(}
-        </Text> */}
-        <ButtonContainer>
-          <MyButton
-            // onPress={() => Alert.alert('take me home')}
-            // this is how we can navigate
-            onPress={() => props.navigation.navigate('ChatPicker')}
-            >
-            <MyButtonText>go to the chat picker</MyButtonText>
-          </MyButton>
         </ButtonContainer>
+        <Test_s />
       </CenteredDiv>
     </PositionDiv>
   </SafeAreaView>

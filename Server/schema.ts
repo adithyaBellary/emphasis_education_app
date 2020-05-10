@@ -10,10 +10,8 @@ const typeDefs = gql`
   }
 
   type MessagePayload {
-    # _id: String!
     text: String!
     MessageId: Int!
-    # name: String!
     createdAt: String!
     user: MessageUser!
   }
@@ -37,21 +35,12 @@ const typeDefs = gql`
     user: MessageUser!
   }
 
-  type User {
-    name: String!
-    email: String!
-  }
-
   type TestUser {
     _id: String!
     email: String!
     password: String!
     userType: Permission!
     chatIDs: [String]!
-  }
-
-  type TestUserwChat {
-    chatIds: [String]!
   }
 
   enum Permission {
@@ -71,9 +60,15 @@ const typeDefs = gql`
     chatIDs: [String]!
   }
 
+  type UserCreate {
+    email: String!
+    password: String!
+    userType: String!
+    classes: [String!]!
+  }
+
   type Query {
     getMessages(id: String): [MessageType]
-    test_q(test: Boolean!): User!
     getUserID: String
     getUser(id: String!): TestUser
     # still have to write
@@ -98,11 +93,13 @@ const typeDefs = gql`
     # add chats to a student
     # change classes
     # change tutor
+    # add offered classes
+    addClass(subject: String!): Boolean
 
   }
 
   type Subscription {
-    somethingChanged: User
+    messageReceived: MessagePayload!
   }
 `;
 

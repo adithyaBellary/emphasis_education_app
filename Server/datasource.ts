@@ -3,7 +3,7 @@ import firebaseSvc from './firebaseSvc';
 import { RESTDataSource } from 'apollo-datasource-rest';
 import { SHA256, MD5 } from "crypto-js"
 
-import { messageType } from './types/messageType';
+import { IMessage } from './types/IMessage';
 
 class dataSource extends RESTDataSource {
   constructor() {
@@ -22,8 +22,8 @@ class dataSource extends RESTDataSource {
     return response
   }
 
-  async sendMessages(message: [messageType]) {
-    const res =  await firebaseSvc.send(message)
+  sendMessages(message: IMessage[]) {
+    const res = firebaseSvc.send(message)
     return res;
   }
 

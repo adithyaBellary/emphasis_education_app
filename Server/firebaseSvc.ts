@@ -1,15 +1,17 @@
 // import firebase from 'firebase';
 import * as firebase from 'firebase';
-import pubsub from './pubsub';
-
-import { firebaseConfig } from './config/firebase';
-import { URLSearchParams } from 'url';
-import dataSource from './datasource';
 import * as moment from 'moment';
-import { SHA256, MD5 } from "crypto-js"
+import { MD5 } from "crypto-js"
+
+import pubsub from './pubsub';
+import { firebaseConfig } from './config/firebase';
+import { MESSAGE_RECEIVED_EVENT } from './constants';
+import { IMessage } from './types/IMessage';
+import { IMessagePayload } from './types/IMessagePayload';
 
 const MESSAGE_REF_BASE: string = 'Messages';
 const User_REF_BASE: string = 'Users';
+
 class FireBaseSVC {
   constructor() {
     firebase.initializeApp(firebaseConfig);
@@ -169,25 +171,57 @@ class FireBaseSVC {
   test_listen() {
     console.log('listener is on')
     this._refMessage('')
-    .on('child_added', () => {
-      pubsub.publish("somethingChanged", { somethingChanged: { name: 'nameeee', email: 'emaillll'} })
+    // .limitToLast(1)
+    .on('child_changed', (snapshot) => {
+      console.log('snapshot', snapshot.val())
+      console.log('snapshot', snapshot.ref.key)
+      const val = snapshot.val();
+      // get the last key
+      const key = Object.keys(val).slice(-1)[0]
+      pubsub.publish(MESSAGE_RECEIVED_EVENT, {
+        messageReceived: {
+          MessageId: val[key].messageID,
+          text: val[key].text,
+          createdAt: val[key].createdAt,
+          user: val[key].user
+        }
+      })
       console.log('published to pubsub')
+
     })
+
+    // this is the listener for a new child (chat) being added
+    this._refMessage('')
+      .on('child_added', (snap) => {
+        const snapVal = snap.val();
+        const key = Object.keys(snapVal)[0];
+        console.log('child added')
+        console.log(snapVal)
+        console.log(snap.ref.key)
+        // publish to the pubsub bring this out
+        pubsub.publish(MESSAGE_RECEIVED_EVENT, {
+          messageReceived: {
+            MessageId: snapVal[key].messageID,
+            text: snapVal[key].text,
+            createdAt: snapVal[key].createdAt,
+            user: snapVal[key].user
+          }
+        })
+      })
   }
 
   timeStamp() {
     return firebase.database.ServerValue.TIMESTAMP;
   }
 
-  send = async messages => {
-    // console.log('messages');
-    // console.log(messages);
+  send = (messages: IMessage[]): IMessagePayload => {
     // TODO refactor all this rip
+    // console.log('sending these messages: ', messages);
     let myText;
     let myMesID;
     let myCreatedAt;
     let myUser;
-    messages.forEach(async element => {
+    messages.forEach(async (element: IMessage) => {
       const { text, user, chatID } = element;
       myMesID = this.genID();
       const message = {
@@ -199,9 +233,7 @@ class FireBaseSVC {
       myText = text;
       myCreatedAt = message.createdAt
       myUser = user;
-      console.log(myUser);
       const hashChatID: string = MD5(chatID).toString();
-      console.log('sending a message');
       await this._refMessage(hashChatID).push(message);
       console.log('message was pushed');
     });
