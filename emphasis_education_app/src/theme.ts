@@ -1,5 +1,5 @@
 export const theme = {
   primary: {
-    backgroundColor: 'red'
+    backgroundColor: 'lightskyblue'
   }
 }

@@ -1,17 +1,38 @@
 import * as React from 'react';
 import {
-  Text
+  Alert,
+  Text,
+  View
 } from 'react-native';
 import {
   CenteredDiv,
   ButtonContainer,
   MyButton,
   MyButtonText,
-  MyCircleButton
+  MyCircleButton,
+  ConcentricIcons,
+  OverallContain
 } from '../shared';
 import { GetUser } from '../HomePage';
 import { ThemeProvider } from 'styled-components';
-import { theme } from '../theme';
+import { theme } from '../../theme';
+
+import { Icon, Button } from 'react-native-elements'
+import styled from 'styled-components';
+
+const Deg0 = styled(View)`
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`
+const Deg10 = styled(View)`
+`
+
+// const MyStyledIcon = styled(Icon)`
+//   background-color: green;
+// `
+
 
 interface IHomeProps {
   navigation: any;
@@ -43,14 +64,30 @@ const Home: React.FC<IHomeProps> = (props) => (
           <MyButtonText>go to chat picker</MyButtonText>
         </MyButton>
       </ButtonContainer>
-      <ButtonContainer>
-        <MyCircleButton>
+      </CenteredDiv>
+
+      <OverallContain>
+      <Deg0>
+        <Icon
+          name='message'
+          color='yellow'
+          onPress={() => Alert.alert('heyyyy')}
+        />
+        <Icon name='message'/>
+      </Deg0>
+      <Deg10>
+      <MyCircleButton>
           <MyButtonText>
             hello i am circle
           </MyButtonText>
         </MyCircleButton>
-      </ButtonContainer>
-    </CenteredDiv>
+      </Deg10>
+      <Deg0>
+        <Icon name='message'/>
+        <Icon name='message'/>
+      </Deg0>
+        </OverallContain>
+
   </ThemeProvider>
 )
 
