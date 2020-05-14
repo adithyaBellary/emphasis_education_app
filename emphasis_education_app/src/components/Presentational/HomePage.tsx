@@ -17,7 +17,8 @@ import { GetUser } from '../HomePage';
 import { ThemeProvider } from 'styled-components';
 import { theme } from '../../theme';
 
-import { Icon, Button } from 'react-native-elements'
+// import { Icon, Button } from 'react-native-elements';
+import { Icon } from 'react-native-elements'
 import styled from 'styled-components';
 
 const Deg0 = styled(View)`
@@ -69,11 +70,11 @@ const Home: React.FC<IHomeProps> = (props) => (
       <OverallContain>
       <Deg0>
         <Icon
-          name='message'
+          name='rowing'
           color='yellow'
           onPress={() => Alert.alert('heyyyy')}
         />
-        <Icon name='message'/>
+        <Icon name='rowing'/>
       </Deg0>
       <Deg10>
       <MyCircleButton>
@@ -83,8 +84,8 @@ const Home: React.FC<IHomeProps> = (props) => (
         </MyCircleButton>
       </Deg10>
       <Deg0>
-        <Icon name='message'/>
-        <Icon name='message'/>
+        <Icon name='rowing'/>
+        <Icon name='rowing'/>
       </Deg0>
         </OverallContain>
 
