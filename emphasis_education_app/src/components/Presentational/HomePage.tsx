@@ -14,7 +14,7 @@ import { GetUser } from '../HomePage';
 import { ThemeProvider } from 'styled-components';
 import { theme } from '../../theme';
 
-import { Icon, Button } from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 import styled from 'styled-components';
 
 const IconContain = styled(View)`
@@ -89,7 +89,6 @@ const Home: React.FC<IHomeProps> = (props) => {
             />
           </IconContain>
         </IconSection>
-
         <MissionStatement />
       </CenteredDiv>
     </ThemeProvider>
