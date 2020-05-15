@@ -35,9 +35,8 @@ const MissionStatement: React.FC = () => {
   )
 }
 
-// need to add Nunito Font
 const Title = styled(Text)`
-  fontFamily: "Cochin"
+  fontFamily: "Nunito"
 `
 
 const Home: React.FC<IHomeProps> = (props) => {
@@ -56,9 +55,9 @@ const Home: React.FC<IHomeProps> = (props) => {
   return (
     <ThemeProvider theme={theme}>
       <CenteredDiv>
-        <Text>
+        <Title>
           emphasis education home page
-        </Text>
+        </Title>
 
         <IconSection>
           <IconContain>
