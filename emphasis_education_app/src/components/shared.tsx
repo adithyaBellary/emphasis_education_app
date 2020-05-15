@@ -39,16 +39,9 @@ export const CenteredDiv = styled(View)`
   align-items: center;
 `;
 
-const x: number = 300;
-export const ConcentricIcons = styled(View)`
-  height: ${x}px;
-  width: ${x}px;
-  background-color: grey;
-  `;
-  // border-radius: 100px;
-
-  export const OverallContain = styled(View)`
-    width: 100%;
-    align-items: center;
-    padding: 50px;
-  `;
+// TODO make this em or %. not straight px
+export const IconSection = styled(View)`
+  width: 100%;
+  padding: 150px 0 100px 0;
+  align-items: center;
+`;

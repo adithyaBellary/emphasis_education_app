@@ -6,90 +6,94 @@ import {
 } from 'react-native';
 import {
   CenteredDiv,
-  ButtonContainer,
-  MyButton,
   MyButtonText,
   MyCircleButton,
-  ConcentricIcons,
-  OverallContain
+  IconSection
 } from '../shared';
 import { GetUser } from '../HomePage';
 import { ThemeProvider } from 'styled-components';
 import { theme } from '../../theme';
 
-// import { Icon, Button } from 'react-native-elements';
-import { Icon } from 'react-native-elements'
+import { Icon, Button } from 'react-native-elements';
 import styled from 'styled-components';
 
-const Deg0 = styled(View)`
+const IconContain = styled(View)`
   width: 80%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 `
-const Deg10 = styled(View)`
-`
-
-// const MyStyledIcon = styled(Icon)`
-//   background-color: green;
-// `
-
-
 interface IHomeProps {
   navigation: any;
   route: any;
   data: GetUser;
 }
 
-const Home: React.FC<IHomeProps> = (props) => (
-  <ThemeProvider theme={theme}>
-    <CenteredDiv>
-      <Text>
-        emphasis education home page
-      </Text>
-      <Text>{props.data.getUser.userType}</Text>
-      <ButtonContainer>
-        <MyButton
-          onPress={() => {
-            props.navigation.navigate(
-              'ChatPicker',
-              {
-                chatIDs: props.route.params.chatIDs,
-                name: props.route.params.name,
-                email: props.route.params.email,
-                _id: props.route.params._id
-              }
-            )
-          }}
-        >
-          <MyButtonText>go to chat picker</MyButtonText>
-        </MyButton>
-      </ButtonContainer>
+const MissionStatement: React.FC = () => {
+  return (
+    <Text>this is the mission statement</Text>
+  )
+}
+
+// need to add Nunito Font
+const Title = styled(Text)`
+  fontFamily: "Cochin"
+`
+
+const Home: React.FC<IHomeProps> = (props) => {
+
+  const goToChat = () => {
+    props.navigation.navigate(
+      'ChatPicker',
+      {
+        chatIDs: props.route.params.chatIDs,
+        name: props.route.params.name,
+        email: props.route.params.email,
+        _id: props.route.params._id
+      }
+    )
+  }
+  return (
+    <ThemeProvider theme={theme}>
+      <CenteredDiv>
+        <Text>
+          emphasis education home page
+        </Text>
+
+        <IconSection>
+          <IconContain>
+            <Icon
+              name='rowing'
+              onPress={() => Alert.alert('my profile')}
+            />
+            <Icon
+              name='message'
+              onPress={goToChat}
+            />
+          </IconContain>
+
+          <MyCircleButton>
+            <MyButtonText>
+              Emphasis Logo
+            </MyButtonText>
+          </MyCircleButton>
+
+          <IconContain>
+            <Icon
+              name='rowing'
+              onPress={() => Alert.alert('additional courses')}
+            />
+            <Icon
+              name='rowing'
+              onPress={() => Alert.alert('settings')}
+            />
+          </IconContain>
+        </IconSection>
+
+        <MissionStatement />
       </CenteredDiv>
-
-      <OverallContain>
-      <Deg0>
-        <Icon
-          name='rowing'
-          color='yellow'
-          onPress={() => Alert.alert('heyyyy')}
-        />
-        <Icon name='rowing'/>
-      </Deg0>
-      <Deg10>
-      <MyCircleButton>
-          <MyButtonText>
-            hello i am circle
-          </MyButtonText>
-        </MyCircleButton>
-      </Deg10>
-      <Deg0>
-        <Icon name='rowing'/>
-        <Icon name='rowing'/>
-      </Deg0>
-        </OverallContain>
-
-  </ThemeProvider>
-)
+    </ThemeProvider>
+  )
+}
 
 export default Home;
