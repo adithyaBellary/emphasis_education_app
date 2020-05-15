@@ -126,58 +126,57 @@ const Login: React.FC<ILoginProps> = props => {
       }
     })
   }
-    return (
-      <SafeAreaView>
-    <TitleContain>
-      <CenteredDiv>
-        <TitleText>
-          Emphasis Education App
-        </TitleText>
-      </CenteredDiv>
-    </TitleContain>
-    <PositionDiv>
-      <CenteredDiv>
-        <MytextInput
-          placeholder='username'
-          value={curState.email}
-          onChangeText={onChangeEmail}
-        />
-        <MytextInput
-          placeholder='password'
-          value={curState.password}
-          onChangeText={onChangePassword}
-        />
-        {curState.error &&
-          <Errorlogin />
-        }
-        <ButtonContainer>
-          <MyButton
-            onPress={my_login}
+  return (
+    <SafeAreaView>
+      <TitleContain>
+        <CenteredDiv>
+          <TitleText>
+            Emphasis Education App
+          </TitleText>
+        </CenteredDiv>
+      </TitleContain>
+      <PositionDiv>
+        <CenteredDiv>
+          <MytextInput
+            placeholder='username'
+            value={curState.email}
+            onChangeText={onChangeEmail}
+          />
+          <MytextInput
+            placeholder='password'
+            value={curState.password}
+            onChangeText={onChangePassword}
+          />
+          {curState.error &&
+            <Errorlogin />
+          }
+          <ButtonContainer>
+            <MyButton
+              onPress={my_login}
             >
-            <MyButtonText>Login</MyButtonText>
-          </MyButton>
-        </ButtonContainer>
-        <ButtonContainer>
-          <MyButton
-            onPress={() => props.navigation.navigate(
-              'CreateUser'
-            )}
+              <MyButtonText>Login</MyButtonText>
+            </MyButton>
+          </ButtonContainer>
+          <ButtonContainer>
+            <MyButton
+              onPress={() => props.navigation.navigate(
+                'CreateUser'
+              )}
             >
-            <MyButtonText>First time user?</MyButtonText>
-          </MyButton>
-        </ButtonContainer>
-        <ButtonContainer>
-          <MyButton
-            onPress={() => Alert.alert('run forgot password')}
+              <MyButtonText>First time user?</MyButtonText>
+            </MyButton>
+          </ButtonContainer>
+          <ButtonContainer>
+            <MyButton
+              onPress={() => Alert.alert('run forgot password')}
             >
-            <MyButtonText>Forgot Password?</MyButtonText>
-          </MyButton>
-        </ButtonContainer>
-        <Test_s />
-      </CenteredDiv>
-    </PositionDiv>
-  </SafeAreaView>
-
+              <MyButtonText>Forgot Password?</MyButtonText>
+            </MyButton>
+          </ButtonContainer>
+          <Test_s />
+        </CenteredDiv>
+      </PositionDiv>
+    </SafeAreaView>
     )
   }
 
