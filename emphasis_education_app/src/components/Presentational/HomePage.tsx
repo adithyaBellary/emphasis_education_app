@@ -35,7 +35,6 @@ const MissionStatement: React.FC = () => {
   )
 }
 
-// need to add Nunito Font
 const Title = styled(Text)`
   fontFamily: "Nunito"
 `
