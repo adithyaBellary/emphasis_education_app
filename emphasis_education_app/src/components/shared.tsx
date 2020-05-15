@@ -20,8 +20,28 @@ width: 100px;
 height: 20px;
 `;
 
+const d: number = 150;
+export const MyCircleButton = styled(TouchableOpacity)`
+  background-color: ${({theme}) => theme.primary.backgroundColor };
+  width: ${d}px;
+  height: ${d}px;
+  border-radius: ${d/2}px;
+  justify-content: center;
+`;
+
 export const MyButtonText = styled(Text)`
 color: white;
 text-align: center;
 font-size: 12px;
+`;
+
+export const CenteredDiv = styled(View)`
+  align-items: center;
+`;
+
+// TODO make this em or %. not straight px
+export const IconSection = styled(View)`
+  width: 100%;
+  padding: 150px 0 100px 0;
+  align-items: center;
 `;
