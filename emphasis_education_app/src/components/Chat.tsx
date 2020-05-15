@@ -112,6 +112,7 @@ const Chat: React.FC<IChatProps> = props => {
   const [curState, setState] = useState<IState>({messages})
   const chatID: string = props.route.params.chatID;
 
+  // lets cache this data
   const { data: getMessages, loading: queryLoading, refetch } = useQuery<
       IGetMessages,
       IGetMessagesInput
@@ -122,8 +123,8 @@ const Chat: React.FC<IChatProps> = props => {
         id: "test"
       },
       onCompleted: ( props ) => {
-        console.log('query was complete')
-        console.log(props);
+        // console.log('query was complete')
+        // console.log(props);
         setState({messages: props.getMessages})
       },
       fetchPolicy: 'no-cache'
@@ -134,7 +135,7 @@ const Chat: React.FC<IChatProps> = props => {
     SUB,
     {
       onSubscriptionData: (props) => {
-        console.log('the returned data,',props.subscriptionData.data.messageReceived)
+        // console.log('the returned data,',props.subscriptionData.data.messageReceived)
         setState({
           messages: [
             ...curState.messages,
@@ -175,6 +176,17 @@ const Chat: React.FC<IChatProps> = props => {
         <Text>loading</Text> :
         (
         <GiftedChat
+          onLoadEarlier={() => console.log('i am loading earlier')}
+          loadEarlier={true}
+          // what gets rendered when the messages are loading
+          renderLoading={() => <Text>render loading</Text>}
+          listViewProps={
+            {
+              onEndReached: ()=> console.log('hit the end'),
+              onEndReachedThreshold: 0.1,
+            }
+          }
+          // infiniteScroll={true}
           messages={curState.messages}
           inverted={false}
           renderBubble={(props) => (

@@ -2,11 +2,11 @@ module.exports = {
   parser: '@typescript-eslint/parser',  // Specifies the ESLint parser
   plugins: ["@typescript-eslint"],
   extends: [
-    // "eslint:recommended",
-    // "plugin:@typescript-eslint/eslint-recommended",
-    // 'plugin:react/recommended',  // Uses the recommended rules from @eslint-plugin-react
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    'plugin:react/recommended',  // Uses the recommended rules from @eslint-plugin-react
     'plugin:@typescript-eslint/recommended',  // Uses the recommended rules from @typescript-eslint/eslint-plugin
-    // "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
   ],
   parserOptions: {
     ecmaVersion: 2018,  // Allows for the parsing of modern ECMAScript features
