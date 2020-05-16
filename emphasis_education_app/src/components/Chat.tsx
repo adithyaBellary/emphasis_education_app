@@ -62,6 +62,7 @@ interface IUser {
   email: string;
 }
 
+// rn gifted chat also has its own IMessage type that we can use
 interface IMessage {
   _id: number;
   text: string;
@@ -99,7 +100,10 @@ const messages: IMessage[] =  [
 ]
 
 interface IMessageReceived {
-  messageReceived: string
+  text: string;
+  MessageId: number;
+  createdAt: number;
+  user: IUser;
 }
 interface IGetMessages {
   getMessages: IMessage[];
@@ -124,36 +128,57 @@ const Chat: React.FC<IChatProps> = props => {
       variables: {
         chatID: chatID
       },
-      onCompleted: ( props ) => {
-        console.log('query was complete')
-        setState({messages: props.getMessages})
-      },
+      // onCompleted: ( props ) => {
+      //   console.log('query was complete')
+      //   setState({messages: props.getMessages})
+      // },
       // need to look at this again
       fetchPolicy: 'no-cache'
     }
   )
 
-  const { data: subData } = useSubscription<IMessageReceived>(
+  const { data: subData, loading: subLoading } = useSubscription<IMessageReceived>(
     SUB,
     {
-      onSubscriptionData: (props) => {
-        // console.log('the returned data,',props.subscriptionData.data.messageReceived)
-        setState({
-          messages: [
-            ...curState.messages,
-            {
-              _id: props.subscriptionData.data.messageReceived.MessageId,
-              text: props.subscriptionData.data.messageReceived.text,
-              createdAt: props.subscriptionData.data.messageReceived.createdAt,
-              user: props.subscriptionData.data.messageReceived.user
-            }
-          ]
-        })
-      }
+      // onSubscriptionData: (props) => {
+      //   console.log('the returned data,',props.subscriptionData.data.messageReceived)
+      //   setState({
+      //     messages: [
+      //       ...curState.messages,
+      //       {
+      //         _id: props.subscriptionData.data.messageReceived.MessageId,
+      //         text: props.subscriptionData.data.messageReceived.text,
+      //         createdAt: props.subscriptionData.data.messageReceived.createdAt,
+      //         user: props.subscriptionData.data.messageReceived.user
+      //       }
+      //     ]
+      //   })
+      // }
     }
   )
+  useEffect(() => {
+    if (!getMessages) { return }
+    setState({messages: getMessages.getMessages})
+  }, [getMessages])
+
+  useEffect(() => {
+    if (!subData) { return }
+    // console.log('subData', subData.messageReceived);
+    setState({
+      messages: [
+        ...curState.messages,
+        {
+          _id: subData.messageReceived.MessageId,
+          text: subData.messageReceived.text,
+          createdAt: subData.messageReceived.createdAt,
+          user: subData.messageReceived.user
+        }
+      ]
+    })
+  }, [subData])
   // TODO type this mutation
   const [sendMessage, { error }] = useMutation(SEND_MESSAGE);
+
 
   if (error) {
     console.log('there was an error getting the messages')
@@ -217,7 +242,7 @@ const Chat: React.FC<IChatProps> = props => {
               }}
             />
           )}
-          onSend={(props) => {
+          onSend={(props: IMessage[]) => {
             sendMessage({
               variables: {
                 messages: [
