@@ -128,34 +128,12 @@ const Chat: React.FC<IChatProps> = props => {
       variables: {
         chatID: chatID
       },
-      // onCompleted: ( props ) => {
-      //   console.log('query was complete')
-      //   setState({messages: props.getMessages})
-      // },
       // need to look at this again
       fetchPolicy: 'no-cache'
     }
   )
 
-  const { data: subData, loading: subLoading } = useSubscription<IMessageReceived>(
-    SUB,
-    {
-      // onSubscriptionData: (props) => {
-      //   console.log('the returned data,',props.subscriptionData.data.messageReceived)
-      //   setState({
-      //     messages: [
-      //       ...curState.messages,
-      //       {
-      //         _id: props.subscriptionData.data.messageReceived.MessageId,
-      //         text: props.subscriptionData.data.messageReceived.text,
-      //         createdAt: props.subscriptionData.data.messageReceived.createdAt,
-      //         user: props.subscriptionData.data.messageReceived.user
-      //       }
-      //     ]
-      //   })
-      // }
-    }
-  )
+  const { data: subData, loading: subLoading } = useSubscription<IMessageReceived>(SUB)
   useEffect(() => {
     if (!getMessages) { return }
     setState({messages: getMessages.getMessages})
@@ -163,7 +141,6 @@ const Chat: React.FC<IChatProps> = props => {
 
   useEffect(() => {
     if (!subData) { return }
-    // console.log('subData', subData.messageReceived);
     setState({
       messages: [
         ...curState.messages,
@@ -203,8 +180,6 @@ const Chat: React.FC<IChatProps> = props => {
         <Text>loading Fifted CHat</Text> :
         (
         <GiftedChat
-          // onLoadEarlier={() => console.log('i am loading earlier')}
-          // loadEarlier={true}
           // what gets rendered when the messages are loading
           // get a loading spinner here
           renderLoading={() => <Text>render loading</Text>}
@@ -248,7 +223,7 @@ const Chat: React.FC<IChatProps> = props => {
                 messages: [
                   {
                     // this works, but i am not too sure about it
-                    id: 'has to be a string',
+                    id: 'messageID',
                     text: props[0].text,
                     user: curUser,
                     chatID: chatID
