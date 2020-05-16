@@ -10,8 +10,8 @@ class dataSource extends RESTDataSource {
     super();
   }
 
-  async getMessages(id) {
-    const resp = await firebaseSvc.getMessages(id);
+  async getMessages(chatID) {
+    const resp = await firebaseSvc.getMessages(chatID);
     // console.log('in datasource');
     // console.log(resp);
     return resp

@@ -4,8 +4,8 @@ import { MESSAGE_RECEIVED_EVENT } from './constants';
 
 const resolvers = {
   Query: {
-    getMessages: async (_, { id }, { dataSources }) => {
-      const resp = await dataSources.f.getMessages(id);
+    getMessages: async (_, { chatID }, { dataSources }) => {
+      const resp = await dataSources.f.getMessages(chatID);
       return resp;
     },
     getUserID: (_, __, { dataSources }) => {

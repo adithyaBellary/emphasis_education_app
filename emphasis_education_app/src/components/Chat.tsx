@@ -29,6 +29,7 @@ const SUB = gql`
 const SEND_MESSAGE = gql`
   mutation sendMessage($messages: [MessageTypeInput]) {
     sendMessage(messages: $messages) {
+      # id
       text
       MessageId
       createdAt
@@ -41,8 +42,9 @@ const SEND_MESSAGE = gql`
 `;
 
 const GetMessages = gql`
-  query getMessages($id: String) {
-    getMessages(id: $id) {
+  query getMessages($chatID: String) {
+    getMessages(chatID: $chatID) {
+      # id
       _id
       text
       createdAt
@@ -104,7 +106,7 @@ interface IGetMessages {
 }
 
 interface IGetMessagesInput {
-  id: string;
+  chatID: string;
 }
 
 const Chat: React.FC<IChatProps> = props => {
@@ -120,13 +122,13 @@ const Chat: React.FC<IChatProps> = props => {
     GetMessages,
     {
       variables: {
-        id: chatID
+        chatID: chatID
       },
       onCompleted: ( props ) => {
-        // console.log('query was complete')
-        // console.log(props);
+        console.log('query was complete')
         setState({messages: props.getMessages})
       },
+      // need to look at this again
       fetchPolicy: 'no-cache'
     }
   )
@@ -176,17 +178,21 @@ const Chat: React.FC<IChatProps> = props => {
         <Text>loading Fifted CHat</Text> :
         (
         <GiftedChat
-          onLoadEarlier={() => console.log('i am loading earlier')}
-          loadEarlier={true}
+          // onLoadEarlier={() => console.log('i am loading earlier')}
+          // loadEarlier={true}
           // what gets rendered when the messages are loading
+          // get a loading spinner here
           renderLoading={() => <Text>render loading</Text>}
+          // this is what is going to be sent to the FlatList in GiftedChat
           listViewProps={
             {
               onEndReached: ()=> console.log('hit the end'),
               onEndReachedThreshold: 0.1,
+              refreshing: queryLoading,
+              // run the refetch here
+              onRefresh: () => console.log('refreshinggggg')
             }
           }
-          // infiniteScroll={true}
           messages={curState.messages}
           inverted={false}
           renderBubble={(props) => (

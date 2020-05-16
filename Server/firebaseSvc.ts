@@ -188,8 +188,8 @@ class FireBaseSVC {
   }
 
   // pass in the range of messages that we want to get
-  getMessages = async (id: string) => {
-    const chatHash: string = MD5(id).toString();
+  getMessages = async (chatID: string) => {
+    const chatHash: string = MD5(chatID).toString();
     return await this._refMessage(chatHash)
       .limitToLast(NUM_INIT_MESSAGES)
       .once('value')
