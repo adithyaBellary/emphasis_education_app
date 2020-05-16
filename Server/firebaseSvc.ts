@@ -187,6 +187,7 @@ class FireBaseSVC {
     return message;
   }
 
+  // pass in the range of messages that we want to get
   getMessages = async (id: string) => {
     const chatHash: string = MD5(id).toString();
     return await this._refMessage(chatHash)
@@ -217,7 +218,6 @@ class FireBaseSVC {
   test_listen() {
     console.log('listener is on')
     this._refMessage('')
-    // .limitToLast(1)
     .on('child_changed', (snapshot) => {
       console.log('snapshot', snapshot.val())
       console.log('snapshot', snapshot.ref.key)

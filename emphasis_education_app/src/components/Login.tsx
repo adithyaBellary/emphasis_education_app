@@ -26,6 +26,7 @@ const PositionDiv = styled(View)`
 
 const TitleText = styled(Text)`
   font-size: 20px;
+  fontFamily: 'Nunito';
 `;
 
 const TitleContain = styled(View)`

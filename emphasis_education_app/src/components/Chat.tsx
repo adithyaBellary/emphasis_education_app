@@ -41,17 +41,17 @@ const SEND_MESSAGE = gql`
 `;
 
 const GetMessages = gql`
-{
-  getMessages(id: "test") {
-    _id
-    text
-    createdAt
-    user {
+  query getMessages($id: String) {
+    getMessages(id: $id) {
       _id
-      name
+      text
+      createdAt
+      user {
+        _id
+        name
+      }
     }
   }
-}
 `;
 
 interface IUser {
@@ -120,7 +120,7 @@ const Chat: React.FC<IChatProps> = props => {
     GetMessages,
     {
       variables: {
-        id: "test"
+        id: chatID
       },
       onCompleted: ( props ) => {
         // console.log('query was complete')
@@ -173,7 +173,7 @@ const Chat: React.FC<IChatProps> = props => {
   return (
     <>
       { queryLoading ?
-        <Text>loading</Text> :
+        <Text>loading Fifted CHat</Text> :
         (
         <GiftedChat
           onLoadEarlier={() => console.log('i am loading earlier')}
@@ -195,8 +195,11 @@ const Chat: React.FC<IChatProps> = props => {
               textStyle={{
                 right: {
                   color: 'yellow',
+                  fontFamily: 'Nunito'
                 },
-                left: {}
+                left: {
+                  fontFamily: 'Nunito'
+                }
               }}
               wrapperStyle={{
                 left: {

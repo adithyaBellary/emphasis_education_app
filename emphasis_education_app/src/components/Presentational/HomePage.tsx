@@ -36,7 +36,7 @@ const MissionStatement: React.FC = () => {
 }
 
 const Title = styled(Text)`
-  fontFamily: "Nunito"
+  fontFamily: 'Nunito'
 `
 
 const Home: React.FC<IHomeProps> = (props) => {
