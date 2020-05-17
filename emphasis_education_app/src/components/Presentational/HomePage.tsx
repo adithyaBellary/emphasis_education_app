@@ -52,6 +52,12 @@ const Home: React.FC<IHomeProps> = (props) => {
       }
     )
   }
+
+  const goToMyProfile = () => {
+    props.navigation.navigate(
+      'MyProfile'
+    )
+  }
   return (
     <ThemeProvider theme={theme}>
       <CenteredDiv>
@@ -63,7 +69,8 @@ const Home: React.FC<IHomeProps> = (props) => {
           <IconContain>
             <Icon
               name='rowing'
-              onPress={() => Alert.alert('my profile')}
+              // onPress={() => Alert.alert('my profile')}
+              onPress={goToMyProfile}
             />
             <Icon
               name='message'

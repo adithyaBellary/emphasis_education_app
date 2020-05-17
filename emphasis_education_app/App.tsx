@@ -24,6 +24,7 @@ import Chat from './src/components/Chat';
 import HomePage from './src/components/HomePage';
 import CreateUser from './src/components/CreateUser';
 import ChatPicker from './src/components/ChatPicker';
+import MyProfile from './src/components/MyProfile';
 
 const cache = new InMemoryCache();
 const httplink = new HttpLink({
@@ -64,7 +65,8 @@ type RootStackProps = {
     _id: string
   };
   ChatPicker: undefined;
-  CreateUser: undefined
+  CreateUser: undefined;
+  MyProfile: undefined;
 }
 
 const stack = createStackNavigator<RootStackProps>();
@@ -103,6 +105,11 @@ const App = () => (
           name="ChatPicker"
           component={ChatPicker}
           options={{ title: 'My Chats' }}
+        />
+        <stack.Screen
+          name="MyProfile"
+          component={MyProfile}
+          options={{ title: 'My Profile' }}
         />
       </stack.Navigator>
     </NavigationContainer>
