@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import {
   Text
 } from 'react-native';
-import { GiftedChat, Bubble } from 'react-native-gifted-chat';
+// import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 import { useMutation, useQuery, useSubscription } from '@apollo/react-hooks';
 import gql from 'graphql-tag'
 
 import { REFETCH_LIMIT } from '../constant';
+import GiftedChat from './Presentational/GiftedChat';
 
 interface IChatProps {
   // TODO type the navagation props
@@ -65,7 +66,7 @@ interface IUser {
 }
 
 // rn gifted chat also has its own IMessage type that we can use
-interface IMessage {
+export interface IMessage {
   _id: number;
   text: string;
   createdAt: number;
@@ -91,6 +92,12 @@ interface IGetMessagesInput {
   init: number;
 }
 let initFetch: number = 0;
+
+export interface IMessageUserType {
+  _id: string,
+  name: string,
+  email: string
+}
 
 const Chat: React.FC<IChatProps> = props => {
 
@@ -173,12 +180,6 @@ const Chat: React.FC<IChatProps> = props => {
     console.log(error)
   }
 
-  interface IMessageUserType {
-    _id: string,
-    name: string,
-    email: string
-  }
-
   const curUser: IMessageUserType = {
     _id: props.route.params._id,
     name: props.route.params.name,
@@ -199,61 +200,14 @@ const Chat: React.FC<IChatProps> = props => {
       { queryLoading ?
         <Text>loading Gifted Chat</Text> :
         (
-        <GiftedChat
-          // what gets rendered when the messages are loading
-          // get a loading spinner here
-          renderLoading={() => <Text>render loading</Text>}
-          // this is what is going to be sent to the FlatList in GiftedChat
-          listViewProps={
-            {
-              onEndReached: ()=> console.log('hit the end'),
-              onEndReachedThreshold: 0.1,
-              refreshing: queryLoading,
-              onRefresh: refreshFn
-            }
-          }
-          renderChatEmpty={() => <Text>we empty</Text>}
-          messages={curState ? curState.messages : undefined}
-          inverted={false}
-          renderBubble={(props) => (
-            <Bubble
-              {...props}
-              textStyle={{
-                right: {
-                  color: 'yellow',
-                  fontFamily: 'Nunito'
-                },
-                left: {
-                  fontFamily: 'Nunito'
-                }
-              }}
-              wrapperStyle={{
-                left: {
-                  backgroundColor: 'pink',
-                },
-                right: {
-                  // backgroundColor: 'yellow'
-                }
-              }}
-            />
-          )}
-          onSend={(props: IMessage[]) => {
-            sendMessage({
-              variables: {
-                messages: [
-                  {
-                    // this works, but i am not too sure about it
-                    id: 'messageID',
-                    text: props[0].text,
-                    user: curUser,
-                    chatID: chatID
-                  }
-                ]
-              }
-            })
-          }}
-          user={curUser}
-        />
+          <GiftedChat
+            queryLoading={queryLoading}
+            refreshFn={refreshFn}
+            chatID={chatID}
+            curUser={curUser}
+            sendMessage={sendMessage}
+            messages={curState ? curState.messages : undefined}
+          />
         )
       }
     </>
