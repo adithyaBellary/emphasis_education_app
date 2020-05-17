@@ -5,12 +5,13 @@ import { MD5 } from "crypto-js"
 
 import pubsub from './pubsub';
 import { firebaseConfig } from './config/firebase';
-import { MESSAGE_RECEIVED_EVENT, NUM_INIT_MESSAGES } from './constants';
+import { MESSAGE_RECEIVED_EVENT, NUM_FETCH_MESSAGES } from './constants';
 import { IMessage } from './types/IMessage';
 import { IMessagePayload } from './types/IMessagePayload';
 
 const MESSAGE_REF_BASE: string = 'Messages';
 const User_REF_BASE: string = 'Users';
+const NUM_MESSAGES_BASE: string = 'NumberOfMessages';
 
 class FireBaseSVC {
   constructor() {
@@ -154,6 +155,10 @@ class FireBaseSVC {
     return firebase.database().ref(`${User_REF_BASE}/${ID}`);
   }
 
+  _refMessageNum(chatID: string) {
+    return firebase.database().ref(`${NUM_MESSAGES_BASE}/${chatID}`);
+  }
+
   async pushUser({ email, password}, hash, userType) {
     // generate type for user
     const testChatIds: Array<string> = ['test'];
@@ -187,15 +192,26 @@ class FireBaseSVC {
     return message;
   }
 
-  // pass in the range of messages that we want to get
-  getMessages = async (chatID: string) => {
+  // start at 0
+  getMessages = async (chatID: string, init: number) => {
     const chatHash: string = MD5(chatID).toString();
+    const numMessages: number = await this.getNumMessages(chatID);
+    if (numMessages === 0) { return [] }
+    // return the entire list of messages
+    if (numMessages > NUM_FETCH_MESSAGES) {}
+    const start: number = -1 * numMessages + init;
+    const end: number = start + NUM_FETCH_MESSAGES;
+    console.log('start', start);
+    console.log('end', end);
+
     return await this._refMessage(chatHash)
-      .limitToLast(NUM_INIT_MESSAGES)
+      .orderByChild('messageID')
+      .startAt(start)
+      .endAt(end)
       .once('value')
       .then(snap => {
         const val = snap.val();
-        console.log(val);
+        // console.log('val', val)
         const key = Object.keys(val)
         const mess = key.map(k => {
           const {messageID, ...rest} = val[k];
@@ -215,12 +231,28 @@ class FireBaseSVC {
   //     .on('value', (snapshot) => callBack(this.parse(snapshot)))
   // }
 
+  getRecentId = async (chatID: string) => {
+    const chatHash: string = MD5(chatID).toString();
+    return await this._refMessage(chatHash)
+      .limitToLast(1)
+      .once('value')
+      .then(snap => {
+        const val = snap.val();
+        if (!val) { return 0 }
+        console.log('val', val);
+        const key = Object.keys(val);
+        console.log('length of keys: (should be 1)', key.length)
+        const oldMessageID = val[key[0]].messageID;
+        return oldMessageID - 1;
+      })
+  }
+
   test_listen() {
     console.log('listener is on')
     this._refMessage('')
     .on('child_changed', (snapshot) => {
-      console.log('snapshot', snapshot.val())
-      console.log('snapshot', snapshot.ref.key)
+      // console.log('snapshot', snapshot.val())
+      // console.log('snapshot', snapshot.ref.key)
       const val = snapshot.val();
       // get the last key
       const key = Object.keys(val).slice(-1)[0]
@@ -241,9 +273,9 @@ class FireBaseSVC {
       .on('child_added', (snap) => {
         const snapVal = snap.val();
         const key = Object.keys(snapVal)[0];
-        console.log('child added')
-        console.log(snapVal)
-        console.log(snap.ref.key)
+        // console.log('child added')
+        // console.log(snapVal)
+        // console.log(snap.ref.key)
         // publish to the pubsub bring this out
         pubsub.publish(MESSAGE_RECEIVED_EVENT, {
           messageReceived: {
@@ -260,16 +292,42 @@ class FireBaseSVC {
     return firebase.database.ServerValue.TIMESTAMP;
   }
 
-  send = (messages: IMessage[]): IMessagePayload => {
+  getNumMessages = async (chatID: string) => {
+    return await this._refMessageNum(chatID).once('value')
+      .then((snap): number => {
+        const val = snap.val();
+        // if this is a new chat wont have any values yet
+        if (!val) { return 0 }
+        return val;
+        // const key = Object.keys(val)[0];
+        // const numMessages: number = val[key];
+        // return numMessages;
+      })
+  }
+
+  updateNumMessages = async (chatID: string) => {
+    const numMessages: number = await this.getNumMessages(chatID);
+    console.log('the number of messages is', numMessages);
+    await this._refMessageNum(chatID).set(numMessages + 1)
+  }
+
+  // could be worth updating the number of messages we have in that chat in a node as well
+  send = async (messages: IMessage[]) => {
     // TODO refactor all this rip
     // console.log('sending these messages: ', messages);
     let myText;
     let myMesID;
     let myCreatedAt;
     let myUser;
+    const oldMess: number = await this.getRecentId(messages[0].chatID);
+    console.log('oldMess', oldMess);
+    this.updateNumMessages(messages[0].chatID);
     messages.forEach(async (element: IMessage) => {
       const { text, user, chatID } = element;
-      myMesID = this.genID();
+      console.log(text)
+      // myMesID = this.genID();
+      // myMesID = oldMess === 0 ? 0 : oldMess - 1;
+      myMesID = oldMess;
       const message = {
         text,
         user,

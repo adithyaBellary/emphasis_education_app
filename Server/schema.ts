@@ -29,7 +29,7 @@ const typeDefs = gql`
   }
 
   type MessageType {
-    id: ID
+    # id: ID
     _id: String!
     text: String!
     createdAt: String!
@@ -69,7 +69,7 @@ const typeDefs = gql`
   }
 
   type Query {
-    getMessages(chatID: String): [MessageType]
+    getMessages(chatID: String, init: Int!): [MessageType]
     getUserID: String
     getUser(id: String!): TestUser
     # still have to write

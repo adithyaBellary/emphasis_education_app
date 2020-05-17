@@ -6,6 +6,8 @@ import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 import { useMutation, useQuery, useSubscription } from '@apollo/react-hooks';
 import gql from 'graphql-tag'
 
+import { REFETCH_LIMIT } from '../constant';
+
 interface IChatProps {
   // TODO type the navagation props
   navigation: any;
@@ -42,8 +44,8 @@ const SEND_MESSAGE = gql`
 `;
 
 const GetMessages = gql`
-  query getMessages($chatID: String) {
-    getMessages(chatID: $chatID) {
+  query getMessages($chatID: String!, $init: Int!) {
+    getMessages(chatID: $chatID, init: $init) {
       # id
       _id
       text
@@ -76,7 +78,7 @@ interface IState {
 
 const messages: IMessage[] =  [
   {
-    _id: 1,
+    _id: 100,
     text: 'test message',
     createdAt: new Date().getTime(),
     user: {
@@ -87,7 +89,7 @@ const messages: IMessage[] =  [
     },
   },
   {
-    _id: 2,
+    _id: 200,
     text: 'aniother test message',
     createdAt: new Date().getTime(),
     user: {
@@ -111,7 +113,9 @@ interface IGetMessages {
 
 interface IGetMessagesInput {
   chatID: string;
+  init: number;
 }
+let initFetch: number = 0;
 
 const Chat: React.FC<IChatProps> = props => {
 
@@ -119,24 +123,38 @@ const Chat: React.FC<IChatProps> = props => {
   const chatID: string = props.route.params.chatID;
 
   // lets cache this data
-  const { data: getMessages, loading: queryLoading, refetch } = useQuery<
+  const { data: getMessages, loading: queryLoading, refetch, error: errorMessage } = useQuery<
       IGetMessages,
       IGetMessagesInput
     >(
     GetMessages,
     {
       variables: {
-        chatID: chatID
+        chatID: chatID,
+        init: initFetch
       },
+      onCompleted: () => console.log('ran'),
       // need to look at this again
       fetchPolicy: 'no-cache'
     }
   )
 
-  const { data: subData, loading: subLoading } = useSubscription<IMessageReceived>(SUB)
+  if (errorMessage) {
+    console.log(errorMessage);
+  }
+
+  const { data: subData } = useSubscription<IMessageReceived>(SUB)
+
+  // for the getMessage useEffect, we should add the results on top of the
+  // what the currentstate is
   useEffect(() => {
     if (!getMessages) { return }
-    setState({messages: getMessages.getMessages})
+    console.log('getMessage', getMessages.getMessages.length)
+    // setState({messages: getMessages.getMessages})
+    setState({messages: [
+      ...getMessages.getMessages,
+      ...curState.messages
+    ]})
   }, [getMessages])
 
   useEffect(() => {
@@ -174,10 +192,18 @@ const Chat: React.FC<IChatProps> = props => {
     email: props.route.params.email,
   }
 
+  const refreshFn = () => {
+    console.log('refreshing')
+    // increment initFetch
+    initFetch = initFetch + REFETCH_LIMIT + 1;
+    const variables = { chatID, init: initFetch}
+    refetch(variables);
+  }
+
   return (
     <>
       { queryLoading ?
-        <Text>loading Fifted CHat</Text> :
+        <Text>loading Gifted Chat</Text> :
         (
         <GiftedChat
           // what gets rendered when the messages are loading
@@ -189,8 +215,7 @@ const Chat: React.FC<IChatProps> = props => {
               onEndReached: ()=> console.log('hit the end'),
               onEndReachedThreshold: 0.1,
               refreshing: queryLoading,
-              // run the refetch here
-              onRefresh: () => console.log('refreshinggggg')
+              onRefresh: refreshFn
             }
           }
           messages={curState.messages}
