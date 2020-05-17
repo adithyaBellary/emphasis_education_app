@@ -73,33 +73,8 @@ interface IMessage {
 }
 
 interface IState {
-  messages: IMessage[]
+  messages: IMessage[];
 }
-
-const messages: IMessage[] =  [
-  {
-    _id: 100,
-    text: 'test message',
-    createdAt: new Date().getTime(),
-    user: {
-      _id: "2",
-      name: 'Test User',
-      email: 'test_email1',
-      // avatar: 'https://placeimg.com/140/140/any'
-    },
-  },
-  {
-    _id: 200,
-    text: 'aniother test message',
-    createdAt: new Date().getTime(),
-    user: {
-      _id: "3",
-      name: 'diff Test User',
-      email: 'test_email1'
-      // avatar: 'https://placeimg.com/140/140/any'
-    },
-  }
-]
 
 interface IMessageReceived {
   text: string;
@@ -119,7 +94,7 @@ let initFetch: number = 0;
 
 const Chat: React.FC<IChatProps> = props => {
 
-  const [curState, setState] = useState<IState>({messages})
+  const [curState, setState] = useState<IState>()
   const chatID: string = props.route.params.chatID;
 
   // lets cache this data
@@ -150,7 +125,12 @@ const Chat: React.FC<IChatProps> = props => {
   useEffect(() => {
     if (!getMessages) { return }
     console.log('getMessage', getMessages.getMessages.length)
-    // setState({messages: getMessages.getMessages})
+    if (!curState) {
+      setState({
+        messages: getMessages.getMessages
+      })
+      return;
+    }
     setState({messages: [
       ...getMessages.getMessages,
       ...curState.messages
@@ -159,6 +139,19 @@ const Chat: React.FC<IChatProps> = props => {
 
   useEffect(() => {
     if (!subData) { return }
+    if (!curState ) {
+      setState({
+        messages: [
+          {
+            _id: subData.messageReceived.MessageId,
+            text: subData.messageReceived.text,
+            createdAt: subData.messageReceived.createdAt,
+            user: subData.messageReceived.user
+          }
+        ]
+      })
+      return
+    }
     setState({
       messages: [
         ...curState.messages,
@@ -194,9 +187,10 @@ const Chat: React.FC<IChatProps> = props => {
 
   const refreshFn = () => {
     console.log('refreshing')
-    // increment initFetch
     initFetch = initFetch + REFETCH_LIMIT + 1;
     const variables = { chatID, init: initFetch}
+    // check whether there are even messages for us to refresh w
+
     refetch(variables);
   }
 
@@ -218,7 +212,8 @@ const Chat: React.FC<IChatProps> = props => {
               onRefresh: refreshFn
             }
           }
-          messages={curState.messages}
+          renderChatEmpty={() => <Text>we empty</Text>}
+          messages={curState ? curState.messages : undefined}
           inverted={false}
           renderBubble={(props) => (
             <Bubble
