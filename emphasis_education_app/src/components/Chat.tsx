@@ -101,11 +101,12 @@ export interface IMessageUserType {
 
 const Chat: React.FC<IChatProps> = props => {
 
+  // let use make out our hook here
   const [curState, setState] = useState<IState>()
   const chatID: string = props.route.params.chatID;
 
   // lets cache this data
-  const { data: getMessages, loading: queryLoading, refetch, error: errorMessage } = useQuery<
+  const { data: getMessages, loading: queryLoading, refetch, error: errorMessage, networkStatus } = useQuery<
       IGetMessages,
       IGetMessagesInput
     >(
@@ -117,14 +118,17 @@ const Chat: React.FC<IChatProps> = props => {
       },
       onCompleted: () => console.log('ran'),
       // need to look at this again
-      fetchPolicy: 'no-cache'
+      // fetchPolicy: 'no-cache',
+      notifyOnNetworkStatusChange: true
     }
   )
 
   if (errorMessage) {
     console.log(errorMessage);
   }
+  // console.log('networkstatus: ', networkStatus);
 
+  // TODO chatPicker might have to have state over this chat
   const { data: subData } = useSubscription<IMessageReceived>(SUB)
 
   // for the getMessage useEffect, we should add the results on top of the
@@ -132,6 +136,7 @@ const Chat: React.FC<IChatProps> = props => {
   useEffect(() => {
     if (!getMessages) { return }
     console.log('getMessage', getMessages.getMessages.length)
+    // console.log('curstate', curState);
     if (!curState) {
       setState({
         messages: getMessages.getMessages
@@ -146,6 +151,7 @@ const Chat: React.FC<IChatProps> = props => {
 
   useEffect(() => {
     if (!subData) { return }
+    console.log('resetting state', curState)
     if (!curState ) {
       setState({
         messages: [
@@ -174,7 +180,6 @@ const Chat: React.FC<IChatProps> = props => {
   // TODO type this mutation
   const [sendMessage, { error }] = useMutation(SEND_MESSAGE);
 
-
   if (error) {
     console.log('there was an error getting the messages')
     console.log(error)
@@ -202,6 +207,7 @@ const Chat: React.FC<IChatProps> = props => {
         (
           <GiftedChat
             queryLoading={queryLoading}
+            networkStatus={networkStatus}
             refreshFn={refreshFn}
             chatID={chatID}
             curUser={curUser}

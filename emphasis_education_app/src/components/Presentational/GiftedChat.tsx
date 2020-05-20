@@ -10,6 +10,7 @@ import {
 
 interface IGiftedChatProps {
   queryLoading: boolean;
+  networkStatus: number;
   chatID: string;
   curUser: IMessageUserType;
   sendMessage: any;
@@ -18,7 +19,7 @@ interface IGiftedChatProps {
 }
 
 
-const MyGiftedChat: React.FC<IGiftedChatProps> = ({ queryLoading, refreshFn, chatID, curUser, sendMessage, messages }) => (
+const MyGiftedChat: React.FC<IGiftedChatProps> = ({ queryLoading, networkStatus, refreshFn, chatID, curUser, sendMessage, messages }) => (
   <GiftedChat
     // what gets rendered when the messages are loading
     // get a loading spinner here
@@ -26,9 +27,10 @@ const MyGiftedChat: React.FC<IGiftedChatProps> = ({ queryLoading, refreshFn, cha
     // this is what is going to be sent to the FlatList in GiftedChat
     listViewProps={
       {
-        onEndReached: ()=> console.log('hit the end'),
+        // onEndReached: ()=> console.log('hit the end'),
         onEndReachedThreshold: 0.1,
         refreshing: queryLoading,
+        // refreshing: networkStatus === 4 ? true : false,
         onRefresh: refreshFn
       }
     }

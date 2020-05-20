@@ -161,7 +161,7 @@ class FireBaseSVC {
 
   async pushUser({ email, password}, hash, userType) {
     // generate type for user
-    const testChatIds: Array<string> = ['test'];
+    const testChatIds: Array<string> = ['test', 'test2'];
     const user_and_id = {
       email,
       password,
@@ -199,8 +199,10 @@ class FireBaseSVC {
     if (numMessages === 0) { return [] }
     // return the entire list of messages
     if (numMessages > NUM_FETCH_MESSAGES) {}
-    const start: number = -1 * numMessages + init;
-    const end: number = start + NUM_FETCH_MESSAGES;
+    const start: number = -1 * (numMessages - 1) + init;
+    if (start > 0) {return []}
+    const potentialEnd: number = start + NUM_FETCH_MESSAGES - 1;
+    const end: number = potentialEnd > 0 ? 0 : potentialEnd;
     console.log('start', start);
     console.log('end', end);
 
