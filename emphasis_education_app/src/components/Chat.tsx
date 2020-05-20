@@ -106,7 +106,7 @@ const Chat: React.FC<IChatProps> = props => {
   const chatID: string = props.route.params.chatID;
 
   // lets cache this data
-  const { data: getMessages, loading: queryLoading, refetch, error: errorMessage, networkStatus } = useQuery<
+  const { data: getMessages, loading: queryLoading, refetch, error: errorMessage,  } = useQuery<
       IGetMessages,
       IGetMessagesInput
     >(
@@ -119,15 +119,13 @@ const Chat: React.FC<IChatProps> = props => {
       onCompleted: () => console.log('ran'),
       // need to look at this again
       // fetchPolicy: 'no-cache',
-      notifyOnNetworkStatusChange: true
+      // notifyOnNetworkStatusChange: true
     }
   )
 
   if (errorMessage) {
     console.log(errorMessage);
   }
-  // console.log('networkstatus: ', networkStatus);
-
   // TODO chatPicker might have to have state over this chat
   const { data: subData } = useSubscription<IMessageReceived>(SUB)
 
@@ -193,7 +191,7 @@ const Chat: React.FC<IChatProps> = props => {
 
   const refreshFn = () => {
     console.log('refreshing')
-    initFetch = initFetch + REFETCH_LIMIT + 1;
+    initFetch = initFetch + REFETCH_LIMIT;
     const variables = { chatID, init: initFetch}
     // check whether there are even messages for us to refresh w
 
@@ -207,7 +205,7 @@ const Chat: React.FC<IChatProps> = props => {
         (
           <GiftedChat
             queryLoading={queryLoading}
-            networkStatus={networkStatus}
+            // networkStatus={networkStatus}
             refreshFn={refreshFn}
             chatID={chatID}
             curUser={curUser}

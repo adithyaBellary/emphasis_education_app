@@ -205,6 +205,7 @@ class FireBaseSVC {
     const end: number = potentialEnd > 0 ? 0 : potentialEnd;
     console.log('start', start);
     console.log('end', end);
+    console.log('init', init)
 
     return await this._refMessage(chatHash)
       .orderByChild('messageID')

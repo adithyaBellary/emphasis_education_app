@@ -10,7 +10,7 @@ import {
 
 interface IGiftedChatProps {
   queryLoading: boolean;
-  networkStatus: number;
+  // networkStatus: number;
   chatID: string;
   curUser: IMessageUserType;
   sendMessage: any;
@@ -19,7 +19,7 @@ interface IGiftedChatProps {
 }
 
 
-const MyGiftedChat: React.FC<IGiftedChatProps> = ({ queryLoading, networkStatus, refreshFn, chatID, curUser, sendMessage, messages }) => (
+const MyGiftedChat: React.FC<IGiftedChatProps> = ({ queryLoading, refreshFn, chatID, curUser, sendMessage, messages }) => (
   <GiftedChat
     // what gets rendered when the messages are loading
     // get a loading spinner here
