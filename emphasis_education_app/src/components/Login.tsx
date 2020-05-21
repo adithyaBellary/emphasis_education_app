@@ -26,6 +26,7 @@ const PositionDiv = styled(View)`
 
 const TitleText = styled(Text)`
   font-size: 20px;
+  fontFamily: 'Nunito';
 `;
 
 const TitleContain = styled(View)`
@@ -65,7 +66,8 @@ const Login: React.FC<ILoginProps> = props => {
     name: 'Test User'
   })
 
-  const [doLogin, { error }] = useMutation(
+  // TODO use loading state to render spinner
+  const [doLogin, { error, loading }] = useMutation(
     LOGIN,
     {
       variables: {

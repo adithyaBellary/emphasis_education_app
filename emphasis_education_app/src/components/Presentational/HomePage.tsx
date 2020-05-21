@@ -36,7 +36,7 @@ const MissionStatement: React.FC = () => {
 }
 
 const Title = styled(Text)`
-  fontFamily: "Nunito"
+  fontFamily: 'Nunito'
 `
 
 const Home: React.FC<IHomeProps> = (props) => {
@@ -52,6 +52,12 @@ const Home: React.FC<IHomeProps> = (props) => {
       }
     )
   }
+
+  const goToMyProfile = () => {
+    props.navigation.navigate(
+      'MyProfile'
+    )
+  }
   return (
     <ThemeProvider theme={theme}>
       <CenteredDiv>
@@ -63,11 +69,14 @@ const Home: React.FC<IHomeProps> = (props) => {
           <IconContain>
             <Icon
               name='rowing'
-              onPress={() => Alert.alert('my profile')}
+              // onPress={() => Alert.alert('my profile')}
+              onPress={goToMyProfile}
+              reverse={true}
             />
             <Icon
               name='message'
               onPress={goToChat}
+              reverse={true}
             />
           </IconContain>
 
@@ -81,10 +90,12 @@ const Home: React.FC<IHomeProps> = (props) => {
             <Icon
               name='rowing'
               onPress={() => Alert.alert('additional courses')}
+              reverse={true}
             />
             <Icon
               name='rowing'
               onPress={() => Alert.alert('settings')}
+              reverse={true}
             />
           </IconContain>
         </IconSection>

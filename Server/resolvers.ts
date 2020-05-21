@@ -4,8 +4,8 @@ import { MESSAGE_RECEIVED_EVENT } from './constants';
 
 const resolvers = {
   Query: {
-    getMessages: async (_, { id }, { dataSources }) => {
-      const resp = await dataSources.f.getMessages(id);
+    getMessages: async (_, { chatID, init }, { dataSources }) => {
+      const resp = await dataSources.f.getMessages(chatID, init);
       return resp;
     },
     getUserID: (_, __, { dataSources }) => {
@@ -27,7 +27,7 @@ const resolvers = {
       return response
     },
     sendMessage: async (_, { messages }, { dataSources }) => {
-      const res = dataSources.f.sendMessages(messages);
+      const res = await dataSources.f.sendMessages(messages);
       return res;
     },
     createUser: async (_, { email, password, userType }, { dataSources }) => {

@@ -10,8 +10,8 @@ class dataSource extends RESTDataSource {
     super();
   }
 
-  async getMessages(id) {
-    const resp = await firebaseSvc.getMessages(id);
+  async getMessages(chatID, init) {
+    const resp = await firebaseSvc.getMessages(chatID, init);
     // console.log('in datasource');
     // console.log(resp);
     return resp
@@ -22,8 +22,9 @@ class dataSource extends RESTDataSource {
     return response
   }
 
-  sendMessages(message: IMessage[]) {
-    const res = firebaseSvc.send(message)
+  async sendMessages(message: IMessage[]) {
+    const res = await firebaseSvc.send(message)
+    console.log('res', res)
     return res;
   }
 

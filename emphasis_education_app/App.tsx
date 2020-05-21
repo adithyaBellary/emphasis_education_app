@@ -19,12 +19,12 @@ import { split } from 'apollo-link';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { getMainDefinition } from 'apollo-utilities';
 
-
 import Login from './src/components/Login';
 import Chat from './src/components/Chat';
 import HomePage from './src/components/HomePage';
 import CreateUser from './src/components/CreateUser';
 import ChatPicker from './src/components/ChatPicker';
+import MyProfile from './src/components/MyProfile';
 
 const cache = new InMemoryCache();
 const httplink = new HttpLink({
@@ -55,7 +55,6 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 });
 
 
-// looks like i need to define all the routes here?
 // TODO add typing that each route needs
 type RootStackProps = {
   Login: undefined;
@@ -66,14 +65,12 @@ type RootStackProps = {
     _id: string
   };
   ChatPicker: undefined;
-  CreateUser: undefined
+  CreateUser: undefined;
+  MyProfile: undefined;
 }
 
-// let us create the navigator
 const stack = createStackNavigator<RootStackProps>();
 
-// TODO might need to wrap this all in an
-// <ApolloProvider /> tag so that everything can access graphQL
 const App = () => (
   <ApolloProvider client={client}>
     <NavigationContainer>
@@ -84,7 +81,7 @@ const App = () => (
           options={{
             title: '',
             headerStyle: {
-              backgroundColor: 'white'
+              backgroundColor: '#5a1846'
             }
           }}
         />
@@ -93,10 +90,11 @@ const App = () => (
           component={HomePage}
           options={{ title: '' }}
         />
+        {/* can maybe get the name of the chat and then set the title to it */}
         <stack.Screen
           name="Chat"
           component={Chat}
-          options={{ title: '' }}
+          options={{ title: 'Test Subject' }}
         />
         <stack.Screen
           name="CreateUser"
@@ -106,7 +104,12 @@ const App = () => (
         <stack.Screen
           name="ChatPicker"
           component={ChatPicker}
-          options={{ title: '' }}
+          options={{ title: 'My Chats' }}
+        />
+        <stack.Screen
+          name="MyProfile"
+          component={MyProfile}
+          options={{ title: 'My Profile' }}
         />
       </stack.Navigator>
     </NavigationContainer>

@@ -8,7 +8,6 @@ import {
 import styled from 'styled-components';
 
 interface IChatPickerProps {
-  // chats: Array<any>;
   navigation: any;
   route: any;
 }
@@ -33,7 +32,6 @@ const ChatPicker: React.FC<IChatPickerProps> = props => {
     )
   }
   // add dropdown functionality
-  console.log(props.route.params.chatIDs);
   return (
     <>
       <SafeAreaView>
