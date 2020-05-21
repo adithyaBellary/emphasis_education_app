@@ -71,10 +71,12 @@ const Home: React.FC<IHomeProps> = (props) => {
               name='rowing'
               // onPress={() => Alert.alert('my profile')}
               onPress={goToMyProfile}
+              reverse={true}
             />
             <Icon
               name='message'
               onPress={goToChat}
+              reverse={true}
             />
           </IconContain>
 
@@ -88,10 +90,12 @@ const Home: React.FC<IHomeProps> = (props) => {
             <Icon
               name='rowing'
               onPress={() => Alert.alert('additional courses')}
+              reverse={true}
             />
             <Icon
               name='rowing'
               onPress={() => Alert.alert('settings')}
+              reverse={true}
             />
           </IconContain>
         </IconSection>

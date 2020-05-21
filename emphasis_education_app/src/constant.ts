@@ -1,1 +1,1 @@
-export const REFETCH_LIMIT: number = 10;
+export const REFETCH_LIMIT: number = 15;

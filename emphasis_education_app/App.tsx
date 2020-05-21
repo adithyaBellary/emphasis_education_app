@@ -81,7 +81,7 @@ const App = () => (
           options={{
             title: '',
             headerStyle: {
-              backgroundColor: 'white'
+              backgroundColor: '#5a1846'
             }
           }}
         />
