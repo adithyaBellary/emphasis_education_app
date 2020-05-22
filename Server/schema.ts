@@ -61,6 +61,10 @@ const typeDefs = gql`
     chatIDs: [String]!
   }
 
+  # this might need some connection to the other members of the family
+  # array of strings that are the emails of the fam members
+
+  # members: [String]!
   type UserCreate {
     email: String!
     password: String!
@@ -95,6 +99,7 @@ const typeDefs = gql`
     # change classes
     # change tutor
     # add offered classes
+    # change the members of the family
     addClass(subject: String!): Boolean
 
   }

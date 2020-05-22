@@ -84,6 +84,8 @@ const Login: React.FC<ILoginProps> = props => {
     }
   )
 
+  console.log('loading', loading);
+
   if (error) console.log('ERROR');
 
   const onChangeEmail = (email: string) => setState({

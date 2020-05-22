@@ -5,6 +5,8 @@ import {
   View, Alert,
 } from 'react-native'
 // import RadioGroup from 'react-native-radio-buttons-group';
+import { Input } from 'react-native-elements';
+import styled from 'styled-components';
 
 import {
   MytextInput,
@@ -64,6 +66,15 @@ const CreateUser: React.FC = () => {
     })
   }
 
+  const StyledInput = styled(Input)`
+    color: green;
+    background: red;
+  `
+
+  const MyView = styled(View)`
+    width: 80%;
+  `
+
   // maybe split the create user flow up into multiple screens?
   return (
     <View>
@@ -72,6 +83,11 @@ const CreateUser: React.FC = () => {
         value={curState.name}
         onChangeText={onNameChange}
       />
+      <MyView>
+        <StyledInput
+
+        />
+      </MyView>
       <MytextInput
         placeholder='email'
         value={curState.email}
