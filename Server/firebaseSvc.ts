@@ -7,7 +7,6 @@ import pubsub from './pubsub';
 import { firebaseConfig } from './config/firebase';
 import { MESSAGE_RECEIVED_EVENT, NUM_FETCH_MESSAGES } from './constants';
 import { IMessage } from './types/IMessage';
-import { IMessagePayload } from './types/IMessagePayload';
 
 const MESSAGE_REF_BASE: string = 'Messages';
 const User_REF_BASE: string = 'Users';

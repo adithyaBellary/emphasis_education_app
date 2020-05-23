@@ -1,29 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useMutation } from '@apollo/react-hooks';
 import {
-  View, Alert, TextInput,
+  View,
+  Alert,
+  TextInput,
+  Text
 } from 'react-native'
 // import RadioGroup from 'react-native-radio-buttons-group';
 import { Input } from 'react-native-elements';
 
 import { CREATE_USER } from '../queries/CreateUser';
-import { IUser } from '../types';
+import { IUserInput, IUser } from '../types';
 import {
   MytextInput,
   ButtonContainer,
   MyButton,
   MyButtonText,
 } from './shared';
+import { CreateUserFnContext } from './CreateUserContainer';
 
+interface ICreateUser {
+  navigation: any;
+  route: any;
+  numUser: number;
+  saveUserInfo(userInfo: IUserInput): void;
+}
 
-const CreateUser: React.FC = () => {
+const CreateUser: React.FC<ICreateUser> = props => {
+  console.log('createUser props', props);
 
-  const [curState, setState] = useState({
+  const MyContext = useContext(CreateUserFnContext);
+  console.log('MyContext', MyContext)
+
+  const [curState, setState] = useState<IUserInput>({
     name: 'test name',
     email: 'test01@gmail.com',
     password: 'test01',
     confirmPassword: 'test01',
-    phone_number: '',
+    phoneNumber: '',
     userType: 'Student',
     classes: 'Math'
   });
@@ -55,9 +69,30 @@ const CreateUser: React.FC = () => {
     })
   }
 
+  const GoToLogin = () => {
+    // run createUserMutation here
+    props.navigation.navigate('Login')
+  }
+
+  const addMember = () => {
+    // se need to write this info to the parent state
+    console.log('saving')
+    // if (props.saveUserInfo) {
+    //   props.saveUserInfo(curState)
+    // } else {
+    //   props.route.params.save(curState)
+    // }
+
+    MyContext.save(curState);
+    props.navigation.push(
+      'CreateUser',
+    )
+  }
+
   // maybe split the create user flow up into multiple screens?
   return (
     <View>
+      <Text>this is fam member number: {props.numUser}</Text>
       <MytextInput
         placeholder='name'
         value={curState.name}
@@ -96,8 +131,18 @@ const CreateUser: React.FC = () => {
       />
 
       <ButtonContainer>
+        <MyButton>
+          <MyButtonText
+            onPress={addMember}
+          >
+            Add another member
+          </MyButtonText>
+        </MyButton>
+      </ButtonContainer>
+
+      <ButtonContainer>
         <MyButton
-          onPress={createUser}
+          onPress={GoToLogin}
         >
           <MyButtonText>
             Submit

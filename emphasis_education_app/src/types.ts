@@ -4,6 +4,15 @@ export interface IProps {
   route: any;
 }
 
-export interface IUser {
-
+export interface IUserInput {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  phoneNumber: string;
+  userType: string;
+  classes: string;
 }
+
+// dont want the confirmPassword stuff for when we write to the database
+export type IUser = Pick<IUserInput, 'name'>;
