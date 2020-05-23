@@ -65,7 +65,7 @@ const typeDefs = gql`
   # array of strings that are the emails of the fam members
 
   # members: [String]!
-  type UserCreate {
+  type UserType {
     email: String!
     password: String!
     userType: String!
@@ -87,6 +87,7 @@ const typeDefs = gql`
 
     # needs to be written
     # get all classes
+    getAllUsers: [UserType]
   }
 
   type Mutation {
