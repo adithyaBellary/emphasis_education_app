@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
 import {
-  View, Alert,
+  View, Alert, TextInput,
 } from 'react-native'
 // import RadioGroup from 'react-native-radio-buttons-group';
 import { Input } from 'react-native-elements';
-import styled from 'styled-components';
 
+import { CREATE_USER } from '../queries/CreateUser';
+import { IUser } from '../types';
 import {
   MytextInput,
   ButtonContainer,
@@ -15,11 +15,6 @@ import {
   MyButtonText,
 } from './shared';
 
-const CREATE_USER = gql`
-  mutation createUser($email: String!, $password: String!, $userType: Permission!) {
-    createUser(email: $email, password: $password, userType: $userType)
-  }
-`;
 
 const CreateUser: React.FC = () => {
 
@@ -33,19 +28,13 @@ const CreateUser: React.FC = () => {
     classes: 'Math'
   });
 
-  // TODO generalize input handler functions
-  const onNameChange = (name: string) => setState({ ...curState, name });
-  const onEmailChange = (email: string) => setState({ ...curState, email });
-  const onPasswordChange = (password: string) => setState({ ...curState, password });
-  const onPasswordConfirmChange= (confirmPassword: string) => setState({ ...curState, confirmPassword });
-  const onClassChange = (classes: string) => setState({ ...curState, classes });
-  const onTypeChange = (userType: string) => setState({ ...curState, userType });
+  const handleTextChange = (name: string) => (text: string) => setState({...curState, [name]: text})
 
   const [createUserMut, { error }] = useMutation(
     CREATE_USER,
     {
       onCompleted: () => {
-        Alert.alert('Thank you for joining Emphasis Education');
+        Alert.alert('Thank you for joining Emphasis Education!');
       }
     }
   )
@@ -66,52 +55,44 @@ const CreateUser: React.FC = () => {
     })
   }
 
-  const StyledInput = styled(Input)`
-    color: green;
-    background: red;
-  `
-
-  const MyView = styled(View)`
-    width: 80%;
-  `
-
   // maybe split the create user flow up into multiple screens?
   return (
     <View>
       <MytextInput
         placeholder='name'
         value={curState.name}
-        onChangeText={onNameChange}
+        onChangeText={handleTextChange('name')}
       />
-      <MyView>
-        <StyledInput
-
-        />
-      </MyView>
-      <MytextInput
+      <Input
+        placeholder='email'
+        onChangeText={handleTextChange('email')}
+        value={curState.email}
+        label={'email'}
+      />
+      {/* <MytextInput
         placeholder='email'
         value={curState.email}
-        onChangeText={onEmailChange}
-      />
+        onChangeText={handleTextChange('email')}
+      /> */}
       <MytextInput
         placeholder='password'
         value={curState.password}
-        onChangeText={onPasswordChange}
+        onChangeText={handleTextChange('password')}
       />
       <MytextInput
         placeholder='confirm password'
         value={curState.confirmPassword}
-        onChangeText={onPasswordConfirmChange}
+        onChangeText={handleTextChange('confirmPassword')}
       />
       <MytextInput
         placeholder='user type'
         value={curState.userType}
-        onChangeText={onTypeChange}
+        onChangeText={handleTextChange('userType')}
       />
       <MytextInput
         placeholder='classes'
         value={curState.classes}
-        onChangeText={onClassChange}
+        onChangeText={handleTextChange('classes')}
       />
 
       <ButtonContainer>

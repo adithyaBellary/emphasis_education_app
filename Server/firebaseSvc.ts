@@ -13,6 +13,8 @@ const MESSAGE_REF_BASE: string = 'Messages';
 const User_REF_BASE: string = 'Users';
 const NUM_MESSAGES_BASE: string = 'NumberOfMessages';
 
+import { MessageTypeInput } from './types/types';
+
 class FireBaseSVC {
   constructor() {
     firebase.initializeApp(firebaseConfig);

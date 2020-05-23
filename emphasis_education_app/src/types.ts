@@ -3,3 +3,7 @@ export interface IProps {
   navigation: any;
   route: any;
 }
+
+export interface IUser {
+
+}

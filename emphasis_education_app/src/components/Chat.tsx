@@ -118,8 +118,7 @@ const Chat: React.FC<IChatProps> = props => {
       },
       onCompleted: () => console.log('ran'),
       // need to look at this again
-      // fetchPolicy: 'no-cache',
-      // notifyOnNetworkStatusChange: true
+      fetchPolicy: 'no-cache',
     }
   )
 
