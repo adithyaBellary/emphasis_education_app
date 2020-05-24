@@ -16,7 +16,7 @@ interface ICreateUserContainProps {
   route: any;
 }
 
-interface ICreateUserArr {
+export interface ICreateUserArr {
   users: IUserInput[];
 }
 

@@ -8,9 +8,10 @@ import {
   MyButton,
   MyButtonText,
 } from './shared';
+import { ICreateUserArr } from './CreateUserContainer';
 
 interface IConfirmationScreenProps {
-  users: any;
+  users: ICreateUserArr | undefined;
   submit(): void;
 }
 
