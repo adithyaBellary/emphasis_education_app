@@ -29,6 +29,7 @@ class dataSource extends RESTDataSource {
   }
 
   async createUser(user) {
+    console.log('user in datasource being created', user)
     await firebaseSvc.createUser(user);
   }
 

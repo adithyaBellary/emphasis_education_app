@@ -161,7 +161,6 @@ class FireBaseSVC {
   }
 
   async pushUser({ email, password}, hash, userType) {
-    // generate type for user
     const testChatIds: Array<string> = ['test', 'test2'];
     const user_and_id = {
       email,

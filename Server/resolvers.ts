@@ -30,11 +30,14 @@ const resolvers = {
       const res = await dataSources.f.sendMessages(messages);
       return res;
     },
-    createUser: async (_, { email, password, userType }, { dataSources }) => {
-      console.log('in resolver creaging user');
+    createUser: async (_, { users }, { dataSources }) => {
+      console.log('in resolver creating user', users);
       // this adds the user to the firebase list of users
-      await dataSources.f.createUser({email, password});
-      await dataSources.f.pushUser({email, password}, userType);
+      users.array.forEach(async element => {
+        // await dataSources.f.createUser({element, element.password});
+        // this adds user to the db
+        // await dataSources.f.pushUser({email, password}, userType);
+      });
       return true;
     }
   },

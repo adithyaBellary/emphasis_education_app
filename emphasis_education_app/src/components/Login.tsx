@@ -89,7 +89,7 @@ const Login: React.FC<ILoginProps> = props => {
     }
   )
 
-  console.log('loading', loading);
+  // console.log('loading', loading);
 
   if (error) console.log('ERROR');
 

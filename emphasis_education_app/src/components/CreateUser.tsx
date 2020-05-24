@@ -1,5 +1,4 @@
 import React, { useState, useContext } from 'react';
-import { useMutation } from '@apollo/react-hooks';
 import {
   View,
   Alert,
@@ -9,7 +8,6 @@ import {
 // import RadioGroup from 'react-native-radio-buttons-group';
 import { Input } from 'react-native-elements';
 
-import { CREATE_USER } from '../queries/CreateUser';
 import { IUserInput, IUser } from '../types';
 import {
   MytextInput,
@@ -17,20 +15,33 @@ import {
   MyButton,
   MyButtonText,
 } from './shared';
-import { CreateUserFnContext } from './CreateUserContainer';
+import { CreateUserFnContext } from './Context';
 
 interface ICreateUser {
   navigation: any;
   route: any;
-  numUser: number;
+  // numUser: number;
+  GoToConfirmationScreen(): void;
   saveUserInfo(userInfo: IUserInput): void;
+  // createUserFn(): void;
+}
+
+const EmptyData: IUserInput = {
+  name: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
+  phoneNumber: '',
+  userType: '',
+  classes: ''
 }
 
 const CreateUser: React.FC<ICreateUser> = props => {
-  console.log('createUser props', props);
+  // console.log('createUser props', props);
+  const [numUser, setNumUser] = React.useState<number>(1)
 
   const MyContext = useContext(CreateUserFnContext);
-  console.log('MyContext', MyContext)
+  // console.log('MyContext', MyContext)
 
   const [curState, setState] = useState<IUserInput>({
     name: 'test name',
@@ -43,56 +54,33 @@ const CreateUser: React.FC<ICreateUser> = props => {
   });
 
   const handleTextChange = (name: string) => (text: string) => setState({...curState, [name]: text})
+  const clearData = () => setState(EmptyData);
 
-  const [createUserMut, { error }] = useMutation(
-    CREATE_USER,
-    {
-      onCompleted: () => {
-        Alert.alert('Thank you for joining Emphasis Education!');
-      }
-    }
-  )
+  const GoToConf = () => {
+    // MyContext.save(curState);
+    // MyContext.goToConfirmationScreen();
+    // MyContext.create()
 
-  if (error) {
-    console.log('there was something wrong with creating the user');
-    console.log(error);
-  }
-
-  const createUser = () => {
-    console.log('running create user mutation')
-    createUserMut({
-      variables: {
-        email: curState.email,
-        password: curState.password,
-        userType: curState.userType
-      }
-    })
-  }
-
-  const GoToLogin = () => {
-    // run createUserMutation here
-    props.navigation.navigate('Login')
+    // props.navigation.navigate('Login')
+    props.saveUserInfo(curState);
+    props.GoToConfirmationScreen()
+    // props.navigation.navigate('ConfirmationScreen')
   }
 
   const addMember = () => {
-    // se need to write this info to the parent state
-    console.log('saving')
-    // if (props.saveUserInfo) {
-    //   props.saveUserInfo(curState)
-    // } else {
-    //   props.route.params.save(curState)
-    // }
-
-    MyContext.save(curState);
-    props.navigation.push(
-      'CreateUser',
-    )
+    // instead, lets clear the input screen and then increment the counter at the top
+    props.saveUserInfo(curState);
+    setNumUser(numUser + 1);
+    clearData();
+    // MyContext.save(curState);
+    // props.navigation.push(
+    //   'CreateUser',
+    // )
   }
 
-  // maybe split the create user flow up into multiple screens?
   return (
     <View>
-      <Text>this is fam member number: {props.numUser}</Text>
+      <Text>this is fam member number: {numUser}</Text>
       <MytextInput
         placeholder='name'
         value={curState.name}
@@ -142,7 +130,7 @@ const CreateUser: React.FC<ICreateUser> = props => {
 
       <ButtonContainer>
         <MyButton
-          onPress={GoToLogin}
+          onPress={GoToConf}
         >
           <MyButtonText>
             Submit

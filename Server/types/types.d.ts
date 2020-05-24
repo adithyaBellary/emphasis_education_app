@@ -78,7 +78,21 @@ export type UserType = {
   email: Scalars['String'];
   password: Scalars['String'];
   userType: Scalars['String'];
+  phoneNumber: Scalars['String'];
   classes: Array<Scalars['String']>;
+};
+
+export type UserInfoType = {
+  __typename?: 'UserInfoType';
+  name: Scalars['String'];
+  email: Scalars['String'];
+  phoneNumber: Scalars['String'];
+  groupID: Scalars['String'];
+};
+
+export type UserInfoTypeArr = {
+  __typename?: 'UserInfoTypeArr';
+  users: Array<Maybe<UserInfoType>>;
 };
 
 export type Query = {

@@ -30,7 +30,7 @@ const SUB = gql`
 `
 
 const SEND_MESSAGE = gql`
-  mutation sendMessage($messages: [MessageTypeInput]) {
+  mutation sendMessage($messages: [MessageInput]) {
     sendMessage(messages: $messages) {
       # id
       text
