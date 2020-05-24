@@ -12,8 +12,6 @@ const MESSAGE_REF_BASE: string = 'Messages';
 const User_REF_BASE: string = 'Users';
 const NUM_MESSAGES_BASE: string = 'NumberOfMessages';
 
-import { MessageTypeInput } from './types/types';
-
 class FireBaseSVC {
   constructor() {
     firebase.initializeApp(firebaseConfig);
@@ -121,13 +119,13 @@ class FireBaseSVC {
     })
   }
 
-  createUser = async (user) => {
+  createUser = async (email, password, name) => {
     firebase.auth()
-      .createUserWithEmailAndPassword(user.email, user.password)
+      .createUserWithEmailAndPassword(email, password)
       .then(() => {
         console.log('successfully created the user');
         const newUser = firebase.auth().currentUser
-        newUser.updateProfile({ displayName: user.name})
+        newUser.updateProfile({ displayName: name})
           .then(() => {
             console.log('all done creating the user');
           }), e => console.log('an error updating the display name');

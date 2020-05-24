@@ -58,12 +58,15 @@ const CreateUserContain: React.FC<ICreateUserContainProps> = props => {
 
   const runCreateUserMut = (): void => {
     console.log('userInfo before running mutaion', userInfo)
+    const usableInfo: IUser[] = userInfo.users.map(({confirmPassword, classes, ...rest }) => {
+      return rest;
+    })
+    console.log('userInfo before running mutaion', usableInfo)
     createUserMut({
       variables: {
-        users: userInfo!.users
+        users: usableInfo
       }
     })
-    console.log('creating users with', userInfo)
   }
 
   const GoToCOnfirmation = () => {

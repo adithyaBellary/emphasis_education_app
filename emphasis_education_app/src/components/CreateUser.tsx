@@ -8,7 +8,7 @@ import {
 // import RadioGroup from 'react-native-radio-buttons-group';
 import { Input } from 'react-native-elements';
 
-import { IUserInput, IUser } from '../types';
+import { IUserInput, IUser, Permission } from '../types';
 import {
   MytextInput,
   ButtonContainer,
@@ -29,7 +29,7 @@ const EmptyData: IUserInput = {
   password: '',
   confirmPassword: '',
   phoneNumber: '',
-  userType: '',
+  userType: Permission.Student,
   classes: ''
 }
 
@@ -42,7 +42,7 @@ const CreateUser: React.FC<ICreateUser> = props => {
     password: 'test01',
     confirmPassword: 'test01',
     phoneNumber: '',
-    userType: 'Student',
+    userType: Permission.Student,
     classes: 'Math'
   });
 

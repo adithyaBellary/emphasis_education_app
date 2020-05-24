@@ -1,6 +1,7 @@
 // fieldName: (parent, args, context, info) => data;
 import pubsub from './pubsub';
 import { MESSAGE_RECEIVED_EVENT } from './constants';
+import { UserInputType } from './types/schema-types';
 
 const resolvers = {
   Query: {
@@ -30,11 +31,11 @@ const resolvers = {
       const res = await dataSources.f.sendMessages(messages);
       return res;
     },
-    createUser: async (_, { users }, { dataSources }) => {
+    createUser: async (_, users: UserInputType[], { dataSources }) => {
       console.log('in resolver creating user', users);
-      // this adds the user to the firebase list of users
-      users.array.forEach(async element => {
-        // await dataSources.f.createUser({element, element.password});
+      users.forEach(async (element: UserInputType) => {
+        // this adds the user to the firebase list of users
+        await dataSources.f.createUser(element.email, element.password, element.name);
         // this adds user to the db
         // await dataSources.f.pushUser({email, password}, userType);
       });

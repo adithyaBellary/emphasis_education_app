@@ -10,11 +10,17 @@ export type Scalars = {
   Upload: any;
 };
 
-export type MessageTypeInput = {
+export type MessageInput = {
   id: Scalars['String'];
   text: Scalars['String'];
-  user: UserInput;
+  user: MessageUserInput;
   chatID: Scalars['String'];
+};
+
+export type MessageUserInput = {
+  name: Scalars['String'];
+  email: Scalars['String'];
+  _id?: Maybe<Scalars['String']>;
 };
 
 export type MessagePayload = {
@@ -23,12 +29,6 @@ export type MessagePayload = {
   MessageId: Scalars['Int'];
   createdAt: Scalars['String'];
   user: MessageUser;
-};
-
-export type UserInput = {
-  name: Scalars['String'];
-  email: Scalars['String'];
-  _id?: Maybe<Scalars['String']>;
 };
 
 export type MessageUser = {
@@ -73,13 +73,12 @@ export type LoginPayload = {
   chatIDs: Array<Maybe<Scalars['String']>>;
 };
 
-export type UserType = {
-  __typename?: 'UserType';
+export type UserInputType = {
+  name: Scalars['String'];
   email: Scalars['String'];
   password: Scalars['String'];
-  userType: Scalars['String'];
+  userType: Permission;
   phoneNumber: Scalars['String'];
-  classes: Array<Scalars['String']>;
 };
 
 export type UserInfoType = {
@@ -87,12 +86,18 @@ export type UserInfoType = {
   name: Scalars['String'];
   email: Scalars['String'];
   phoneNumber: Scalars['String'];
+  userType: Permission;
   groupID: Scalars['String'];
 };
 
 export type UserInfoTypeArr = {
   __typename?: 'UserInfoTypeArr';
   users: Array<Maybe<UserInfoType>>;
+};
+
+export type CreateUserPayload = {
+  __typename?: 'CreateUserPayload';
+  success?: Maybe<Scalars['Boolean']>;
 };
 
 export type Query = {
@@ -102,7 +107,7 @@ export type Query = {
   getUser?: Maybe<TestUser>;
   getClasses?: Maybe<Array<Maybe<Scalars['String']>>>;
   queryUserID?: Maybe<Scalars['Int']>;
-  getAllUsers?: Maybe<Array<Maybe<UserType>>>;
+  getAllUsers?: Maybe<Array<Maybe<UserInfoType>>>;
 };
 
 
@@ -125,7 +130,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   login?: Maybe<LoginPayload>;
   sendMessage: MessagePayload;
-  createUser?: Maybe<Scalars['Boolean']>;
+  createUser?: Maybe<CreateUserPayload>;
   addClass?: Maybe<Scalars['Boolean']>;
 };
 
@@ -137,14 +142,12 @@ export type MutationLoginArgs = {
 
 
 export type MutationSendMessageArgs = {
-  messages?: Maybe<Array<Maybe<MessageTypeInput>>>;
+  messages?: Maybe<Array<Maybe<MessageInput>>>;
 };
 
 
 export type MutationCreateUserArgs = {
-  email: Scalars['String'];
-  password: Scalars['String'];
-  userType: Permission;
+  users?: Maybe<Array<Maybe<UserInputType>>>;
 };
 
 

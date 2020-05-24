@@ -67,16 +67,17 @@ const typeDefs = gql`
   # lets use this type for the input to the createUser function
   # members: [String]!
   input UserInputType {
+    name: String!
     email: String!
     password: String!
-    # userType: String!
     userType: Permission!
     phoneNumber: String!
-    groupID: String!
+    # groupID: String!
   }
 
+  # maybe we can add an optional info field too
+
   # this type will be for what we want to query for when we represent data on the frontend
-  # this will need to be a subset of the above type
   type UserInfoType {
     name: String!
     email: String!
