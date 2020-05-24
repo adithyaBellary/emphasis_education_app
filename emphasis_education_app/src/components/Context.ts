@@ -12,5 +12,3 @@ export const CreateUserFnContext = React.createContext<IContext>({
   create: () => {},
   goToConfirmationScreen: () => {}
 });
-
-// export const CreateUserFnContext = React.createContext(null)

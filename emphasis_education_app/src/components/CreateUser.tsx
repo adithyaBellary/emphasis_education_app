@@ -15,15 +15,12 @@ import {
   MyButton,
   MyButtonText,
 } from './shared';
-import { CreateUserFnContext } from './Context';
 
 interface ICreateUser {
   navigation: any;
   route: any;
-  // numUser: number;
   GoToConfirmationScreen(): void;
   saveUserInfo(userInfo: IUserInput): void;
-  // createUserFn(): void;
 }
 
 const EmptyData: IUserInput = {
@@ -37,11 +34,7 @@ const EmptyData: IUserInput = {
 }
 
 const CreateUser: React.FC<ICreateUser> = props => {
-  // console.log('createUser props', props);
   const [numUser, setNumUser] = React.useState<number>(1)
-
-  const MyContext = useContext(CreateUserFnContext);
-  // console.log('MyContext', MyContext)
 
   const [curState, setState] = useState<IUserInput>({
     name: 'test name',
@@ -57,25 +50,14 @@ const CreateUser: React.FC<ICreateUser> = props => {
   const clearData = () => setState(EmptyData);
 
   const GoToConf = () => {
-    // MyContext.save(curState);
-    // MyContext.goToConfirmationScreen();
-    // MyContext.create()
-
-    // props.navigation.navigate('Login')
     props.saveUserInfo(curState);
     props.GoToConfirmationScreen()
-    // props.navigation.navigate('ConfirmationScreen')
   }
 
   const addMember = () => {
-    // instead, lets clear the input screen and then increment the counter at the top
     props.saveUserInfo(curState);
     setNumUser(numUser + 1);
     clearData();
-    // MyContext.save(curState);
-    // props.navigation.push(
-    //   'CreateUser',
-    // )
   }
 
   return (

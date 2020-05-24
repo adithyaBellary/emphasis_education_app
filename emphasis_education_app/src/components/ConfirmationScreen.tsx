@@ -10,8 +10,6 @@ import {
 } from './shared';
 
 interface IConfirmationScreenProps {
-  // navigation: any;
-  // route: any;
   users: any;
   submit(): void;
 }
@@ -31,7 +29,7 @@ const ConfirmationScreen: React.FC<IConfirmationScreenProps> = ({ users, submit 
           <MyButtonText
             onPress={submit}
           >
-            Add another member
+            Submit
           </MyButtonText>
         </MyButton>
       </ButtonContainer>
