@@ -90,7 +90,7 @@ const CreateUserContain: React.FC<ICreateUserContainProps> = props => {
       )}
       {showConf && (
         <ConfirmationScreen
-          users={userInfo}
+          createdUsers={userInfo}
           submit={runCreateUserMut}
         />
       )}

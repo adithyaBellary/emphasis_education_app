@@ -9,22 +9,36 @@ import {
   MyButtonText,
 } from './shared';
 import { ICreateUserArr } from './CreateUserContainer';
+import IndividualItem from './DisplayIndividualMember';
+
+import { IUserInput } from '../types';
+
 
 interface IConfirmationScreenProps {
-  users: ICreateUserArr | undefined;
+  createdUsers: ICreateUserArr | undefined;
   submit(): void;
 }
 
 // we need to be able to edit info from here
-const ConfirmationScreen: React.FC<IConfirmationScreenProps> = ({ users, submit }) => {
-  console.log('props', users)
+const ConfirmationScreen: React.FC<IConfirmationScreenProps> = ({ createdUsers, submit }) => {
+  console.log('props in confirmation', createdUsers)
   // display the data just entered
+  // if (createdUsers) {
+  //   const { users } = createdUsers;
+  // }
 
   return (
     <View>
       <Text>
         Confirming
       </Text>
+      {createdUsers && createdUsers.users.map((user: IUserInput, index: number) => (
+        <IndividualItem
+          id={index + 1}
+          {...user}
+        />
+
+      ))}
       <ButtonContainer>
         <MyButton>
           <MyButtonText

@@ -92,11 +92,11 @@ const CreateUser: React.FC<ICreateUser> = props => {
         value={curState.userType}
         onChangeText={handleTextChange('userType')}
       />
-      {/* <MytextInput
-        placeholder='classes'
-        value={curState.classes}
-        onChangeText={handleTextChange('classes')}
-      /> */}
+      <MytextInput
+        placeholder='phone number'
+        value={curState.phoneNumber}
+        onChangeText={handleTextChange('phoneNumber')}
+      />
 
       <ButtonContainer>
         <MyButton
