@@ -21,7 +21,7 @@ export type IUser = Pick<
   >;
 
 export enum Permission {
-  Student = 'STUDENT',
-  Tutor = 'TUTOR',
-  Admin = 'ADMIN'
+  Student = 'Student',
+  Tutor = 'Tutor',
+  Admin = 'Admin'
 }

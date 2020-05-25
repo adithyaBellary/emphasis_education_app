@@ -7,7 +7,7 @@ import pubsub from './pubsub';
 import { firebaseConfig } from './config/firebase';
 import { MESSAGE_RECEIVED_EVENT, NUM_FETCH_MESSAGES } from './constants';
 import { IMessage } from './types/IMessage';
-import { UserInfoType } from './types/schema-types';
+import { UserInfoType, MutationLoginArgs, MessageInput } from './types/schema-types';
 
 const MESSAGE_REF_BASE: string = 'Messages';
 const User_REF_BASE: string = 'Users';
@@ -27,7 +27,7 @@ class FireBaseSVC {
     return curUser.chatIDs;
   }
 
-  login = async (user) => {
+  login = async (user: MutationLoginArgs) => {
     console.log('logging inn');
     let res: boolean;
     const output = await firebase.auth().signInWithEmailAndPassword(
@@ -38,7 +38,7 @@ class FireBaseSVC {
       () => res = true,
       () => res = false
     );
-    const chatIDs = await this.getChatId(user);
+    const chatIDs: string[] = await this.getChatId(user);
     return {
       res,
       chatIDs
@@ -322,7 +322,7 @@ class FireBaseSVC {
   }
 
   // could be worth updating the number of messages we have in that chat in a node as well
-  send = async (messages: IMessage[]) => {
+  send = async (messages: MessageInput[]) => {
     // TODO refactor all this rip
     // console.log('sending these messages: ', messages);
     let myText;
@@ -332,9 +332,9 @@ class FireBaseSVC {
     const oldMess: number = await this.getRecentId(messages[0].chatID);
     console.log('oldMess', oldMess);
     this.updateNumMessages(messages[0].chatID);
-    messages.forEach(async (element: IMessage) => {
+    messages.forEach(async (element: MessageInput) => {
       const { text, user, chatID } = element;
-      console.log(text)
+      // console.log(text)
       // myMesID = oldMess === 0 ? 0 : oldMess - 1;
       myMesID = oldMess;
       const message = {
@@ -375,7 +375,7 @@ class FireBaseSVC {
 
   async getUser(id: string) {
     // need await!!
-    const user = await firebase.database().ref(`Users/${id}`).once('value')
+    const user: UserInfoType = await firebase.database().ref(`Users/${id}`).once('value')
       .then(snap => {
         const val = snap.val()
         const key = Object.keys(val)[0];

@@ -40,7 +40,7 @@ const CreateUser: React.FC<ICreateUser> = props => {
     email: 'test01@gmail.com',
     password: 'test01',
     confirmPassword: 'test01',
-    phoneNumber: '',
+    phoneNumber: '2',
     userType: Permission.Student,
   });
 
