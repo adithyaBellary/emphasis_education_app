@@ -30,7 +30,7 @@ const SUB = gql`
 `
 
 const SEND_MESSAGE = gql`
-  mutation sendMessage($messages: [MessageTypeInput]) {
+  mutation sendMessage($messages: [MessageInput]) {
     sendMessage(messages: $messages) {
       # id
       text
@@ -118,8 +118,7 @@ const Chat: React.FC<IChatProps> = props => {
       },
       onCompleted: () => console.log('ran'),
       // need to look at this again
-      // fetchPolicy: 'no-cache',
-      // notifyOnNetworkStatusChange: true
+      fetchPolicy: 'no-cache',
     }
   )
 

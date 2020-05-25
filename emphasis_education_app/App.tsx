@@ -25,6 +25,8 @@ import HomePage from './src/components/HomePage';
 import CreateUser from './src/components/CreateUser';
 import ChatPicker from './src/components/ChatPicker';
 import MyProfile from './src/components/MyProfile';
+import CreateUserContain from './src/components/CreateUserContainer';
+import ConfirmationScreen from './src/components/ConfirmationScreen';
 
 const cache = new InMemoryCache();
 const httplink = new HttpLink({
@@ -66,7 +68,9 @@ type RootStackProps = {
   };
   ChatPicker: undefined;
   CreateUser: undefined;
+  CreateUserContain: undefined;
   MyProfile: undefined;
+  ConfirmationScreen: undefined;
 }
 
 const stack = createStackNavigator<RootStackProps>();
@@ -110,6 +114,16 @@ const App = () => (
           name="MyProfile"
           component={MyProfile}
           options={{ title: 'My Profile' }}
+        />
+        <stack.Screen
+          name="CreateUserContain"
+          component={CreateUserContain}
+          options={{ title: '' }}
+        />
+        <stack.Screen
+          name="ConfirmationScreen"
+          component={ConfirmationScreen}
+          options={{ title: '' }}
         />
       </stack.Navigator>
     </NavigationContainer>

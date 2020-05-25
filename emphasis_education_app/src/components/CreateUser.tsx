@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
-import { useMutation } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
+import React, { useState, useContext } from 'react';
 import {
-  View, Alert,
+  View,
+  Alert,
+  TextInput,
+  Text
 } from 'react-native'
 // import RadioGroup from 'react-native-radio-buttons-group';
+import { Input } from 'react-native-elements';
 
+import { IUserInput, IUser, Permission } from '../types';
 import {
   MytextInput,
   ButtonContainer,
@@ -13,94 +16,101 @@ import {
   MyButtonText,
 } from './shared';
 
-const CREATE_USER = gql`
-  mutation createUser($email: String!, $password: String!, $userType: Permission!) {
-    createUser(email: $email, password: $password, userType: $userType)
-  }
-`;
+interface ICreateUser {
+  navigation: any;
+  route: any;
+  GoToConfirmationScreen(): void;
+  saveUserInfo(userInfo: IUserInput): void;
+}
 
-const CreateUser: React.FC = () => {
+const EmptyData: IUserInput = {
+  name: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
+  phoneNumber: '',
+  userType: Permission.Student,
+}
 
-  const [curState, setState] = useState({
+const CreateUser: React.FC<ICreateUser> = props => {
+  const [numUser, setNumUser] = React.useState<number>(1)
+
+  const [curState, setState] = useState<IUserInput>({
     name: 'test name',
     email: 'test01@gmail.com',
     password: 'test01',
     confirmPassword: 'test01',
-    phone_number: '',
-    userType: 'Student',
-    classes: 'Math'
+    phoneNumber: '2',
+    userType: Permission.Student,
   });
 
-  // TODO generalize input handler functions
-  const onNameChange = (name: string) => setState({ ...curState, name });
-  const onEmailChange = (email: string) => setState({ ...curState, email });
-  const onPasswordChange = (password: string) => setState({ ...curState, password });
-  const onPasswordConfirmChange= (confirmPassword: string) => setState({ ...curState, confirmPassword });
-  const onClassChange = (classes: string) => setState({ ...curState, classes });
-  const onTypeChange = (userType: string) => setState({ ...curState, userType });
+  const handleTextChange = (name: string) => (text: string) => setState({...curState, [name]: text})
+  const clearData = () => setState(EmptyData);
 
-  const [createUserMut, { error }] = useMutation(
-    CREATE_USER,
-    {
-      onCompleted: () => {
-        Alert.alert('Thank you for joining Emphasis Education');
-      }
-    }
-  )
-
-  if (error) {
-    console.log('there was something wrong with creating the user');
-    console.log(error);
+  const GoToConf = () => {
+    props.saveUserInfo(curState);
+    props.GoToConfirmationScreen()
   }
 
-  const createUser = () => {
-    console.log('running create user mutation')
-    createUserMut({
-      variables: {
-        email: curState.email,
-        password: curState.password,
-        userType: curState.userType
-      }
-    })
+  const addMember = () => {
+    props.saveUserInfo(curState);
+    setNumUser(numUser + 1);
+    clearData();
   }
 
-  // maybe split the create user flow up into multiple screens?
   return (
     <View>
+      <Text>this is fam member number: {numUser}</Text>
       <MytextInput
         placeholder='name'
         value={curState.name}
-        onChangeText={onNameChange}
+        onChangeText={handleTextChange('name')}
       />
-      <MytextInput
+      <Input
+        placeholder='email'
+        onChangeText={handleTextChange('email')}
+        value={curState.email}
+        label={'email'}
+      />
+      {/* <MytextInput
         placeholder='email'
         value={curState.email}
-        onChangeText={onEmailChange}
-      />
+        onChangeText={handleTextChange('email')}
+      /> */}
       <MytextInput
         placeholder='password'
         value={curState.password}
-        onChangeText={onPasswordChange}
+        onChangeText={handleTextChange('password')}
       />
       <MytextInput
         placeholder='confirm password'
         value={curState.confirmPassword}
-        onChangeText={onPasswordConfirmChange}
+        onChangeText={handleTextChange('confirmPassword')}
       />
       <MytextInput
         placeholder='user type'
         value={curState.userType}
-        onChangeText={onTypeChange}
+        onChangeText={handleTextChange('userType')}
       />
       <MytextInput
-        placeholder='classes'
-        value={curState.classes}
-        onChangeText={onClassChange}
+        placeholder='phone number'
+        value={curState.phoneNumber}
+        onChangeText={handleTextChange('phoneNumber')}
       />
 
       <ButtonContainer>
         <MyButton
-          onPress={createUser}
+          onPress={addMember}
+        >
+          <MyButtonText>
+            Add another member
+          </MyButtonText>
+        </MyButton>
+      </ButtonContainer>
+
+      <ButtonContainer>
+        <MyButton
+          onPress={GoToConf}
         >
           <MyButtonText>
             Submit

@@ -19,6 +19,7 @@
     "@types/crypto-js": "^3.1.44",
     "@types/react-navigation": "^3.4.0",
     "@types/styled-components": "^4.4.3",
+    "apollo": "^2.28.0",
     "apollo-cache-inmemory": "^1.6.5",
     "apollo-client": "^2.6.8",
     "apollo-datasource-rest": "^0.8.0",

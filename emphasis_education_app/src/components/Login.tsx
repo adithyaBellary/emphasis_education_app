@@ -56,6 +56,10 @@ const LOGIN = gql`
   }
 `;
 
+const getHash = (email: string): string => {
+  return MD5(email).toString();
+}
+
 const Login: React.FC<ILoginProps> = props => {
 
   const [curState, setState] = useState({
@@ -76,6 +80,7 @@ const Login: React.FC<ILoginProps> = props => {
       },
       onCompleted: ( {login} ) => {
         if (login.res) {
+          // we should create the userContext here
           successLogin(login.chatIDs)
         } else {
           errorLogin()
@@ -83,6 +88,8 @@ const Login: React.FC<ILoginProps> = props => {
       }
     }
   )
+
+  // console.log('loading', loading);
 
   if (error) console.log('ERROR');
 
@@ -95,13 +102,7 @@ const Login: React.FC<ILoginProps> = props => {
     password
   });
 
-  const getHash = (email: string): string => {
-    return MD5(email).toString();
-  }
-
   const successLogin = (chatIDs: [string]) => {
-    // console.log('the current state')
-    // console.log(curState)
     props.navigation.navigate(
       'Home',
       {
@@ -128,6 +129,7 @@ const Login: React.FC<ILoginProps> = props => {
       }
     })
   }
+
   return (
     <SafeAreaView>
       <TitleContain>
@@ -161,9 +163,7 @@ const Login: React.FC<ILoginProps> = props => {
           </ButtonContainer>
           <ButtonContainer>
             <MyButton
-              onPress={() => props.navigation.navigate(
-                'CreateUser'
-              )}
+              onPress={() => props.navigation.navigate('CreateUserContain')}
             >
               <MyButtonText>First time user?</MyButtonText>
             </MyButton>

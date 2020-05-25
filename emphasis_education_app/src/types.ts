@@ -3,3 +3,25 @@ export interface IProps {
   navigation: any;
   route: any;
 }
+
+// this determines state for the user input form
+export interface IUserInput {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  phoneNumber: string;
+  userType: Permission;
+}
+
+// dont want the confirmPassword stuff for when we send to backend
+export type IUser = Pick<
+    IUserInput,
+    'name' | 'email' | 'password' | 'phoneNumber' | 'userType'
+  >;
+
+export enum Permission {
+  Student = 'Student',
+  Tutor = 'Tutor',
+  Admin = 'Admin'
+}
