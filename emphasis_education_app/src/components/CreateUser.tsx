@@ -30,7 +30,6 @@ const EmptyData: IUserInput = {
   confirmPassword: '',
   phoneNumber: '',
   userType: Permission.Student,
-  classes: ''
 }
 
 const CreateUser: React.FC<ICreateUser> = props => {
@@ -43,7 +42,6 @@ const CreateUser: React.FC<ICreateUser> = props => {
     confirmPassword: 'test01',
     phoneNumber: '',
     userType: Permission.Student,
-    classes: 'Math'
   });
 
   const handleTextChange = (name: string) => (text: string) => setState({...curState, [name]: text})
@@ -94,17 +92,17 @@ const CreateUser: React.FC<ICreateUser> = props => {
         value={curState.userType}
         onChangeText={handleTextChange('userType')}
       />
-      <MytextInput
+      {/* <MytextInput
         placeholder='classes'
         value={curState.classes}
         onChangeText={handleTextChange('classes')}
-      />
+      /> */}
 
       <ButtonContainer>
-        <MyButton>
-          <MyButtonText
-            onPress={addMember}
-          >
+        <MyButton
+          onPress={addMember}
+        >
+          <MyButtonText>
             Add another member
           </MyButtonText>
         </MyButton>

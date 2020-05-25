@@ -87,12 +87,9 @@ export type UserInfoType = {
   email: Scalars['String'];
   phoneNumber: Scalars['String'];
   userType: Permission;
+  _id: Scalars['String'];
+  chatIDs: Array<Maybe<Scalars['String']>>;
   groupID: Scalars['String'];
-};
-
-export type UserInfoTypeArr = {
-  __typename?: 'UserInfoTypeArr';
-  users: Array<Maybe<UserInfoType>>;
 };
 
 export type CreateUserPayload = {

@@ -12,7 +12,6 @@ export interface IUserInput {
   confirmPassword: string;
   phoneNumber: string;
   userType: Permission;
-  classes: string;
 }
 
 // dont want the confirmPassword stuff for when we send to backend

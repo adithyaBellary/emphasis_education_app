@@ -2,6 +2,7 @@
 import pubsub from './pubsub';
 import { MESSAGE_RECEIVED_EVENT } from './constants';
 import { UserInputType } from './types/schema-types';
+import { genID } from './helper';
 
 const resolvers = {
   Query: {
@@ -31,13 +32,21 @@ const resolvers = {
       const res = await dataSources.f.sendMessages(messages);
       return res;
     },
-    createUser: async (_, users: UserInputType[], { dataSources }) => {
+    createUser: (_, {users}, { dataSources }) => {
       console.log('in resolver creating user', users);
-      users.forEach(async (element: UserInputType) => {
+      // set the groupID. should be the same for each user in the family
+      const groupID: string = genID();
+      users.forEach(async ({email, password, name, userType, phoneNumber}: UserInputType) => {
         // this adds the user to the firebase list of users
-        await dataSources.f.createUser(element.email, element.password, element.name);
+        await dataSources.f.createUser(email, password, name);
         // this adds user to the db
-        // await dataSources.f.pushUser({email, password}, userType);
+        await dataSources.f.pushUser(
+          name,
+          email,
+          userType,
+          phoneNumber,
+          groupID
+        );
       });
       return true;
     }

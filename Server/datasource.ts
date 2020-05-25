@@ -4,6 +4,7 @@ import { RESTDataSource } from 'apollo-datasource-rest';
 import { SHA256, MD5 } from "crypto-js"
 
 import { IMessage } from './types/IMessage';
+import { Permission } from './types/schema-types';
 
 class dataSource extends RESTDataSource {
   constructor() {
@@ -28,14 +29,14 @@ class dataSource extends RESTDataSource {
     return res;
   }
 
-  async createUser(email: string, password: string, name: string) {
+  createUser(email: string, password: string, name: string) {
     console.log('user in datasource being created', email, password, name)
-    await firebaseSvc.createUser(email, password, name);
+    firebaseSvc.createUser(email, password, name);
   }
 
-  async pushUser(user, userType) {
-    const hash: string = MD5(user.email).toString();
-    await firebaseSvc.pushUser(user, hash, userType);
+  async pushUser(name: string, email: string, userType: Permission, phoneNumber: string, groupID: string) {
+    const hash: string = MD5(email).toString();
+    await firebaseSvc.pushUser(name, email, userType, phoneNumber, hash, groupID);
   }
 
   getID() {

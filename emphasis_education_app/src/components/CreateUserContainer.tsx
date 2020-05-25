@@ -58,7 +58,7 @@ const CreateUserContain: React.FC<ICreateUserContainProps> = props => {
 
   const runCreateUserMut = (): void => {
     console.log('userInfo before running mutaion', userInfo)
-    const usableInfo: IUser[] = userInfo.users.map(({confirmPassword, classes, ...rest }) => {
+    const usableInfo: IUser[] = userInfo.users.map(({confirmPassword, ...rest }) => {
       return rest;
     })
     console.log('userInfo before running mutaion', usableInfo)
@@ -69,7 +69,7 @@ const CreateUserContain: React.FC<ICreateUserContainProps> = props => {
     })
   }
 
-  const GoToCOnfirmation = () => {
+  const GoToConfirmation = () => {
     console.log('going to conf screen', userInfo)
     setSHowConf(true);
   }
@@ -84,7 +84,7 @@ const CreateUserContain: React.FC<ICreateUserContainProps> = props => {
       {!showConf && (
         <CreateUser
           saveUserInfo={updateUserInfo}
-          GoToConfirmationScreen={GoToCOnfirmation}
+          GoToConfirmationScreen={GoToConfirmation}
           {...props}
         />
       )}

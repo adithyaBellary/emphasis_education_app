@@ -72,24 +72,26 @@ const typeDefs = gql`
     password: String!
     userType: Permission!
     phoneNumber: String!
-    # groupID: String!
   }
 
   # maybe we can add an optional info field too
 
   # this type will be for what we want to query for when we represent data on the frontend
+  # these are fields that will be written to the db
   type UserInfoType {
     name: String!
     email: String!
     phoneNumber: String!
     userType: Permission!
+    _id: String!
+    chatIDs: [String]!
     # all members of the same group
     groupID: String!
   }
 
-  type UserInfoTypeArr {
-    users: [UserInfoType]!
-  }
+  # type UserInfoTypeArr {
+  #   users: [UserInfoType]!
+  # }
 
   type CreateUserPayload {
     success: Boolean

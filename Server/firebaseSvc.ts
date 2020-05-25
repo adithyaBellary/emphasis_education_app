@@ -7,10 +7,12 @@ import pubsub from './pubsub';
 import { firebaseConfig } from './config/firebase';
 import { MESSAGE_RECEIVED_EVENT, NUM_FETCH_MESSAGES } from './constants';
 import { IMessage } from './types/IMessage';
+import { UserInfoType } from './types/schema-types';
 
 const MESSAGE_REF_BASE: string = 'Messages';
 const User_REF_BASE: string = 'Users';
 const NUM_MESSAGES_BASE: string = 'NumberOfMessages';
+const FAMILY_REF_BASE: string = 'Family';
 
 class FireBaseSVC {
   constructor() {
@@ -119,7 +121,7 @@ class FireBaseSVC {
     })
   }
 
-  createUser = async (email, password, name) => {
+  createUser = async (email: string, password: string, name: string) => {
     firebase.auth()
       .createUserWithEmailAndPassword(email, password)
       .then(() => {
@@ -158,16 +160,23 @@ class FireBaseSVC {
     return firebase.database().ref(`${NUM_MESSAGES_BASE}/${chatID}`);
   }
 
-  async pushUser({ email, password}, hash, userType) {
+  _refFamily(FamilyID: string) {
+    return firebase.database().ref(`${FAMILY_REF_BASE}/${FamilyID}`);
+  }
+
+  async pushUser(name, email, userType, phoneNumber, hash, groupID) {
     const testChatIds: Array<string> = ['test', 'test2'];
-    const user_and_id = {
+    const user_and_id: UserInfoType = {
+      name,
       email,
-      password,
+      phoneNumber,
       _id: hash,
       userType: userType,
-      chatIDs: testChatIds
+      chatIDs: testChatIds,
+      groupID
     }
     await this._refUser(hash).push(user_and_id);
+    await this._refFamily(groupID).push(user_and_id)
   }
 
   // TODO type this shit
@@ -326,7 +335,6 @@ class FireBaseSVC {
     messages.forEach(async (element: IMessage) => {
       const { text, user, chatID } = element;
       console.log(text)
-      // myMesID = this.genID();
       // myMesID = oldMess === 0 ? 0 : oldMess - 1;
       myMesID = oldMess;
       const message = {
