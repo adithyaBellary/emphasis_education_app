@@ -25,3 +25,8 @@ export enum Permission {
   Tutor = 'Tutor',
   Admin = 'Admin'
 }
+
+export interface ILoginPayload {
+  res: boolean;
+  chatIDs: string[];
+}

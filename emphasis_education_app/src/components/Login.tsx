@@ -18,7 +18,7 @@ import {
 } from './shared';
 import { LOGIN } from '../queries/Login';
 import Context from './Context/Context';
-import { Permission } from '../types';
+import { Permission, ILoginPayload } from '../types';
 
 import Test_s from './test_s';
 
@@ -66,17 +66,18 @@ const Login: React.FC<ILoginProps> = props => {
   })
 
   // TODO use loading state to render spinner
-  const [doLogin, { data, error, loading }] = useMutation(
+  const [doLogin, { data, error, loading }] = useMutation<ILoginPayload>(
     LOGIN,
     {
       variables: {
         email: curState.email,
         password: curState.password
       },
-      onCompleted: ( {login} ) => {
-        if (login.res) {
+      onCompleted: ( { res, chatIDs} ) => {
+        console.log('login onComplete', res);;
+        if (res) {
           // we should create the userContext here
-          successLogin(login.chatIDs)
+          successLogin(chatIDs)
         } else {
           errorLogin()
         }
@@ -96,7 +97,7 @@ const Login: React.FC<ILoginProps> = props => {
     password
   });
 
-  const successLogin = (chatIDs: [string]) => {
+  const successLogin = (chatIDs: string[]) => {
     // how about we add the login payload to the context here
     setUser({
       name: 'dfs',
