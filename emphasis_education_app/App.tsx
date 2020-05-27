@@ -28,6 +28,10 @@ import MyProfile from './src/components/MyProfile';
 import CreateUserContain from './src/components/CreateUserContainer';
 import ConfirmationScreen from './src/components/ConfirmationScreen';
 
+import ContextProvider from './src/components/Context/Provider';
+import context, {EmptyUser} from './src/components/Context/Context';
+import { IUser } from './src/types';
+
 const cache = new InMemoryCache();
 const httplink = new HttpLink({
   uri: 'http://localhost:4000'
@@ -75,7 +79,18 @@ type RootStackProps = {
 
 const stack = createStackNavigator<RootStackProps>();
 
-const App = () => (
+const App = () => {
+  // wrap this all in the context
+  const [user, setUser] = React.useState<IUser>(EmptyUser);
+  const updateUser = (newUser: IUser) => setUser(newUser)
+  const value = {
+     loggedUser: user,
+     setUser: updateUser
+    }
+  return (
+  <context.Provider
+    value={value}
+  >
   <ApolloProvider client={client}>
     <NavigationContainer>
       <stack.Navigator initialRouteName='Login'>
@@ -128,6 +143,8 @@ const App = () => (
       </stack.Navigator>
     </NavigationContainer>
   </ApolloProvider>
-);
+  </context.Provider>
+  )
+        };
 
 export default App;
