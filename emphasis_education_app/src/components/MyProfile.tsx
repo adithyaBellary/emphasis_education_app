@@ -13,6 +13,7 @@ interface IMyProfileProps {
 }
 
 const MyProfile: React.FC<IMyProfileProps> = () => {
+  // loggedUser needs to have the groupID as well, so that we can get the rest of the family mmembers
   const { loggedUser } = useContext(Context);
   console.log('loggedUser', loggedUser);
   return (

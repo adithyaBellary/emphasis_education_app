@@ -59,6 +59,7 @@ const GetMessages = gql`
   }
 `;
 
+// TODO consolidate this with the other types in the types.ts file
 interface IUser {
   _id: string;
   name: string;

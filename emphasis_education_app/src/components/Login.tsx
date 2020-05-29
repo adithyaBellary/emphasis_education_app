@@ -73,11 +73,10 @@ const Login: React.FC<ILoginProps> = props => {
         email: curState.email,
         password: curState.password
       },
-      onCompleted: ( { res, chatIDs} ) => {
-        console.log('login onComplete', res);;
-        if (res) {
+      onCompleted: ( { login } ) => {
+        if (login.res) {
           // we should create the userContext here
-          successLogin(chatIDs)
+          successLogin(login.chatIDs)
         } else {
           errorLogin()
         }
@@ -86,7 +85,6 @@ const Login: React.FC<ILoginProps> = props => {
   )
 
   if (error) console.log('ERROR');
-  console.log('login data', data);
 
   const onChangeEmail = (email: string) => setState({
     ...curState,
@@ -102,8 +100,8 @@ const Login: React.FC<ILoginProps> = props => {
     setUser({
       name: 'dfs',
       email: 'fsda',
-      password: 'fdsa',
       phoneNumber: 'fsa',
+      groupID: 'testID',
       userType: Permission.Student,
     })
     props.navigation.navigate(

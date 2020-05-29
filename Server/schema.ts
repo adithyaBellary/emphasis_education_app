@@ -36,6 +36,7 @@ const typeDefs = gql`
     user: MessageUser!
   }
 
+  # lets make this similar to UserInfoType
   type TestUser {
     _id: String!
     email: String!
@@ -100,6 +101,7 @@ const typeDefs = gql`
   type Query {
     getMessages(chatID: String, init: Int!): [MessageType]
     getUserID: String
+    # lets return UserInfoType insgead
     getUser(id: String!): TestUser
     # still have to write
 
@@ -113,6 +115,7 @@ const typeDefs = gql`
     # needs to be written
     # get all classes
     getAllUsers: [UserInfoType]
+    getFamily(email: String!): [UserInfoType]
   }
 
   type Mutation {

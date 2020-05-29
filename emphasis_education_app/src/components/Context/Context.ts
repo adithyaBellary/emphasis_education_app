@@ -9,8 +9,8 @@ interface IContext {
 export let EmptyUser: IUser = {
   name: '',
   email: '',
-  password: '',
   phoneNumber: '',
+  groupID: '',
   userType: Permission.Student
 }
 

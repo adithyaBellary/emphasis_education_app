@@ -5,7 +5,7 @@ import {
   View,
 } from 'react-native';
 
-import { IUserInput, IUser } from '../types';
+import { IUserInput, IUsableUserInfo } from '../types';
 import CreateUser from './CreateUser';
 import { CREATE_USER } from '../queries/CreateUser';
 
@@ -58,7 +58,7 @@ const CreateUserContain: React.FC<ICreateUserContainProps> = props => {
 
   const runCreateUserMut = (): void => {
     console.log('userInfo before running mutaion', userInfo)
-    const usableInfo: IUser[] = userInfo.users.map(({confirmPassword, ...rest }) => {
+    const usableInfo: IUsableUserInfo[] = userInfo.users.map(({confirmPassword, ...rest }) => {
       return rest;
     })
     console.log('userInfo before running mutaion', usableInfo)
