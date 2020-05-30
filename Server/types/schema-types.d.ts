@@ -70,6 +70,12 @@ export enum Classes {
 export type LoginPayload = {
   __typename?: 'LoginPayload';
   res: Scalars['Boolean'];
+  name: Scalars['String'];
+  email: Scalars['String'];
+  phoneNumber: Scalars['String'];
+  userType: Permission;
+  groupID: Scalars['String'];
+  _id: Scalars['String'];
   chatIDs: Array<Maybe<Scalars['String']>>;
 };
 
@@ -105,6 +111,7 @@ export type Query = {
   getClasses?: Maybe<Array<Maybe<Scalars['String']>>>;
   queryUserID?: Maybe<Scalars['Int']>;
   getAllUsers?: Maybe<Array<Maybe<UserInfoType>>>;
+  getFamily?: Maybe<Array<Maybe<UserInfoType>>>;
 };
 
 
@@ -121,6 +128,11 @@ export type QueryGetUserArgs = {
 
 export type QueryQueryUserIdArgs = {
   email?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryGetFamilyArgs = {
+  email: Scalars['String'];
 };
 
 export type Mutation = {

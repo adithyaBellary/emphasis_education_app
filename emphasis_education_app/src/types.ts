@@ -29,6 +29,7 @@ export type IUsableUserInfo = Pick<
     userType: Permission;
     groupID: string;
     chatIDs: string[];
+    _id: string;
   }
 
 export enum Permission {
@@ -37,8 +38,14 @@ export enum Permission {
   Admin = 'Admin'
 }
 
-interface ILoginPayloadProps {
+export interface ILoginPayloadProps {
   res: string;
+  name: string;
+  email: string;
+  phoneNumber: string;
+  userType: Permission;
+  groupID: string;
+  _id: string;
   chatIDs: string[];
 }
 export interface ILoginPayload {

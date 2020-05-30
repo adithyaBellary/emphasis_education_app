@@ -63,7 +63,7 @@ const typeDefs = gql`
     name: String!
     email: String!
     phoneNumber: String!
-    userType: String!
+    userType: Permission!
     groupID: String!
     _id: String!
     chatIDs: [String]!

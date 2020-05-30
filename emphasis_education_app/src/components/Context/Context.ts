@@ -12,7 +12,8 @@ export let EmptyUser: IUser = {
   phoneNumber: '',
   groupID: '',
   userType: Permission.Student,
-  chatIDs: ['chat1', 'chat2']
+  chatIDs: ['chat1', 'chat2'],
+  _id: '_id'
 }
 
 const setUser = (user: IUser) => {

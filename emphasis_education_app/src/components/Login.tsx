@@ -18,7 +18,7 @@ import {
 } from './shared';
 import { LOGIN } from '../queries/Login';
 import Context from './Context/Context';
-import { Permission, ILoginPayload } from '../types';
+import { Permission, ILoginPayload, ILoginPayloadProps } from '../types';
 
 import Test_s from './test_s';
 
@@ -103,7 +103,8 @@ const Login: React.FC<ILoginProps> = props => {
       phoneNumber: 'fsa',
       groupID: 'testID',
       userType: Permission.Student,
-      chatIDs: ['chat1', 'chat2']
+      chatIDs: ['chat1', 'chat2'],
+      _id: 'id'
     })
     props.navigation.navigate(
       'Home',
