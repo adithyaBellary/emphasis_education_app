@@ -96,17 +96,8 @@ const Login: React.FC<ILoginProps> = props => {
   });
 
   const successLogin = (user: ILoginPayloadProps) => {
-    // how about we add the login payload to the context here
     setUser({...user})
-    props.navigation.navigate(
-      'Home',
-      {
-        name: curState.name,
-        email: curState.email,
-        _id: (curState.email),
-        chatIDs: user.chatIDs,
-      }
-    );
+    props.navigation.navigate('Home');
   }
 
   const errorLogin = () => {

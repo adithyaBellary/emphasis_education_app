@@ -8,6 +8,7 @@ import gql from 'graphql-tag'
 
 import { REFETCH_LIMIT } from '../constant';
 import GiftedChat from './Presentational/GiftedChat';
+import Context from './Context/Context';
 
 interface IChatProps {
   // TODO type the navagation props
@@ -59,19 +60,12 @@ const GetMessages = gql`
   }
 `;
 
-// TODO consolidate this with the other types in the types.ts file
-interface IUser {
-  _id: string;
-  name: string;
-  email: string;
-}
-
 // rn gifted chat also has its own IMessage type that we can use
 export interface IMessage {
   _id: number;
   text: string;
   createdAt: number;
-  user: IUser;
+  user: IMessageUserType;
 }
 
 interface IState {
@@ -82,7 +76,7 @@ interface IMessageReceived {
   text: string;
   MessageId: number;
   createdAt: number;
-  user: IUser;
+  user: IMessageUserType;
 }
 interface IGetMessages {
   getMessages: IMessage[];
@@ -101,8 +95,7 @@ export interface IMessageUserType {
 }
 
 const Chat: React.FC<IChatProps> = props => {
-
-  // let use make out our hook here
+  const { loggedUser } = React.useContext(Context);
   const [curState, setState] = useState<IState>()
   const chatID: string = props.route.params.chatID;
 
@@ -129,12 +122,8 @@ const Chat: React.FC<IChatProps> = props => {
   // TODO chatPicker might have to have state over this chat
   const { data: subData } = useSubscription<IMessageReceived>(SUB)
 
-  // for the getMessage useEffect, we should add the results on top of the
-  // what the currentstate is
   useEffect(() => {
     if (!getMessages) { return }
-    console.log('getMessage', getMessages.getMessages.length)
-    // console.log('curstate', curState);
     if (!curState) {
       setState({
         messages: getMessages.getMessages
@@ -184,9 +173,9 @@ const Chat: React.FC<IChatProps> = props => {
   }
 
   const curUser: IMessageUserType = {
-    _id: props.route.params._id,
-    name: props.route.params.name,
-    email: props.route.params.email,
+    _id: loggedUser._id,
+    name: loggedUser.name,
+    email: loggedUser.email,
   }
 
   const refreshFn = () => {

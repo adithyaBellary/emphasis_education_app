@@ -52,23 +52,10 @@ const MissionStatement: React.FC = () => {
 const Home: React.FC<ILiftedHomeProps> = ( props ) => {
   const { loggedUser } = React.useContext(Context);
 
-  const goToMyProfile = () => {
-    props.navigation.navigate(
-      'MyProfile'
-    )
-  }
+  const goToMyProfile = () => props.navigation.navigate('MyProfile');
 
-  const goToChat = () => {
-    props.navigation.navigate(
-      'ChatPicker',
-      {
-        chatIDs: props.route.params.chatIDs,
-        name: props.route.params.name,
-        email: props.route.params.email,
-        _id: props.route.params._id
-      }
-    )
-  }
+  const goToChat = () => props.navigation.navigate('ChatPicker');
+
 
   return (
     <ThemeProvider theme={theme}>
