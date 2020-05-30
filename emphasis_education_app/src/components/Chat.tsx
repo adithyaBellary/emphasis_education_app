@@ -9,6 +9,7 @@ import gql from 'graphql-tag'
 import { REFETCH_LIMIT } from '../constant';
 import GiftedChat from './Presentational/GiftedChat';
 import Context from './Context/Context';
+import { IMessage, IMessageUserType } from '../types';
 
 interface IChatProps {
   // TODO type the navagation props
@@ -60,14 +61,6 @@ const GetMessages = gql`
   }
 `;
 
-// rn gifted chat also has its own IMessage type that we can use
-export interface IMessage {
-  _id: number;
-  text: string;
-  createdAt: number;
-  user: IMessageUserType;
-}
-
 interface IState {
   messages: IMessage[];
 }
@@ -88,11 +81,6 @@ interface IGetMessagesInput {
 }
 let initFetch: number = 0;
 
-export interface IMessageUserType {
-  _id: string,
-  name: string,
-  email: string
-}
 
 const Chat: React.FC<IChatProps> = props => {
   const { loggedUser } = React.useContext(Context);

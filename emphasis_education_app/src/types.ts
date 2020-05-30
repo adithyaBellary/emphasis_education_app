@@ -21,16 +21,16 @@ export type IUsableUserInfo = Pick<
     'name' | 'email' | 'password' | 'phoneNumber' | 'userType'
   >;
 
-  // this will be the user type that we get back from the backend
-  export interface IUser {
-    name: string;
-    email: string;
-    phoneNumber: string;
-    userType: Permission;
-    groupID: string;
-    chatIDs: string[];
-    _id: string;
-  }
+// this will be the user type that we get back from the backend
+export interface IUser {
+  name: string;
+  email: string;
+  phoneNumber: string;
+  userType: Permission;
+  groupID: string;
+  chatIDs: string[];
+  _id: string;
+}
 
 export enum Permission {
   Student = 'Student',
@@ -50,4 +50,17 @@ export interface ILoginPayloadProps {
 }
 export interface ILoginPayload {
   login: ILoginPayloadProps;
+}
+
+export interface IMessageUserType {
+  _id: string,
+  name: string,
+  email: string
+}
+
+export interface IMessage {
+  _id: number;
+  text: string;
+  createdAt: number;
+  user: IMessageUserType;
 }
