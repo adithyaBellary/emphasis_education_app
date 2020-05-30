@@ -2,26 +2,28 @@ import * as React from 'react';
 // this will be needed to get the full screen dimensions
 // ill need to know the screen dimensions to position all the widgets
 import {
+  Alert,
   View,
   Text,
 } from 'react-native';
-import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag'
 
-import HomePage from './Presentational/HomePage';
+import styled, { ThemeProvider } from 'styled-components';
+import { theme } from '../theme';
+import {
+  CenteredDiv,
+  MyButtonText,
+  MyCircleButton,
+  IconSection
+} from './shared';
+import { Icon } from 'react-native-elements';
+import Context from './Context/Context';
 
 interface ILiftedHomeProps {
   navigation: any;
   route: any;
 }
 
-const GET_USER = gql`
-  query GetUser($id: String!) {
-    getUser(id: $id) {
-      userType
-    }
-  }
-`
 interface UserType {
   userType: string
 }
@@ -30,33 +32,87 @@ export interface GetUser {
   getUser: UserType;
 }
 
-interface GetUserInput {
-  id: string;
+const Title = styled(Text)`
+  fontFamily: 'Nunito'
+`
+
+const IconContain = styled(View)`
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`
+
+const MissionStatement: React.FC = () => {
+  return (
+    <Text>this is the mission statement</Text>
+  )
 }
 
 const Home: React.FC<ILiftedHomeProps> = ( props ) => {
-  const options = { variables: { id: props.route.params._id }}
-  const { data, loading, error } = useQuery<
-    GetUser,
-    GetUserInput
-      >(GET_USER, options)
+  const { loggedUser } = React.useContext(Context);
 
-  if (error) {
-    console.log('there was an error getting the user')
-    return <Text>There was an error getting the user</Text>
+  const goToMyProfile = () => {
+    props.navigation.navigate(
+      'MyProfile'
+    )
   }
 
-  if (!data) {
-    return <Text>Could not get the user for some reason</Text>
+  const goToChat = () => {
+    props.navigation.navigate(
+      'ChatPicker',
+      {
+        chatIDs: props.route.params.chatIDs,
+        name: props.route.params.name,
+        email: props.route.params.email,
+        _id: props.route.params._id
+      }
+    )
   }
 
   return (
-    <>
-    {loading ?
-      <Text>Render a loading animation here or something</Text> :
-      <HomePage data={data} {...props} />
-    }
-    </>
+    <ThemeProvider theme={theme}>
+      <CenteredDiv>
+        <Title>
+          emphasis education home page
+        </Title>
+
+        <IconSection>
+          <IconContain>
+            <Icon
+              name='rowing'
+              onPress={goToMyProfile}
+              reverse={true}
+            />
+            <Icon
+              name='message'
+              onPress={goToChat}
+              reverse={true}
+            />
+          </IconContain>
+
+          <MyCircleButton>
+            <MyButtonText>
+              Emphasis Logo
+            </MyButtonText>
+          </MyCircleButton>
+
+          <IconContain>
+            <Icon
+              name='rowing'
+              onPress={() => Alert.alert('additional courses')}
+              reverse={true}
+            />
+            <Icon
+              name='rowing'
+              onPress={() => Alert.alert('settings')}
+              reverse={true}
+            />
+          </IconContain>
+        </IconSection>
+        <MissionStatement />
+      </CenteredDiv>
+    </ThemeProvider>
   )
 
 }

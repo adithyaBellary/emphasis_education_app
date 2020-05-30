@@ -76,7 +76,7 @@ const Login: React.FC<ILoginProps> = props => {
       onCompleted: ( { login } ) => {
         if (login.res) {
           // we should create the userContext here
-          successLogin(login.chatIDs)
+          successLogin(login)
         } else {
           errorLogin()
         }
@@ -95,24 +95,16 @@ const Login: React.FC<ILoginProps> = props => {
     password
   });
 
-  const successLogin = (chatIDs: string[]) => {
+  const successLogin = (user: ILoginPayloadProps) => {
     // how about we add the login payload to the context here
-    setUser({
-      name: 'dfs',
-      email: 'fsda',
-      phoneNumber: 'fsa',
-      groupID: 'testID',
-      userType: Permission.Student,
-      chatIDs: ['chat1', 'chat2'],
-      _id: 'id'
-    })
+    setUser({...user})
     props.navigation.navigate(
       'Home',
       {
         name: curState.name,
         email: curState.email,
         _id: (curState.email),
-        chatIDs,
+        chatIDs: user.chatIDs,
       }
     );
   }
