@@ -28,6 +28,7 @@ export type IUsableUserInfo = Pick<
     phoneNumber: string;
     userType: Permission;
     groupID: string;
+    chatIDs: string[];
   }
 
 export enum Permission {

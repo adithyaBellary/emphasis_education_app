@@ -59,6 +59,13 @@ const typeDefs = gql`
 
   type LoginPayload {
     res: Boolean!
+    # basically UserInfoType from here down
+    name: String!
+    email: String!
+    phoneNumber: String!
+    userType: String!
+    groupID: String!
+    _id: String!
     chatIDs: [String]!
   }
 

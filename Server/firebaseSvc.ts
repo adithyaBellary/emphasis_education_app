@@ -44,8 +44,9 @@ class FireBaseSVC {
       () => res = true,
       () => res = false
     );
-    const chatIDs: string[] = await this.getChatId(user.email);
-    const payload: LoginPayload = { res, chatIDs };
+    const loggedInUser: UserInfoType = await this.getUser(user.email);
+    const {__typename, ...rest} = loggedInUser;
+    const payload: LoginPayload = { res, ...rest };
 
     return payload;
   }
@@ -145,7 +146,6 @@ class FireBaseSVC {
     const curUser = firebase.auth().currentUser;
     if (!curUser) {
       console.log('the current user is null');
-      // is this the right thing to be returning if the user is null?
       return null;
     } else {
       return curUser.uid;
@@ -205,7 +205,6 @@ class FireBaseSVC {
       .once('value')
       .then(snap => {
         const val = snap.val();
-        // console.log('val', val)
         const key = Object.keys(val)
         const mess: MessageType[] = key.map(k => {
           const {messageID, ...rest} = val[k];
@@ -287,10 +286,8 @@ class FireBaseSVC {
     await this._refMessageNum(chatID).set(numMessages + 1)
   }
 
-  // could be worth updating the number of messages we have in that chat in a node as well
   send = async (messages: MessageInput[]) => {
     // TODO refactor all this rip
-    // console.log('sending these messages: ', messages);
     let myText;
     let myMesID;
     let myCreatedAt;
@@ -337,11 +334,13 @@ class FireBaseSVC {
     })
   }
 
-  async getUser(id: string) {
-    // need await!!
-    const user: UserInfoType = await firebase.database().ref(`Users/${id}`).once('value')
+  // lets pass in the email and then hash it here
+  async getUser(email: string) {
+    const hashedEmail = MD5(email).toString();
+    const user: UserInfoType = await firebase.database().ref(`Users/${hashedEmail}`).once('value')
       .then(snap => {
         const val = snap.val()
+        console.log('val', val)
         const key = Object.keys(val)[0];
         return val[key]
       })

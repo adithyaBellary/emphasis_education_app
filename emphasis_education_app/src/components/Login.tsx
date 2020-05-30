@@ -103,13 +103,14 @@ const Login: React.FC<ILoginProps> = props => {
       phoneNumber: 'fsa',
       groupID: 'testID',
       userType: Permission.Student,
+      chatIDs: ['chat1', 'chat2']
     })
     props.navigation.navigate(
       'Home',
       {
         name: curState.name,
         email: curState.email,
-        _id: getHash(curState.email),
+        _id: (curState.email),
         chatIDs,
       }
     );

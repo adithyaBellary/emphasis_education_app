@@ -11,7 +11,8 @@ export let EmptyUser: IUser = {
   email: '',
   phoneNumber: '',
   groupID: '',
-  userType: Permission.Student
+  userType: Permission.Student,
+  chatIDs: ['chat1', 'chat2']
 }
 
 const setUser = (user: IUser) => {
@@ -24,6 +25,6 @@ export const DummyData: IContext = {
   setUser: setUser,
 }
 
-const CreateUserFnContext = React.createContext<IContext>(DummyData);
+const CreateUserFnContext = React.createContext<IContext>({} as any);
 
 export default CreateUserFnContext;
