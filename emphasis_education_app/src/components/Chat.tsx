@@ -65,11 +65,15 @@ interface IState {
   messages: IMessage[];
 }
 
-interface IMessageReceived {
+interface IMessageReceivedProps {
   text: string;
   MessageId: number;
   createdAt: number;
   user: IMessageUserType;
+}
+
+interface IMessageReceived {
+  messageReceived: IMessageReceivedProps
 }
 interface IGetMessages {
   getMessages: IMessage[];
@@ -81,6 +85,9 @@ interface IGetMessagesInput {
 }
 let initFetch: number = 0;
 
+interface IMessagePayload {
+  sendMessage: IMessageReceivedProps;
+}
 
 const Chat: React.FC<IChatProps> = props => {
   const { loggedUser } = React.useContext(Context);
@@ -88,7 +95,7 @@ const Chat: React.FC<IChatProps> = props => {
   const chatID: string = props.route.params.chatID;
 
   // lets cache this data
-  const { data: getMessages, loading: queryLoading, refetch, error: errorMessage,  } = useQuery<
+  const { data: getMessages, loading: queryLoading, refetch, error: errorMessage } = useQuery<
       IGetMessages,
       IGetMessagesInput
     >(
@@ -126,15 +133,15 @@ const Chat: React.FC<IChatProps> = props => {
 
   useEffect(() => {
     if (!subData) { return }
-    console.log('resetting state', curState)
+    const { MessageId: _id, text, createdAt, user } = subData.messageReceived;
     if (!curState ) {
       setState({
         messages: [
           {
-            _id: subData.messageReceived.MessageId,
-            text: subData.messageReceived.text,
-            createdAt: subData.messageReceived.createdAt,
-            user: subData.messageReceived.user
+            _id,
+            text,
+            createdAt,
+            user: user
           }
         ]
       })
@@ -144,16 +151,16 @@ const Chat: React.FC<IChatProps> = props => {
       messages: [
         ...curState.messages,
         {
-          _id: subData.messageReceived.MessageId,
-          text: subData.messageReceived.text,
-          createdAt: subData.messageReceived.createdAt,
-          user: subData.messageReceived.user
+          _id,
+          text,
+          createdAt,
+          user
         }
       ]
     })
   }, [subData])
   // TODO type this mutation
-  const [sendMessage, { error }] = useMutation(SEND_MESSAGE);
+  const [sendMessage, { error }] = useMutation<IMessagePayload>(SEND_MESSAGE);
 
   if (error) {
     console.log('there was an error getting the messages')

@@ -121,8 +121,8 @@ const typeDefs = gql`
 
     # needs to be written
     # get all classes
+    getFamily(groupID: String!): [UserInfoType]
     getAllUsers: [UserInfoType]
-    getFamily(email: String!): [UserInfoType]
   }
 
   type Mutation {

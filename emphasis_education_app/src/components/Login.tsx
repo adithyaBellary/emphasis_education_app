@@ -75,7 +75,6 @@ const Login: React.FC<ILoginProps> = props => {
       },
       onCompleted: ( { login } ) => {
         if (login.res) {
-          // we should create the userContext here
           successLogin(login)
         } else {
           errorLogin()

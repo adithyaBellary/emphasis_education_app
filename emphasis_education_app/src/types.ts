@@ -64,3 +64,11 @@ export interface IMessage {
   createdAt: number;
   user: IMessageUserType;
 }
+
+export interface IGetFamilyInput {
+  groupID: string;
+}
+
+export interface IUserPayload {
+  users: IUser[];
+}

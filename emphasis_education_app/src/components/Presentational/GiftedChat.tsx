@@ -6,7 +6,7 @@ import {
 import {
   IMessageUserType,
   IMessage
-} from '../Chat';
+} from '../../types';
 
 interface IGiftedChatProps {
   queryLoading: boolean;

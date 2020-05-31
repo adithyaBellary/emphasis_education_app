@@ -65,11 +65,7 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 type RootStackProps = {
   Login: undefined;
   Home: undefined;
-  Chat: {
-    name: string,
-    email: string,
-    _id: string
-  };
+  Chat: undefined;
   ChatPicker: undefined;
   CreateUser: undefined;
   CreateUserContain: undefined;

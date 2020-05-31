@@ -13,8 +13,6 @@ class dataSource extends RESTDataSource {
 
   async getMessages(chatID, init) {
     const resp = await firebaseSvc.getMessages(chatID, init);
-    // console.log('in datasource');
-    // console.log(resp);
     return resp
   }
 
@@ -45,6 +43,10 @@ class dataSource extends RESTDataSource {
 
   getUser(id: string) {
     return firebaseSvc.getUser(id);
+  }
+
+  getFamily(groupID: string) {
+    return firebaseSvc.getFamily(groupID);
   }
 }
 

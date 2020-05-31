@@ -164,8 +164,8 @@ class FireBaseSVC {
     return firebase.database().ref(`${NUM_MESSAGES_BASE}/${chatID}`);
   }
 
-  _refFamily(FamilyID: string) {
-    return firebase.database().ref(`${FAMILY_REF_BASE}/${FamilyID}`);
+  _refFamily(groupID: string) {
+    return firebase.database().ref(`${FAMILY_REF_BASE}/${groupID}`);
   }
 
   async pushUser(name, email, userType, phoneNumber, hash, groupID) {
@@ -345,6 +345,15 @@ class FireBaseSVC {
         return val[key]
       })
     return user;
+  }
+
+  async getFamily(groupID: string) {
+    return await this._refFamily(groupID).once('value')
+      .then((snap) => {
+        const val = snap.val();
+        const keys = Object.keys(val);
+        return keys.map(key => val[key])
+      })
   }
 }
 

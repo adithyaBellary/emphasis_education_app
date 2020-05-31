@@ -1,10 +1,14 @@
-import React, { useState, useEffect, useContext } from 'react';
+import * as React from 'react';
 import {
   Text,
   View
 } from 'react-native';
-import styled from 'styled-components';
+import { useQuery } from '@apollo/react-hooks';
+
 import Context from './Context/Context';
+
+import { GET_FAMILY } from '../queries/GetFamily';
+import { IGetFamilyInput, IUserPayload } from '../types';
 
 interface IMyProfileProps {
   // TODO type the navagation props
@@ -13,8 +17,12 @@ interface IMyProfileProps {
 }
 
 const MyProfile: React.FC<IMyProfileProps> = () => {
-  const { loggedUser } = useContext(Context);
-  console.log('loggedUser', loggedUser);
+  const { loggedUser } = React.useContext(Context);
+  const groupID = loggedUser.groupID;
+  const options = { variables: { groupID }}
+  const { data } = useQuery<IUserPayload, IGetFamilyInput>(GET_FAMILY, options)
+  console.log('my profile data', data);
+
   return (
     <View>
       <Text>
