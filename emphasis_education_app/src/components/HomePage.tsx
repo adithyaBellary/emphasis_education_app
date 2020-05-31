@@ -6,10 +6,8 @@ import {
   View,
   Text,
 } from 'react-native';
-import gql from 'graphql-tag'
 
-import styled, { ThemeProvider } from 'styled-components';
-import { theme } from '../theme';
+import styled from 'styled-components';
 import {
   CenteredDiv,
   MyButtonText,
@@ -54,49 +52,47 @@ const Home: React.FC<ILiftedHomeProps> = ( props ) => {
   const changeScreens = (dest: string) => () =>  props.navigation.navigate(dest)
 
   return (
-    <ThemeProvider theme={theme}>
-      <CenteredDiv>
-        <Title>
-          emphasis education home page
-        </Title>
+    <CenteredDiv>
+      <Title>
+        emphasis education home page
+      </Title>
 
-        <IconSection>
-          <IconContain>
-            <Icon
-              name='person'
-              onPress={changeScreens('MyProfile')}
-              type='fontisto'
-              reverse={true}
-            />
-            <Icon
-              name='message'
-              onPress={changeScreens('ChatPicker')}
-              reverse={true}
-            />
-          </IconContain>
+      <IconSection>
+        <IconContain>
+          <Icon
+            name='person'
+            onPress={changeScreens('MyProfile')}
+            type='fontisto'
+            reverse={true}
+          />
+          <Icon
+            name='message'
+            onPress={changeScreens('ChatPicker')}
+            reverse={true}
+          />
+        </IconContain>
 
-          <MyCircleButton>
-            <MyButtonText>
-              Emphasis Logo
-            </MyButtonText>
-          </MyCircleButton>
+        <MyCircleButton>
+          <MyButtonText>
+            Emphasis Logo
+          </MyButtonText>
+        </MyCircleButton>
 
-          <IconContain>
-            <Icon
-              name='search'
-              onPress={changeScreens('Search')}
-              reverse={true}
-            />
-            <Icon
-              name='settings'
-              onPress={() => Alert.alert('settings')}
-              reverse={true}
-            />
-          </IconContain>
-        </IconSection>
-        <MissionStatement />
-      </CenteredDiv>
-    </ThemeProvider>
+        <IconContain>
+          <Icon
+            name='search'
+            onPress={changeScreens('Search')}
+            reverse={true}
+          />
+          <Icon
+            name='settings'
+            onPress={() => Alert.alert('settings')}
+            reverse={true}
+          />
+        </IconContain>
+      </IconSection>
+      <MissionStatement />
+    </CenteredDiv>
   )
 
 }

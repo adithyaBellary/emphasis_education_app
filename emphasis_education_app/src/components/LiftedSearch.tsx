@@ -4,12 +4,18 @@ import {
   Text
 } from 'react-native';
 import { useQuery, useLazyQuery } from '@apollo/react-hooks';
-import { Input } from 'react-native-elements';
+import { Input, Icon } from 'react-native-elements';
+import styled from 'styled-components';
 
 import SearchResults from './SearchResults';
 
 import { ISearchUserPayload, ISearchInput } from '../types';
 import { SEARCH_USERS } from '../queries/SearchUsers';
+
+const SearchContain = styled(View)`
+  padding-top: 20px;
+
+`
 
 const LiftedSearch: React.FC = () => {
   const [searchTerm, setSearchTerm] = React.useState('');
@@ -21,18 +27,20 @@ const LiftedSearch: React.FC = () => {
   console.log('data', data)
 
   return (
-    <View>
-      <Text>
-        Search Component
-      </Text>
+    <SearchContain>
       <Input
         placeholder='Search for users'
         onChangeText={handleTextChange}
+        leftIcon={
+          <Icon
+            name='search'
+          />
+        }
       />
       <SearchResults
         searchResults={data ? data.searchUsers : []}
       />
-    </View>
+    </SearchContain>
   )
 }
 

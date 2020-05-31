@@ -18,6 +18,7 @@ import { WebSocketLink } from 'apollo-link-ws';
 import { split } from 'apollo-link';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { getMainDefinition } from 'apollo-utilities';
+import { ThemeProvider } from 'styled-components';
 
 import Login from './src/components/Login';
 import Chat from './src/components/Chat';
@@ -28,8 +29,8 @@ import Profile from './src/components/LiftedProfile';
 import CreateUserContain from './src/components/CreateUserContainer';
 import ConfirmationScreen from './src/components/ConfirmationScreen';
 import Search from './src/components/LiftedSearch';
+import { theme } from './src/theme';
 
-import ContextProvider from './src/components/Context/Provider';
 import context, {EmptyUser} from './src/components/Context/Context';
 import { IUser } from './src/types';
 
@@ -86,68 +87,68 @@ const App = () => {
      setUser: updateUser
     }
   return (
-  <context.Provider
-    value={value}
-  >
-  <ApolloProvider client={client}>
-    <NavigationContainer>
-      <stack.Navigator initialRouteName='Login'>
-        <stack.Screen
-          name="Login"
-          component={Login}
-          options={{
-            title: '',
-            headerStyle: {
-              backgroundColor: '#5a1846'
-            }
-          }}
-        />
-        <stack.Screen
-          name="Home"
-          component={HomePage}
-          options={{ title: '' }}
-        />
-        <stack.Screen
-          name="Search"
-          component={Search}
-          options={{ title: '' }}
-        />
-        {/* can maybe get the name of the chat and then set the title to it */}
-        <stack.Screen
-          name="Chat"
-          component={Chat}
-          options={{ title: 'Test Subject' }}
-        />
-        <stack.Screen
-          name="CreateUser"
-          component={CreateUser}
-          options={{ title: '' }}
-        />
-        <stack.Screen
-          name="ChatPicker"
-          component={ChatPicker}
-          options={{ title: 'My Chats' }}
-        />
-        <stack.Screen
-          name="MyProfile"
-          component={Profile}
-          options={{ title: 'My Profile' }}
-        />
-        <stack.Screen
-          name="CreateUserContain"
-          component={CreateUserContain}
-          options={{ title: '' }}
-        />
-        <stack.Screen
-          name="ConfirmationScreen"
-          component={ConfirmationScreen}
-          options={{ title: '' }}
-        />
-      </stack.Navigator>
-    </NavigationContainer>
-  </ApolloProvider>
-  </context.Provider>
+    <context.Provider value={value}>
+      <ThemeProvider theme={theme}>
+        <ApolloProvider client={client}>
+          <NavigationContainer>
+            <stack.Navigator initialRouteName='Login'>
+              <stack.Screen
+                name="Login"
+                component={Login}
+                options={{
+                  title: '',
+                  headerStyle: {
+                    backgroundColor: '#5a1846'
+                  }
+                }}
+              />
+              <stack.Screen
+                name="Home"
+                component={HomePage}
+                options={{ title: '' }}
+              />
+              <stack.Screen
+                name="Search"
+                component={Search}
+                options={{ title: '' }}
+              />
+              {/* can maybe get the name of the chat and then set the title to it */}
+              <stack.Screen
+                name="Chat"
+                component={Chat}
+                options={{ title: 'Test Subject' }}
+              />
+              <stack.Screen
+                name="CreateUser"
+                component={CreateUser}
+                options={{ title: '' }}
+              />
+              <stack.Screen
+                name="ChatPicker"
+                component={ChatPicker}
+                options={{ title: 'My Chats' }}
+              />
+              <stack.Screen
+                name="MyProfile"
+                component={Profile}
+                options={{ title: 'My Profile' }}
+              />
+              <stack.Screen
+                name="CreateUserContain"
+                component={CreateUserContain}
+                options={{ title: '' }}
+              />
+              <stack.Screen
+                name="ConfirmationScreen"
+                component={ConfirmationScreen}
+                options={{ title: '' }}
+              />
+            </stack.Navigator>
+          </NavigationContainer>
+        </ApolloProvider>
+      </ThemeProvider>
+    </context.Provider>
   )
-        };
+};
 
 export default App;

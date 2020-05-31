@@ -5,15 +5,20 @@ import {
 } from 'react-native';
 
 import { IUser } from '../types';
+import styled from 'styled-components';
 
 interface ISearchResultsProps {
   searchResults: IUser[];
 }
 
+const SearchResultsContainer = styled(View)`
+  padding: 0 20px;
+`
+
 const SearchResults: React.FC<ISearchResultsProps> = ({ searchResults }) => {
 
   return (
-    <View>
+    <SearchResultsContainer>
       {searchResults.map((results) => {
         return (
           <Text>
@@ -21,7 +26,7 @@ const SearchResults: React.FC<ISearchResultsProps> = ({ searchResults }) => {
           </Text>
         )
       })}
-    </View>
+    </SearchResultsContainer>
   )
 }
 
