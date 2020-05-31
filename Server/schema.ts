@@ -29,7 +29,6 @@ const typeDefs = gql`
   }
 
   type MessageType {
-    # id: ID
     _id: String!
     text: String!
     createdAt: String!
@@ -69,11 +68,6 @@ const typeDefs = gql`
     chatIDs: [String]!
   }
 
-  # this might need some connection to the other members of the family
-  # array of strings that are the emails of the fam members
-
-  # lets use this type for the input to the createUser function
-  # members: [String]!
   input UserInputType {
     name: String!
     email: String!
@@ -93,13 +87,8 @@ const typeDefs = gql`
     userType: Permission!
     _id: String!
     chatIDs: [String]!
-    # all members of the same group
     groupID: String!
   }
-
-  # type UserInfoTypeArr {
-  #   users: [UserInfoType]!
-  # }
 
   type CreateUserPayload {
     success: Boolean
@@ -107,31 +96,13 @@ const typeDefs = gql`
 
   type Query {
     getMessages(chatID: String, init: Int!): [MessageType]
-    getUserID: String
-    # lets return UserInfoType insgead
-    getUser(id: String!): TestUser
     getFamily(groupID: String!): [UserInfoType]
     searchUsers(searchTerm: String!): [UserInfoType]!
-    # still have to write
-
-    # make an enum for the classes?
-    # sounds like a good idea because they should be a part of a predetermined list
-    getClasses: [String]
-    # getting the current user
-    # get ID when we query on email
-    queryUserID(email: String): Int
-
-
-    # needs to be written
-    # get all classes
   }
 
   type Mutation {
     login(email: String!, password: String!): LoginPayload
     sendMessage(messages: [MessageInput]): MessagePayload!
-    # createUser will need to take an array of users to create
-    # createUser(email: String!, password: String!, userType: Permission!): Boolean
-
     createUser(users: [UserInputType]): CreateUserPayload
 
     # needs to be written

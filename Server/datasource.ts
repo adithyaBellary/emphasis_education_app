@@ -12,19 +12,15 @@ class dataSource extends RESTDataSource {
   }
 
   async getMessages(chatID, init) {
-    const resp = await firebaseSvc.getMessages(chatID, init);
-    return resp
+    return  await firebaseSvc.getMessages(chatID, init);
   }
 
   async login(user) {
-    const response = await firebaseSvc.login(user)
-    return response
+    return await firebaseSvc.login(user)
   }
 
   async sendMessages(message: MessageInput[]) {
-    const res = await firebaseSvc.send(message)
-    console.log('res', res)
-    return res;
+    return await firebaseSvc.send(message)
   }
 
   createUser(email: string, password: string, name: string) {
@@ -35,14 +31,6 @@ class dataSource extends RESTDataSource {
   async pushUser(name: string, email: string, userType: Permission, phoneNumber: string, groupID: string) {
     const hash: string = MD5(email).toString();
     await firebaseSvc.pushUser(name, email, userType, phoneNumber, hash, groupID);
-  }
-
-  getID() {
-    return firebaseSvc.genID();
-  }
-
-  getUser(id: string) {
-    return firebaseSvc.getUser(id);
   }
 
   async getFamily(groupID: string) {

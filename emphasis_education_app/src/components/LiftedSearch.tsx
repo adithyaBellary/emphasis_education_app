@@ -14,7 +14,6 @@ import { SEARCH_USERS } from '../queries/SearchUsers';
 
 const SearchContain = styled(View)`
   padding-top: 20px;
-
 `
 
 const LiftedSearch: React.FC = () => {

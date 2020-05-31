@@ -27,13 +27,6 @@ class FireBaseSVC {
     this.test_listen();
   }
 
-  getChatId = async (email: string) => {
-    const hash: string = MD5(email).toString();
-    const curUser: UserInfoType = await this.getUser(hash);
-
-    return curUser.chatIDs;
-  }
-
   login = async (user: MutationLoginArgs) => {
     let res: boolean;
     const output = await firebase.auth().signInWithEmailAndPassword(
@@ -198,9 +191,6 @@ class FireBaseSVC {
     if (start > 0) {return []}
     const potentialEnd: number = start + NUM_FETCH_MESSAGES - 1;
     const end: number = potentialEnd > 0 ? 0 : potentialEnd;
-    console.log('start', start);
-    console.log('end', end);
-    console.log('init', init)
 
     return await this._refMessage(chatHash)
       .orderByChild('messageID')
@@ -229,7 +219,6 @@ class FireBaseSVC {
       .then(snap => {
         const val = snap.val();
         if (!val) { return 0 }
-        console.log('val', val);
         const key = Object.keys(val);
         const oldMessageID = val[key[0]].messageID;
         return oldMessageID - 1;
@@ -250,8 +239,6 @@ class FireBaseSVC {
           user: val[key].user
         }
       })
-      console.log('published to pubsub')
-
     })
 
     // this is the listener for a new child (chat) being added
@@ -286,7 +273,6 @@ class FireBaseSVC {
 
   updateNumMessages = async (chatID: string) => {
     const numMessages: number = await this.getNumMessages(chatID);
-    console.log('the number of messages is', numMessages);
     await this._refMessageNum(chatID).set(numMessages + 1)
   }
 
@@ -297,7 +283,6 @@ class FireBaseSVC {
     let myCreatedAt;
     let myUser;
     const oldMess: number = await this.getRecentId(messages[0].chatID);
-    console.log('oldMess', oldMess);
     this.updateNumMessages(messages[0].chatID);
     messages.forEach(async (element: MessageInput) => {
       const { text, user, chatID } = element;
@@ -313,7 +298,6 @@ class FireBaseSVC {
       myUser = user;
       const hashChatID: string = MD5(chatID).toString();
       await this._refMessage(hashChatID).push(message);
-      console.log('message was pushed');
     });
     return {
       text: myText,
@@ -325,10 +309,6 @@ class FireBaseSVC {
 
   refOff () {
     this._refMessage('').off();
-  }
-
-  genID() {
-    return Math.round(Math.random() * 10000000);
   }
 
   async push_test(chatPath: string) {
@@ -344,7 +324,6 @@ class FireBaseSVC {
     const user: UserInfoType = await firebase.database().ref(`Users/${hashedEmail}`).once('value')
       .then(snap => {
         const val = snap.val()
-        console.log('val', val)
         const key = Object.keys(val)[0];
         return val[key]
       })
