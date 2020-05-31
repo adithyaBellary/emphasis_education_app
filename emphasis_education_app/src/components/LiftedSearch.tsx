@@ -1,9 +1,9 @@
 import * as React from 'react';
 import {
-  View,
-  Text
+  ActivityIndicator,
+  View
 } from 'react-native';
-import { useQuery, useLazyQuery } from '@apollo/react-hooks';
+import { useLazyQuery } from '@apollo/react-hooks';
 import { Input, Icon } from 'react-native-elements';
 import styled from 'styled-components';
 
@@ -37,9 +37,12 @@ const LiftedSearch: React.FC = () => {
           />
         }
       />
-      <SearchResults
-        searchResults={data ? data.searchUsers : []}
-      />
+      {loading ? <ActivityIndicator /> : (
+        <SearchResults
+          searchResults={data ? data.searchUsers : []}
+        />
+      )}
+
     </SearchContain>
   )
 }

@@ -375,7 +375,7 @@ class FireBaseSVC {
           relevantFields.forEach((_field) => {
             let field = _user[_field];
             if (_field === 'email') { field = field.split('@')[0] }
-            if (field.includes(searchTerm)) {
+            if (field.toLowerCase().includes(searchTerm.toLocaleLowerCase())) {
               flag = true;
               return;
             }
