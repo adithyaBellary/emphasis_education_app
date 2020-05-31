@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {useMutation} from '@apollo/react-hooks';
 import {
   Alert,
@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import styled from 'styled-components';
 import { MD5 } from "crypto-js"
-import gql from 'graphql-tag';
 
 import {
   MytextInput,
@@ -17,6 +16,9 @@ import {
   MyButtonText,
   CenteredDiv
 } from './shared';
+import { LOGIN } from '../queries/Login';
+import Context from './Context/Context';
+import { Permission, ILoginPayload, ILoginPayloadProps } from '../types';
 
 import Test_s from './test_s';
 
@@ -47,20 +49,13 @@ const Errorlogin: React.FC = () => (
   <ErrorText>there was an issue logging in</ErrorText>
 );
 
-const LOGIN = gql`
-  mutation login($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      res
-      chatIDs
-    }
-  }
-`;
-
 const getHash = (email: string): string => {
   return MD5(email).toString();
 }
 
 const Login: React.FC<ILoginProps> = props => {
+
+  const { setUser } = useContext(Context);
 
   const [curState, setState] = useState({
     error: false,
@@ -71,25 +66,22 @@ const Login: React.FC<ILoginProps> = props => {
   })
 
   // TODO use loading state to render spinner
-  const [doLogin, { error, loading }] = useMutation(
+  const [doLogin, { data, error, loading }] = useMutation<ILoginPayload>(
     LOGIN,
     {
       variables: {
         email: curState.email,
         password: curState.password
       },
-      onCompleted: ( {login} ) => {
+      onCompleted: ( { login } ) => {
         if (login.res) {
-          // we should create the userContext here
-          successLogin(login.chatIDs)
+          successLogin(login)
         } else {
           errorLogin()
         }
       }
     }
   )
-
-  // console.log('loading', loading);
 
   if (error) console.log('ERROR');
 
@@ -102,16 +94,9 @@ const Login: React.FC<ILoginProps> = props => {
     password
   });
 
-  const successLogin = (chatIDs: [string]) => {
-    props.navigation.navigate(
-      'Home',
-      {
-        name: curState.name,
-        email: curState.email,
-        _id: getHash(curState.email),
-        chatIDs,
-      }
-    );
+  const successLogin = (user: ILoginPayloadProps) => {
+    setUser({...user})
+    props.navigation.navigate('Home');
   }
 
   const errorLogin = () => {

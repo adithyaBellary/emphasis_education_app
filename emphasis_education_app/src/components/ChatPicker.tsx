@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import styled from 'styled-components';
+import Context from './Context/Context';
 
 interface IChatPickerProps {
   navigation: any;
@@ -19,15 +20,16 @@ const IndChat = styled(TouchableOpacity)`
 `;
 
 const ChatPicker: React.FC<IChatPickerProps> = props => {
+  const { loggedUser } = React.useContext(Context);
 
   const goToChat = (sub: string) => async () => {
     props.navigation.navigate(
       'Chat',
       {
         chatID: sub,
-        name: props.route.params.name,
-        email: props.route.params.email,
-        _id: props.route.params._id
+        // name: props.route.params.name,
+        // email: props.route.params.email,
+        // _id: props.route.params._id
       }
     )
   }
@@ -50,7 +52,7 @@ const ChatPicker: React.FC<IChatPickerProps> = props => {
           History
         </Text>
         </IndChat>
-        {props.route.params.chatIDs.map((sub: string) => {
+        {loggedUser.chatIDs.map((sub: string) => {
           return (
             <IndChat
               onPress={goToChat(sub)}

@@ -8,7 +8,7 @@ import {
 // import RadioGroup from 'react-native-radio-buttons-group';
 import { Input } from 'react-native-elements';
 
-import { IUserInput, IUser, Permission } from '../types';
+import { IUserInput, Permission } from '../types';
 import {
   MytextInput,
   ButtonContainer,

@@ -36,6 +36,7 @@ const typeDefs = gql`
     user: MessageUser!
   }
 
+  # lets make this similar to UserInfoType
   type TestUser {
     _id: String!
     email: String!
@@ -58,6 +59,13 @@ const typeDefs = gql`
 
   type LoginPayload {
     res: Boolean!
+    # basically UserInfoType from here down
+    name: String!
+    email: String!
+    phoneNumber: String!
+    userType: Permission!
+    groupID: String!
+    _id: String!
     chatIDs: [String]!
   }
 
@@ -100,7 +108,10 @@ const typeDefs = gql`
   type Query {
     getMessages(chatID: String, init: Int!): [MessageType]
     getUserID: String
+    # lets return UserInfoType insgead
     getUser(id: String!): TestUser
+    getFamily(groupID: String!): [UserInfoType]
+    searchUsers(searchTerm: String!): [UserInfoType]!
     # still have to write
 
     # make an enum for the classes?
@@ -110,9 +121,9 @@ const typeDefs = gql`
     # get ID when we query on email
     queryUserID(email: String): Int
 
+
     # needs to be written
     # get all classes
-    getAllUsers: [UserInfoType]
   }
 
   type Mutation {

@@ -4,10 +4,15 @@ import {
 } from 'react-native';
 // import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 import { useMutation, useQuery, useSubscription } from '@apollo/react-hooks';
-import gql from 'graphql-tag'
+
+import GiftedChat from './Presentational/GiftedChat';
+import Context from './Context/Context';
 
 import { REFETCH_LIMIT } from '../constant';
-import GiftedChat from './Presentational/GiftedChat';
+import { IMessage, IMessageUserType } from '../types';
+import { SUB } from '../queries/MessageReceived';
+import { SEND_MESSAGE } from '../queries/SendMessage';
+import { GET_MESSAGES } from '../queries/GetMessages';
 
 interface IChatProps {
   // TODO type the navagation props
@@ -15,73 +20,19 @@ interface IChatProps {
   route: any;
 }
 
-const SUB = gql`
-  subscription {
-    messageReceived {
-      text
-      MessageId
-      createdAt
-      user {
-        name
-        _id
-      }
-    }
-  }
-`
-
-const SEND_MESSAGE = gql`
-  mutation sendMessage($messages: [MessageInput]) {
-    sendMessage(messages: $messages) {
-      # id
-      text
-      MessageId
-      createdAt
-      user {
-        name
-        _id
-      }
-    }
-  }
-`;
-
-const GetMessages = gql`
-  query getMessages($chatID: String!, $init: Int!) {
-    getMessages(chatID: $chatID, init: $init) {
-      # id
-      _id
-      text
-      createdAt
-      user {
-        _id
-        name
-      }
-    }
-  }
-`;
-
-interface IUser {
-  _id: string;
-  name: string;
-  email: string;
-}
-
-// rn gifted chat also has its own IMessage type that we can use
-export interface IMessage {
-  _id: number;
-  text: string;
-  createdAt: number;
-  user: IUser;
-}
-
 interface IState {
   messages: IMessage[];
 }
 
-interface IMessageReceived {
+interface IMessageReceivedProps {
   text: string;
   MessageId: number;
   createdAt: number;
-  user: IUser;
+  user: IMessageUserType;
+}
+
+interface IMessageReceived {
+  messageReceived: IMessageReceivedProps
 }
 interface IGetMessages {
   getMessages: IMessage[];
@@ -93,24 +44,21 @@ interface IGetMessagesInput {
 }
 let initFetch: number = 0;
 
-export interface IMessageUserType {
-  _id: string,
-  name: string,
-  email: string
+interface IMessagePayload {
+  sendMessage: IMessageReceivedProps;
 }
 
 const Chat: React.FC<IChatProps> = props => {
-
-  // let use make out our hook here
+  const { loggedUser } = React.useContext(Context);
   const [curState, setState] = useState<IState>()
   const chatID: string = props.route.params.chatID;
 
   // lets cache this data
-  const { data: getMessages, loading: queryLoading, refetch, error: errorMessage,  } = useQuery<
+  const { data: getMessages, loading: queryLoading, refetch, error: errorMessage } = useQuery<
       IGetMessages,
       IGetMessagesInput
     >(
-    GetMessages,
+    GET_MESSAGES,
     {
       variables: {
         chatID: chatID,
@@ -128,12 +76,8 @@ const Chat: React.FC<IChatProps> = props => {
   // TODO chatPicker might have to have state over this chat
   const { data: subData } = useSubscription<IMessageReceived>(SUB)
 
-  // for the getMessage useEffect, we should add the results on top of the
-  // what the currentstate is
   useEffect(() => {
     if (!getMessages) { return }
-    console.log('getMessage', getMessages.getMessages.length)
-    // console.log('curstate', curState);
     if (!curState) {
       setState({
         messages: getMessages.getMessages
@@ -148,15 +92,15 @@ const Chat: React.FC<IChatProps> = props => {
 
   useEffect(() => {
     if (!subData) { return }
-    console.log('resetting state', curState)
+    const { MessageId: _id, text, createdAt, user } = subData.messageReceived;
     if (!curState ) {
       setState({
         messages: [
           {
-            _id: subData.messageReceived.MessageId,
-            text: subData.messageReceived.text,
-            createdAt: subData.messageReceived.createdAt,
-            user: subData.messageReceived.user
+            _id,
+            text,
+            createdAt,
+            user: user
           }
         ]
       })
@@ -166,16 +110,16 @@ const Chat: React.FC<IChatProps> = props => {
       messages: [
         ...curState.messages,
         {
-          _id: subData.messageReceived.MessageId,
-          text: subData.messageReceived.text,
-          createdAt: subData.messageReceived.createdAt,
-          user: subData.messageReceived.user
+          _id,
+          text,
+          createdAt,
+          user
         }
       ]
     })
   }, [subData])
   // TODO type this mutation
-  const [sendMessage, { error }] = useMutation(SEND_MESSAGE);
+  const [sendMessage, { error }] = useMutation<IMessagePayload>(SEND_MESSAGE);
 
   if (error) {
     console.log('there was an error getting the messages')
@@ -183,9 +127,9 @@ const Chat: React.FC<IChatProps> = props => {
   }
 
   const curUser: IMessageUserType = {
-    _id: props.route.params._id,
-    name: props.route.params.name,
-    email: props.route.params.email,
+    _id: loggedUser._id,
+    name: loggedUser.name,
+    email: loggedUser.email,
   }
 
   const refreshFn = () => {

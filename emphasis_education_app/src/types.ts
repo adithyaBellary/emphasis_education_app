@@ -15,13 +15,67 @@ export interface IUserInput {
 }
 
 // dont want the confirmPassword stuff for when we send to backend
-export type IUser = Pick<
+// rename this to IUsableUserInfo
+export type IUsableUserInfo = Pick<
     IUserInput,
     'name' | 'email' | 'password' | 'phoneNumber' | 'userType'
   >;
+
+// this will be the user type that we get back from the backend
+export interface IUser {
+  name: string;
+  email: string;
+  phoneNumber: string;
+  userType: Permission;
+  groupID: string;
+  chatIDs: string[];
+  _id: string;
+}
 
 export enum Permission {
   Student = 'Student',
   Tutor = 'Tutor',
   Admin = 'Admin'
+}
+
+export interface ILoginPayloadProps {
+  res: string;
+  name: string;
+  email: string;
+  phoneNumber: string;
+  userType: Permission;
+  groupID: string;
+  _id: string;
+  chatIDs: string[];
+}
+export interface ILoginPayload {
+  login: ILoginPayloadProps;
+}
+
+export interface IMessageUserType {
+  _id: string,
+  name: string,
+  email: string
+}
+
+export interface IMessage {
+  _id: number;
+  text: string;
+  createdAt: number;
+  user: IMessageUserType;
+}
+
+export interface IGetFamilyInput {
+  groupID: string;
+}
+
+export interface IUserPayload {
+  users: IUser[];
+}
+export interface ISearchUserPayload {
+  searchUsers: IUser[];
+}
+
+export interface ISearchInput {
+  searchTerm: string;
 }

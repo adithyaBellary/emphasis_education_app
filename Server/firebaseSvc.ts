@@ -35,7 +35,6 @@ class FireBaseSVC {
   }
 
   login = async (user: MutationLoginArgs) => {
-    console.log('logging inn');
     let res: boolean;
     const output = await firebase.auth().signInWithEmailAndPassword(
       user.email,
@@ -45,8 +44,9 @@ class FireBaseSVC {
       () => res = true,
       () => res = false
     );
-    const chatIDs: string[] = await this.getChatId(user.email);
-    const payload: LoginPayload = { res, chatIDs };
+    const loggedInUser: UserInfoType = await this.getUser(user.email);
+    const {__typename, ...rest} = loggedInUser;
+    const payload: LoginPayload = { res, ...rest };
 
     return payload;
   }
@@ -146,7 +146,6 @@ class FireBaseSVC {
     const curUser = firebase.auth().currentUser;
     if (!curUser) {
       console.log('the current user is null');
-      // is this the right thing to be returning if the user is null?
       return null;
     } else {
       return curUser.uid;
@@ -157,16 +156,20 @@ class FireBaseSVC {
     return firebase.database().ref(`${MESSAGE_REF_BASE}/${chatPath}`);
   }
 
-  _refUser(ID: string) {
+  _refUserID(ID: string) {
     return firebase.database().ref(`${User_REF_BASE}/${ID}`);
+  }
+
+  _refUsers() {
+    return firebase.database().ref(`${User_REF_BASE}`);
   }
 
   _refMessageNum(chatID: string) {
     return firebase.database().ref(`${NUM_MESSAGES_BASE}/${chatID}`);
   }
 
-  _refFamily(FamilyID: string) {
-    return firebase.database().ref(`${FAMILY_REF_BASE}/${FamilyID}`);
+  _refFamily(groupID: string) {
+    return firebase.database().ref(`${FAMILY_REF_BASE}/${groupID}`);
   }
 
   async pushUser(name, email, userType, phoneNumber, hash, groupID) {
@@ -180,7 +183,7 @@ class FireBaseSVC {
       chatIDs: testChatIds,
       groupID
     }
-    await this._refUser(hash).push(user_and_id);
+    await this._refUserID(hash).push(user_and_id);
     await this._refFamily(groupID).push(user_and_id)
   }
 
@@ -206,7 +209,6 @@ class FireBaseSVC {
       .once('value')
       .then(snap => {
         const val = snap.val();
-        // console.log('val', val)
         const key = Object.keys(val)
         const mess: MessageType[] = key.map(k => {
           const {messageID, ...rest} = val[k];
@@ -288,10 +290,8 @@ class FireBaseSVC {
     await this._refMessageNum(chatID).set(numMessages + 1)
   }
 
-  // could be worth updating the number of messages we have in that chat in a node as well
   send = async (messages: MessageInput[]) => {
     // TODO refactor all this rip
-    // console.log('sending these messages: ', messages);
     let myText;
     let myMesID;
     let myCreatedAt;
@@ -338,15 +338,53 @@ class FireBaseSVC {
     })
   }
 
-  async getUser(id: string) {
-    // need await!!
-    const user: UserInfoType = await firebase.database().ref(`Users/${id}`).once('value')
+  // lets pass in the email and then hash it here
+  async getUser(email: string) {
+    const hashedEmail = MD5(email).toString();
+    const user: UserInfoType = await firebase.database().ref(`Users/${hashedEmail}`).once('value')
       .then(snap => {
         const val = snap.val()
+        console.log('val', val)
         const key = Object.keys(val)[0];
         return val[key]
       })
     return user;
+  }
+
+  async getFamily(groupID: string) {
+    return await this._refFamily(groupID).once('value')
+      .then((snap) => {
+        const val = snap.val();
+        const keys = Object.keys(val);
+        return keys.map(key => val[key])
+      })
+  }
+  async searchUsers(searchTerm: string) {
+
+    const relevantFields = [ 'email', 'name', 'phoneNumber', 'userType' ];
+
+    // this will be the ref for all the users
+    return await this._refUsers().once('value')
+      .then((snap) => {
+        const val = snap.val();
+        const keys = Object.keys(val);
+        const Users = keys.map((k, index) => {
+          const u = val[k];
+          const _user = u[Object.keys(u)[0]]
+          let flag = false;
+          relevantFields.forEach((_field) => {
+            let field = _user[_field];
+            if (_field === 'email') { field = field.split('@')[0] }
+            if (field.includes(searchTerm)) {
+              flag = true;
+              return;
+            }
+          })
+          if (flag) { return _user }
+        }).filter(user => !!user)
+
+        return Users;
+      })
   }
 }
 
