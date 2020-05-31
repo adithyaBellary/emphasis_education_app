@@ -24,7 +24,7 @@ import Chat from './src/components/Chat';
 import HomePage from './src/components/HomePage';
 import CreateUser from './src/components/CreateUser';
 import ChatPicker from './src/components/ChatPicker';
-import MyProfile from './src/components/MyProfile';
+import Profile from './src/components/LiftedProfile';
 import CreateUserContain from './src/components/CreateUserContainer';
 import ConfirmationScreen from './src/components/ConfirmationScreen';
 
@@ -123,7 +123,7 @@ const App = () => {
         />
         <stack.Screen
           name="MyProfile"
-          component={MyProfile}
+          component={Profile}
           options={{ title: 'My Profile' }}
         />
         <stack.Screen
