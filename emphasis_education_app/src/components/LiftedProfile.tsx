@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+  ActivityIndicator,
   Text,
   View
 } from 'react-native';
@@ -28,14 +29,10 @@ const LiftedProfile: React.FC<ILiftedProfileProps> = () => {
   return (
     <>
     {
-      loading ? (
-        <View>
-          <Text>
-            loading
-          </Text>
-        </View>
-      ) : (
-      <Profile />
+      loading ? <ActivityIndicator /> : (
+        <Profile
+          users={data ? data.users : []}
+        />
       )
     }
     </>
