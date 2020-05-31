@@ -4,7 +4,7 @@ import {
   Text
 } from 'react-native';
 
-import { IUser } from '../types';
+import { IUser } from '../../types';
 import styled from 'styled-components';
 
 interface ISearchResultsProps {
