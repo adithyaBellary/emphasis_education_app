@@ -4,62 +4,21 @@ import {
 } from 'react-native';
 // import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 import { useMutation, useQuery, useSubscription } from '@apollo/react-hooks';
-import gql from 'graphql-tag'
 
-import { REFETCH_LIMIT } from '../constant';
 import GiftedChat from './Presentational/GiftedChat';
 import Context from './Context/Context';
+
+import { REFETCH_LIMIT } from '../constant';
 import { IMessage, IMessageUserType } from '../types';
+import { SUB } from '../queries/MessageReceived';
+import { SEND_MESSAGE } from '../queries/SendMessage';
+import { GET_MESSAGES } from '../queries/GetMessages';
 
 interface IChatProps {
   // TODO type the navagation props
   navigation: any;
   route: any;
 }
-
-const SUB = gql`
-  subscription {
-    messageReceived {
-      text
-      MessageId
-      createdAt
-      user {
-        name
-        _id
-      }
-    }
-  }
-`
-
-const SEND_MESSAGE = gql`
-  mutation sendMessage($messages: [MessageInput]) {
-    sendMessage(messages: $messages) {
-      # id
-      text
-      MessageId
-      createdAt
-      user {
-        name
-        _id
-      }
-    }
-  }
-`;
-
-const GetMessages = gql`
-  query getMessages($chatID: String!, $init: Int!) {
-    getMessages(chatID: $chatID, init: $init) {
-      # id
-      _id
-      text
-      createdAt
-      user {
-        _id
-        name
-      }
-    }
-  }
-`;
 
 interface IState {
   messages: IMessage[];
@@ -99,7 +58,7 @@ const Chat: React.FC<IChatProps> = props => {
       IGetMessages,
       IGetMessagesInput
     >(
-    GetMessages,
+    GET_MESSAGES,
     {
       variables: {
         chatID: chatID,
