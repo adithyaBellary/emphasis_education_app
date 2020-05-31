@@ -67,8 +67,9 @@ const Home: React.FC<ILiftedHomeProps> = ( props ) => {
         <IconSection>
           <IconContain>
             <Icon
-              name='rowing'
+              name='person'
               onPress={goToMyProfile}
+              type='fontisto'
               reverse={true}
             />
             <Icon
@@ -86,12 +87,12 @@ const Home: React.FC<ILiftedHomeProps> = ( props ) => {
 
           <IconContain>
             <Icon
-              name='rowing'
+              name='search'
               onPress={() => Alert.alert('additional courses')}
               reverse={true}
             />
             <Icon
-              name='rowing'
+              name='settings'
               onPress={() => Alert.alert('settings')}
               reverse={true}
             />
