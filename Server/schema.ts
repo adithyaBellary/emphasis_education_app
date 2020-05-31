@@ -111,6 +111,7 @@ const typeDefs = gql`
     # lets return UserInfoType insgead
     getUser(id: String!): TestUser
     getFamily(groupID: String!): [UserInfoType]
+    searchUsers(searchTerm: String!): [UserInfoType]!
     # still have to write
 
     # make an enum for the classes?
@@ -123,7 +124,6 @@ const typeDefs = gql`
 
     # needs to be written
     # get all classes
-    searchUsers(searchTerm: String!): [UserInfoType]!
   }
 
   type Mutation {

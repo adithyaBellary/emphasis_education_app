@@ -72,3 +72,10 @@ export interface IGetFamilyInput {
 export interface IUserPayload {
   users: IUser[];
 }
+export interface ISearchUserPayload {
+  searchUsers: IUser[];
+}
+
+export interface ISearchInput {
+  searchTerm: string;
+}

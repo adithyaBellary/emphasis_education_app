@@ -27,6 +27,7 @@ import ChatPicker from './src/components/ChatPicker';
 import Profile from './src/components/LiftedProfile';
 import CreateUserContain from './src/components/CreateUserContainer';
 import ConfirmationScreen from './src/components/ConfirmationScreen';
+import Search from './src/components/LiftedSearch';
 
 import ContextProvider from './src/components/Context/Provider';
 import context, {EmptyUser} from './src/components/Context/Context';
@@ -71,6 +72,7 @@ type RootStackProps = {
   CreateUserContain: undefined;
   MyProfile: undefined;
   ConfirmationScreen: undefined;
+  Search: undefined;
 }
 
 const stack = createStackNavigator<RootStackProps>();
@@ -103,6 +105,11 @@ const App = () => {
         <stack.Screen
           name="Home"
           component={HomePage}
+          options={{ title: '' }}
+        />
+        <stack.Screen
+          name="Search"
+          component={Search}
           options={{ title: '' }}
         />
         {/* can maybe get the name of the chat and then set the title to it */}

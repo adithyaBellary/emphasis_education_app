@@ -51,11 +51,7 @@ const MissionStatement: React.FC = () => {
 
 const Home: React.FC<ILiftedHomeProps> = ( props ) => {
   const { loggedUser } = React.useContext(Context);
-
-  const goToMyProfile = () => props.navigation.navigate('MyProfile');
-
-  const goToChat = () => props.navigation.navigate('ChatPicker');
-
+  const changeScreens = (dest: string) => () =>  props.navigation.navigate(dest)
 
   return (
     <ThemeProvider theme={theme}>
@@ -68,13 +64,13 @@ const Home: React.FC<ILiftedHomeProps> = ( props ) => {
           <IconContain>
             <Icon
               name='person'
-              onPress={goToMyProfile}
+              onPress={changeScreens('MyProfile')}
               type='fontisto'
               reverse={true}
             />
             <Icon
               name='message'
-              onPress={goToChat}
+              onPress={changeScreens('ChatPicker')}
               reverse={true}
             />
           </IconContain>
@@ -88,7 +84,7 @@ const Home: React.FC<ILiftedHomeProps> = ( props ) => {
           <IconContain>
             <Icon
               name='search'
-              onPress={() => Alert.alert('additional courses')}
+              onPress={changeScreens('Search')}
               reverse={true}
             />
             <Icon
