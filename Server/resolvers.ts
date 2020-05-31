@@ -16,8 +16,11 @@ const resolvers = {
     getUser: (_, { id }, { dataSources }) => {
       return dataSources.f.getUser(id);
     },
-    getFamily: (_, { groupID }, { dataSources }) => {
-      return dataSources.f.getFamily(groupID)
+    getFamily: async (_, { groupID }, { dataSources }) => {
+      return await dataSources.f.getFamily(groupID)
+    },
+    searchUsers: async (_, { searchTerm }, { dataSources}) => {
+      return await dataSources.f.searchUsers(searchTerm)
     }
   },
 

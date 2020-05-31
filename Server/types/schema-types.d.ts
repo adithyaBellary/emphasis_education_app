@@ -108,10 +108,10 @@ export type Query = {
   getMessages?: Maybe<Array<Maybe<MessageType>>>;
   getUserID?: Maybe<Scalars['String']>;
   getUser?: Maybe<TestUser>;
+  getFamily?: Maybe<Array<Maybe<UserInfoType>>>;
   getClasses?: Maybe<Array<Maybe<Scalars['String']>>>;
   queryUserID?: Maybe<Scalars['Int']>;
-  getAllUsers?: Maybe<Array<Maybe<UserInfoType>>>;
-  getFamily?: Maybe<Array<Maybe<UserInfoType>>>;
+  searchUsers: Array<Maybe<UserInfoType>>;
 };
 
 
@@ -126,13 +126,18 @@ export type QueryGetUserArgs = {
 };
 
 
+export type QueryGetFamilyArgs = {
+  groupID: Scalars['String'];
+};
+
+
 export type QueryQueryUserIdArgs = {
   email?: Maybe<Scalars['String']>;
 };
 
 
-export type QueryGetFamilyArgs = {
-  email: Scalars['String'];
+export type QuerySearchUsersArgs = {
+  searchTerm: Scalars['String'];
 };
 
 export type Mutation = {

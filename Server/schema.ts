@@ -110,6 +110,7 @@ const typeDefs = gql`
     getUserID: String
     # lets return UserInfoType insgead
     getUser(id: String!): TestUser
+    getFamily(groupID: String!): [UserInfoType]
     # still have to write
 
     # make an enum for the classes?
@@ -119,10 +120,10 @@ const typeDefs = gql`
     # get ID when we query on email
     queryUserID(email: String): Int
 
+
     # needs to be written
     # get all classes
-    getFamily(groupID: String!): [UserInfoType]
-    getAllUsers: [UserInfoType]
+    searchUsers(searchTerm: String!): [UserInfoType]!
   }
 
   type Mutation {

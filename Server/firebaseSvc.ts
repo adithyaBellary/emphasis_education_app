@@ -156,8 +156,12 @@ class FireBaseSVC {
     return firebase.database().ref(`${MESSAGE_REF_BASE}/${chatPath}`);
   }
 
-  _refUser(ID: string) {
+  _refUserID(ID: string) {
     return firebase.database().ref(`${User_REF_BASE}/${ID}`);
+  }
+
+  _refUsers() {
+    return firebase.database().ref(`${User_REF_BASE}`);
   }
 
   _refMessageNum(chatID: string) {
@@ -179,7 +183,7 @@ class FireBaseSVC {
       chatIDs: testChatIds,
       groupID
     }
-    await this._refUser(hash).push(user_and_id);
+    await this._refUserID(hash).push(user_and_id);
     await this._refFamily(groupID).push(user_and_id)
   }
 
@@ -353,6 +357,33 @@ class FireBaseSVC {
         const val = snap.val();
         const keys = Object.keys(val);
         return keys.map(key => val[key])
+      })
+  }
+  async searchUsers(searchTerm: string) {
+
+    const relevantFields = [ 'email', 'name', 'phoneNumber', 'userType' ];
+
+    // this will be the ref for all the users
+    return await this._refUsers().once('value')
+      .then((snap) => {
+        const val = snap.val();
+        const keys = Object.keys(val);
+        const Users = keys.map((k, index) => {
+          const u = val[k];
+          const _user = u[Object.keys(u)[0]]
+          let flag = false;
+          relevantFields.forEach((_field) => {
+            let field = _user[_field];
+            if (_field === 'email') { field = field.split('@')[0] }
+            if (field.includes(searchTerm)) {
+              flag = true;
+              return;
+            }
+          })
+          if (flag) { return _user }
+        }).filter(user => !!user)
+
+        return Users;
       })
   }
 }

@@ -45,8 +45,12 @@ class dataSource extends RESTDataSource {
     return firebaseSvc.getUser(id);
   }
 
-  getFamily(groupID: string) {
-    return firebaseSvc.getFamily(groupID);
+  async getFamily(groupID: string) {
+    return await firebaseSvc.getFamily(groupID);
+  }
+
+  async searchUsers(searchTerm: string) {
+    return await firebaseSvc.searchUsers(searchTerm);
   }
 }
 
