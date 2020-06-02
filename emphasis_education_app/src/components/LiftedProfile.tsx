@@ -10,7 +10,7 @@ import Context from './Context/Context';
 import Profile from './Presentational/Profile';
 
 import { GET_FAMILY } from '../queries/GetFamily';
-import { IGetFamilyInput, IUserPayload } from '../types';
+import { IGetFamilyInput, IGetFamilyPayload } from '../types';
 
 interface ILiftedProfileProps {
   // TODO type the navagation props
@@ -22,7 +22,7 @@ const LiftedProfile: React.FC<ILiftedProfileProps> = () => {
   const { loggedUser } = React.useContext(Context);
   const groupID = loggedUser.groupID;
   const options = { variables: { groupID }}
-  const { data, loading, error } = useQuery<IUserPayload, IGetFamilyInput>(GET_FAMILY, options)
+  const { data, loading, error } = useQuery<IGetFamilyPayload, IGetFamilyInput>(GET_FAMILY, options)
   console.log('my profile data', data);
   if ( error ) { console.log('error loading the profile')}
 
@@ -31,7 +31,7 @@ const LiftedProfile: React.FC<ILiftedProfileProps> = () => {
     {
       loading ? <ActivityIndicator /> : (
         <Profile
-          users={data ? data.users : []}
+          users={data ? data.getFamily : []}
         />
       )
     }

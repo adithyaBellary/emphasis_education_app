@@ -4,6 +4,7 @@ import {
   Text
 } from 'react-native';
 import styled from 'styled-components';
+import { Divider } from 'react-native-elements';
 
 import { IUser } from '../../types';
 import Context from '../Context/Context';
@@ -33,11 +34,27 @@ const UserInfoLabel = styled(Text)`
   font-size: 14px;
   fontFamily: 'Nunito-Light';
 `
+interface IIndividualFieldProps {
+  value: string;
+  label: string;
+}
+
+const IndividualField: React.FC<IIndividualFieldProps> = ({ value, label}) => (
+  <>
+    <UserInfoText>
+      {value}
+    </UserInfoText>
+    <UserInfoLabel>
+      {label}
+    </UserInfoLabel>
+  </>
+)
 
 const Profile: React.FC<IProfileProps> = ({ users }) => {
 
   // let us put the logged in user in the top, so we need to get the context
   const { loggedUser } = React.useContext(Context)
+  console.log('users in my profile', users)
 
   return (
     <ProfileContain>
@@ -45,25 +62,43 @@ const Profile: React.FC<IProfileProps> = ({ users }) => {
         {loggedUser.name}
       </Title>
       <UserInfoContain>
-        <UserInfoText>
-          {loggedUser.email}
-        </UserInfoText>
-        <UserInfoLabel>
-          Email
-        </UserInfoLabel>
+        <IndividualField
+          value={loggedUser.email}
+          label={'Email'}
+        />
+        <Divider />
         {/* ugh now i need to format the phoneNumber */}
-        <UserInfoText>
-          {loggedUser.phoneNumber}
-        </UserInfoText>
-        <UserInfoLabel>
-          Phone Number
-        </UserInfoLabel>
+        <IndividualField
+          value={loggedUser.phoneNumber}
+          label={'Phone Number'}
+        />
 
+        {/* list the classes */}
       </UserInfoContain>
 
-      {/* <Title>
-        Other People
-      </Title> */}
+      {/* lets only render this stuff if we have other users to render outside of just the logged in user */}
+      <Title>
+        Family Members
+      </Title>
+      <UserInfoContain>
+        {
+          users.map((user, index) => (
+            <>
+              <IndividualField
+                key={index}
+                value={user.name}
+                label={'Name'}
+              />
+              <IndividualField
+                key={index}
+                value={user.email}
+                label={'Email'}
+              />
+            </>
+          ))
+        }
+
+      </UserInfoContain>
 
     </ProfileContain>
   )

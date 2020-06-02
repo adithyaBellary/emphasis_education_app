@@ -8,7 +8,8 @@
  * @format
  */
 
-import React from 'react';
+import * as React from 'react';
+import { Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { ApolloClient } from 'apollo-client';
@@ -34,13 +35,17 @@ import { theme } from './src/theme';
 import context, {EmptyUser} from './src/components/Context/Context';
 import { IUser } from './src/types';
 
+// const PORT = Platform.OS === 'ios' ?
+
 const cache = new InMemoryCache();
 const httplink = new HttpLink({
-  uri: 'http://localhost:4000'
+  // uri: 'http://localhost:4000'
+  uri: 'http://10.0.2.2:8081'
 });
 
 const wsLink = new WebSocketLink({
-  uri: `ws://localhost:4000/graphql`,
+  // uri: `ws://localhost:4000/graphql`,
+  uri: `ws://10.0.2.2:8081/graphql`,
   options: {
     reconnect: true,
     timeout: 20000,

@@ -69,8 +69,8 @@ export interface IGetFamilyInput {
   groupID: string;
 }
 
-export interface IUserPayload {
-  users: IUser[];
+export interface IGetFamilyPayload {
+  getFamily: IUser[];
 }
 export interface ISearchUserPayload {
   searchUsers: IUser[];

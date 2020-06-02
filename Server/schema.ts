@@ -80,6 +80,7 @@ const typeDefs = gql`
 
   # this type will be for what we want to query for when we represent data on the frontend
   # these are fields that will be written to the db
+  # Backend analog IUser
   type UserInfoType {
     name: String!
     email: String!
