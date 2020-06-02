@@ -39,13 +39,11 @@ import { IUser } from './src/types';
 
 const cache = new InMemoryCache();
 const httplink = new HttpLink({
-  // uri: 'http://localhost:4000'
-  uri: 'http://10.0.2.2:8081'
+  uri: 'https://emphasis-education-server.herokuapp.com/'
 });
 
 const wsLink = new WebSocketLink({
-  // uri: `ws://localhost:4000/graphql`,
-  uri: `ws://10.0.2.2:8081/graphql`,
+  uri: `ws://emphasis-education-server.herokuapp.com/graphql`,
   options: {
     reconnect: true,
     timeout: 20000,
