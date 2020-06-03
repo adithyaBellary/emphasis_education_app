@@ -9,7 +9,6 @@
  */
 
 import * as React from 'react';
-import { Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { ApolloClient } from 'apollo-client';
@@ -34,8 +33,8 @@ import { theme } from './src/theme';
 
 import context, {EmptyUser} from './src/components/Context/Context';
 import { IUser } from './src/types';
-
-// const PORT = Platform.OS === 'ios' ?
+import { Icon } from 'react-native-elements';
+import { Alert } from 'react-native';
 
 const cache = new InMemoryCache();
 const httplink = new HttpLink({
@@ -81,6 +80,10 @@ type RootStackProps = {
 
 const stack = createStackNavigator<RootStackProps>();
 
+// let us check if the user is logged in or not
+// if yeah, then home page
+// if not, then login page
+
 const App = () => {
   // wrap this all in the context
   const [user, setUser] = React.useState<IUser>(EmptyUser);
@@ -108,7 +111,11 @@ const App = () => {
               <stack.Screen
                 name="Home"
                 component={HomePage}
-                options={{ title: '' }}
+                options={{
+                  title: '' ,
+                  // we chouldnt really be able to go back to the login page?
+                  headerLeft: () => null
+                }}
               />
               <stack.Screen
                 name="Search"
@@ -129,7 +136,10 @@ const App = () => {
               <stack.Screen
                 name="ChatPicker"
                 component={ChatPicker}
-                options={{ title: 'My Chats' }}
+                options={{
+                  title: 'My Chats',
+
+                }}
               />
               <stack.Screen
                 name="MyProfile"
