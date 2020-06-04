@@ -114,7 +114,7 @@ const App = () => {
                 options={{
                   title: '' ,
                   // we chouldnt really be able to go back to the login page?
-                  headerLeft: () => null
+                  // headerLeft: () => null
                 }}
               />
               <stack.Screen
