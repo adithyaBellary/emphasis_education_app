@@ -10,6 +10,8 @@ import { Icon } from 'react-native-elements';
 
 import styled from 'styled-components';
 import Context from './Context/Context';
+import { PermissionedComponent } from './shared';
+import { Permission } from '../types';
 
 interface IChatPickerProps {
   navigation: any;
@@ -42,11 +44,17 @@ const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
   React.useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <Icon
-          name='pluscircleo'
-          type='antdesign'
-          onPress={() => Alert.alert('go to create new chat')}
-        />
+        <PermissionedComponent
+          // allowedPermission={Permission.Admin}
+          // this will need to be changed to the Admin later
+          allowedPermission={Permission.Student}
+        >
+          <Icon
+            name='pluscircleo'
+            type='antdesign'
+            onPress={() => Alert.alert('go to create new chat')}
+            />
+        </PermissionedComponent>
       ),
       headerRightContainerStyle: {
         padding: 10

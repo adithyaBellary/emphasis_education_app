@@ -1,3 +1,4 @@
+import * as React from 'react';
 import {
   TextInput,
   View,
@@ -5,6 +6,9 @@ import {
   TouchableOpacity
 } from 'react-native';
 import styled from 'styled-components';
+
+import { Permission } from '../types';
+import Context from './Context/Context';
 
 export const MytextInput = styled(TextInput)`
   border: black;
@@ -45,3 +49,17 @@ export const IconSection = styled(View)`
   padding: 150px 0 100px 0;
   align-items: center;
 `;
+
+interface IPermissionProps {
+  allowedPermission: Permission;
+}
+
+export const PermissionedComponent: React.FC<IPermissionProps> = ({ allowedPermission, children}) => {
+  const {loggedUser} = React.useContext(Context)
+
+  if(loggedUser.userType === allowedPermission) {
+    return <>{children}</>
+  } else {
+    return null;
+  }
+}
