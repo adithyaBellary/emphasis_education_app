@@ -6,6 +6,9 @@ interface IAdminPageProps {
   navigation: any;
   route: any;
 }
+
+// this should be where admins manage the classes and the students
+
 const AdminPage: React.FC<IAdminPageProps> = props => {
 
 

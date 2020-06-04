@@ -68,7 +68,7 @@ const Home: React.FC<ILiftedHomeProps> = ( { navigation} ) => {
           <Icon
             name='user'
             type='antdesign'
-            onPress={changeScreens('AdminPage')}
+            onPress={changeScreens('Search')}
           />
           <Text>Admin</Text>
           </AdminContain>

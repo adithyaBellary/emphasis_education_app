@@ -7,15 +7,16 @@ import styled from 'styled-components';
 
 const IndividualResultContainer = styled(View)`
   padding: 10px 0;
+  display: flex;
+  flexDirection: row;
+  justifyContent: space-between;
 `
 
 const IndividualResult: React.FC = ({ children }) => {
 
   return (
     <IndividualResultContainer>
-      <Text>
-        {children}
-      </Text>
+      {children}
     </IndividualResultContainer>
   )
 }

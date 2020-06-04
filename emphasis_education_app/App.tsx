@@ -28,7 +28,7 @@ import ChatPicker from './src/components/ChatPicker';
 import Profile from './src/components/LiftedProfile';
 import CreateUserContain from './src/components/CreateUserContainer';
 import ConfirmationScreen from './src/components/ConfirmationScreen';
-import Search from './src/components/Search/LiftedSearch';
+import Search from './src/components/AdminPage/LiftedSearch';
 import AdminPage from './src/components/AdminPage';
 
 import { theme } from './src/theme';

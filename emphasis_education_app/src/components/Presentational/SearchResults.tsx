@@ -1,11 +1,13 @@
 import * as React from 'react';
 import {
+  Text,
   View,
 } from 'react-native';
 import styled from 'styled-components';
+import { Icon } from 'react-native-elements';
 
 import { IUser } from '../../types';
-import IndividualResult from '../Search/IndividualResult';
+import IndividualResult from '../AdminPage/IndividualResult';
 
 interface ISearchResultsProps {
   searchResults: IUser[];
@@ -13,7 +15,6 @@ interface ISearchResultsProps {
 
 const SearchResultsContainer = styled(View)`
   padding: 0 20px;
-  background-color: grey;
 `
 
 const SearchResults: React.FC<ISearchResultsProps> = ({ searchResults }) => {
@@ -25,7 +26,13 @@ const SearchResults: React.FC<ISearchResultsProps> = ({ searchResults }) => {
           <IndividualResult
             key={index}
           >
-            {results.name}
+            <Text>
+              {results.name}
+            </Text>
+            <Icon
+              name='user'
+              type='antdesign'
+            />
           </IndividualResult>
         )
       })}
