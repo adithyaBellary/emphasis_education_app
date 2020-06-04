@@ -29,12 +29,12 @@ import Profile from './src/components/LiftedProfile';
 import CreateUserContain from './src/components/CreateUserContainer';
 import ConfirmationScreen from './src/components/ConfirmationScreen';
 import Search from './src/components/Search/LiftedSearch';
-import { theme } from './src/theme';
+import AdminPage from './src/components/AdminPage';
 
+import { theme } from './src/theme';
 import context, {EmptyUser} from './src/components/Context/Context';
 import { IUser } from './src/types';
-import { Icon } from 'react-native-elements';
-import { Alert } from 'react-native';
+
 
 const cache = new InMemoryCache();
 const httplink = new HttpLink({
@@ -76,6 +76,7 @@ type RootStackProps = {
   MyProfile: undefined;
   ConfirmationScreen: undefined;
   Search: undefined;
+  AdminPage: undefined;
 }
 
 const stack = createStackNavigator<RootStackProps>();
@@ -155,6 +156,11 @@ const App = () => {
                 name="ConfirmationScreen"
                 component={ConfirmationScreen}
                 options={{ title: '' }}
+              />
+              <stack.Screen
+                name="AdminPage"
+                component={AdminPage}
+                options={{ title: 'Admin Page' }}
               />
             </stack.Navigator>
           </NavigationContainer>
