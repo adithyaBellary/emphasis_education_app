@@ -139,7 +139,6 @@ const App = () => {
                 component={ChatPicker}
                 options={{
                   title: 'My Chats',
-
                 }}
               />
               <stack.Screen
