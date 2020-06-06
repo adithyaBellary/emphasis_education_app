@@ -7,7 +7,7 @@
     "@types/crypto-js": "^3.1.44",
     "apollo-boost": "^0.4.7",
     "apollo-datasource-rest": "^0.8.0",
-    "apollo-server": "^2.11.0",
+    "apollo-server": "^2.14.2",
     "crypto-js": "^4.0.0",
     "firebase": "^7.13.2",
     "gql2ts": "^1.10.1",
