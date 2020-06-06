@@ -62,7 +62,7 @@ const Profile: React.FC<IProfileProps> = ({ family, mainUserID }) => {
     }
   })[0]
   console.log('mainUser', mainUser, mainUserID)
-  if (!mainUser) { return null; }
+  if (!mainUser) { return <View><Text>could not find the user.</Text></View>; }
   return (
     <ProfileContain>
       <Title>
@@ -83,27 +83,32 @@ const Profile: React.FC<IProfileProps> = ({ family, mainUserID }) => {
         {/* list the classes */}
       </UserInfoContain>
 
-      {/* lets only render this stuff if we have other users to render outside of just the logged in user */}
-      <Title>
-        Family Members
-      </Title>
+      {family.length > 1 && (
+        <Title>
+          Family Members
+        </Title>
+      )}
+
       <UserInfoContain>
         {
           family.map((user, index) => (
             <>
-              <IndividualField
-                // key={index}
-                value={user.name}
-                label={'Name'}
-              />
-              <IndividualField
-                // key={index}
-                value={user.email}
-                label={'Email'}
-              />
+              {(user._id !== mainUser._id) && (
+                <>
+                  <IndividualField
+                    // key={index}
+                    value={user.name}
+                    label={'Name'}
+                  />
+                  <IndividualField
+                    // key={index}
+                    value={user.email}
+                    label={'Email'}
+                  />
+                </>
+              )}
             </>
-          ))
-        }
+          ))}
 
       </UserInfoContain>
 

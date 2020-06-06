@@ -7,6 +7,7 @@ export const GET_FAMILY = gql`
       email
       groupID
       phoneNumber
+      _id
     }
   }
 `
