@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {
   ActivityIndicator,
-  View
+  View,
 } from 'react-native';
 import { useLazyQuery } from '@apollo/react-hooks';
 import { Input, Icon } from 'react-native-elements';
@@ -16,7 +16,11 @@ const SearchContain = styled(View)`
   padding-top: 20px;
 `
 
-const LiftedSearch: React.FC = () => {
+interface ILiftedSearchProps {
+  navigation: any;
+}
+
+const LiftedSearch: React.FC<ILiftedSearchProps> = ({ navigation }) => {
   const [searchTerm, setSearchTerm] = React.useState('');
   const [runQuery, { data, loading, error }] = useLazyQuery<ISearchUserPayload, ISearchInput>(SEARCH_USERS)
   const handleTextChange = (text: string) => setSearchTerm(text)
@@ -39,6 +43,7 @@ const LiftedSearch: React.FC = () => {
       {loading ? <ActivityIndicator /> : (
         <SearchResults
           searchResults={data ? data.searchUsers : []}
+          navigation={navigation}
         />
       )}
 

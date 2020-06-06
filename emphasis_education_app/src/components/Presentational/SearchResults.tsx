@@ -11,13 +11,14 @@ import IndividualResult from '../AdminPage/IndividualResult';
 
 interface ISearchResultsProps {
   searchResults: IUser[];
+  navigation: any;
 }
 
 const SearchResultsContainer = styled(View)`
   padding: 0 20px;
 `
 
-const SearchResults: React.FC<ISearchResultsProps> = ({ searchResults }) => {
+const SearchResults: React.FC<ISearchResultsProps> = ({ searchResults, navigation }) => {
 
   return (
     <SearchResultsContainer>
@@ -32,6 +33,7 @@ const SearchResults: React.FC<ISearchResultsProps> = ({ searchResults }) => {
             <Icon
               name='user'
               type='antdesign'
+              onPress={() => navigation.navigate('UserProfile') }
             />
           </IndividualResult>
         )
