@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import * as React from 'react';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 import {
+  ActivityIndicator,
   Text
 } from 'react-native';
 import {
@@ -21,16 +22,10 @@ interface IGiftedChatProps {
 
 const MyGiftedChat: React.FC<IGiftedChatProps> = ({ queryLoading, refreshFn, chatID, curUser, sendMessage, messages }) => (
   <GiftedChat
-    // what gets rendered when the messages are loading
-    // get a loading spinner here
-    renderLoading={() => <Text>render loading</Text>}
-    // this is what is going to be sent to the FlatList in GiftedChat
+    renderLoading={() => <ActivityIndicator />}
     listViewProps={
       {
-        // onEndReached: ()=> console.log('hit the end'),
-        onEndReachedThreshold: 0.1,
         refreshing: queryLoading,
-        // refreshing: networkStatus === 4 ? true : false,
         onRefresh: refreshFn
       }
     }
@@ -74,6 +69,7 @@ const MyGiftedChat: React.FC<IGiftedChatProps> = ({ queryLoading, refreshFn, cha
         }
       })
     }}
+    onLongPress={(ctx, currentMessage) => console.log('delete this', ctx, currentMessage)}
     user={curUser}
   />
 )

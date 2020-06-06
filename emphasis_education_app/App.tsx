@@ -8,7 +8,7 @@
  * @format
  */
 
-import React from 'react';
+import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { ApolloClient } from 'apollo-client';
@@ -18,6 +18,7 @@ import { WebSocketLink } from 'apollo-link-ws';
 import { split } from 'apollo-link';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { getMainDefinition } from 'apollo-utilities';
+import { ThemeProvider } from 'styled-components';
 
 import Login from './src/components/Login';
 import Chat from './src/components/Chat';
@@ -27,18 +28,22 @@ import ChatPicker from './src/components/ChatPicker';
 import Profile from './src/components/LiftedProfile';
 import CreateUserContain from './src/components/CreateUserContainer';
 import ConfirmationScreen from './src/components/ConfirmationScreen';
-import Search from './src/components/LiftedSearch';
+import Search from './src/components/AdminPage/LiftedSearch';
+import AdminPage from './src/components/AdminPage';
 
-import ContextProvider from './src/components/Context/Provider';
+import { theme } from './src/theme';
 import context, {EmptyUser} from './src/components/Context/Context';
 import { IUser } from './src/types';
 
+
 const cache = new InMemoryCache();
 const httplink = new HttpLink({
+  // uri: 'https://emphasis-education-server.herokuapp.com/'
   uri: 'http://localhost:4000'
 });
 
 const wsLink = new WebSocketLink({
+  // uri: `ws://emphasis-education-server.herokuapp.com/graphql`,
   uri: `ws://localhost:4000/graphql`,
   options: {
     reconnect: true,
@@ -73,9 +78,14 @@ type RootStackProps = {
   MyProfile: undefined;
   ConfirmationScreen: undefined;
   Search: undefined;
+  AdminPage: undefined;
 }
 
 const stack = createStackNavigator<RootStackProps>();
+
+// let us check if the user is logged in or not
+// if yeah, then home page
+// if not, then login page
 
 const App = () => {
   // wrap this all in the context
@@ -86,68 +96,79 @@ const App = () => {
      setUser: updateUser
     }
   return (
-  <context.Provider
-    value={value}
-  >
-  <ApolloProvider client={client}>
-    <NavigationContainer>
-      <stack.Navigator initialRouteName='Login'>
-        <stack.Screen
-          name="Login"
-          component={Login}
-          options={{
-            title: '',
-            headerStyle: {
-              backgroundColor: '#5a1846'
-            }
-          }}
-        />
-        <stack.Screen
-          name="Home"
-          component={HomePage}
-          options={{ title: '' }}
-        />
-        <stack.Screen
-          name="Search"
-          component={Search}
-          options={{ title: '' }}
-        />
-        {/* can maybe get the name of the chat and then set the title to it */}
-        <stack.Screen
-          name="Chat"
-          component={Chat}
-          options={{ title: 'Test Subject' }}
-        />
-        <stack.Screen
-          name="CreateUser"
-          component={CreateUser}
-          options={{ title: '' }}
-        />
-        <stack.Screen
-          name="ChatPicker"
-          component={ChatPicker}
-          options={{ title: 'My Chats' }}
-        />
-        <stack.Screen
-          name="MyProfile"
-          component={Profile}
-          options={{ title: 'My Profile' }}
-        />
-        <stack.Screen
-          name="CreateUserContain"
-          component={CreateUserContain}
-          options={{ title: '' }}
-        />
-        <stack.Screen
-          name="ConfirmationScreen"
-          component={ConfirmationScreen}
-          options={{ title: '' }}
-        />
-      </stack.Navigator>
-    </NavigationContainer>
-  </ApolloProvider>
-  </context.Provider>
+    <context.Provider value={value}>
+      <ThemeProvider theme={theme}>
+        <ApolloProvider client={client}>
+          <NavigationContainer>
+            <stack.Navigator initialRouteName='Login'>
+              <stack.Screen
+                name="Login"
+                component={Login}
+                options={{
+                  title: '',
+                  headerStyle: {
+                    backgroundColor: '#5a1846'
+                  }
+                }}
+              />
+              <stack.Screen
+                name="Home"
+                component={HomePage}
+                options={{
+                  title: '' ,
+                  // we chouldnt really be able to go back to the login page?
+                  // headerLeft: () => null
+                }}
+              />
+              <stack.Screen
+                name="Search"
+                component={Search}
+                options={{ title: '' }}
+              />
+              {/* can maybe get the name of the chat and then set the title to it */}
+              <stack.Screen
+                name="Chat"
+                component={Chat}
+                options={{ title: 'Test Subject' }}
+              />
+              <stack.Screen
+                name="CreateUser"
+                component={CreateUser}
+                options={{ title: '' }}
+              />
+              <stack.Screen
+                name="ChatPicker"
+                component={ChatPicker}
+                options={{
+                  title: 'My Chats',
+                }}
+              />
+              <stack.Screen
+                name="MyProfile"
+                component={Profile}
+                options={{ title: 'My Profile' }}
+              />
+              <stack.Screen
+                name="CreateUserContain"
+                component={CreateUserContain}
+                options={{ title: '' }}
+              />
+              <stack.Screen
+                name="ConfirmationScreen"
+                component={ConfirmationScreen}
+                options={{ title: '' }}
+              />
+              <stack.Screen
+                name="AdminPage"
+                component={AdminPage}
+                options={{ title: 'Admin Page' }}
+              />
+            </stack.Navigator>
+          </NavigationContainer>
+        </ApolloProvider>
+      </ThemeProvider>
+    </context.Provider>
   )
-        };
+};
 
 export default App;

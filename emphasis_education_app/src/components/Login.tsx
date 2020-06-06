@@ -83,7 +83,8 @@ const Login: React.FC<ILoginProps> = props => {
     }
   )
 
-  if (error) console.log('ERROR');
+  if (error) console.log('ERROR', error);
+  if (data) console.log('data', data)
 
   const onChangeEmail = (email: string) => setState({
     ...curState,
@@ -112,7 +113,7 @@ const Login: React.FC<ILoginProps> = props => {
         email: curState.email,
         password: curState.password,
       }
-    })
+    }).then((resp) =>  console.log('resp\n\n', resp))
   }
 
   return (

@@ -2,11 +2,16 @@ import * as React from 'react';
 import {
   Alert,
   Text,
+  View,
   SafeAreaView,
   TouchableOpacity,
 } from 'react-native';
+import { Icon } from 'react-native-elements';
+
 import styled from 'styled-components';
 import Context from './Context/Context';
+import { PermissionedComponent } from './shared';
+import { Permission } from '../types';
 
 interface IChatPickerProps {
   navigation: any;
@@ -19,51 +24,61 @@ const IndChat = styled(TouchableOpacity)`
   height: 30px;
 `;
 
-const ChatPicker: React.FC<IChatPickerProps> = props => {
+const ChatsContain = styled(View)`
+  padding: 0 10px;
+`
+
+const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
   const { loggedUser } = React.useContext(Context);
+  const userType = loggedUser.userType;
 
   const goToChat = (sub: string) => async () => {
-    props.navigation.navigate(
+    navigation.navigate(
       'Chat',
       {
-        chatID: sub,
-        // name: props.route.params.name,
-        // email: props.route.params.email,
-        // _id: props.route.params._id
+        chatID: sub
       }
     )
   }
+
+  React.useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <PermissionedComponent
+          // allowedPermission={Permission.Admin}
+          // this will need to be changed to the Admin later
+          allowedPermission={Permission.Student}
+        >
+          <Icon
+            name='pluscircleo'
+            type='antdesign'
+            onPress={() => Alert.alert('go to create new chat')}
+            />
+        </PermissionedComponent>
+      ),
+      headerRightContainerStyle: {
+        padding: 10
+      }
+    })
+  }, [])
   // add dropdown functionality
   return (
     <>
       <SafeAreaView>
-        <IndChat
-          onPress={() => Alert.alert('going to the chat')}
-        >
-          <Text>
-          Math
-          </Text>
-
-        </IndChat>
-        <IndChat
-          onPress={() => Alert.alert('going to the chat')}
-        >
-        <Text>
-          History
-        </Text>
-        </IndChat>
-        {loggedUser.chatIDs.map((sub: string) => {
-          return (
-            <IndChat
-              onPress={goToChat(sub)}
-              key={sub}
-            >
-              <Text>
-                {sub}
-              </Text>
-            </IndChat>
-            )
-        })}
+        <ChatsContain>
+          {loggedUser.chatIDs.map((sub: string) => {
+            return (
+              <IndChat
+                onPress={goToChat(sub)}
+                key={sub}
+              >
+                <Text>
+                  {sub}
+                </Text>
+              </IndChat>
+              )
+          })}
+        </ChatsContain>
       </SafeAreaView>
     </>
   )

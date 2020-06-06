@@ -10,12 +10,6 @@ const resolvers = {
       const resp = await dataSources.f.getMessages(chatID, init);
       return resp;
     },
-    getUserID: (_, __, { dataSources }) => {
-      return dataSources.f.getID();
-    },
-    getUser: (_, { id }, { dataSources }) => {
-      return dataSources.f.getUser(id);
-    },
     getFamily: async (_, { groupID }, { dataSources }) => {
       return await dataSources.f.getFamily(groupID)
     },

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+  ActivityIndicator,
   Text,
   View
 } from 'react-native';
@@ -9,7 +10,7 @@ import Context from './Context/Context';
 import Profile from './Presentational/Profile';
 
 import { GET_FAMILY } from '../queries/GetFamily';
-import { IGetFamilyInput, IUserPayload } from '../types';
+import { IGetFamilyInput, IGetFamilyPayload } from '../types';
 
 interface ILiftedProfileProps {
   // TODO type the navagation props
@@ -17,25 +18,22 @@ interface ILiftedProfileProps {
   route: any;
 }
 
-const LiftedProfile: React.FC<ILiftedProfileProps> = () => {
-  const { loggedUser } = React.useContext(Context);
-  const groupID = loggedUser.groupID;
-  const options = { variables: { groupID }}
-  const { data, loading, error } = useQuery<IUserPayload, IGetFamilyInput>(GET_FAMILY, options)
+const LiftedProfile: React.FC<ILiftedProfileProps> = ({ route }) => {
+  const mainUserID: string = route.params.groupID
+  // what i get passed here is what will go on the top of the profile page
+  const options = { variables: { groupID: mainUserID }}
+  const { data, loading, error } = useQuery<IGetFamilyPayload, IGetFamilyInput>(GET_FAMILY, options)
   console.log('my profile data', data);
   if ( error ) { console.log('error loading the profile')}
 
   return (
     <>
     {
-      loading ? (
-        <View>
-          <Text>
-            loading
-          </Text>
-        </View>
-      ) : (
-      <Profile />
+      loading ? <ActivityIndicator /> : (
+        <Profile
+          mainUserID={mainUserID}
+          family={data ? data.getFamily : []}
+        />
       )
     }
     </>

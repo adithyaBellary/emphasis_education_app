@@ -5,6 +5,9 @@ export const GET_FAMILY = gql`
     getFamily(groupID: $groupID) {
       name
       email
+      groupID
+      phoneNumber
+      _id
     }
   }
 `

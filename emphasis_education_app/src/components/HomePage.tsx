@@ -6,18 +6,18 @@ import {
   View,
   Text,
 } from 'react-native';
-import gql from 'graphql-tag'
 
-import styled, { ThemeProvider } from 'styled-components';
-import { theme } from '../theme';
+import styled from 'styled-components';
 import {
   CenteredDiv,
   MyButtonText,
   MyCircleButton,
-  IconSection
+  IconSection,
+  PermissionedComponent
 } from './shared';
 import { Icon } from 'react-native-elements';
 import Context from './Context/Context';
+import { Permission } from '../types';
 
 interface ILiftedHomeProps {
   navigation: any;
@@ -49,54 +49,87 @@ const MissionStatement: React.FC = () => {
   )
 }
 
-const Home: React.FC<ILiftedHomeProps> = ( props ) => {
+const AdminContain = styled(View)`
+  align-items: center;
+`
+
+const Home: React.FC<ILiftedHomeProps> = ( { navigation} ) => {
   const { loggedUser } = React.useContext(Context);
-  const changeScreens = (dest: string) => () =>  props.navigation.navigate(dest)
+  const changeScreens = (dest: string) => () =>  navigation.navigate(dest)
+
+  React.useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <PermissionedComponent
+          // allowedPermission={Permission.Admin}
+          allowedPermission={Permission.Student}
+        >
+          <AdminContain>
+          <Icon
+            name='user'
+            type='antdesign'
+            onPress={changeScreens('AdminPage')}
+          />
+          <Text>Admin</Text>
+          </AdminContain>
+
+        </PermissionedComponent>
+      ),
+      headerRightContainerStyle: {
+        padding: 10
+      },
+      headerLeft: () => null
+    })
+  }, [])
 
   return (
-    <ThemeProvider theme={theme}>
-      <CenteredDiv>
-        <Title>
-          emphasis education home page
-        </Title>
+    <CenteredDiv>
+      <Title>
+        emphasis education home page
+      </Title>
 
-        <IconSection>
-          <IconContain>
-            <Icon
-              name='person'
-              onPress={changeScreens('MyProfile')}
-              type='fontisto'
-              reverse={true}
-            />
-            <Icon
-              name='message'
-              onPress={changeScreens('ChatPicker')}
-              reverse={true}
-            />
-          </IconContain>
+      <IconSection>
+        <IconContain>
+          <Icon
+            name='person'
+            // onPress={changeScreens('MyProfile')}
+            onPress={() => navigation.navigate(
+              'MyProfile',
+              {
+                groupID: loggedUser.groupID
+              }
+            )}
+            type='fontisto'
+            reverse={true}
+          />
+          <Icon
+            name='message'
+            onPress={changeScreens('ChatPicker')}
+            reverse={true}
+          />
+        </IconContain>
 
-          <MyCircleButton>
-            <MyButtonText>
-              Emphasis Logo
-            </MyButtonText>
-          </MyCircleButton>
+        <MyCircleButton>
+          <MyButtonText>
+            Emphasis Logo
+          </MyButtonText>
+        </MyCircleButton>
 
-          <IconContain>
-            <Icon
-              name='search'
-              onPress={changeScreens('Search')}
-              reverse={true}
-            />
-            <Icon
-              name='settings'
-              onPress={() => Alert.alert('settings')}
-              reverse={true}
-            />
-          </IconContain>
-        </IconSection>
-        <MissionStatement />
-      </CenteredDiv>
-    </ThemeProvider>
+        <IconContain>
+          <Icon
+            name='search'
+            onPress={changeScreens('Search')}
+            reverse={true}
+          />
+          <Icon
+            name='settings'
+            onPress={() => Alert.alert('settings')}
+            reverse={true}
+          />
+        </IconContain>
+      </IconSection>
+      <MissionStatement />
+    </CenteredDiv>
   )
 
 }
