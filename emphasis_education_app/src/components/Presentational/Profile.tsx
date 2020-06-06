@@ -10,7 +10,8 @@ import { IUser } from '../../types';
 import Context from '../Context/Context';
 
 interface IProfileProps {
-  users: IUser[]
+  mainUserID: string
+  family: IUser[]
 }
 
 const ProfileContain = styled(View)`
@@ -50,26 +51,32 @@ const IndividualField: React.FC<IIndividualFieldProps> = ({ value, label}) => (
   </>
 )
 
-const Profile: React.FC<IProfileProps> = ({ users }) => {
+const Profile: React.FC<IProfileProps> = ({ family, mainUserID }) => {
 
   // let us put the logged in user in the top, so we need to get the context
   const { loggedUser } = React.useContext(Context)
-  console.log('users in my profile', users)
-
+  console.log('users in my profile', family)
+  const mainUser: (IUser | undefined) = family.map(u => {
+    if (u.groupID === mainUserID) {
+      return u
+    }
+  })[0]
+  console.log('mainUser', mainUser, mainUserID)
+  if (!mainUser) { return null; }
   return (
     <ProfileContain>
       <Title>
-        {loggedUser.name}
+        {mainUser.name}
       </Title>
       <UserInfoContain>
         <IndividualField
-          value={loggedUser.email}
+          value={mainUser.email}
           label={'Email'}
         />
         <Divider />
         {/* ugh now i need to format the phoneNumber */}
         <IndividualField
-          value={loggedUser.phoneNumber}
+          value={mainUser.phoneNumber}
           label={'Phone Number'}
         />
 
@@ -82,15 +89,15 @@ const Profile: React.FC<IProfileProps> = ({ users }) => {
       </Title>
       <UserInfoContain>
         {
-          users.map((user, index) => (
+          family.map((user, index) => (
             <>
               <IndividualField
-                key={index}
+                // key={index}
                 value={user.name}
                 label={'Name'}
               />
               <IndividualField
-                key={index}
+                // key={index}
                 value={user.email}
                 label={'Email'}
               />

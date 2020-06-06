@@ -18,10 +18,11 @@ interface ILiftedProfileProps {
   route: any;
 }
 
-const LiftedProfile: React.FC<ILiftedProfileProps> = () => {
+const LiftedProfile: React.FC<ILiftedProfileProps> = ({ route }) => {
   const { loggedUser } = React.useContext(Context);
   const groupID = loggedUser.groupID;
-  const options = { variables: { groupID }}
+  // what i get passed here is what will go on the top of the profile page
+  const options = { variables: { groupID: route.params.groupID }}
   const { data, loading, error } = useQuery<IGetFamilyPayload, IGetFamilyInput>(GET_FAMILY, options)
   console.log('my profile data', data);
   if ( error ) { console.log('error loading the profile')}
@@ -31,7 +32,8 @@ const LiftedProfile: React.FC<ILiftedProfileProps> = () => {
     {
       loading ? <ActivityIndicator /> : (
         <Profile
-          users={data ? data.getFamily : []}
+          mainUserID={route.params.groupID}
+          family={data ? data.getFamily : []}
         />
       )
     }

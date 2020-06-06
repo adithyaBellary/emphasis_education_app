@@ -19,7 +19,7 @@ const SearchResultsContainer = styled(View)`
 `
 
 const SearchResults: React.FC<ISearchResultsProps> = ({ searchResults, navigation }) => {
-
+  console.log('search results', searchResults)
   return (
     <SearchResultsContainer>
       {searchResults.map((results, index) => {
@@ -33,7 +33,12 @@ const SearchResults: React.FC<ISearchResultsProps> = ({ searchResults, navigatio
             <Icon
               name='user'
               type='antdesign'
-              onPress={() => navigation.navigate('UserProfile') }
+              onPress={() => navigation.navigate(
+                'MyProfile',
+                {
+                  groupID: results.groupID
+                }
+              )}
             />
           </IndividualResult>
         )

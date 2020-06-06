@@ -92,7 +92,13 @@ const Home: React.FC<ILiftedHomeProps> = ( { navigation} ) => {
         <IconContain>
           <Icon
             name='person'
-            onPress={changeScreens('MyProfile')}
+            // onPress={changeScreens('MyProfile')}
+            onPress={() => navigation.navigate(
+              'MyProfile',
+              {
+                groupID: loggedUser.groupID
+              }
+            )}
             type='fontisto'
             reverse={true}
           />
