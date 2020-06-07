@@ -14,7 +14,7 @@ interface ISearchResultsProps {
   navigation: any;
 }
 
-const SearchResultsContainer = styled(View)`
+export const SearchResultsContainer = styled(View)`
   padding: 0 20px;
 `
 

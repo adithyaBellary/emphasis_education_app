@@ -88,8 +88,12 @@ export interface ISearchUserPayload {
   searchUsers: IUser[];
 }
 
-export interface ISearchClassesPayload {
+interface ISearchClasses {
+  classes: string[];
+}
 
+export interface ISearchClassesPayload {
+  searchClasses: ISearchClasses;
 }
 
 export interface ISearchInput {
