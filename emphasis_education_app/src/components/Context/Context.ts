@@ -13,6 +13,7 @@ export let EmptyUser: IUser = {
   groupID: '',
   userType: Permission.Student,
   chatIDs: ['chat1', 'chat2'],
+  classes: [],
   _id: '_id'
 }
 

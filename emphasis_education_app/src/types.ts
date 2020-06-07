@@ -29,7 +29,17 @@ export interface IUser {
   userType: Permission;
   groupID: string;
   chatIDs: string[];
+  classes?: Class[];
   _id: string;
+}
+
+// make all of these optional because we know almost nothing on user creation
+export interface Class {
+  _id?: string;
+  name?: string;
+  userID?: string;
+  tutorID?: string;
+  chatID?: string;
 }
 
 export enum Permission {
@@ -38,6 +48,7 @@ export enum Permission {
   Admin = 'Admin'
 }
 
+// basically res + IUser
 export interface ILoginPayloadProps {
   res: string;
   name: string;
@@ -45,6 +56,7 @@ export interface ILoginPayloadProps {
   phoneNumber: string;
   userType: Permission;
   groupID: string;
+  classes?: Class[];
   _id: string;
   chatIDs: string[];
 }
@@ -74,6 +86,10 @@ export interface IGetFamilyPayload {
 }
 export interface ISearchUserPayload {
   searchUsers: IUser[];
+}
+
+export interface ISearchClassesPayload {
+
 }
 
 export interface ISearchInput {
