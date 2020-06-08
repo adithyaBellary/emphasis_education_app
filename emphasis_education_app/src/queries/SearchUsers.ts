@@ -6,6 +6,7 @@ export const SEARCH_USERS = gql`
       name
       userType
       groupID
+      _id
     }
   }
 `

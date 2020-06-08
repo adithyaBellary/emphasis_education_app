@@ -30,6 +30,7 @@ import CreateUserContain from './src/components/CreateUserContainer';
 import ConfirmationScreen from './src/components/ConfirmationScreen';
 import Search from './src/components/AdminPage/LiftedSearch';
 import AdminPage from './src/components/AdminPage';
+import CreateChat from './src/components/CreateChat';
 
 import { theme } from './src/theme';
 import context, {EmptyUser} from './src/components/Context/Context';
@@ -79,6 +80,7 @@ type RootStackProps = {
   ConfirmationScreen: undefined;
   Search: undefined;
   AdminPage: undefined;
+  CreateChat: undefined;
 }
 
 const stack = createStackNavigator<RootStackProps>();
@@ -162,6 +164,11 @@ const App = () => {
                 name="AdminPage"
                 component={AdminPage}
                 options={{ title: 'Admin Page' }}
+              />
+              <stack.Screen
+                name='CreateChat'
+                component={CreateChat}
+                options={{ title: 'New Chat'}}
               />
             </stack.Navigator>
           </NavigationContainer>

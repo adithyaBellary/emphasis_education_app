@@ -32,7 +32,7 @@ const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
   const { loggedUser } = React.useContext(Context);
   const userType = loggedUser.userType;
 
-  const goToChat = (sub: string) => async () => {
+  const goToChat = (sub: string) => () => {
     navigation.navigate(
       'Chat',
       {
@@ -40,6 +40,7 @@ const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
       }
     )
   }
+  const goToCreateChat = () => navigation.navigate('CreateChat');
 
   React.useEffect(() => {
     navigation.setOptions({
@@ -52,8 +53,8 @@ const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
           <Icon
             name='pluscircleo'
             type='antdesign'
-            onPress={() => Alert.alert('go to create new chat')}
-            />
+            onPress={goToCreateChat}
+          />
         </PermissionedComponent>
       ),
       headerRightContainerStyle: {

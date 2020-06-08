@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {
-  ActivityIndicator
+  ActivityIndicator, Alert
 } from 'react-native'
 import { useLazyQuery } from '@apollo/react-hooks';
 import { Input, Icon } from 'react-native-elements';
@@ -18,7 +18,6 @@ const ClassSearch = () => {
   React.useEffect(() => {
     runQuery({variables: {searchTerm}})
   }, [searchTerm])
-  console.log('data in class search', data)
   return (
     <SearchContain>
       <Input
@@ -27,6 +26,13 @@ const ClassSearch = () => {
         leftIcon={
           <Icon
             name='search'
+          />
+        }
+        rightIcon={
+          <Icon
+            name='pluscircleo'
+            type='antdesign'
+            onPress={() => Alert.alert('this will make a new class')}
           />
         }
       />

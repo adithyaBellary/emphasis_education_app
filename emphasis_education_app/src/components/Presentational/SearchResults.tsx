@@ -19,13 +19,13 @@ export const SearchResultsContainer = styled(View)`
 `
 
 const SearchResults: React.FC<ISearchResultsProps> = ({ searchResults, navigation }) => {
-  console.log('search results', searchResults)
   return (
     <SearchResultsContainer>
       {searchResults.map((results, index) => {
         return (
           <IndividualResult
             key={index}
+            // onPress={}
           >
             <Text>
               {results.name}
