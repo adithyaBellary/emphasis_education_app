@@ -77,7 +77,6 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
   const addSelectedClasses = (className: string) => () => {
     // if there is already a class that is added, then we cannot add another one
     if (selectedClasses) {
-      // Alert.alert(`There is already a class added, ${selectedClasses}`)
       const ind = selectedResults.indexOf(className)
       let newArray = selectedResults
       newArray.splice(ind, 1)
@@ -111,8 +110,9 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
         }
       />
       {/* display selecgted class */}
+      <Text>Selected Class: {selectedClasses}</Text>
       {/* display selected users */}
-
+      <Text>Selected Users: {selectedUsers.map(u => `${u}, `)} </Text>
       {/* let us display the results here so that we can easily have state over them */}
       { userLoading ? <ActivityIndicator /> : (
         userData ? userData.searchUsers.map((u, index) => (
