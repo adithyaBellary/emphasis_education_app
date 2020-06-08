@@ -27,7 +27,7 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
   const [userSearch, setUserSearch] = React.useState('')
   const [runClassSearchQuery, {data: classData, loading: classLoading, error: classError}] = useLazyQuery<ISearchClassesPayload, ISearchInput>(SEARCH_CLASSES)
   const [runUserSearchQuery, {data: userData, loading: userLoading, error: userError}] = useLazyQuery<ISearchUserPayload, ISearchInput>(SEARCH_USERS)
-  const [selectedClasses, setSelectedClasses] = React.useState<string>()
+  const [selectedClasses, setSelectedClasses] = React.useState<string>('')
   const [selectedUsers, setSelectedUsers] = React.useState<string[]>([])
   const [selectedResults, setSelectedResults] = React.useState<string[]>([])
 
@@ -52,8 +52,8 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
   })
   // pluscircleo
   // checkcircle
-  console.log('user search', userData)
-  console.log('class search', classData)
+  // console.log('user search', userData)
+  // console.log('class search', classData)
 
   const onUserTextChage = (text: string) => setUserSearch(text)
   const onClassTextChange = (text: string) => setClassSearch(text)
@@ -61,7 +61,14 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
   const addSelectedUsers = (userID: string) => () =>  {
     // check if this user has been added already
     if (selectedUsers.includes(userID)) {
-      Alert.alert('this user has already been added')
+      let ind = selectedUsers.indexOf(userID)
+      let newArray = selectedUsers
+      newArray.splice(ind, 1)
+      setSelectedUsers(newArray)
+      ind = selectedResults.indexOf(userID)
+      newArray = selectedResults
+      newArray.splice(ind, 1)
+      setSelectedResults([...newArray])
     } else {
       setSelectedUsers([...selectedUsers, userID])
       setSelectedResults([...selectedResults, userID])
@@ -70,9 +77,15 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
   const addSelectedClasses = (className: string) => () => {
     // if there is already a class that is added, then we cannot add another one
     if (selectedClasses) {
-      Alert.alert(`There is already a class added, ${selectedClasses}`)
+      // Alert.alert(`There is already a class added, ${selectedClasses}`)
+      const ind = selectedResults.indexOf(className)
+      let newArray = selectedResults
+      newArray.splice(ind, 1)
+      setSelectedResults(newArray)
+      setSelectedClasses('')
     } else {
       setSelectedClasses(className)
+      setSelectedResults([...selectedResults, className])
     }
   }
 
@@ -97,6 +110,9 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
           />
         }
       />
+      {/* display selecgted class */}
+      {/* display selected users */}
+
       {/* let us display the results here so that we can easily have state over them */}
       { userLoading ? <ActivityIndicator /> : (
         userData ? userData.searchUsers.map((u, index) => (
@@ -106,8 +122,8 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
             <IndividualResultContainer>
               <Text>{u.name}</Text>
               <Icon
-                // name='pluscircleo'
-                name={selectedResults.includes(u._id) ? 'checkcircle' : 'pluscircleo'}
+                // name={selectedResults.includes(u._id) ? 'checkcircle' : 'pluscircleo'}
+                name={selectedUsers.includes(u._id) ? 'checkcircle' : 'pluscircleo'}
                 type='antdesign'
               />
             </IndividualResultContainer>
@@ -119,7 +135,13 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
           <TouchableOpacity
             onPress={addSelectedClasses(c)}
           >
+            <IndividualResultContainer>
             <Text>{c}</Text>
+            <Icon
+              name={selectedResults.includes(c) ? 'checkcircle' : 'pluscircleo'}
+              type='antdesign'
+            />
+            </IndividualResultContainer>
           </TouchableOpacity>
         )) : null
       )}
