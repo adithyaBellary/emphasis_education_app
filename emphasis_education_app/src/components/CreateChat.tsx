@@ -15,6 +15,7 @@ import { useLazyQuery } from '@apollo/react-hooks';
 import { SEARCH_CLASSES } from '../queries/SearchClasses';
 import { SEARCH_USERS } from '../queries/SearchUsers';
 import { ISearchInput, ISearchClassesPayload, ISearchUserPayload } from '../types';
+import { IndividualResultContainer } from './AdminPage/IndividualResult';
 
 interface ICreateChatProps {
   navigation: any;
@@ -28,6 +29,7 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
   const [runUserSearchQuery, {data: userData, loading: userLoading, error: userError}] = useLazyQuery<ISearchUserPayload, ISearchInput>(SEARCH_USERS)
   const [selectedClasses, setSelectedClasses] = React.useState<string>()
   const [selectedUsers, setSelectedUsers] = React.useState<string[]>([])
+  const [selectedResults, setSelectedResults] = React.useState<string[]>([])
 
   React.useEffect(() => {
     runClassSearchQuery({variables: { searchTerm: classSearch}})
@@ -62,6 +64,7 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
       Alert.alert('this user has already been added')
     } else {
       setSelectedUsers([...selectedUsers, userID])
+      setSelectedResults([...selectedResults, userID])
     }
   }
   const addSelectedClasses = (className: string) => () => {
@@ -96,11 +99,18 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
       />
       {/* let us display the results here so that we can easily have state over them */}
       { userLoading ? <ActivityIndicator /> : (
-        userData ? userData.searchUsers.map((u) => (
+        userData ? userData.searchUsers.map((u, index) => (
           <TouchableOpacity
             onPress={addSelectedUsers(u._id)}
           >
-            <Text>{u.name}</Text>
+            <IndividualResultContainer>
+              <Text>{u.name}</Text>
+              <Icon
+                // name='pluscircleo'
+                name={selectedResults.includes(u._id) ? 'checkcircle' : 'pluscircleo'}
+                type='antdesign'
+              />
+            </IndividualResultContainer>
           </TouchableOpacity>
         )) : null
       )}

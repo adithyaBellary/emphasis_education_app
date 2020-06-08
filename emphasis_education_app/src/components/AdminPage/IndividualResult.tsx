@@ -5,7 +5,7 @@ import {
 } from 'react-native';
 import styled from 'styled-components';
 
-const IndividualResultContainer = styled(View)`
+export const IndividualResultContainer = styled(View)`
   padding: 10px 0;
   display: flex;
   flexDirection: row;

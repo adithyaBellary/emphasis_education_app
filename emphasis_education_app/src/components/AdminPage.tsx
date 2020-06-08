@@ -6,9 +6,6 @@ import { View, Text } from 'react-native';
 import Search from './AdminPage/LiftedSearch';
 import classSearch from './AdminPage/LiftedClassSearch';
 
-// import { SEARCH_USERS } from '../queries/SearchUsers';
-// import { SEARCH_CLASSES } from '../queries/SearchClasses';
-
 interface IAdminPageProps {
   navigation: any;
   route: any;
