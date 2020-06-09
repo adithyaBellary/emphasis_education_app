@@ -30,14 +30,17 @@ export interface IUser {
   groupID: string;
   chatIDs: string[];
   classes?: Class[];
+  // instead of actually storing the classes themselves
+  // classIDs: string[];
   _id: string;
 }
 
 // make all of these optional because we know almost nothing on user creation
 export interface Class {
-  _id?: string;
-  name?: string;
-  userID?: string;
+  // we wont be sending this to the backend
+  // _id?: string;
+  className?: string;
+  userID?: string[];
   tutorID?: string;
   chatID?: string;
 }

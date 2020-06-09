@@ -84,7 +84,7 @@ const Login: React.FC<ILoginProps> = props => {
   )
 
   if (error) console.log('ERROR', error);
-  if (data) console.log('data', data)
+  // if (data) console.log('data', data)
 
   const onChangeEmail = (email: string) => setState({
     ...curState,
@@ -96,6 +96,7 @@ const Login: React.FC<ILoginProps> = props => {
   });
 
   const successLogin = (user: ILoginPayloadProps) => {
+    console.log('login user', user.classes)
     setUser({...user})
     props.navigation.navigate('Home');
   }

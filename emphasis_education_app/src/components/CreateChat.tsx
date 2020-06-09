@@ -55,6 +55,10 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
   // console.log('user search', userData)
   // console.log('class search', classData)
 
+  const createChat = () => {
+    // before calling the chat mutation, make sure that there is a tutor added to the chat
+  }
+
   const onUserTextChage = (text: string) => setUserSearch(text)
   const onClassTextChange = (text: string) => setClassSearch(text)
 
