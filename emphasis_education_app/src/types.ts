@@ -14,12 +14,13 @@ export interface IUserInput {
   userType: Permission;
 }
 
-// dont want the confirmPassword stuff for when we send to backend
-// rename this to IUsableUserInfo
-export type IUsableUserInfo = Pick<
-    IUserInput,
-    'name' | 'email' | 'password' | 'phoneNumber' | 'userType'
-  >;
+export interface IUsableUserInfo {
+  name: string;
+  email: string;
+  password: string;
+  phoneNumber: string;
+  userType: Permission;
+}
 
 // this will be the user type that we get back from the backend
 export interface IUser {
@@ -29,7 +30,27 @@ export interface IUser {
   userType: Permission;
   groupID: string;
   chatIDs: string[];
+  classes?: Class[];
   _id: string;
+}
+
+interface ICreateUserResponse {
+  success: boolean;
+}
+
+export interface ICreateUserPayload {
+  createUser: ICreateUserResponse;
+}
+
+// make all of these optional because we know almost nothing on user creation
+export interface Class {
+  // we wont be sending this to the backend
+  // _id?: string;
+  displayName: string;
+  className?: string;
+  userEmails?: string[];
+  tutorEmail?: string;
+  chatID?: string;
 }
 
 export enum Permission {
@@ -38,6 +59,7 @@ export enum Permission {
   Admin = 'Admin'
 }
 
+// basically res + IUser
 export interface ILoginPayloadProps {
   res: string;
   name: string;
@@ -45,6 +67,7 @@ export interface ILoginPayloadProps {
   phoneNumber: string;
   userType: Permission;
   groupID: string;
+  classes?: Class[];
   _id: string;
   chatIDs: string[];
 }
@@ -74,6 +97,14 @@ export interface IGetFamilyPayload {
 }
 export interface ISearchUserPayload {
   searchUsers: IUser[];
+}
+
+interface ISearchClasses {
+  classes: string[];
+}
+
+export interface ISearchClassesPayload {
+  searchClasses: ISearchClasses;
 }
 
 export interface ISearchInput {

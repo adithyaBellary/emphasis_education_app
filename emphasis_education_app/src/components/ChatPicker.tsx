@@ -11,6 +11,7 @@ import { Icon } from 'react-native-elements';
 import styled from 'styled-components';
 import Context from './Context/Context';
 import { PermissionedComponent } from './shared';
+
 import { Permission } from '../types';
 
 interface IChatPickerProps {
@@ -30,9 +31,8 @@ const ChatsContain = styled(View)`
 
 const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
   const { loggedUser } = React.useContext(Context);
-  const userType = loggedUser.userType;
 
-  const goToChat = (sub: string) => async () => {
+  const goToChat = (sub: string) => () => {
     navigation.navigate(
       'Chat',
       {
@@ -40,6 +40,7 @@ const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
       }
     )
   }
+  const goToCreateChat = () => navigation.navigate('CreateChat');
 
   React.useEffect(() => {
     navigation.setOptions({
@@ -52,8 +53,8 @@ const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
           <Icon
             name='pluscircleo'
             type='antdesign'
-            onPress={() => Alert.alert('go to create new chat')}
-            />
+            onPress={goToCreateChat}
+          />
         </PermissionedComponent>
       ),
       headerRightContainerStyle: {
@@ -66,18 +67,14 @@ const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
     <>
       <SafeAreaView>
         <ChatsContain>
-          {loggedUser.chatIDs.map((sub: string) => {
-            return (
-              <IndChat
-                onPress={goToChat(sub)}
-                key={sub}
-              >
-                <Text>
-                  {sub}
-                </Text>
-              </IndChat>
-              )
-          })}
+          {/* add the classes that our logged in user has */}
+          {loggedUser.classes && loggedUser.classes.map((c) => (
+            <IndChat
+              onPress={goToChat(c.chatID!)}
+            >
+              <Text>{c.className}</Text>
+            </IndChat>
+          ))}
         </ChatsContain>
       </SafeAreaView>
     </>

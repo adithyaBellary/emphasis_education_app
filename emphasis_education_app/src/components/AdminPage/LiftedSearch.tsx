@@ -12,7 +12,7 @@ import SearchResults from '../Presentational/SearchResults';
 import { ISearchUserPayload, ISearchInput } from '../../types';
 import { SEARCH_USERS } from '../../queries/SearchUsers';
 
-const SearchContain = styled(View)`
+export const SearchContain = styled(View)`
   padding-top: 20px;
 `
 

@@ -4,9 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { View, Text } from 'react-native';
 
 import Search from './AdminPage/LiftedSearch';
-
-// import { SEARCH_USERS } from '../queries/SearchUsers';
-// import { SEARCH_CLASSES } from '../queries/SearchClasses';
+import classSearch from './AdminPage/LiftedClassSearch';
 
 interface IAdminPageProps {
   navigation: any;
@@ -62,7 +60,7 @@ const AdminPage: React.FC<IAdminPageProps> = () => {
   return (
     <Tab.Navigator>
       <Tab.Screen name="Users" component={UserStack} />
-      <Tab.Screen name="Classes" component={Classes} />
+      <Tab.Screen name="Classes" component={classSearch} />
     </Tab.Navigator>
   )
 }

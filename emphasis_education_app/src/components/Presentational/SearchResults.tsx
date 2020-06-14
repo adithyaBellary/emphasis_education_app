@@ -14,18 +14,18 @@ interface ISearchResultsProps {
   navigation: any;
 }
 
-const SearchResultsContainer = styled(View)`
+export const SearchResultsContainer = styled(View)`
   padding: 0 20px;
 `
 
 const SearchResults: React.FC<ISearchResultsProps> = ({ searchResults, navigation }) => {
-  console.log('search results', searchResults)
   return (
     <SearchResultsContainer>
       {searchResults.map((results, index) => {
         return (
           <IndividualResult
             key={index}
+            // onPress={}
           >
             <Text>
               {results.name}

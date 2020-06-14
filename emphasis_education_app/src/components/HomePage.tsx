@@ -55,6 +55,7 @@ const AdminContain = styled(View)`
 
 const Home: React.FC<ILiftedHomeProps> = ( { navigation} ) => {
   const { loggedUser } = React.useContext(Context);
+  console.log('logged user in profile', loggedUser.groupID)
   const changeScreens = (dest: string) => () =>  navigation.navigate(dest)
 
   React.useEffect(() => {

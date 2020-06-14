@@ -52,7 +52,7 @@ const Chat: React.FC<IChatProps> = props => {
   const { loggedUser } = React.useContext(Context);
   const [curState, setState] = useState<IState>()
   const chatID: string = props.route.params.chatID;
-
+  console.log('chatID', chatID)
   // lets cache this data
   const { data: getMessages, loading: queryLoading, refetch, error: errorMessage } = useQuery<
       IGetMessages,

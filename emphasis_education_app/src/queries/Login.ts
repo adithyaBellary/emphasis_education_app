@@ -11,6 +11,11 @@ mutation login($email: String!, $password: String!) {
     groupID
     _id
     chatIDs
+    classes {
+      className
+      chatID
+
+    }
   }
 }
 `;
