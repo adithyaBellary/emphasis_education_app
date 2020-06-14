@@ -67,19 +67,6 @@ const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
     <>
       <SafeAreaView>
         <ChatsContain>
-          {loggedUser.chatIDs.map((sub: string) => {
-            return (
-              <IndChat
-                onPress={goToChat(sub)}
-                onLongPress={() => Alert.alert('on long press')}
-                key={sub}
-              >
-                <Text>
-                  {sub}
-                </Text>
-              </IndChat>
-              )
-          })}
           {/* add the classes that our logged in user has */}
           {loggedUser.classes && loggedUser.classes.map((c) => (
             <IndChat

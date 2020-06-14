@@ -13,6 +13,8 @@ mutation login($email: String!, $password: String!) {
     chatIDs
     classes {
       className
+      chatID
+
     }
   }
 }
