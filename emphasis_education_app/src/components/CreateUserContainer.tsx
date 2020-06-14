@@ -5,7 +5,7 @@ import {
   View,
 } from 'react-native';
 
-import { IUserInput, IUsableUserInfo } from '../types';
+import { IUserInput, IUsableUserInfo, ICreateUserPayload } from '../types';
 import CreateUser from './CreateUser';
 import { CREATE_USER } from '../queries/CreateUser';
 
@@ -15,6 +15,8 @@ interface ICreateUserContainProps {
   navigation: any;
   route: any;
 }
+const SuccessMessaging: string = 'Thanks for joining Emphasis Education';
+const ErrorMessaging: string = 'Something went wrong creating this user';
 
 export interface ICreateUserArr {
   users: IUserInput[];
@@ -43,11 +45,11 @@ const CreateUserContain: React.FC<ICreateUserContainProps> = props => {
     })
   }
 
-  const [createUserMut, { error }] = useMutation(
+  const [createUserMut, { loading, error }] = useMutation<ICreateUserPayload>(
     CREATE_USER,
     {
-      onCompleted: () => {
-        Alert.alert('Thank you for joining Emphasis Education!');
+      onCompleted: ({ createUser }) => {
+        Alert.alert(createUser.success ? SuccessMessaging : ErrorMessaging );
       }
     }
   )
@@ -58,13 +60,13 @@ const CreateUserContain: React.FC<ICreateUserContainProps> = props => {
 
   const runCreateUserMut = (): void => {
     console.log('userInfo before running mutaion', userInfo)
-    const usableInfo: IUsableUserInfo[] = userInfo.users.map(({confirmPassword, ...rest }) => {
+    const _users: IUsableUserInfo[] = userInfo.users.map(({confirmPassword, ...rest }) => {
       return rest;
     })
-    console.log('userInfo before running mutaion', usableInfo)
+    console.log('userInfo before running mutaion', _users)
     createUserMut({
       variables: {
-        users: usableInfo
+        users: _users
       }
     })
   }
@@ -92,6 +94,7 @@ const CreateUserContain: React.FC<ICreateUserContainProps> = props => {
         <ConfirmationScreen
           createdUsers={userInfo}
           submit={runCreateUserMut}
+          loading={loading}
         />
       )}
     </View>

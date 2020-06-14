@@ -11,6 +11,7 @@ import { Icon } from 'react-native-elements';
 import styled from 'styled-components';
 import Context from './Context/Context';
 import { PermissionedComponent } from './shared';
+
 import { Permission } from '../types';
 
 interface IChatPickerProps {
@@ -30,7 +31,6 @@ const ChatsContain = styled(View)`
 
 const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
   const { loggedUser } = React.useContext(Context);
-  const userType = loggedUser.userType;
 
   const goToChat = (sub: string) => () => {
     navigation.navigate(
@@ -71,6 +71,7 @@ const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
             return (
               <IndChat
                 onPress={goToChat(sub)}
+                onLongPress={() => Alert.alert('on long press')}
                 key={sub}
               >
                 <Text>
@@ -79,6 +80,14 @@ const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
               </IndChat>
               )
           })}
+          {/* add the classes that our logged in user has */}
+          {loggedUser.classes && loggedUser.classes.map((c) => (
+            <IndChat
+              onPress={goToChat(c.chatID!)}
+            >
+              <Text>{c.className}</Text>
+            </IndChat>
+          ))}
         </ChatsContain>
       </SafeAreaView>
     </>

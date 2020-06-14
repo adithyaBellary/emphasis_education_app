@@ -9,13 +9,15 @@ import {
 import {
   Input, Icon
 } from 'react-native-elements';
-import { useLazyQuery } from '@apollo/react-hooks';
+import { useLazyQuery, useMutation } from '@apollo/react-hooks';
 
 
 import { SEARCH_CLASSES } from '../queries/SearchClasses';
 import { SEARCH_USERS } from '../queries/SearchUsers';
+import { CREATE_CHAT } from '../queries/CreateChat';
 import { ISearchInput, ISearchClassesPayload, ISearchUserPayload } from '../types';
 import { IndividualResultContainer } from './AdminPage/IndividualResult';
+import { getMainDefinition } from 'apollo-utilities';
 
 interface ICreateChatProps {
   navigation: any;
@@ -30,6 +32,19 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
   const [selectedClasses, setSelectedClasses] = React.useState<string>('')
   const [selectedUsers, setSelectedUsers] = React.useState<string[]>([])
   const [selectedResults, setSelectedResults] = React.useState<string[]>([])
+
+  const [createChatMutation, {data: dataCreateChat, loading: loadingCreateChat, error}] = useMutation(CREATE_CHAT);
+  const options = {
+    variables: {
+      displayName: 'Test Display Name',
+      className: 'Math II',
+      tutorEmail: 'test01@gmail.com',
+      userEmails: [
+        'test02@gmail.com',
+        'test03@gmail.com'
+      ]
+    }
+  }
 
   React.useEffect(() => {
     runClassSearchQuery({variables: { searchTerm: classSearch}})
@@ -122,6 +137,7 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
         userData ? userData.searchUsers.map((u, index) => (
           <TouchableOpacity
             onPress={addSelectedUsers(u._id)}
+            // onPress={addSelectedUsers(u.)}
           >
             <IndividualResultContainer>
               <Text>{u.name}</Text>

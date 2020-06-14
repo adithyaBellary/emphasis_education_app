@@ -1,7 +1,8 @@
 import * as React from 'react';
 import {
   View,
-  Text
+  Text,
+  ActivityIndicator
 } from 'react-native';
 import {
   ButtonContainer,
@@ -16,11 +17,12 @@ import { IUserInput } from '../types';
 
 interface IConfirmationScreenProps {
   createdUsers: ICreateUserArr | undefined;
+  loading: boolean;
   submit(): void;
 }
 
 // we need to be able to edit info from here
-const ConfirmationScreen: React.FC<IConfirmationScreenProps> = ({ createdUsers, submit }) => {
+const ConfirmationScreen: React.FC<IConfirmationScreenProps> = ({ createdUsers, loading, submit }) => {
   console.log('props in confirmation', createdUsers)
   // display the data just entered
   // if (createdUsers) {
@@ -46,6 +48,7 @@ const ConfirmationScreen: React.FC<IConfirmationScreenProps> = ({ createdUsers, 
           >
             Submit
           </MyButtonText>
+          {loading && <ActivityIndicator/>}
         </MyButton>
       </ButtonContainer>
 
