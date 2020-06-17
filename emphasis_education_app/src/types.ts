@@ -12,6 +12,7 @@ export interface IUserInput {
   confirmPassword: string;
   phoneNumber: string;
   userType: Permission;
+  gender: string;
 }
 
 export interface IUsableUserInfo {
@@ -20,6 +21,7 @@ export interface IUsableUserInfo {
   password: string;
   phoneNumber: string;
   userType: Permission;
+  gender: string;
 }
 
 // this will be the user type that we get back from the backend
@@ -32,6 +34,7 @@ export interface IUser {
   chatIDs: string[];
   classes?: Class[];
   _id: string;
+  gender: string;
 }
 
 interface ICreateUserResponse {
@@ -53,8 +56,21 @@ export interface Class {
   chatID?: string;
 }
 
+export interface ICreateChatInput {
+  displayName: string;
+  className: string;
+  tutorEmail: string;
+  userEmails: string[];
+}
+
+export interface ICreateChatPayload {
+  res: boolean;
+}
+
 export enum Permission {
   Student = 'Student',
+  // need to distinguish the parents
+  Parent = 'Parent',
   Tutor = 'Tutor',
   Admin = 'Admin'
 }
@@ -62,14 +78,7 @@ export enum Permission {
 // basically res + IUser
 export interface ILoginPayloadProps {
   res: string;
-  name: string;
-  email: string;
-  phoneNumber: string;
-  userType: Permission;
-  groupID: string;
-  classes?: Class[];
-  _id: string;
-  chatIDs: string[];
+  user: IUser;
 }
 export interface ILoginPayload {
   login: ILoginPayloadProps;

@@ -30,6 +30,7 @@ const EmptyData: IUserInput = {
   confirmPassword: '',
   phoneNumber: '',
   userType: Permission.Student,
+  gender: ''
 }
 
 const CreateUser: React.FC<ICreateUser> = props => {
@@ -42,6 +43,7 @@ const CreateUser: React.FC<ICreateUser> = props => {
     confirmPassword: 'test01',
     phoneNumber: '2',
     userType: Permission.Student,
+    gender: 'F'
   });
 
   const handleTextChange = (name: string) => (text: string) => setState({...curState, [name]: text})

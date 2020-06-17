@@ -74,6 +74,7 @@ const Login: React.FC<ILoginProps> = props => {
         password: curState.password
       },
       onCompleted: ( { login } ) => {
+        console.log('login result', login.user)
         if (login.res) {
           successLogin(login)
         } else {

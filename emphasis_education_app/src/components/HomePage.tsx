@@ -124,7 +124,7 @@ const Home: React.FC<ILiftedHomeProps> = ( { navigation} ) => {
           />
           <Icon
             name='settings'
-            onPress={() => Alert.alert('settings')}
+            onPress={changeScreens('Settings')}
             reverse={true}
           />
         </IconContain>
