@@ -108,6 +108,11 @@ const Stack = () => {
   return (
 <NavigationContainer>
             <stack.Navigator initialRouteName={initRoute}>
+            <stack.Screen
+                name='Settings'
+                component={Settings}
+                options={{ title: 'Settings'}}
+              />
               <stack.Screen
                 name="Login"
                 component={Login}
@@ -175,11 +180,7 @@ const Stack = () => {
                 component={CreateChat}
                 options={{ title: 'New Chat'}}
               />
-              <stack.Screen
-                name='Settings'
-                component={Settings}
-                options={{ title: 'Settings'}}
-              />
+
             </stack.Navigator>
           </NavigationContainer>
   )

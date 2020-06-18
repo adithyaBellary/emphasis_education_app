@@ -10,7 +10,6 @@ import styled from 'styled-components';
 import { MD5 } from "crypto-js"
 import {NavigationActions, StackActions} from 'react-navigation';
 
-
 import {
   MytextInput,
   ButtonContainer,
@@ -57,10 +56,17 @@ const getHash = (email: string): string => {
 
 const Login: React.FC<ILoginProps> = props => {
 
+  const resetHistory = StackActions.reset({
+    index: 0,
+    actions: [NavigationActions.navigate({ routeName: 'Login'})],
+    key: null
+  })
+
   React.useEffect(() => {
     props.navigation.setOptions({
       headerLeft: () => null
     })
+    // props.navigation.dispatch(resetHistory);
   }, [])
 
   const { setUser } = useContext(Context);
