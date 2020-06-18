@@ -106,83 +106,83 @@ const Stack = () => {
     initRoute = 'Login'
   }
   return (
-<NavigationContainer>
-            <stack.Navigator initialRouteName={initRoute}>
-            <stack.Screen
-                name='Settings'
-                component={Settings}
-                options={{ title: 'Settings'}}
-              />
-              <stack.Screen
-                name="Login"
-                component={Login}
-                options={{
-                  title: '',
-                  headerStyle: {
-                    backgroundColor: '#5a1846'
-                  }
-                }}
-              />
-              <stack.Screen
-                name="Home"
-                component={HomePage}
-                options={{
-                  title: '' ,
-                  // we chouldnt really be able to go back to the login page?
-                  // headerLeft: () => null
-                }}
-              />
-              <stack.Screen
-                name="Search"
-                component={Search}
-                options={{ title: '' }}
-              />
-              {/* can maybe get the name of the chat and then set the title to it */}
-              <stack.Screen
-                name="Chat"
-                component={Chat}
-                options={{ title: 'Test Subject' }}
-              />
-              <stack.Screen
-                name="CreateUser"
-                component={CreateUser}
-                options={{ title: '' }}
-              />
-              <stack.Screen
-                name="ChatPicker"
-                component={ChatPicker}
-                options={{
-                  title: 'My Chats',
-                }}
-              />
-              <stack.Screen
-                name="MyProfile"
-                component={Profile}
-                options={{ title: 'My Profile' }}
-              />
-              <stack.Screen
-                name="CreateUserContain"
-                component={CreateUserContain}
-                options={{ title: '' }}
-              />
-              <stack.Screen
-                name="ConfirmationScreen"
-                component={ConfirmationScreen}
-                options={{ title: '' }}
-              />
-              <stack.Screen
-                name="AdminPage"
-                component={AdminPage}
-                options={{ title: 'Admin Page' }}
-              />
-              <stack.Screen
-                name='CreateChat'
-                component={CreateChat}
-                options={{ title: 'New Chat'}}
-              />
+    <NavigationContainer>
+      <stack.Navigator initialRouteName={initRoute}>
+        <stack.Screen
+            name='Settings'
+            component={Settings}
+            options={{ title: 'Settings'}}
+          />
+        <stack.Screen
+          name="Login"
+          component={Login}
+          options={{
+            title: '',
+            headerStyle: {
+              backgroundColor: '#5a1846'
+            }
+          }}
+        />
+        <stack.Screen
+          name="Home"
+          component={HomePage}
+          options={{
+            title: '' ,
+            // we chouldnt really be able to go back to the login page?
+            // headerLeft: () => null
+          }}
+        />
+        <stack.Screen
+          name="Search"
+          component={Search}
+          options={{ title: '' }}
+        />
+        {/* can maybe get the name of the chat and then set the title to it */}
+        <stack.Screen
+          name="Chat"
+          component={Chat}
+          options={{ title: 'Test Subject' }}
+        />
+        <stack.Screen
+          name="CreateUser"
+          component={CreateUser}
+          options={{ title: '' }}
+        />
+        <stack.Screen
+          name="ChatPicker"
+          component={ChatPicker}
+          options={{
+            title: 'My Chats',
+          }}
+        />
+        <stack.Screen
+          name="MyProfile"
+          component={Profile}
+          options={{ title: 'My Profile' }}
+        />
+        <stack.Screen
+          name="CreateUserContain"
+          component={CreateUserContain}
+          options={{ title: '' }}
+        />
+        <stack.Screen
+          name="ConfirmationScreen"
+          component={ConfirmationScreen}
+          options={{ title: '' }}
+        />
+        <stack.Screen
+          name="AdminPage"
+          component={AdminPage}
+          options={{ title: 'Admin Page' }}
+        />
+        <stack.Screen
+          name='CreateChat'
+          component={CreateChat}
+          options={{ title: 'New Chat'}}
+        />
 
-            </stack.Navigator>
-          </NavigationContainer>
+      </stack.Navigator>
+    </NavigationContainer>
   )
 }
 
