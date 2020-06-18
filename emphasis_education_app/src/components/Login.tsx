@@ -8,6 +8,8 @@ import {
 } from 'react-native';
 import styled from 'styled-components';
 import { MD5 } from "crypto-js"
+import {NavigationActions, StackActions} from 'react-navigation';
+
 
 import {
   MytextInput,
@@ -55,12 +57,18 @@ const getHash = (email: string): string => {
 
 const Login: React.FC<ILoginProps> = props => {
 
+  React.useEffect(() => {
+    props.navigation.setOptions({
+      headerLeft: () => null
+    })
+  }, [])
+
   const { setUser } = useContext(Context);
 
   const [curState, setState] = useState({
     error: false,
     userName: 'test01@gmail.com',
-    email: 'test01@gmail.com',
+    email: 'test05@gmail.com',
     password: 'test01',
     name: 'Test User'
   })

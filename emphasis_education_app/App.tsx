@@ -16,7 +16,7 @@ import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
 import { WebSocketLink } from 'apollo-link-ws';
 import { split } from 'apollo-link';
-import { ApolloProvider } from '@apollo/react-hooks';
+import { ApolloProvider, useQuery } from '@apollo/react-hooks';
 import { getMainDefinition } from 'apollo-utilities';
 import { ThemeProvider } from 'styled-components';
 
@@ -37,6 +37,7 @@ import { theme } from './src/theme';
 import context, {EmptyUser} from './src/components/Context/Context';
 import { IUser } from './src/types';
 
+import { CHECK_LOGGED_IN } from './src/queries/CheckLoggedIn';
 
 const cache = new InMemoryCache();
 const httplink = new HttpLink({
@@ -91,20 +92,22 @@ const stack = createStackNavigator<RootStackProps>();
 // if yeah, then home page
 // if not, then login page
 
-const App = () => {
-  // wrap this all in the context
-  const [user, setUser] = React.useState<IUser>(EmptyUser);
-  const updateUser = (newUser: IUser) => setUser(newUser)
-  const value = {
-     loggedUser: user,
-     setUser: updateUser
-    }
+const Stack = () => {
+  const { data, loading, error} = useQuery(CHECK_LOGGED_IN);
+  let initRoute = 'Login';
+  if (loading || !data) {
+    return null
+  }
+  if (data.checkLoggedIn.loggedIn) {
+    // if we are logged in, go to the home page
+    console.log('data in root app', data.checkLoggedIn.loggedIn)
+    initRoute = 'Home'
+  } else {
+    initRoute = 'Login'
+  }
   return (
-    <context.Provider value={value}>
-      <ThemeProvider theme={theme}>
-        <ApolloProvider client={client}>
-          <NavigationContainer>
-            <stack.Navigator initialRouteName='Login'>
+<NavigationContainer>
+            <stack.Navigator initialRouteName={initRoute}>
               <stack.Screen
                 name="Login"
                 component={Login}
@@ -179,6 +182,23 @@ const App = () => {
               />
             </stack.Navigator>
           </NavigationContainer>
+  )
+}
+
+const App = () => {
+  // wrap this all in the context
+  const [user, setUser] = React.useState<IUser>(EmptyUser);
+  const updateUser = (newUser: IUser) => setUser(newUser)
+  const value = {
+     loggedUser: user,
+     setUser: updateUser
+    }
+
+  return (
+    <context.Provider value={value}>
+      <ThemeProvider theme={theme}>
+        <ApolloProvider client={client}>
+          <Stack />
         </ApolloProvider>
       </ThemeProvider>
     </context.Provider>
