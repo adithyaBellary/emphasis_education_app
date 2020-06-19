@@ -2,10 +2,8 @@ import * as React from 'react';
 import {
   View,
   Text,
-  Alert
 } from 'react-native';
 import { useMutation } from '@apollo/react-hooks';
-// import {NavigationActions, StackActions} from 'react-navigation';
 
 import { ButtonContainer, MyButton, MyButtonText } from './shared';
 import { Logout } from '../queries/Logout';
@@ -17,10 +15,6 @@ interface ISettingsProps {
 }
 
 const Settings: React.FC<ISettingsProps> = ({ navigation }) => {
-
-  // React.useEffect(() => {
-  //   navigation.dispatch(resetHistory);
-  // }, [])
 
   const [runMut, { data, loading, error}] = useMutation(
     Logout,
@@ -36,13 +30,6 @@ const Settings: React.FC<ISettingsProps> = ({ navigation }) => {
             ]
           })
         )
-        // navigation.navigate('Login')
-        // const resetHistory = StackActions.reset({
-        //   index: 0,
-        //   actions: [NavigationActions.navigate({ routeName: 'Login' })],
-        //   key: null
-        // })
-        // navigation.dispatch(resetHistory);
       }
     }
   );

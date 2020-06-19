@@ -126,9 +126,7 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
           />
         }
       />
-      {/* display selecgted class */}
       <Text>Selected Class: {selectedClasses}</Text>
-      {/* display selected users */}
       <Text>Selected Users: {selectedUsers.map(u => `${u}, `)} </Text>
       {/* let us display the results here so that we can easily have state over them */}
       { userLoading ? <ActivityIndicator /> : (

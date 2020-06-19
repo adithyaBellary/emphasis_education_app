@@ -29,8 +29,17 @@ const ChatsContain = styled(View)`
   padding: 0 10px;
 `
 
+const EmptyChat: React.FC = () => (
+  <View>
+    <Text>
+      You are currently not added to any chats. Please contact the Admins to be added to a chat
+    </Text>
+  </View>
+)
+
 const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
   const { loggedUser } = React.useContext(Context);
+  console.log('logged user in chat picker', loggedUser);
 
   const goToChat = (sub: string) => () => {
     navigation.navigate(
@@ -67,14 +76,15 @@ const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
     <>
       <SafeAreaView>
         <ChatsContain>
-          {/* add the classes that our logged in user has */}
-          {loggedUser.classes && loggedUser.classes.map((c) => (
+          {loggedUser.classes ? loggedUser.classes.map((c) => (
             <IndChat
               onPress={goToChat(c.chatID!)}
             >
               <Text>{c.className}</Text>
             </IndChat>
-          ))}
+          )) : (
+            <EmptyChat />
+          )}
         </ChatsContain>
       </SafeAreaView>
     </>
