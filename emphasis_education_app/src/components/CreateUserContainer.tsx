@@ -26,7 +26,7 @@ const CreateUserContain: React.FC<ICreateUserContainProps> = props => {
   const [userInfo, setUserInfo] = React.useState<ICreateUserArr>();
   const [showConf, setSHowConf] = React.useState(false);
 
-  // make this into our owh custom hook
+  // make this into our own custom hook
   const updateUserInfo = (newUserInfo: IUserInput): void => {
     console.log('newUserInfo', newUserInfo);
     if (!userInfo) {

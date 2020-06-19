@@ -15,9 +15,8 @@ import { useLazyQuery, useMutation } from '@apollo/react-hooks';
 import { SEARCH_CLASSES } from '../queries/SearchClasses';
 import { SEARCH_USERS } from '../queries/SearchUsers';
 import { CREATE_CHAT } from '../queries/CreateChat';
-import { ISearchInput, ISearchClassesPayload, ISearchUserPayload } from '../types';
+import { ISearchInput, ISearchClassesPayload, ISearchUserPayload, ICreateChatInput, ICreateChatPayload } from '../types';
 import { IndividualResultContainer } from './AdminPage/IndividualResult';
-import { getMainDefinition } from 'apollo-utilities';
 
 interface ICreateChatProps {
   navigation: any;
@@ -33,18 +32,7 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
   const [selectedUsers, setSelectedUsers] = React.useState<string[]>([])
   const [selectedResults, setSelectedResults] = React.useState<string[]>([])
 
-  const [createChatMutation, {data: dataCreateChat, loading: loadingCreateChat, error}] = useMutation(CREATE_CHAT);
-  const options = {
-    variables: {
-      displayName: 'Test Display Name',
-      className: 'Math II',
-      tutorEmail: 'test01@gmail.com',
-      userEmails: [
-        'test02@gmail.com',
-        'test03@gmail.com'
-      ]
-    }
-  }
+  const [createChatMutation, {data: dataCreateChat, loading: loadingCreateChat, error}] = useMutation<ICreateChatPayload, ICreateChatInput>(CREATE_CHAT);
 
   React.useEffect(() => {
     runClassSearchQuery({variables: { searchTerm: classSearch}})
@@ -59,7 +47,7 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
       <Button
         title='Done'
         // onPress={() => Alert.alert('creating the chat')}
-        onPress={() => console.log('creagting a new chat with', selectedUsers)}
+        onPress={createChat}
         // TODO add disabled functionality
         // disabled={}
       />
@@ -71,7 +59,23 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
   // console.log('class search', classData)
 
   const createChat = () => {
-    // before calling the chat mutation, make sure that there is a tutor added to the chat
+    console.log('creating a new chat with', selectedClasses, selectedUsers)
+    // we need to get the
+    let tutorEmail;
+    // the selectedUsers field needs to know which ones are students and which one is the tutor
+    // const _userEmails = sele
+    const variables: ICreateChatInput = {
+      displayName: 'Test Display Name',
+      className: selectedClasses,
+      tutorEmail: 'test01@gmail.com',
+      userEmails: [
+        'test02@gmail.com',
+        'test03@gmail.com'
+      ]
+    }
+    const options = { variables }
+    createChatMutation(options)
+    // or we could we make the selected users here
   }
 
   const onUserTextChage = (text: string) => setUserSearch(text)
@@ -83,27 +87,21 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
       let ind = selectedUsers.indexOf(userID)
       let newArray = selectedUsers
       newArray.splice(ind, 1)
-      setSelectedUsers(newArray)
-      ind = selectedResults.indexOf(userID)
-      newArray = selectedResults
-      newArray.splice(ind, 1)
-      setSelectedResults([...newArray])
+      console.log('new array', newArray)
+      setSelectedUsers([...newArray])
     } else {
       setSelectedUsers([...selectedUsers, userID])
-      setSelectedResults([...selectedResults, userID])
     }
   }
   const addSelectedClasses = (className: string) => () => {
-    // if there is already a class that is added, then we cannot add another one
     if (selectedClasses) {
-      const ind = selectedResults.indexOf(className)
-      let newArray = selectedResults
-      newArray.splice(ind, 1)
-      setSelectedResults(newArray)
-      setSelectedClasses('')
+      if (selectedClasses === className) {
+        setSelectedClasses('')
+      } else {
+        setSelectedClasses(className)
+      }
     } else {
       setSelectedClasses(className)
-      setSelectedResults([...selectedResults, className])
     }
   }
 
@@ -128,21 +126,17 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
           />
         }
       />
-      {/* display selecgted class */}
       <Text>Selected Class: {selectedClasses}</Text>
-      {/* display selected users */}
       <Text>Selected Users: {selectedUsers.map(u => `${u}, `)} </Text>
       {/* let us display the results here so that we can easily have state over them */}
       { userLoading ? <ActivityIndicator /> : (
         userData ? userData.searchUsers.map((u, index) => (
           <TouchableOpacity
             onPress={addSelectedUsers(u._id)}
-            // onPress={addSelectedUsers(u.)}
           >
             <IndividualResultContainer>
               <Text>{u.name}</Text>
               <Icon
-                // name={selectedResults.includes(u._id) ? 'checkcircle' : 'pluscircleo'}
                 name={selectedUsers.includes(u._id) ? 'checkcircle' : 'pluscircleo'}
                 type='antdesign'
               />
@@ -158,7 +152,7 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
             <IndividualResultContainer>
             <Text>{c}</Text>
             <Icon
-              name={selectedResults.includes(c) ? 'checkcircle' : 'pluscircleo'}
+              name={selectedClasses === c ? 'checkcircle' : 'pluscircleo'}
               type='antdesign'
             />
             </IndividualResultContainer>
