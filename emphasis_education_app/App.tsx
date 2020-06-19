@@ -9,7 +9,7 @@
  */
 
 import * as React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, CommonActions } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { ApolloClient } from 'apollo-client';
 import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
@@ -38,6 +38,7 @@ import context, {EmptyUser} from './src/components/Context/Context';
 import { IUser } from './src/types';
 
 import { CHECK_LOGGED_IN } from './src/queries/CheckLoggedIn';
+import { View, Text } from 'react-native';
 
 const cache = new InMemoryCache();
 const httplink = new HttpLink({
@@ -96,7 +97,11 @@ const Stack = () => {
   const { data, loading, error} = useQuery(CHECK_LOGGED_IN);
   let initRoute = 'Login';
   if (loading || !data) {
-    return null
+    return (
+    <View>
+      <Text>loading</Text>
+    </View>
+    )
   }
   if (data.checkLoggedIn.loggedIn) {
     // if we are logged in, go to the home page
@@ -112,7 +117,7 @@ const Stack = () => {
             name='Settings'
             component={Settings}
             options={{ title: 'Settings'}}
-          />
+        />
         <stack.Screen
           name="Login"
           component={Login}
@@ -180,7 +185,6 @@ const Stack = () => {
           component={CreateChat}
           options={{ title: 'New Chat'}}
         />
-
       </stack.Navigator>
     </NavigationContainer>
   )

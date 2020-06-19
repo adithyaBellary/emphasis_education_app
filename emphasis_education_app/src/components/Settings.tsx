@@ -5,10 +5,11 @@ import {
   Alert
 } from 'react-native';
 import { useMutation } from '@apollo/react-hooks';
-import {NavigationActions, StackActions} from 'react-navigation';
+// import {NavigationActions, StackActions} from 'react-navigation';
 
 import { ButtonContainer, MyButton, MyButtonText } from './shared';
 import { Logout } from '../queries/Logout';
+import { CommonActions } from '@react-navigation/native';
 
 interface ISettingsProps {
   navigation: any;
@@ -16,12 +17,6 @@ interface ISettingsProps {
 }
 
 const Settings: React.FC<ISettingsProps> = ({ navigation }) => {
-
-  const resetHistory = StackActions.reset({
-    index: 0,
-    actions: [NavigationActions.navigate({ routeName: 'Login' })],
-    key: null
-  })
 
   // React.useEffect(() => {
   //   navigation.dispatch(resetHistory);
@@ -31,7 +26,20 @@ const Settings: React.FC<ISettingsProps> = ({ navigation }) => {
     Logout,
     {
       onCompleted: () => {
-        navigation.navigate('Login')
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 1,
+            routes: [
+              { name: 'Login'}
+            ]
+          })
+        )
+        // navigation.navigate('Login')
+        // const resetHistory = StackActions.reset({
+        //   index: 0,
+        //   actions: [NavigationActions.navigate({ routeName: 'Login' })],
+        //   key: null
+        // })
         // navigation.dispatch(resetHistory);
       }
     }

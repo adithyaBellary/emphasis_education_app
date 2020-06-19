@@ -14,7 +14,8 @@ export let EmptyUser: IUser = {
   userType: Permission.Student,
   chatIDs: ['chat1', 'chat2'],
   classes: [],
-  _id: '_id'
+  _id: '_id',
+  gender: 'F'
 }
 
 const setUser = (user: IUser) => {
