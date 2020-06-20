@@ -14,7 +14,8 @@ import {
   ButtonContainer,
   MyButton,
   MyButtonText,
-  CenteredDiv
+  CenteredDiv,
+  LoginInput
 } from './shared';
 import { LOGIN } from '../queries/Login';
 import Context from './Context/Context';
@@ -134,12 +135,12 @@ const Login: React.FC<ILoginProps> = props => {
       </TitleContain>
       <PositionDiv>
         <CenteredDiv>
-          <MytextInput
+          <LoginInput
             placeholder='username'
             value={curState.email}
             onChangeText={onChangeEmail}
           />
-          <MytextInput
+          <LoginInput
             placeholder='password'
             value={curState.password}
             onChangeText={onChangePassword}
@@ -166,7 +167,6 @@ const Login: React.FC<ILoginProps> = props => {
               <MyButtonText>Forgot Password?</MyButtonText>
             </MyButton>
           </ButtonContainer>
-          <Test_s />
         </CenteredDiv>
       </PositionDiv>
     </SafeAreaView>

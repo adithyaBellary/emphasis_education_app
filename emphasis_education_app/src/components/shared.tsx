@@ -18,6 +18,15 @@ export const MytextInput = styled(TextInput)`
   fontSize: 18px;
 `;
 
+export const LoginInput = styled(TextInput)`
+  fontFamily: ${({ theme }) => theme.font.main};
+  fontSize: 18px;
+  border: 1px black solid;
+  border-radius: 10px;
+  width: 90%;
+  text-align: center;
+`;
+
 export const InputContain = styled(View)`
   border-bottom-width: 1px;
   border-bottom-color: black;
@@ -42,10 +51,14 @@ export const ButtonContainer = styled(View)`
   padding: 10px;
 `;
 
+export const ButtonGroupContain = styled(View)`
+  padding-top: 20%;
+`
+
 export const MyButton = styled(TouchableOpacity)`
-  background-color: ${props => props.disabled ? 'grey' : 'lightskyblue'} ;
-  width: 100px;
-  height: 20px;
+  background-color: ${({ disabled, theme}) => disabled ? 'grey' : theme.colors.purple} ;
+  height: 40px;
+  justify-content: center;
 `;
 
 const d: number = 150;
@@ -60,7 +73,8 @@ export const MyCircleButton = styled(TouchableOpacity)`
 export const MyButtonText = styled(Text)`
   color: white;
   text-align: center;
-  font-size: 12px;
+  font-size: 14px;
+  fontFamily: ${({ theme }) => theme.font.main}
 `;
 
 export const CenteredDiv = styled(View)`
@@ -166,12 +180,13 @@ export const RadioButtonGroup: React.FC<IRadioButtonGroupProps> = ({titles, onSe
   };
   return (
     <RadioButtonRow>
-      {titles.map(title => (
+      {titles.map((title, index) => (
         <RadioButton
           title={title}
           num={titles.length}
           selectedElement={selectedElement}
           setSelectedElement={selectElement}
+          key={index}
         />
       ))}
     </RadioButtonRow>

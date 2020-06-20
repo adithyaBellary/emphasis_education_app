@@ -14,7 +14,8 @@ import {
   MyButtonText,
   RadioButtonGroup,
   InputContain,
-  ThemedTextInput
+  ThemedTextInput,
+  ButtonGroupContain
 } from './shared';
 import styled from 'styled-components';
 
@@ -107,26 +108,28 @@ const CreateUser: React.FC<ICreateUser> = props => {
           onSelect={handleTextChange('userType')}
         />
       </CenteredDiv>
-      <ButtonContainer>
-        <MyButton
-          onPress={addMember}
-          // disabled={true}
-        >
-          <MyButtonText>
-            Add another member
-          </MyButtonText>
-        </MyButton>
-      </ButtonContainer>
+      <ButtonGroupContain>
+        <ButtonContainer>
+          <MyButton
+            onPress={addMember}
+            // disabled={true}
+          >
+            <MyButtonText>
+              Add another member
+            </MyButtonText>
+          </MyButton>
+        </ButtonContainer>
 
-      <ButtonContainer>
-        <MyButton
-          onPress={GoToConf}
-        >
-          <MyButtonText>
-            Submit
-          </MyButtonText>
-        </MyButton>
-      </ButtonContainer>
+        <ButtonContainer>
+          <MyButton
+            onPress={GoToConf}
+          >
+            <MyButtonText>
+              Submit
+            </MyButtonText>
+          </MyButton>
+        </ButtonContainer>
+      </ButtonGroupContain>
     </View>
   )
 }

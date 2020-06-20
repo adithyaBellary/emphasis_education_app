@@ -9,7 +9,8 @@
  */
 
 import * as React from 'react';
-import { NavigationContainer, CommonActions } from '@react-navigation/native';
+import { View, Text } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { ApolloClient } from 'apollo-client';
 import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
@@ -38,7 +39,6 @@ import context, {EmptyUser} from './src/components/Context/Context';
 import { IUser } from './src/types';
 
 import { CHECK_LOGGED_IN } from './src/queries/CheckLoggedIn';
-import { View, Text } from 'react-native';
 
 const cache = new InMemoryCache();
 const httplink = new HttpLink({
@@ -93,19 +93,20 @@ const stack = createStackNavigator<RootStackProps>();
 // if yeah, then home page
 // if not, then login page
 
-const Stack = () => {
+const Stack: React.FC = () => {
   const { data, loading, error} = useQuery(CHECK_LOGGED_IN);
   let initRoute = 'Login';
-  if (loading || !data) {
+  if ( loading || !data) {
     return (
-    <View>
-      <Text>loading</Text>
-    </View>
+      // this should be the logo maybe?
+      <View>
+        <Text>loading</Text>
+      </View>
     )
   }
+  // console.log('data in root app', data.checkLoggedIn.loggedIn)
   if (data.checkLoggedIn.loggedIn) {
     // if we are logged in, go to the home page
-    console.log('data in root app', data.checkLoggedIn.loggedIn)
     initRoute = 'Home'
   } else {
     initRoute = 'Login'
@@ -142,7 +143,6 @@ const Stack = () => {
           component={Search}
           options={{ title: '' }}
         />
-        {/* can maybe get the name of the chat and then set the title to it */}
         <stack.Screen
           name="Chat"
           component={Chat}
@@ -168,7 +168,7 @@ const Stack = () => {
         <stack.Screen
           name="CreateUserContain"
           component={CreateUserContain}
-          options={{ title: '' }}
+          options={{ title: 'Create User' }}
         />
         <stack.Screen
           name="ConfirmationScreen"
@@ -195,9 +195,9 @@ const App = () => {
   const [user, setUser] = React.useState<IUser>(EmptyUser);
   const updateUser = (newUser: IUser) => setUser(newUser)
   const value = {
-     loggedUser: user,
-     setUser: updateUser
-    }
+    loggedUser: user,
+    setUser: updateUser
+  }
 
   return (
     <context.Provider value={value}>

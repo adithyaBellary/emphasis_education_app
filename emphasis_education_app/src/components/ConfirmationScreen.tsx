@@ -14,7 +14,6 @@ import IndividualItem from './DisplayIndividualMember';
 
 import { IUserInput } from '../types';
 
-
 interface IConfirmationScreenProps {
   createdUsers: ICreateUserArr | undefined;
   loading: boolean;
