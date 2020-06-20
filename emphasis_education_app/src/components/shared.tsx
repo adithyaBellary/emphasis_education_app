@@ -14,8 +14,29 @@ import Context from './Context/Context';
 
 export const MytextInput = styled(TextInput)`
   padding: 10px 0;
-  fontFamily: ${props => props.theme.font.main};
+  fontFamily: ${({ theme }) => theme.font.main};
+  fontSize: 18px;
 `;
+
+export const InputContain = styled(View)`
+  border-bottom-width: 1px;
+  border-bottom-color: black;
+  width: 90%;
+`;
+
+interface IThemedInputProps {
+  placeholder: string;
+  value?: string;
+  onChangeText(t: string): void;
+}
+
+export const ThemedTextInput: React.FC<IThemedInputProps> = props => (
+  <InputContain>
+    <MytextInput
+      {...props}
+    />
+  </InputContain>
+)
 
 export const ButtonContainer = styled(View)`
   padding: 10px;
@@ -129,7 +150,7 @@ const RadioButtonRow = styled(View)`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 10px 0;
+  padding-top: 10%;
 `
 interface IRadioButtonGroupProps {
   titles: string[]

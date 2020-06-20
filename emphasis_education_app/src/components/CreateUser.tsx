@@ -12,15 +12,13 @@ import {
   ButtonContainer,
   MyButton,
   MyButtonText,
-  RadioButtonGroup
+  RadioButtonGroup,
+  InputContain,
+  ThemedTextInput
 } from './shared';
 import styled from 'styled-components';
 
-const InputContain = styled(View)`
-  border-bottom-width: 1px;
-  border-bottom-color: black;
-  width: 90%;
-`
+
 
 interface ICreateUser {
   navigation: any;
@@ -73,50 +71,42 @@ const CreateUser: React.FC<ICreateUser> = props => {
 
   return (
     <View>
-      <Text>this is fam member number: {numUser}</Text>
       <CenteredDiv>
-        <InputContain>
-          <MytextInput
-            placeholder='name'
-            value={curState.name}
-            onChangeText={handleTextChange('name')}
-          />
-        </InputContain>
+        <Text>Family member number {numUser}</Text>
+        <ThemedTextInput
+          placeholder='Nmae'
+          value={curState.name}
+          onChangeText={handleTextChange('name')}
+        />
+        <ThemedTextInput
+          placeholder='email'
+          value={curState.email}
+          onChangeText={handleTextChange('email')}
+        />
+        <ThemedTextInput
+          placeholder='password'
+          value={curState.password}
+          onChangeText={handleTextChange('password')}
+        />
+        <ThemedTextInput
+          placeholder='confirm password'
+          value={curState.confirmPassword}
+          onChangeText={handleTextChange('confirmPassword')}
+        />
+        <ThemedTextInput
+          placeholder='phone number'
+          value={curState.phoneNumber}
+          onChangeText={handleTextChange('phoneNumber')}
+        />
+        <RadioButtonGroup
+          titles={['Male', 'Female']}
+          onSelect={handleTextChange('gender')}
+        />
+        <RadioButtonGroup
+          titles={[Permission.Parent, Permission.Student, Permission.Tutor]}
+          onSelect={handleTextChange('userType')}
+        />
       </CenteredDiv>
-      <Input
-        placeholder='email'
-        onChangeText={handleTextChange('email')}
-        value={curState.email}
-        label={'email'}
-      />
-      {/* <MytextInput
-        placeholder='email'
-        value={curState.email}
-        onChangeText={handleTextChange('email')}
-      /> */}
-      <MytextInput
-        placeholder='password'
-        value={curState.password}
-        onChangeText={handleTextChange('password')}
-      />
-      <MytextInput
-        placeholder='confirm password'
-        value={curState.confirmPassword}
-        onChangeText={handleTextChange('confirmPassword')}
-      />
-      <MytextInput
-        placeholder='phone number'
-        value={curState.phoneNumber}
-        onChangeText={handleTextChange('phoneNumber')}
-      />
-      <RadioButtonGroup
-        titles={['Male', 'Female']}
-        onSelect={handleTextChange('gender')}
-      />
-      <RadioButtonGroup
-        titles={[Permission.Parent, Permission.Student, Permission.Tutor]}
-        onSelect={handleTextChange('userType')}
-      />
       <ButtonContainer>
         <MyButton
           onPress={addMember}

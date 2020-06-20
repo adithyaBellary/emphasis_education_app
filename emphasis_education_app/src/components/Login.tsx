@@ -28,11 +28,11 @@ const PositionDiv = styled(View)`
 
 const TitleText = styled(Text)`
   font-size: 20px;
-  fontFamily: 'Nunito';
+  fontFamily: ${({ theme }) => theme.font.main};
 `;
 
 const TitleContain = styled(View)`
-  padding-top: 200px;
+  padding-top: 100px;
 `;
 
 interface ILoginProps {
@@ -120,7 +120,7 @@ const Login: React.FC<ILoginProps> = props => {
         email: curState.email,
         password: curState.password,
       }
-    }).then((resp) =>  console.log('resp\n\n', resp))
+    })
   }
 
   return (
@@ -144,9 +144,7 @@ const Login: React.FC<ILoginProps> = props => {
             value={curState.password}
             onChangeText={onChangePassword}
           />
-          {curState.error &&
-            <Errorlogin />
-          }
+          {curState.error && <Errorlogin /> }
           <ButtonContainer>
             <MyButton
               onPress={my_login}
