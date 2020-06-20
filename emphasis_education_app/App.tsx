@@ -151,7 +151,7 @@ const Stack = () => {
         <stack.Screen
           name="CreateUser"
           component={CreateUser}
-          options={{ title: '' }}
+          options={{ title: 'Create User' }}
         />
         <stack.Screen
           name="ChatPicker"

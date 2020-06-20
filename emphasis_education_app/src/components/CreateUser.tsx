@@ -1,20 +1,26 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import {
   View,
-  Alert,
-  TextInput,
   Text
 } from 'react-native'
-// import RadioGroup from 'react-native-radio-buttons-group';
 import { Input } from 'react-native-elements';
 
 import { IUserInput, Permission } from '../types';
 import {
+  CenteredDiv,
   MytextInput,
   ButtonContainer,
   MyButton,
   MyButtonText,
+  RadioButtonGroup
 } from './shared';
+import styled from 'styled-components';
+
+const InputContain = styled(View)`
+  border-bottom-width: 1px;
+  border-bottom-color: black;
+  width: 90%;
+`
 
 interface ICreateUser {
   navigation: any;
@@ -49,6 +55,11 @@ const CreateUser: React.FC<ICreateUser> = props => {
   const handleTextChange = (name: string) => (text: string) => setState({...curState, [name]: text})
   const clearData = () => setState(EmptyData);
 
+  const canSubmit = (): boolean => {
+    return !!curState.name &&
+     !!curState.phoneNumber
+  }
+
   const GoToConf = () => {
     props.saveUserInfo(curState);
     props.GoToConfirmationScreen()
@@ -63,11 +74,15 @@ const CreateUser: React.FC<ICreateUser> = props => {
   return (
     <View>
       <Text>this is fam member number: {numUser}</Text>
-      <MytextInput
-        placeholder='name'
-        value={curState.name}
-        onChangeText={handleTextChange('name')}
-      />
+      <CenteredDiv>
+        <InputContain>
+          <MytextInput
+            placeholder='name'
+            value={curState.name}
+            onChangeText={handleTextChange('name')}
+          />
+        </InputContain>
+      </CenteredDiv>
       <Input
         placeholder='email'
         onChangeText={handleTextChange('email')}
@@ -90,19 +105,22 @@ const CreateUser: React.FC<ICreateUser> = props => {
         onChangeText={handleTextChange('confirmPassword')}
       />
       <MytextInput
-        placeholder='user type'
-        value={curState.userType}
-        onChangeText={handleTextChange('userType')}
-      />
-      <MytextInput
         placeholder='phone number'
         value={curState.phoneNumber}
         onChangeText={handleTextChange('phoneNumber')}
       />
-
+      <RadioButtonGroup
+        titles={['Male', 'Female']}
+        onSelect={handleTextChange('gender')}
+      />
+      <RadioButtonGroup
+        titles={[Permission.Parent, Permission.Student, Permission.Tutor]}
+        onSelect={handleTextChange('userType')}
+      />
       <ButtonContainer>
         <MyButton
           onPress={addMember}
+          // disabled={true}
         >
           <MyButtonText>
             Add another member

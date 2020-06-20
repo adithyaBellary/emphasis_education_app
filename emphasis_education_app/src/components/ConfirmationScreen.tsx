@@ -22,38 +22,28 @@ interface IConfirmationScreenProps {
 }
 
 // we need to be able to edit info from here
-const ConfirmationScreen: React.FC<IConfirmationScreenProps> = ({ createdUsers, loading, submit }) => {
-  console.log('props in confirmation', createdUsers)
-  // display the data just entered
-  // if (createdUsers) {
-  //   const { users } = createdUsers;
-  // }
-
-  return (
-    <View>
-      <Text>
-        Confirming
-      </Text>
-      {createdUsers && createdUsers.users.map((user: IUserInput, index: number) => (
-        <IndividualItem
-          id={index + 1}
-          {...user}
-        />
-
-      ))}
-      <ButtonContainer>
-        <MyButton>
-          <MyButtonText
-            onPress={submit}
-          >
-            Submit
-          </MyButtonText>
-          {loading && <ActivityIndicator/>}
-        </MyButton>
-      </ButtonContainer>
-
-    </View>
-  )
-}
+const ConfirmationScreen: React.FC<IConfirmationScreenProps> = ({ createdUsers, loading, submit }) => (
+  <View>
+    <Text>
+      Confirming
+    </Text>
+    {createdUsers && createdUsers.users.map((user: IUserInput, index: number) => (
+      <IndividualItem
+        id={index + 1}
+        {...user}
+      />
+    ))}
+    <ButtonContainer>
+      <MyButton>
+        <MyButtonText
+          onPress={submit}
+        >
+          Submit
+        </MyButtonText>
+        {loading && <ActivityIndicator/>}
+      </MyButton>
+    </ButtonContainer>
+  </View>
+)
 
 export default ConfirmationScreen;

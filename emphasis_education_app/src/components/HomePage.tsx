@@ -2,7 +2,6 @@ import * as React from 'react';
 // this will be needed to get the full screen dimensions
 // ill need to know the screen dimensions to position all the widgets
 import {
-  Alert,
   View,
   Text,
 } from 'react-native';
@@ -93,7 +92,6 @@ const Home: React.FC<ILiftedHomeProps> = ( { navigation} ) => {
         <IconContain>
           <Icon
             name='person'
-            // onPress={changeScreens('MyProfile')}
             onPress={() => navigation.navigate(
               'MyProfile',
               {

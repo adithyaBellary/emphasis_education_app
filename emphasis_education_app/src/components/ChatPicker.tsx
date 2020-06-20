@@ -11,6 +11,7 @@ import { Icon } from 'react-native-elements';
 import styled from 'styled-components';
 import Context from './Context/Context';
 import { PermissionedComponent } from './shared';
+import Accordion from './Accordion';
 
 import { Permission } from '../types';
 
@@ -85,6 +86,12 @@ const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
           )) : (
             <EmptyChat />
           )}
+          {/* {loggedUser.classes ? loggedUser.classes.map(c => (
+            <Accordion
+              title={c.displayName}
+              data={loggedUser.classes!}
+            />
+          )) : <EmptyChat />} */}
         </ChatsContain>
       </SafeAreaView>
     </>

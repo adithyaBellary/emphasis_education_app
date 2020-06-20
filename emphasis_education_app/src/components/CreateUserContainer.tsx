@@ -28,7 +28,6 @@ const CreateUserContain: React.FC<ICreateUserContainProps> = props => {
 
   // make this into our own custom hook
   const updateUserInfo = (newUserInfo: IUserInput): void => {
-    console.log('newUserInfo', newUserInfo);
     if (!userInfo) {
       setUserInfo({
         users: [
@@ -50,13 +49,10 @@ const CreateUserContain: React.FC<ICreateUserContainProps> = props => {
     {
       onCompleted: ({ createUser }) => {
         Alert.alert(createUser.success ? SuccessMessaging : ErrorMessaging );
+        props.navigation.navigate('Login')
       }
     }
   )
-
-  React.useEffect(() => {
-    console.log('changes', userInfo)
-  }, [userInfo])
 
   const runCreateUserMut = (): void => {
     console.log('userInfo before running mutaion', userInfo)
@@ -67,7 +63,7 @@ const CreateUserContain: React.FC<ICreateUserContainProps> = props => {
     createUserMut({
       variables: {
         users: _users
-      }
+      },
     })
   }
 

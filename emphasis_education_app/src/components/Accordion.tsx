@@ -8,16 +8,26 @@ import {
 
 interface IAccordionProps {
   title: string;
-  data: any;
+  // the data will be an array of the classes
+  data: any[];
 }
-const Accordion: React.FC = () => {
+const Accordion: React.FC<IAccordionProps> = ({ title, data}) => {
   const [expanded, setExpanded] = React.useState(false);
-
+  const toggleExpanded = () => () => setExpanded(state => !state)
   return (
     <View>
-      <TouchableOpacity>
-
+      <TouchableOpacity
+        onPress={toggleExpanded}
+      >
+        <Text>test class i guess { title}</Text>
       </TouchableOpacity>
+      <View>
+        {expanded && (
+          <View>
+
+          </View>
+        )}
+      </View>
     </View>
 
   )

@@ -6,7 +6,7 @@ import {
 
 import { IUserInput, Permission } from '../types';
 
-const IndividualItem: React.FC<IUserInput & {id: number}> = ({ name, email, password, phoneNumber, userType, id }) => {
+const IndividualItem: React.FC<IUserInput & {id: number}> = ({ name, email, password, phoneNumber, userType, id, gender }) => {
 
   return (
     <View>
@@ -28,7 +28,9 @@ const IndividualItem: React.FC<IUserInput & {id: number}> = ({ name, email, pass
       <Text>
         {userType}
       </Text>
-
+      <Text>
+        {gender}
+      </Text>
     </View>
   )
 }
