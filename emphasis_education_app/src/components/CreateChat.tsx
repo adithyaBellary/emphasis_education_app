@@ -24,6 +24,7 @@ interface ICreateChatProps {
 
 interface ISelectedUsersProps {
   _id: string;
+  email: string;
   userType: string;
 }
 
@@ -59,43 +60,43 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
   const createChat = () => {
     console.log('creating a new chat with', selectedClasses, selectedUsers)
     // we need to get the
-    let tutorEmail;
-    let userEmails;
+    let tutorEmail: string = ''
+    const userEmails = selectedUsers.reduce<string[]>((acc, cur) => {
+      if (cur.userType === Permission.Tutor) {
+        if (!tutorEmail) {
+          tutorEmail = cur.email
+        }
+        return acc
+      } else {
+        return [...acc, cur.email]
+      }
+    }, [] as string[])
 
-    // selectedResults.reduce((acc, current) => {
-    //   if ()
-    // }, [])
-    // the selectedUsers field needs to know which ones are students and which one is the tutor
-    // const _userEmails = sele
-
+    if (!tutorEmail) { Alert.alert('')}
     const variables: ICreateChatInput = {
       displayName: 'Test Display Name',
       className: selectedClasses,
-      tutorEmail: 'test01@gmail.com',
-      userEmails: [
-        'test02@gmail.com',
-        'test03@gmail.com'
-      ]
+      tutorEmail,
+      userEmails
     }
     const options = { variables }
     createChatMutation(options)
-    // or we could we make the selected users here
   }
 
   const onUserTextChage = (text: string) => setUserSearch(text)
   const onClassTextChange = (text: string) => setClassSearch(text)
 
-  const addSelectedUsers = (userID: string, userType: string) => () =>  {
+  const addSelectedUsers = (userID: string, userType: string, userEmail: string) => () =>  {
     let present = false;
     let _newArray = selectedUsers.reduce((acc, cur) => {
       if (cur._id === userID) {
         present = true;
         return acc
       } else {
-        return [...acc, {_id: cur._id, userType: cur.userType}]
+        return [...acc, {_id: cur._id, userType: cur.userType, email: cur.email}]
       }
     }, [] as ISelectedUsersProps[])
-    if (!present) { _newArray = [..._newArray, {_id: userID, userType}] }
+    if (!present) { _newArray = [..._newArray, {_id: userID, userType, email: userEmail}] }
     setSelectedUsers([..._newArray])
   }
 
@@ -145,7 +146,7 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
           });
           return (
             <TouchableOpacity
-              onPress={addSelectedUsers(u._id, u.userType)}
+              onPress={addSelectedUsers(u._id, u.userType, u.email)}
             >
               <IndividualResultContainer>
                 <Text>{u.name}</Text>
