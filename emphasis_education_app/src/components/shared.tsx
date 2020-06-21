@@ -215,8 +215,12 @@ interface IIndividualFieldProps {
   labelSize: number;
 };
 
+export const IndividualContain = styled(View)`
+  padding: 5px 0;
+`
+
 export const IndividualField: React.FC<IIndividualFieldProps> = ({ value, label, valueSize, labelSize}) => (
-  <>
+  <IndividualContain>
     <ThemedText
       size={valueSize}
       type={'main'}
@@ -229,5 +233,5 @@ export const IndividualField: React.FC<IIndividualFieldProps> = ({ value, label,
     >
       {label}
     </ThemedText>
-  </>
+  </IndividualContain>
 );
