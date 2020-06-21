@@ -3,21 +3,17 @@ import {
   View,
   Text
 } from 'react-native'
-import { Input } from 'react-native-elements';
 
 import { IUserInput, Permission } from '../types';
 import {
   CenteredDiv,
-  MytextInput,
   ButtonContainer,
   MyButton,
   MyButtonText,
   RadioButtonGroup,
-  InputContain,
   ThemedTextInput,
   ButtonGroupContain
 } from './shared';
-import styled from 'styled-components';
 
 interface ICreateUser {
   navigation: any;

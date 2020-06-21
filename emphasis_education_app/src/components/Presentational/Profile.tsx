@@ -4,7 +4,7 @@ import {
   Text
 } from 'react-native';
 import styled from 'styled-components';
-import { Divider } from 'react-native-elements';
+import { Divider, Icon } from 'react-native-elements';
 
 import { IUser } from '../../types';
 import Context from '../Context/Context';
@@ -22,6 +22,24 @@ const Title = styled(Text)`
   padding: 10px 0;
 `
 
+const TitleWithIcon = styled(Text)`
+  fontFamily: ${({ theme }) => theme.font.bold};
+  font-size: 30px;
+  padding: 10px 0;
+
+`
+
+const TitleRow = styled(View)`
+  display: flex;
+  flexDirection: row;
+  justify-content: center;
+  align-items: center;
+`
+
+const IconContain = styled(View)`
+  padding: 0 5px;
+`
+
 const UserInfoContain = styled(View)`
 `
 
@@ -35,6 +53,7 @@ const Profile: React.FC<IProfileProps> = ({ family, mainUserID }) => {
   })[0]
   console.log('mainUser', mainUser, mainUserID)
   if (!mainUser) { return <View><Text>could not find the user.</Text></View>; }
+
   return (
     <ContentContain>
       <Title>
@@ -66,13 +85,18 @@ const Profile: React.FC<IProfileProps> = ({ family, mainUserID }) => {
           />
         ))}
       </UserInfoContain>
-
-      {family.length > 1 && (
-        <Title>
+      <TitleRow>
+        <TitleWithIcon>
           Family Members
-        </Title>
-      )}
-
+        </TitleWithIcon>
+        <IconContain>
+          <Icon
+            name='pluscircleo'
+            type='antdesign'
+            // onPress={}
+          />
+        </IconContain>
+      </TitleRow>
       <UserInfoContain>
         {
           family.map((user, index) => (

@@ -201,13 +201,6 @@ export const ThemedText = styled(Text)<{ size: number, type: string}>`
   fontSize: ${props => props.size}px;
 `
 
-// const UserInfoText = styled(Text)`
-//   font-size: 16px;
-// `
-// const UserInfoLabel = styled(Text)`
-//   font-size: 14px;
-//   fontFamily: ${({ theme }) => theme.font.light};
-// `
 interface IIndividualFieldProps {
   value: string;
   label: string;
@@ -215,12 +208,12 @@ interface IIndividualFieldProps {
   labelSize: number;
 };
 
-export const IndividualContain = styled(View)`
-  padding: 5px 0;
+export const GeneralSpacing = styled(View)<{r: number, l: number, u: number, d: number}>`
+  padding: ${({ u }) => u}px ${({ r }) => r}px ${({ d }) => d}px ${({ l }) => l}px
 `
 
 export const IndividualField: React.FC<IIndividualFieldProps> = ({ value, label, valueSize, labelSize}) => (
-  <IndividualContain>
+  <GeneralSpacing u={5} r={0} d={5} l={0}>
     <ThemedText
       size={valueSize}
       type={'main'}
@@ -233,5 +226,5 @@ export const IndividualField: React.FC<IIndividualFieldProps> = ({ value, label,
     >
       {label}
     </ThemedText>
-  </IndividualContain>
+  </GeneralSpacing>
 );
