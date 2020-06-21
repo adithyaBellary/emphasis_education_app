@@ -8,6 +8,8 @@ import {
   ButtonContainer,
   MyButton,
   MyButtonText,
+  CenteredDiv,
+  ContentContain
 } from './shared';
 import { ICreateUserArr } from './CreateUserContainer';
 import IndividualItem from './DisplayIndividualMember';
@@ -23,15 +25,14 @@ interface IConfirmationScreenProps {
 // we need to be able to edit info from here
 const ConfirmationScreen: React.FC<IConfirmationScreenProps> = ({ createdUsers, loading, submit }) => (
   <View>
-    <Text>
-      Confirming
-    </Text>
-    {createdUsers && createdUsers.users.map((user: IUserInput, index: number) => (
-      <IndividualItem
-        id={index + 1}
-        {...user}
-      />
-    ))}
+    <ContentContain>
+      {createdUsers && createdUsers.users.map((user: IUserInput, index: number) => (
+        <IndividualItem
+          id={index + 1}
+          {...user}
+        />
+      ))}
+    </ContentContain>
     <ButtonContainer>
       <MyButton>
         <MyButtonText

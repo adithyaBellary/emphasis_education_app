@@ -26,6 +26,14 @@ const CreateUserContain: React.FC<ICreateUserContainProps> = props => {
   const [userInfo, setUserInfo] = React.useState<ICreateUserArr>();
   const [showConf, setSHowConf] = React.useState(false);
 
+  React.useEffect(() => {
+    if (showConf) {
+      props.navigation.setOptions({
+        title: 'Create User Confirmation'
+      })
+    }
+  }, [showConf])
+
   // make this into our own custom hook
   const updateUserInfo = (newUserInfo: IUserInput): void => {
     if (!userInfo) {

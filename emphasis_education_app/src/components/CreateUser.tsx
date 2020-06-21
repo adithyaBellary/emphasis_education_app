@@ -19,8 +19,6 @@ import {
 } from './shared';
 import styled from 'styled-components';
 
-
-
 interface ICreateUser {
   navigation: any;
   route: any;
@@ -48,7 +46,7 @@ const CreateUser: React.FC<ICreateUser> = props => {
     confirmPassword: 'test01',
     phoneNumber: '2',
     userType: Permission.Student,
-    gender: 'F'
+    gender: ''
   });
 
   const handleTextChange = (name: string) => (text: string) => setState({...curState, [name]: text})

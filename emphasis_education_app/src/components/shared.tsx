@@ -192,3 +192,42 @@ export const RadioButtonGroup: React.FC<IRadioButtonGroupProps> = ({titles, onSe
     </RadioButtonRow>
   )
 }
+
+export const ContentContain = styled(View)`
+  padding: 20px;
+`
+export const ThemedText = styled(Text)<{ size: number, type: string}>`
+  fontFamily: ${({ theme, type }) => type === 'light' ? theme.font.light : theme.font.main}
+  fontSize: ${props => props.size}px;
+`
+
+// const UserInfoText = styled(Text)`
+//   font-size: 16px;
+// `
+// const UserInfoLabel = styled(Text)`
+//   font-size: 14px;
+//   fontFamily: ${({ theme }) => theme.font.light};
+// `
+interface IIndividualFieldProps {
+  value: string;
+  label: string;
+  valueSize: number;
+  labelSize: number;
+};
+
+export const IndividualField: React.FC<IIndividualFieldProps> = ({ value, label, valueSize, labelSize}) => (
+  <>
+    <ThemedText
+      size={valueSize}
+      type={'main'}
+    >
+      {value}
+    </ThemedText>
+    <ThemedText
+      size={labelSize}
+      type={'light'}
+    >
+      {label}
+    </ThemedText>
+  </>
+);

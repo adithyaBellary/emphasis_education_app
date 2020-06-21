@@ -41,22 +41,16 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
     runUserSearchQuery({variables: { searchTerm: userSearch}})
   }, [userSearch])
 
-  // only set it to done when we have entered all the needed information
   navigation.setOptions({
     headerRight: () => (
       <Button
         title='Done'
-        // onPress={() => Alert.alert('creating the chat')}
         onPress={createChat}
         // TODO add disabled functionality
         // disabled={}
       />
     )
   })
-  // pluscircleo
-  // checkcircle
-  // console.log('user search', userData)
-  // console.log('class search', classData)
 
   const createChat = () => {
     console.log('creating a new chat with', selectedClasses, selectedUsers)
@@ -87,7 +81,6 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
       let ind = selectedUsers.indexOf(userID)
       let newArray = selectedUsers
       newArray.splice(ind, 1)
-      console.log('new array', newArray)
       setSelectedUsers([...newArray])
     } else {
       setSelectedUsers([...selectedUsers, userID])
