@@ -37,7 +37,14 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
   const [selectedUsers, setSelectedUsers] = React.useState<ISelectedUsersProps[]>([])
   // const [selectedResults, setSelectedResults] = React.useState<string[]>([])
 
-  const [createChatMutation, {data: dataCreateChat, loading: loadingCreateChat, error}] = useMutation<ICreateChatPayload, ICreateChatInput>(CREATE_CHAT);
+  const [createChatMutation, {data: dataCreateChat, loading: loadingCreateChat, error}] = useMutation<ICreateChatPayload, ICreateChatInput>(
+    CREATE_CHAT,
+    {
+      onError: (e) => {
+        console.log('error:', e)
+      }
+    }
+  );
 
   React.useEffect(() => {
     runClassSearchQuery({variables: { searchTerm: classSearch}})
@@ -60,27 +67,35 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
   const createChat = () => {
     console.log('creating a new chat with', selectedClasses, selectedUsers)
     // we need to get the
-    let tutorEmail: string = ''
-    const userEmails = selectedUsers.reduce<string[]>((acc, cur) => {
-      if (cur.userType === Permission.Tutor) {
-        if (!tutorEmail) {
-          tutorEmail = cur.email
+    try {
+      let tutorEmail: string = ''
+      const userEmails = selectedUsers.reduce<string[]>((acc, cur) => {
+        if (cur.userType === Permission.Tutor) {
+          if (!tutorEmail) {
+            tutorEmail = cur.email
+            console.log('setting', tutorEmail)
+          }
+          return acc
+        } else {
+          return [...acc, cur.email]
         }
-        return acc
-      } else {
-        return [...acc, cur.email]
-      }
-    }, [] as string[])
+      }, [] as string[])
 
-    if (!tutorEmail) { Alert.alert('')}
-    const variables: ICreateChatInput = {
-      displayName: 'Test Display Name',
-      className: selectedClasses,
-      tutorEmail,
-      userEmails
+      if (!tutorEmail) {throw Error}
+
+      const variables: ICreateChatInput = {
+        displayName: 'Test Display Name',
+        className: selectedClasses,
+        tutorEmail,
+        userEmails
+      }
+
+      createChatMutation({
+        variables
+      })
+    } catch(e) {
+      Alert.alert('there was an error making this chat')
     }
-    const options = { variables }
-    createChatMutation(options)
   }
 
   const onUserTextChage = (text: string) => setUserSearch(text)
@@ -97,6 +112,7 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
       }
     }, [] as ISelectedUsersProps[])
     if (!present) { _newArray = [..._newArray, {_id: userID, userType, email: userEmail}] }
+    console.log('_newArray', _newArray)
     setSelectedUsers([..._newArray])
   }
 
@@ -134,7 +150,7 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
         }
       />
       <Text>Selected Class: {selectedClasses}</Text>
-      <Text>Selected Users: {selectedUsers.map(u => `${u._id}, `)} </Text>
+      <Text>Selected Users: {selectedUsers.map(u => `${u.email}, `)} </Text>
       {/* let us display the results here so that we can easily have state over them */}
       { userLoading ? <ActivityIndicator /> : (
         userData ? userData.searchUsers.map((u, index) => {
