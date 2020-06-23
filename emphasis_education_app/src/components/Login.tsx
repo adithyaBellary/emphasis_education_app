@@ -21,8 +21,6 @@ import { LOGIN } from '../queries/Login';
 import Context from './Context/Context';
 import { Permission, ILoginPayload, ILoginPayloadProps } from '../types';
 
-import Test_s from './test_s';
-
 const PositionDiv = styled(View)`
   padding-top: 200px;
 `;

@@ -42,13 +42,13 @@ import { CHECK_LOGGED_IN } from './src/queries/CheckLoggedIn';
 
 const cache = new InMemoryCache();
 const httplink = new HttpLink({
-  // uri: 'https://emphasis-education-server.herokuapp.com/'
-  uri: 'http://localhost:4000'
+  uri: 'https://emphasis-education-server.herokuapp.com/'
+  // uri: 'http://localhost:4000'
 });
 
 const wsLink = new WebSocketLink({
-  // uri: `ws://emphasis-education-server.herokuapp.com/graphql`,
-  uri: `ws://localhost:4000/graphql`,
+  uri: `ws://emphasis-education-server.herokuapp.com/graphql`,
+  // uri: `ws://localhost:4000/graphql`,
   options: {
     reconnect: true,
     timeout: 20000,
@@ -95,8 +95,9 @@ const stack = createStackNavigator<RootStackProps>();
 
 const Stack: React.FC = () => {
   const { data, loading, error} = useQuery(CHECK_LOGGED_IN);
+
   let initRoute = 'Login';
-  if ( loading || !data) {
+  if ( loading || !data ) {
     return (
       // this should be the logo maybe?
       <View>
@@ -104,6 +105,7 @@ const Stack: React.FC = () => {
       </View>
     )
   }
+  console.log('data from login check', data)
   // console.log('data in root app', data.checkLoggedIn.loggedIn)
   if (data.checkLoggedIn.loggedIn) {
     // if we are logged in, go to the home page
@@ -192,7 +194,7 @@ const Stack: React.FC = () => {
 
 const App = () => {
   // wrap this all in the context
-  const [user, setUser] = React.useState<IUser>(EmptyUser);
+  const [user, setUser] = React.useState<IUser>({} as IUser);
   const updateUser = (newUser: IUser) => setUser(newUser)
   const value = {
     loggedUser: user,

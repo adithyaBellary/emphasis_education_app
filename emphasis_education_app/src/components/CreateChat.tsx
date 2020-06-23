@@ -40,6 +40,9 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
   const [createChatMutation, {data: dataCreateChat, loading: loadingCreateChat, error}] = useMutation<ICreateChatPayload, ICreateChatInput>(
     CREATE_CHAT,
     {
+      onCompleted: () => {
+        Alert.alert('chat successfully made')
+      },
       onError: (e) => {
         console.log('error:', e)
       }
