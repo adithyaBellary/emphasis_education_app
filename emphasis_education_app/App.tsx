@@ -12,9 +12,6 @@ import * as React from 'react';
 import { View, Text, ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-// import {createStackNavigator as testStackNav} from 'react-navigation-stack';
-// import { createSwitchNavigator, createAppContainer } from 'react-navigation';
-// import { createSwitchNavigator, createAppContainer } from '@react-navigation/switch';
 import { ApolloClient } from 'apollo-client';
 import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
@@ -25,11 +22,9 @@ import { getMainDefinition } from 'apollo-utilities';
 import { ThemeProvider } from 'styled-components';
 import AsyncStorage from '@react-native-community/async-storage';
 
-import AuthLoading from './src/components/AuthLoading';
 import Login from './src/components/Login';
 import Chat from './src/components/Chat';
 import HomePage from './src/components/HomePage';
-import CreateUser from './src/components/CreateUser';
 import ChatPicker from './src/components/ChatPicker';
 import Profile from './src/components/LiftedProfile';
 import CreateUserContain from './src/components/CreateUserContainer';
@@ -43,9 +38,7 @@ import { theme } from './src/theme';
 import context, {EmptyUser, AuthContext} from './src/components/Context/Context';
 import { IUser } from './src/types';
 
-import { CHECK_LOGGED_IN } from './src/queries/CheckLoggedIn';
 import { LOGIN_TOKEN } from './src/constant';
-import { Actions } from 'react-native-gifted-chat';
 
 const cache = new InMemoryCache();
 const httplink = new HttpLink({
@@ -258,24 +251,15 @@ const App = () => {
 
   return (
     <AuthContext.Provider value={authContext}>
-
-    <context.Provider value={value}>
-      <ThemeProvider theme={theme}>
-        <ApolloProvider client={client}>
-          <NavigationContainer>
-            {/* {
-              !!userToken ? (
-                <AppStack />
-              ) : (
-                <AuthStack />
-              )
-            } */}
-            <RootStack userToken={userToken}/>
-          </NavigationContainer>
-        </ApolloProvider>
-      </ThemeProvider>
-    </context.Provider>
-
+      <context.Provider value={value}>
+        <ThemeProvider theme={theme}>
+          <ApolloProvider client={client}>
+            <NavigationContainer>
+              <RootStack userToken={userToken}/>
+            </NavigationContainer>
+          </ApolloProvider>
+        </ThemeProvider>
+      </context.Provider>
     </AuthContext.Provider>
   )
 };
