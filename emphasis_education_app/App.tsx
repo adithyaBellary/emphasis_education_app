@@ -78,28 +78,6 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 });
 
 
-// TODO add typing that each route needs
-// type RootStackProps = {
-//   // Login: undefined;
-//   Home: undefined;
-//   Chat: undefined;
-//   ChatPicker: undefined;
-//   CreateUser: undefined;
-//   CreateUserContain: undefined;
-//   MyProfile: undefined;
-//   ConfirmationScreen: undefined;
-//   Search: undefined;
-//   AdminPage: undefined;
-//   CreateChat: undefined;
-//   Settings: undefined;
-// }
-
-// type IAuthStackProps = {
-//   Login: undefined;
-// }
-
-// const authStack = createStackNavigator<IAuthStackProps>();
-// const _authStack = testStackNav({ Login: Login});
 const AuthStackNav = createStackNavigator();
 const AuthStack = () => (
   <AuthStackNav.Navigator initialRouteName={'Login'}>
@@ -107,12 +85,15 @@ const AuthStack = () => (
       name='Login'
       component={Login}
     />
-    <AuthStackNav.Screen
-      name='CreateUser'
-      component={CreateUser}
-      options={{
-        title: 'Create User'
-      }}
+    <AppStackNav.Screen
+      name="CreateUserContain"
+      component={CreateUserContain}
+      options={{ title: 'Create User' }}
+    />
+    <AppStackNav.Screen
+      name="ConfirmationScreen"
+      component={ConfirmationScreen}
+      options={{ title: '' }}
     />
   </AuthStackNav.Navigator>
 )
@@ -120,25 +101,10 @@ const AuthStack = () => (
 
 const AppStackNav = createStackNavigator();
 
-const AppStack: React.FC = () => {
+const AppStack = () => {
 
   return (
       <AppStackNav.Navigator initialRouteName={'Home'}>
-        <AppStackNav.Screen
-            name='Settings'
-            component={Settings}
-            options={{ title: 'Settings'}}
-        />
-        {/* <AppStackNav.Screen
-          name="Login"
-          component={Login}
-          options={{
-            title: '',
-            headerStyle: {
-              backgroundColor: '#5a1846'
-            }
-          }}
-        /> */}
         <AppStackNav.Screen
           name="Home"
           component={HomePage}
@@ -158,11 +124,6 @@ const AppStack: React.FC = () => {
           component={Chat}
           options={{ title: 'Test Subject' }}
         />
-        {/* <AppStackNav.Screen
-          name="CreateUser"
-          component={CreateUser}
-          options={{ title: 'Create User' }}
-        /> */}
         <AppStackNav.Screen
           name="ChatPicker"
           component={ChatPicker}
@@ -176,16 +137,6 @@ const AppStack: React.FC = () => {
           options={{ title: 'My Profile' }}
         />
         <AppStackNav.Screen
-          name="CreateUserContain"
-          component={CreateUserContain}
-          options={{ title: 'Create User' }}
-        />
-        <AppStackNav.Screen
-          name="ConfirmationScreen"
-          component={ConfirmationScreen}
-          options={{ title: '' }}
-        />
-        <AppStackNav.Screen
           name="AdminPage"
           component={AdminPage}
           options={{ title: 'Admin Page' }}
@@ -195,16 +146,34 @@ const AppStack: React.FC = () => {
           component={CreateChat}
           options={{ title: 'New Chat'}}
         />
+        <AppStackNav.Screen
+          name='Settings'
+          component={Settings}
+          options={{ title: 'Settings'}}
+        />
       </AppStackNav.Navigator>
   )
 }
-
+const RootStackNav = createStackNavigator();
+const RootStack = ({ userToken }) => (
+  <RootStackNav.Navigator headerMode="none">
+    { !!userToken ? (
+      <RootStackNav.Screen
+        name='App'
+        component={AppStack}
+      />
+    ) : (
+      <RootStackNav.Screen
+        name='Auth'
+        component={AuthStack}
+      />
+    )}
+  </RootStackNav.Navigator>
+)
 // const reducer = () =>
 
 const App = () => {
   // wrap this all in the context
-  // const [authLoading, setAuthLoading] = React.useState(true);
-  // const [isLoggedIn, setIsLoggedIn] = React.useState(false);
 
   const [{authLoading, userToken, signingOut}, dispatch] = React.useReducer(
     ( prevState, action) => {
@@ -218,20 +187,20 @@ const App = () => {
         case 'LOGIN':
           return {
             ...prevState,
-            authLoading: false,
+            loggingOut: false,
             userToken: action.token
           };
         case 'LOGOUT':
           return {
             ...prevState,
-            signingOut: true,
+            loggingOut: true,
             userToken: null
-          }
+          };
       }
     }, {
       authLoading: true,
       userToken: null,
-      signingOut: false
+      loggingOut: false
     }
   )
 
@@ -294,13 +263,14 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <ApolloProvider client={client}>
           <NavigationContainer>
-            {
+            {/* {
               !!userToken ? (
                 <AppStack />
               ) : (
                 <AuthStack />
               )
-            }
+            } */}
+            <RootStack userToken={userToken}/>
           </NavigationContainer>
         </ApolloProvider>
       </ThemeProvider>

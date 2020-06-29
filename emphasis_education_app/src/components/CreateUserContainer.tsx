@@ -10,6 +10,8 @@ import CreateUser from './CreateUser';
 import { CREATE_USER } from '../queries/CreateUser';
 
 import  ConfirmationScreen  from './ConfirmationScreen';
+import { AuthContext } from './Context/Context';
+
 
 interface ICreateUserContainProps {
   navigation: any;
@@ -34,6 +36,8 @@ const CreateUserContain: React.FC<ICreateUserContainProps> = props => {
     }
   }, [showConf])
 
+  const { logout } = React.useContext(AuthContext);
+
   // make this into our own custom hook
   const updateUserInfo = (newUserInfo: IUserInput): void => {
     if (!userInfo) {
@@ -57,7 +61,9 @@ const CreateUserContain: React.FC<ICreateUserContainProps> = props => {
     {
       onCompleted: ({ createUser }) => {
         Alert.alert(createUser.success ? SuccessMessaging : ErrorMessaging );
-        props.navigation.navigate('Login')
+        // logout();
+        // or
+        // props.navigation.navigate('Login')
       }
     }
   )

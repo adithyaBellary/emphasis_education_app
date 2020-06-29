@@ -163,8 +163,7 @@ const Login: React.FC<ILoginProps> = props => {
           </ButtonContainer>
           <ButtonContainer>
             <MyButton
-              onPress={() => props.navigation.navigate('CreateUserContain')}
-              // onPress={() => props.navigation.navigate('App', { screen: 'CreateUserContain'})}
+              onPress={() => props.navigation.push('CreateUserContain')}
             >
               <MyButtonText>First time user?</MyButtonText>
             </MyButton>
