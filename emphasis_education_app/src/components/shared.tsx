@@ -23,7 +23,7 @@ export const LoginInput = styled(TextInput)`
   fontSize: 18px;
   border: 1px black solid;
   border-radius: 10px;
-  width: 90%;
+  width: 80%;
   text-align: center;
 `;
 

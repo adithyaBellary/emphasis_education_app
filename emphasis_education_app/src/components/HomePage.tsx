@@ -60,20 +60,20 @@ const Home: React.FC<ILiftedHomeProps> = ( { navigation} ) => {
   React.useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <PermissionedComponent
-          // allowedPermission={Permission.Admin}
-          allowedPermission={Permission.Student}
-        >
+        // <PermissionedComponent
+        //   // allowedPermission={Permission.Admin}
+        //   allowedPermission={Permission.Student}
+        // >
           <AdminContain>
-          <Icon
-            name='user'
-            type='antdesign'
-            onPress={changeScreens('AdminPage')}
-          />
-          <Text>Admin</Text>
+            <Icon
+              name='user'
+              type='antdesign'
+              onPress={changeScreens('AdminPage')}
+            />
+            <Text>Admin</Text>
           </AdminContain>
 
-        </PermissionedComponent>
+        // </PermissionedComponent>
       ),
       headerRightContainerStyle: {
         padding: 10

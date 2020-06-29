@@ -7,7 +7,8 @@ import {
   SafeAreaView,
 } from 'react-native';
 import styled from 'styled-components';
-import { MD5 } from "crypto-js"
+import { MD5 } from 'crypto-js';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import {
   MytextInput,
@@ -18,8 +19,10 @@ import {
   LoginInput
 } from './shared';
 import { LOGIN } from '../queries/Login';
-import Context from './Context/Context';
+import Context, { AuthContext } from './Context/Context';
 import { Permission, ILoginPayload, ILoginPayloadProps } from '../types';
+
+import { LOGIN_TOKEN } from '../constant';
 
 const PositionDiv = styled(View)`
   padding-top: 200px;
@@ -54,13 +57,14 @@ const getHash = (email: string): string => {
 
 const Login: React.FC<ILoginProps> = props => {
 
-  React.useEffect(() => {
-    props.navigation.setOptions({
-      headerLeft: () => null
-    })
-  }, [])
+  // React.useEffect(() => {
+  //   props.navigation.setOptions({
+  //     headerLeft: () => null
+  //   })
+  // }, [])
 
   const { setUser } = useContext(Context);
+  const { login } = useContext(AuthContext);
 
   const [curState, setState] = useState({
     error: false,
@@ -78,10 +82,10 @@ const Login: React.FC<ILoginProps> = props => {
         email: curState.email,
         password: curState.password
       },
-      onCompleted: ( { login } ) => {
+      onCompleted: async ( { login } ) => {
         console.log('login result', login.user)
         if (login.res) {
-          successLogin(login)
+          await successLogin(login)
         } else {
           errorLogin()
         }
@@ -100,11 +104,17 @@ const Login: React.FC<ILoginProps> = props => {
     password
   });
 
-  const successLogin = (user: ILoginPayloadProps) => {
-    console.log('login user', user.user)
-    setUser({...user.user})
-    props.navigation.navigate('Home');
-  }
+  const successLogin = async (user: ILoginPayloadProps) => {
+    try {
+      console.log('login user', user.user)
+      setUser({...user.user})
+      await AsyncStorage.setItem(LOGIN_TOKEN, 'true')
+      props.navigation.navigate('App', { screen: 'Home'});
+      // set the async storage
+    } catch (e) {
+     console.log('error saving the user')
+    }
+   }
 
   const errorLogin = () => {
     setState({
@@ -134,19 +144,19 @@ const Login: React.FC<ILoginProps> = props => {
       <PositionDiv>
         <CenteredDiv>
           <LoginInput
-            placeholder='username'
+            placeholder='Username'
             value={curState.email}
             onChangeText={onChangeEmail}
           />
           <LoginInput
-            placeholder='password'
+            placeholder='Password'
             value={curState.password}
             onChangeText={onChangePassword}
           />
           {curState.error && <Errorlogin /> }
           <ButtonContainer>
             <MyButton
-              onPress={my_login}
+              onPress={() => login()}
             >
               <MyButtonText>Login</MyButtonText>
             </MyButton>
@@ -154,6 +164,7 @@ const Login: React.FC<ILoginProps> = props => {
           <ButtonContainer>
             <MyButton
               onPress={() => props.navigation.navigate('CreateUserContain')}
+              // onPress={() => props.navigation.navigate('App', { screen: 'CreateUserContain'})}
             >
               <MyButtonText>First time user?</MyButtonText>
             </MyButton>

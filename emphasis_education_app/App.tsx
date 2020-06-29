@@ -9,9 +9,12 @@
  */
 
 import * as React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+// import {createStackNavigator as testStackNav} from 'react-navigation-stack';
+// import { createSwitchNavigator, createAppContainer } from 'react-navigation';
+// import { createSwitchNavigator, createAppContainer } from '@react-navigation/switch';
 import { ApolloClient } from 'apollo-client';
 import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
@@ -20,7 +23,9 @@ import { split } from 'apollo-link';
 import { ApolloProvider, useQuery } from '@apollo/react-hooks';
 import { getMainDefinition } from 'apollo-utilities';
 import { ThemeProvider } from 'styled-components';
+import AsyncStorage from '@react-native-community/async-storage';
 
+import AuthLoading from './src/components/AuthLoading';
 import Login from './src/components/Login';
 import Chat from './src/components/Chat';
 import HomePage from './src/components/HomePage';
@@ -35,10 +40,12 @@ import CreateChat from './src/components/CreateChat';
 import Settings from './src/components/Settings';
 
 import { theme } from './src/theme';
-import context, {EmptyUser} from './src/components/Context/Context';
+import context, {EmptyUser, AuthContext} from './src/components/Context/Context';
 import { IUser } from './src/types';
 
 import { CHECK_LOGGED_IN } from './src/queries/CheckLoggedIn';
+import { LOGIN_TOKEN } from './src/constant';
+import { Actions } from 'react-native-gifted-chat';
 
 const cache = new InMemoryCache();
 const httplink = new HttpLink({
@@ -72,56 +79,57 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 
 
 // TODO add typing that each route needs
-type RootStackProps = {
-  Login: undefined;
-  Home: undefined;
-  Chat: undefined;
-  ChatPicker: undefined;
-  CreateUser: undefined;
-  CreateUserContain: undefined;
-  MyProfile: undefined;
-  ConfirmationScreen: undefined;
-  Search: undefined;
-  AdminPage: undefined;
-  CreateChat: undefined;
-  Settings: undefined;
-}
+// type RootStackProps = {
+//   // Login: undefined;
+//   Home: undefined;
+//   Chat: undefined;
+//   ChatPicker: undefined;
+//   CreateUser: undefined;
+//   CreateUserContain: undefined;
+//   MyProfile: undefined;
+//   ConfirmationScreen: undefined;
+//   Search: undefined;
+//   AdminPage: undefined;
+//   CreateChat: undefined;
+//   Settings: undefined;
+// }
 
-const stack = createStackNavigator<RootStackProps>();
+// type IAuthStackProps = {
+//   Login: undefined;
+// }
 
-// let us check if the user is logged in or not
-// if yeah, then home page
-// if not, then login page
+// const authStack = createStackNavigator<IAuthStackProps>();
+// const _authStack = testStackNav({ Login: Login});
+const AuthStackNav = createStackNavigator();
+const AuthStack = () => (
+  <AuthStackNav.Navigator initialRouteName={'Login'}>
+    <AuthStackNav.Screen
+      name='Login'
+      component={Login}
+    />
+    <AuthStackNav.Screen
+      name='CreateUser'
+      component={CreateUser}
+      options={{
+        title: 'Create User'
+      }}
+    />
+  </AuthStackNav.Navigator>
+)
 
-const Stack: React.FC = () => {
-  const { data, loading, error} = useQuery(CHECK_LOGGED_IN);
 
-  let initRoute = 'Login';
-  if ( loading || !data ) {
-    return (
-      // this should be the logo maybe?
-      <View>
-        <Text>loading</Text>
-      </View>
-    )
-  }
-  console.log('data from login check', data)
-  // console.log('data in root app', data.checkLoggedIn.loggedIn)
-  if (data.checkLoggedIn.loggedIn) {
-    // if we are logged in, go to the home page
-    initRoute = 'Home'
-  } else {
-    initRoute = 'Login'
-  }
+const AppStackNav = createStackNavigator();
+
+const AppStack: React.FC = () => {
+
   return (
-    <NavigationContainer>
-      <stack.Navigator initialRouteName={initRoute}>
-        <stack.Screen
+      <AppStackNav.Navigator initialRouteName={'Home'}>
+        <AppStackNav.Screen
             name='Settings'
             component={Settings}
             options={{ title: 'Settings'}}
         />
-        <stack.Screen
+        {/* <AppStackNav.Screen
           name="Login"
           component={Login}
           options={{
@@ -130,8 +138,8 @@ const Stack: React.FC = () => {
               backgroundColor: '#5a1846'
             }
           }}
-        />
-        <stack.Screen
+        /> */}
+        <AppStackNav.Screen
           name="Home"
           component={HomePage}
           options={{
@@ -140,60 +148,108 @@ const Stack: React.FC = () => {
             // headerLeft: () => null
           }}
         />
-        <stack.Screen
+        <AppStackNav.Screen
           name="Search"
           component={Search}
           options={{ title: '' }}
         />
-        <stack.Screen
+        <AppStackNav.Screen
           name="Chat"
           component={Chat}
           options={{ title: 'Test Subject' }}
         />
-        <stack.Screen
+        {/* <AppStackNav.Screen
           name="CreateUser"
           component={CreateUser}
           options={{ title: 'Create User' }}
-        />
-        <stack.Screen
+        /> */}
+        <AppStackNav.Screen
           name="ChatPicker"
           component={ChatPicker}
           options={{
             title: 'My Chats',
           }}
         />
-        <stack.Screen
+        <AppStackNav.Screen
           name="MyProfile"
           component={Profile}
           options={{ title: 'My Profile' }}
         />
-        <stack.Screen
+        <AppStackNav.Screen
           name="CreateUserContain"
           component={CreateUserContain}
           options={{ title: 'Create User' }}
         />
-        <stack.Screen
+        <AppStackNav.Screen
           name="ConfirmationScreen"
           component={ConfirmationScreen}
           options={{ title: '' }}
         />
-        <stack.Screen
+        <AppStackNav.Screen
           name="AdminPage"
           component={AdminPage}
           options={{ title: 'Admin Page' }}
         />
-        <stack.Screen
+        <AppStackNav.Screen
           name='CreateChat'
           component={CreateChat}
           options={{ title: 'New Chat'}}
         />
-      </stack.Navigator>
-    </NavigationContainer>
+      </AppStackNav.Navigator>
   )
 }
 
+// const reducer = () =>
+
 const App = () => {
   // wrap this all in the context
+  // const [authLoading, setAuthLoading] = React.useState(true);
+  // const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+
+  const [{authLoading, userToken, signingOut}, dispatch] = React.useReducer(
+    ( prevState, action) => {
+      switch (action.type) {
+        case 'CHECK_LOGIN':
+          return {
+            ...prevState,
+            authLoading: false,
+            userToken: action.token
+          };
+        case 'LOGIN':
+          return {
+            ...prevState,
+            authLoading: false,
+            userToken: action.token
+          };
+        case 'LOGOUT':
+          return {
+            ...prevState,
+            signingOut: true,
+            userToken: null
+          }
+      }
+    }, {
+      authLoading: true,
+      userToken: null,
+      signingOut: false
+    }
+  )
+
+  const _checkAuth = async () => {
+    let userToken;
+    try {
+      userToken = await AsyncStorage.getItem(LOGIN_TOKEN)
+    } catch (e) {
+      console.log('checking for login failed')
+    }
+    console.log('userToken', userToken)
+    dispatch({ type: 'CHECK_LOGIN', token: userToken})
+  }
+
+  React.useEffect(() => {
+    _checkAuth()
+  }, [])
+
   const [user, setUser] = React.useState<IUser>({} as IUser);
   const updateUser = (newUser: IUser) => setUser(newUser)
   const value = {
@@ -201,14 +257,56 @@ const App = () => {
     setUser: updateUser
   }
 
+  const authContext = React.useMemo(
+    () => ({
+      login: data => {
+        // this is where we will call the mutation
+        console.log('data in login context', data)
+
+        dispatch({ type: 'LOGIN', token: LOGIN_TOKEN})
+      },
+      logout: async data => {
+        console.log('signing out in app')
+        await AsyncStorage.clear();
+        dispatch({ type: 'LOGOUT'})
+      },
+      createUser: data => {
+        dispatch({ type: 'LOGOUT', token: LOGIN_TOKEN})
+      },
+    }),
+    []
+  );
+
+  if (authLoading) {
+    return (
+      <ActivityIndicator>
+        <View>
+          <Text>we are loading</Text>
+        </View>
+      </ActivityIndicator>
+    )
+  }
+
   return (
+    <AuthContext.Provider value={authContext}>
+
     <context.Provider value={value}>
       <ThemeProvider theme={theme}>
         <ApolloProvider client={client}>
-          <Stack />
+          <NavigationContainer>
+            {
+              !!userToken ? (
+                <AppStack />
+              ) : (
+                <AuthStack />
+              )
+            }
+          </NavigationContainer>
         </ApolloProvider>
       </ThemeProvider>
     </context.Provider>
+
+    </AuthContext.Provider>
   )
 };
 
