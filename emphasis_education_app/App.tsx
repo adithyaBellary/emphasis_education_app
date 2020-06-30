@@ -17,7 +17,7 @@ import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
 import { WebSocketLink } from 'apollo-link-ws';
 import { split } from 'apollo-link';
-import { ApolloProvider, useQuery } from '@apollo/react-hooks';
+import { ApolloProvider, useQuery, useMutation } from '@apollo/react-hooks';
 import { getMainDefinition } from 'apollo-utilities';
 import { ThemeProvider } from 'styled-components';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -36,9 +36,11 @@ import Settings from './src/components/Settings';
 
 import { theme } from './src/theme';
 import context, {EmptyUser, AuthContext} from './src/components/Context/Context';
-import { IUser } from './src/types';
+import { IUser, ILoginPayload } from './src/types';
 
 import { LOGIN_TOKEN } from './src/constant';
+
+import { LOGIN } from './src/queries/Login';
 
 const cache = new InMemoryCache();
 const httplink = new HttpLink({
@@ -95,56 +97,55 @@ const AuthStack = () => (
 const AppStackNav = createStackNavigator();
 
 const AppStack = () => {
-
   return (
-      <AppStackNav.Navigator initialRouteName={'Home'}>
-        <AppStackNav.Screen
-          name="Home"
-          component={HomePage}
-          options={{
-            title: '' ,
-            // we chouldnt really be able to go back to the login page?
-            // headerLeft: () => null
-          }}
-        />
-        <AppStackNav.Screen
-          name="Search"
-          component={Search}
-          options={{ title: '' }}
-        />
-        <AppStackNav.Screen
-          name="Chat"
-          component={Chat}
-          options={{ title: 'Test Subject' }}
-        />
-        <AppStackNav.Screen
-          name="ChatPicker"
-          component={ChatPicker}
-          options={{
-            title: 'My Chats',
-          }}
-        />
-        <AppStackNav.Screen
-          name="MyProfile"
-          component={Profile}
-          options={{ title: 'My Profile' }}
-        />
-        <AppStackNav.Screen
-          name="AdminPage"
-          component={AdminPage}
-          options={{ title: 'Admin Page' }}
-        />
-        <AppStackNav.Screen
-          name='CreateChat'
-          component={CreateChat}
-          options={{ title: 'New Chat'}}
-        />
-        <AppStackNav.Screen
-          name='Settings'
-          component={Settings}
-          options={{ title: 'Settings'}}
-        />
-      </AppStackNav.Navigator>
+    <AppStackNav.Navigator initialRouteName={'Home'}>
+      <AppStackNav.Screen
+        name="Home"
+        component={HomePage}
+        options={{
+          title: '' ,
+          // we chouldnt really be able to go back to the login page?
+          // headerLeft: () => null
+        }}
+      />
+      <AppStackNav.Screen
+        name="Search"
+        component={Search}
+        options={{ title: '' }}
+      />
+      <AppStackNav.Screen
+        name="Chat"
+        component={Chat}
+        options={{ title: 'Test Subject' }}
+      />
+      <AppStackNav.Screen
+        name="ChatPicker"
+        component={ChatPicker}
+        options={{
+          title: 'My Chats',
+        }}
+      />
+      <AppStackNav.Screen
+        name="MyProfile"
+        component={Profile}
+        options={{ title: 'My Profile' }}
+      />
+      <AppStackNav.Screen
+        name="AdminPage"
+        component={AdminPage}
+        options={{ title: 'Admin Page' }}
+      />
+      <AppStackNav.Screen
+        name='CreateChat'
+        component={CreateChat}
+        options={{ title: 'New Chat'}}
+      />
+      <AppStackNav.Screen
+        name='Settings'
+        component={Settings}
+        options={{ title: 'Settings'}}
+      />
+    </AppStackNav.Navigator>
   )
 }
 const RootStackNav = createStackNavigator();
@@ -166,8 +167,6 @@ const RootStack = ({ userToken }) => (
 // const reducer = () =>
 
 const App = () => {
-  // wrap this all in the context
-
   const [{authLoading, userToken, signingOut}, dispatch] = React.useReducer(
     ( prevState, action) => {
       switch (action.type) {
@@ -219,13 +218,31 @@ const App = () => {
     setUser: updateUser
   }
 
+  const [_login, { data, error, loading}] = useMutation<ILoginPayload>(
+    LOGIN,
+    {
+      onCompleted: async ({ login }) => {
+        if (login.res) {
+          console.log('login result', login.user)
+          setUser({...login.user});
+          await AsyncStorage.setItem(LOGIN_TOKEN, '_loggedIn')
+          dispatch({ type: 'LOGIN', token: LOGIN_TOKEN})
+        } else {
+
+        }
+      }
+    }
+  )
+
+
   const authContext = React.useMemo(
     () => ({
-      login: data => {
+      login: (email: string, password: string) => {
         // this is where we will call the mutation
-        console.log('data in login context', data)
+        console.log('data in login context', email, password)
+        _login({ variables: { email, password }})
 
-        dispatch({ type: 'LOGIN', token: LOGIN_TOKEN})
+        // dispatch({ type: 'LOGIN', token: LOGIN_TOKEN})
       },
       logout: async data => {
         console.log('signing out in app')

@@ -123,14 +123,14 @@ const Login: React.FC<ILoginProps> = props => {
     })
   }
 
-  const my_login = () => {
-    doLogin({
-      variables: {
-        email: curState.email,
-        password: curState.password,
-      }
-    })
-  }
+  // const my_login = () => {
+  //   doLogin({
+  //     variables: {
+  //       email: curState.email,
+  //       password: curState.password,
+  //     }
+  //   })
+  // }
 
   return (
     <SafeAreaView>
@@ -156,7 +156,7 @@ const Login: React.FC<ILoginProps> = props => {
           {curState.error && <Errorlogin /> }
           <ButtonContainer>
             <MyButton
-              onPress={() => login()}
+              onPress={() => login(curState.email, curState.password)}
             >
               <MyButtonText>Login</MyButtonText>
             </MyButton>

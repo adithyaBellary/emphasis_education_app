@@ -36,8 +36,6 @@ const CreateUserContain: React.FC<ICreateUserContainProps> = props => {
     }
   }, [showConf])
 
-  const { logout } = React.useContext(AuthContext);
-
   // make this into our own custom hook
   const updateUserInfo = (newUserInfo: IUserInput): void => {
     if (!userInfo) {
@@ -61,8 +59,7 @@ const CreateUserContain: React.FC<ICreateUserContainProps> = props => {
     {
       onCompleted: ({ createUser }) => {
         Alert.alert(createUser.success ? SuccessMessaging : ErrorMessaging );
-        // logout();
-        // or
+        // or if we want to go automatically
         // props.navigation.navigate('Login')
       }
     }
