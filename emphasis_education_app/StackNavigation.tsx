@@ -26,12 +26,13 @@ import context, {EmptyUser, AuthContext} from './src/components/Context/Context'
 import { IUser, ILoginPayload } from './src/types';
 
 const AuthStackNav = createStackNavigator();
-const AuthStack = () => (
+const AuthStack = ({ error }) => {
+  console.log('props in auth st', error)
+  return (
   <AuthStackNav.Navigator initialRouteName={'Login'}>
-    <AuthStackNav.Screen
-      name='Login'
-      component={Login}
-    />
+    <AuthStackNav.Screen name='Login'>
+      {_props => <Login {..._props} error={error}/>}
+    </AuthStackNav.Screen>
     <AppStackNav.Screen
       name="CreateUserContain"
       component={CreateUserContain}
@@ -43,7 +44,8 @@ const AuthStack = () => (
       options={{ title: '' }}
     />
   </AuthStackNav.Navigator>
-)
+  )
+}
 
 const AppStackNav = createStackNavigator();
 
@@ -101,7 +103,8 @@ const AppStack = () => {
 }
 
 const RootStackNav = createStackNavigator();
-const RootStack = ({ userToken }) => (
+const RootStack = ({ userToken, error}) => {
+return (
   <RootStackNav.Navigator headerMode="none">
     { !!userToken ? (
       <RootStackNav.Screen
@@ -109,13 +112,14 @@ const RootStack = ({ userToken }) => (
         component={AppStack}
       />
     ) : (
-      <RootStackNav.Screen
-        name='Auth'
-        component={AuthStack}
-      />
+      <RootStackNav.Screen name='Auth'>
+        {_props => <AuthStack {..._props} error={error}/> }
+      </RootStackNav.Screen>
+
     )}
   </RootStackNav.Navigator>
 )
+    }
 
 const StackNavigation: React.FC = () => {
   const [{authLoading, userToken, signingOut}, dispatch] = React.useReducer(
@@ -164,11 +168,13 @@ const StackNavigation: React.FC = () => {
 
   const { setUser } = React.useContext(Context);
 
+  const [loginError, setLoginError] = React.useState(false);
 
   const [_login, { data, error, loading}] = useMutation<ILoginPayload>(
     LOGIN,
     {
       onCompleted: async ({ login }) => {
+        console.log('login response', login)
         if (login.res) {
           console.log('login result', login.user)
           setUser({...login.user});
@@ -176,6 +182,7 @@ const StackNavigation: React.FC = () => {
           dispatch({ type: 'LOGIN', token: LOGIN_TOKEN})
         } else {
           console.log('login failed')
+          setLoginError(true);
         }
       }
     }
@@ -215,7 +222,7 @@ const StackNavigation: React.FC = () => {
   return (
     <AuthContext.Provider value={authContext}>
       <NavigationContainer>
-        <RootStack userToken={userToken}/>
+        <RootStack userToken={userToken} error={loginError}/>
       </NavigationContainer>
     </AuthContext.Provider>
 

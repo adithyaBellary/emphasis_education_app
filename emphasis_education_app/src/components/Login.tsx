@@ -40,6 +40,8 @@ const TitleContain = styled(View)`
 interface ILoginProps {
   // TODO type this shit
   navigation: any;
+  route: any;
+  error: boolean;
 }
 
 const ErrorText = styled(Text)`
@@ -153,7 +155,7 @@ const Login: React.FC<ILoginProps> = props => {
             value={curState.password}
             onChangeText={onChangePassword}
           />
-          {curState.error && <Errorlogin /> }
+          {props.error && <Errorlogin /> }
           <ButtonContainer>
             <MyButton
               onPress={() => login(curState.email, curState.password)}
