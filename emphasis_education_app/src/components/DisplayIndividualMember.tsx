@@ -3,31 +3,62 @@ import {
   View,
   Text
 } from 'react-native'
+import { Divider } from 'react-native-elements';
 
-import { IUserInput, Permission } from '../types';
 
-const IndividualItem: React.FC<IUserInput & {id: number}> = ({ name, email, password, phoneNumber, userType, id }) => {
+import { IUserInput } from '../types';
+import { ThemedText } from './shared';
+import  { IndividualField } from './shared';
+
+const IndividualItem: React.FC<IUserInput & {id: number}> = ({
+  name, email, password, phoneNumber, userType, id, gender }) => {
 
   return (
     <View>
-      <Text>
+      <ThemedText size={18} type={'main'}>
         Family member {id}
-      </Text>
-      <Text>
-        {name}
-      </Text>
-      <Text>
-        {email}
-      </Text>
-      <Text>
-        {password}
-      </Text>
-      <Text>
-        {phoneNumber}
-      </Text>
-      <Text>
-        {userType}
-      </Text>
+      </ThemedText>
+      <Divider />
+      <IndividualField
+        value={name}
+        valueSize={16}
+        label={'Name'}
+        labelSize={14}
+      />
+      <IndividualField
+        value={email}
+        valueSize={16}
+        label={'Email'}
+        labelSize={14}
+      />
+
+      <IndividualField
+        value={password}
+        valueSize={16}
+        label={'Password'}
+        labelSize={14}
+      />
+
+      <IndividualField
+        value={phoneNumber}
+        valueSize={16}
+        label={'Phone Number'}
+        labelSize={14}
+      />
+
+      <IndividualField
+        value={userType}
+        valueSize={16}
+        label={'User Type'}
+        labelSize={14}
+      />
+
+      <IndividualField
+        value={gender}
+        valueSize={16}
+        label={'Gender'}
+        labelSize={14}
+      />
 
     </View>
   )

@@ -1,19 +1,18 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import {
   View,
-  Alert,
-  TextInput,
   Text
 } from 'react-native'
-// import RadioGroup from 'react-native-radio-buttons-group';
-import { Input } from 'react-native-elements';
 
 import { IUserInput, Permission } from '../types';
 import {
-  MytextInput,
+  CenteredDiv,
   ButtonContainer,
   MyButton,
   MyButtonText,
+  RadioButtonGroup,
+  ThemedTextInput,
+  ButtonGroupContain
 } from './shared';
 
 interface ICreateUser {
@@ -43,11 +42,16 @@ const CreateUser: React.FC<ICreateUser> = props => {
     confirmPassword: 'test01',
     phoneNumber: '2',
     userType: Permission.Student,
-    gender: 'F'
+    gender: ''
   });
 
   const handleTextChange = (name: string) => (text: string) => setState({...curState, [name]: text})
   const clearData = () => setState(EmptyData);
+
+  const canSubmit = (): boolean => {
+    return !!curState.name &&
+     !!curState.phoneNumber
+  }
 
   const GoToConf = () => {
     props.saveUserInfo(curState);
@@ -62,63 +66,64 @@ const CreateUser: React.FC<ICreateUser> = props => {
 
   return (
     <View>
-      <Text>this is fam member number: {numUser}</Text>
-      <MytextInput
-        placeholder='name'
-        value={curState.name}
-        onChangeText={handleTextChange('name')}
-      />
-      <Input
-        placeholder='email'
-        onChangeText={handleTextChange('email')}
-        value={curState.email}
-        label={'email'}
-      />
-      {/* <MytextInput
-        placeholder='email'
-        value={curState.email}
-        onChangeText={handleTextChange('email')}
-      /> */}
-      <MytextInput
-        placeholder='password'
-        value={curState.password}
-        onChangeText={handleTextChange('password')}
-      />
-      <MytextInput
-        placeholder='confirm password'
-        value={curState.confirmPassword}
-        onChangeText={handleTextChange('confirmPassword')}
-      />
-      <MytextInput
-        placeholder='user type'
-        value={curState.userType}
-        onChangeText={handleTextChange('userType')}
-      />
-      <MytextInput
-        placeholder='phone number'
-        value={curState.phoneNumber}
-        onChangeText={handleTextChange('phoneNumber')}
-      />
+      <CenteredDiv>
+        <Text>Family member number {numUser}</Text>
+        <ThemedTextInput
+          placeholder='Nmae'
+          value={curState.name}
+          onChangeText={handleTextChange('name')}
+        />
+        <ThemedTextInput
+          placeholder='email'
+          value={curState.email}
+          onChangeText={handleTextChange('email')}
+        />
+        <ThemedTextInput
+          placeholder='password'
+          value={curState.password}
+          onChangeText={handleTextChange('password')}
+        />
+        <ThemedTextInput
+          placeholder='confirm password'
+          value={curState.confirmPassword}
+          onChangeText={handleTextChange('confirmPassword')}
+        />
+        <ThemedTextInput
+          placeholder='phone number'
+          value={curState.phoneNumber}
+          onChangeText={handleTextChange('phoneNumber')}
+        />
+        <RadioButtonGroup
+          titles={['Male', 'Female']}
+          onSelect={handleTextChange('gender')}
+        />
+        <RadioButtonGroup
+          titles={[Permission.Parent, Permission.Student, Permission.Tutor]}
+          onSelect={handleTextChange('userType')}
+        />
+      </CenteredDiv>
+      <ButtonGroupContain>
+        <ButtonContainer>
+          <MyButton
+            onPress={addMember}
+            // disabled={true}
+          >
+            <MyButtonText>
+              Add another member
+            </MyButtonText>
+          </MyButton>
+        </ButtonContainer>
 
-      <ButtonContainer>
-        <MyButton
-          onPress={addMember}
-        >
-          <MyButtonText>
-            Add another member
-          </MyButtonText>
-        </MyButton>
-      </ButtonContainer>
-
-      <ButtonContainer>
-        <MyButton
-          onPress={GoToConf}
-        >
-          <MyButtonText>
-            Submit
-          </MyButtonText>
-        </MyButton>
-      </ButtonContainer>
+        <ButtonContainer>
+          <MyButton
+            onPress={GoToConf}
+          >
+            <MyButtonText>
+              Submit
+            </MyButtonText>
+          </MyButton>
+        </ButtonContainer>
+      </ButtonGroupContain>
     </View>
   )
 }

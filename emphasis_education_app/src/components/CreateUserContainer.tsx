@@ -10,6 +10,8 @@ import CreateUser from './CreateUser';
 import { CREATE_USER } from '../queries/CreateUser';
 
 import  ConfirmationScreen  from './ConfirmationScreen';
+import { AuthContext } from './Context/Context';
+
 
 interface ICreateUserContainProps {
   navigation: any;
@@ -26,9 +28,16 @@ const CreateUserContain: React.FC<ICreateUserContainProps> = props => {
   const [userInfo, setUserInfo] = React.useState<ICreateUserArr>();
   const [showConf, setSHowConf] = React.useState(false);
 
+  React.useEffect(() => {
+    if (showConf) {
+      props.navigation.setOptions({
+        title: 'Create User Confirmation'
+      })
+    }
+  }, [showConf])
+
   // make this into our own custom hook
   const updateUserInfo = (newUserInfo: IUserInput): void => {
-    console.log('newUserInfo', newUserInfo);
     if (!userInfo) {
       setUserInfo({
         users: [
@@ -50,13 +59,11 @@ const CreateUserContain: React.FC<ICreateUserContainProps> = props => {
     {
       onCompleted: ({ createUser }) => {
         Alert.alert(createUser.success ? SuccessMessaging : ErrorMessaging );
+        // or if we want to go automatically
+        // props.navigation.navigate('Login')
       }
     }
   )
-
-  React.useEffect(() => {
-    console.log('changes', userInfo)
-  }, [userInfo])
 
   const runCreateUserMut = (): void => {
     console.log('userInfo before running mutaion', userInfo)
@@ -67,7 +74,7 @@ const CreateUserContain: React.FC<ICreateUserContainProps> = props => {
     createUserMut({
       variables: {
         users: _users
-      }
+      },
     })
   }
 

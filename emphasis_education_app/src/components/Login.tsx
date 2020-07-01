@@ -7,23 +7,22 @@ import {
   SafeAreaView,
 } from 'react-native';
 import styled from 'styled-components';
-import { MD5 } from "crypto-js"
-import {NavigationActions, StackActions} from 'react-navigation';
-import { CommonActions } from '@react-navigation/native';
-
+import { MD5 } from 'crypto-js';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import {
   MytextInput,
   ButtonContainer,
   MyButton,
   MyButtonText,
-  CenteredDiv
+  CenteredDiv,
+  LoginInput
 } from './shared';
 import { LOGIN } from '../queries/Login';
-import Context from './Context/Context';
+import Context, { AuthContext } from './Context/Context';
 import { Permission, ILoginPayload, ILoginPayloadProps } from '../types';
 
-import Test_s from './test_s';
+import { LOGIN_TOKEN } from '../constant';
 
 const PositionDiv = styled(View)`
   padding-top: 200px;
@@ -31,16 +30,18 @@ const PositionDiv = styled(View)`
 
 const TitleText = styled(Text)`
   font-size: 20px;
-  fontFamily: 'Nunito';
+  fontFamily: ${({ theme }) => theme.font.main};
 `;
 
 const TitleContain = styled(View)`
-  padding-top: 200px;
+  padding-top: 100px;
 `;
 
 interface ILoginProps {
   // TODO type this shit
   navigation: any;
+  route: any;
+  error: boolean;
 }
 
 const ErrorText = styled(Text)`
@@ -58,31 +59,19 @@ const getHash = (email: string): string => {
 
 const Login: React.FC<ILoginProps> = props => {
 
-  React.useEffect(() => {
-    props.navigation.setOptions({
-      headerLeft: () => null
-    })
-    // const resetHistory = StackActions.reset({
-    //   index: 0,
-    //   actions: [NavigationActions.navigate({ routeName: 'Login'})],
-    //   key: null
-    // })
-    // props.navigation.dispatch(resetHistory);
-    // props.navigation.dispatch(
-    //   StackActions.reset({
-    //     index: 1,
-    //     actions: [NavigationActions.navigate({ routeName: 'Login'})],
-    //     key: null
-    //   })
-    // );
-  }, [])
+  // React.useEffect(() => {
+  //   props.navigation.setOptions({
+  //     headerLeft: () => null
+  //   })
+  // }, [])
 
   const { setUser } = useContext(Context);
+  const { login } = useContext(AuthContext);
 
   const [curState, setState] = useState({
     error: false,
     userName: 'test01@gmail.com',
-    email: 'test05@gmail.com',
+    email: 'test01@gmail.com',
     password: 'test01',
     name: 'Test User'
   })
@@ -95,10 +84,10 @@ const Login: React.FC<ILoginProps> = props => {
         email: curState.email,
         password: curState.password
       },
-      onCompleted: ( { login } ) => {
+      onCompleted: async ( { login } ) => {
         console.log('login result', login.user)
         if (login.res) {
-          successLogin(login)
+          await successLogin(login)
         } else {
           errorLogin()
         }
@@ -107,7 +96,6 @@ const Login: React.FC<ILoginProps> = props => {
   )
 
   if (error) console.log('ERROR', error);
-  // if (data) console.log('data', data)
 
   const onChangeEmail = (email: string) => setState({
     ...curState,
@@ -118,12 +106,17 @@ const Login: React.FC<ILoginProps> = props => {
     password
   });
 
-  const successLogin = (user: ILoginPayloadProps) => {
-    console.log('login user', user.user)
-    setUser({...user.user})
-    props.navigation.navigate('Home');
-    // props.navigation.push('Home');
-  }
+  const successLogin = async (user: ILoginPayloadProps) => {
+    try {
+      console.log('login user', user.user)
+      setUser({...user.user})
+      await AsyncStorage.setItem(LOGIN_TOKEN, 'true')
+      props.navigation.navigate('App', { screen: 'Home'});
+      // set the async storage
+    } catch (e) {
+     console.log('error saving the user')
+    }
+   }
 
   const errorLogin = () => {
     setState({
@@ -132,14 +125,14 @@ const Login: React.FC<ILoginProps> = props => {
     })
   }
 
-  const my_login = () => {
-    doLogin({
-      variables: {
-        email: curState.email,
-        password: curState.password,
-      }
-    }).then((resp) =>  console.log('resp\n\n', resp))
-  }
+  // const my_login = () => {
+  //   doLogin({
+  //     variables: {
+  //       email: curState.email,
+  //       password: curState.password,
+  //     }
+  //   })
+  // }
 
   return (
     <SafeAreaView>
@@ -152,29 +145,27 @@ const Login: React.FC<ILoginProps> = props => {
       </TitleContain>
       <PositionDiv>
         <CenteredDiv>
-          <MytextInput
-            placeholder='username'
+          <LoginInput
+            placeholder='Username'
             value={curState.email}
             onChangeText={onChangeEmail}
           />
-          <MytextInput
-            placeholder='password'
+          <LoginInput
+            placeholder='Password'
             value={curState.password}
             onChangeText={onChangePassword}
           />
-          {curState.error &&
-            <Errorlogin />
-          }
+          {props.error && <Errorlogin /> }
           <ButtonContainer>
             <MyButton
-              onPress={my_login}
+              onPress={() => login(curState.email, curState.password)}
             >
               <MyButtonText>Login</MyButtonText>
             </MyButton>
           </ButtonContainer>
           <ButtonContainer>
             <MyButton
-              onPress={() => props.navigation.navigate('CreateUserContain')}
+              onPress={() => props.navigation.push('CreateUserContain')}
             >
               <MyButtonText>First time user?</MyButtonText>
             </MyButton>
@@ -186,7 +177,6 @@ const Login: React.FC<ILoginProps> = props => {
               <MyButtonText>Forgot Password?</MyButtonText>
             </MyButton>
           </ButtonContainer>
-          <Test_s />
         </CenteredDiv>
       </PositionDiv>
     </SafeAreaView>

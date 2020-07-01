@@ -9,46 +9,30 @@
  */
 
 import * as React from 'react';
-import { NavigationContainer, CommonActions } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 import { ApolloClient } from 'apollo-client';
 import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
 import { WebSocketLink } from 'apollo-link-ws';
 import { split } from 'apollo-link';
-import { ApolloProvider, useQuery } from '@apollo/react-hooks';
+import { ApolloProvider, useQuery, useMutation } from '@apollo/react-hooks';
 import { getMainDefinition } from 'apollo-utilities';
 import { ThemeProvider } from 'styled-components';
 
-import Login from './src/components/Login';
-import Chat from './src/components/Chat';
-import HomePage from './src/components/HomePage';
-import CreateUser from './src/components/CreateUser';
-import ChatPicker from './src/components/ChatPicker';
-import Profile from './src/components/LiftedProfile';
-import CreateUserContain from './src/components/CreateUserContainer';
-import ConfirmationScreen from './src/components/ConfirmationScreen';
-import Search from './src/components/AdminPage/LiftedSearch';
-import AdminPage from './src/components/AdminPage';
-import CreateChat from './src/components/CreateChat';
-import Settings from './src/components/Settings';
-
 import { theme } from './src/theme';
-import context, {EmptyUser} from './src/components/Context/Context';
-import { IUser } from './src/types';
+import context, {EmptyUser, AuthContext} from './src/components/Context/Context';
+import { IUser, ILoginPayload } from './src/types';
 
-import { CHECK_LOGGED_IN } from './src/queries/CheckLoggedIn';
-import { View, Text } from 'react-native';
+import StackNavigation from './StackNavigation';
 
 const cache = new InMemoryCache();
 const httplink = new HttpLink({
-  // uri: 'https://emphasis-education-server.herokuapp.com/'
-  uri: 'http://localhost:4000'
+  uri: 'https://emphasis-education-server.herokuapp.com/'
+  // uri: 'http://localhost:4000'
 });
 
 const wsLink = new WebSocketLink({
-  // uri: `ws://emphasis-education-server.herokuapp.com/graphql`,
-  uri: `ws://localhost:4000/graphql`,
+  uri: `ws://emphasis-education-server.herokuapp.com/graphql`,
+  // uri: `ws://localhost:4000/graphql`,
   options: {
     reconnect: true,
     timeout: 20000,
@@ -70,143 +54,23 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   link
 });
 
-
-// TODO add typing that each route needs
-type RootStackProps = {
-  Login: undefined;
-  Home: undefined;
-  Chat: undefined;
-  ChatPicker: undefined;
-  CreateUser: undefined;
-  CreateUserContain: undefined;
-  MyProfile: undefined;
-  ConfirmationScreen: undefined;
-  Search: undefined;
-  AdminPage: undefined;
-  CreateChat: undefined;
-  Settings: undefined;
-}
-
-const stack = createStackNavigator<RootStackProps>();
-
-// let us check if the user is logged in or not
-// if yeah, then home page
-// if not, then login page
-
-const Stack = () => {
-  const { data, loading, error} = useQuery(CHECK_LOGGED_IN);
-  let initRoute = 'Login';
-  if (loading || !data) {
-    return (
-    <View>
-      <Text>loading</Text>
-    </View>
-    )
-  }
-  if (data.checkLoggedIn.loggedIn) {
-    // if we are logged in, go to the home page
-    console.log('data in root app', data.checkLoggedIn.loggedIn)
-    initRoute = 'Home'
-  } else {
-    initRoute = 'Login'
-  }
-  return (
-    <NavigationContainer>
-      <stack.Navigator initialRouteName={initRoute}>
-        <stack.Screen
-            name='Settings'
-            component={Settings}
-            options={{ title: 'Settings'}}
-        />
-        <stack.Screen
-          name="Login"
-          component={Login}
-          options={{
-            title: '',
-            headerStyle: {
-              backgroundColor: '#5a1846'
-            }
-          }}
-        />
-        <stack.Screen
-          name="Home"
-          component={HomePage}
-          options={{
-            title: '' ,
-            // we chouldnt really be able to go back to the login page?
-            // headerLeft: () => null
-          }}
-        />
-        <stack.Screen
-          name="Search"
-          component={Search}
-          options={{ title: '' }}
-        />
-        {/* can maybe get the name of the chat and then set the title to it */}
-        <stack.Screen
-          name="Chat"
-          component={Chat}
-          options={{ title: 'Test Subject' }}
-        />
-        <stack.Screen
-          name="CreateUser"
-          component={CreateUser}
-          options={{ title: '' }}
-        />
-        <stack.Screen
-          name="ChatPicker"
-          component={ChatPicker}
-          options={{
-            title: 'My Chats',
-          }}
-        />
-        <stack.Screen
-          name="MyProfile"
-          component={Profile}
-          options={{ title: 'My Profile' }}
-        />
-        <stack.Screen
-          name="CreateUserContain"
-          component={CreateUserContain}
-          options={{ title: '' }}
-        />
-        <stack.Screen
-          name="ConfirmationScreen"
-          component={ConfirmationScreen}
-          options={{ title: '' }}
-        />
-        <stack.Screen
-          name="AdminPage"
-          component={AdminPage}
-          options={{ title: 'Admin Page' }}
-        />
-        <stack.Screen
-          name='CreateChat'
-          component={CreateChat}
-          options={{ title: 'New Chat'}}
-        />
-      </stack.Navigator>
-    </NavigationContainer>
-  )
-}
-
 const App = () => {
-  // wrap this all in the context
-  const [user, setUser] = React.useState<IUser>(EmptyUser);
+
+  const [user, setUser] = React.useState<IUser>({} as IUser);
   const updateUser = (newUser: IUser) => setUser(newUser)
   const value = {
-     loggedUser: user,
-     setUser: updateUser
-    }
+    loggedUser: user,
+    setUser: updateUser
+  }
 
   return (
-    <context.Provider value={value}>
+    <ApolloProvider client={client}>
       <ThemeProvider theme={theme}>
-        <ApolloProvider client={client}>
-          <Stack />
-        </ApolloProvider>
+        <context.Provider value={value}>
+          <StackNavigation />
+        </context.Provider>
       </ThemeProvider>
-    </context.Provider>
+    </ApolloProvider>
   )
 };
 
