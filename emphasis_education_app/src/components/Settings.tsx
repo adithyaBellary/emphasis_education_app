@@ -3,12 +3,8 @@ import {
   View,
   Text,
 } from 'react-native';
-// import { useMutation } from '@apollo/react-hooks';
 
 import { ButtonContainer, MyButton, MyButtonText } from './shared';
-// import { Logout } from '../queries/Logout';
-// import { CommonActions } from '@react-navigation/native';
-// import AsyncStorage from '@react-native-community/async-storage';
 import { AuthContext } from './Context/Context';
 
 interface ISettingsProps {
