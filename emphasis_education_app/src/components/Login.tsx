@@ -1,5 +1,4 @@
 import React, { useState, useContext } from 'react';
-import {useMutation} from '@apollo/react-hooks';
 import {
   Alert,
   View,
@@ -8,7 +7,6 @@ import {
 } from 'react-native';
 import styled from 'styled-components';
 import { MD5 } from 'crypto-js';
-import AsyncStorage from '@react-native-community/async-storage';
 
 import {
   MytextInput,
@@ -16,13 +14,10 @@ import {
   MyButton,
   MyButtonText,
   CenteredDiv,
-  LoginInput
+  LoginInput,
+  HorizontalDivider
 } from './shared';
-import { LOGIN } from '../queries/Login';
 import Context, { AuthContext } from './Context/Context';
-import { Permission, ILoginPayload, ILoginPayloadProps } from '../types';
-
-import { LOGIN_TOKEN } from '../constant';
 
 const PositionDiv = styled(View)`
   padding-top: 200px;
@@ -57,6 +52,10 @@ const getHash = (email: string): string => {
   return MD5(email).toString();
 }
 
+const InputContain = styled(View)`
+  padding: 10px;
+`
+
 const Login: React.FC<ILoginProps> = props => {
 
   // React.useEffect(() => {
@@ -65,7 +64,7 @@ const Login: React.FC<ILoginProps> = props => {
   //   })
   // }, [])
 
-  const { setUser } = useContext(Context);
+  // const { setUser } = useContext(Context);
   const { login } = useContext(AuthContext);
 
   const [curState, setState] = useState({
@@ -77,25 +76,25 @@ const Login: React.FC<ILoginProps> = props => {
   })
 
   // TODO use loading state to render spinner
-  const [doLogin, { data, error, loading }] = useMutation<ILoginPayload>(
-    LOGIN,
-    {
-      variables: {
-        email: curState.email,
-        password: curState.password
-      },
-      onCompleted: async ( { login } ) => {
-        console.log('login result', login.user)
-        if (login.res) {
-          await successLogin(login)
-        } else {
-          errorLogin()
-        }
-      }
-    }
-  )
+  // const [doLogin, { data, error, loading }] = useMutation<ILoginPayload>(
+  //   LOGIN,
+  //   {
+  //     variables: {
+  //       email: curState.email,
+  //       password: curState.password
+  //     },
+  //     onCompleted: async ( { login } ) => {
+  //       console.log('login result', login.user)
+  //       if (login.res) {
+  //         await successLogin(login)
+  //       } else {
+  //         errorLogin()
+  //       }
+  //     }
+  //   }
+  // )
 
-  if (error) console.log('ERROR', error);
+  // if (error) console.log('ERROR', error);
 
   const onChangeEmail = (email: string) => setState({
     ...curState,
@@ -106,55 +105,32 @@ const Login: React.FC<ILoginProps> = props => {
     password
   });
 
-  const successLogin = async (user: ILoginPayloadProps) => {
-    try {
-      console.log('login user', user.user)
-      setUser({...user.user})
-      await AsyncStorage.setItem(LOGIN_TOKEN, 'true')
-      props.navigation.navigate('App', { screen: 'Home'});
-      // set the async storage
-    } catch (e) {
-     console.log('error saving the user')
-    }
-   }
-
-  const errorLogin = () => {
-    setState({
-      ...curState,
-      error: true
-    })
-  }
-
-  // const my_login = () => {
-  //   doLogin({
-  //     variables: {
-  //       email: curState.email,
-  //       password: curState.password,
-  //     }
-  //   })
-  // }
-
   return (
     <SafeAreaView>
       <TitleContain>
         <CenteredDiv>
           <TitleText>
-            Emphasis Education App
+            Emphasis Education
           </TitleText>
         </CenteredDiv>
       </TitleContain>
       <PositionDiv>
         <CenteredDiv>
-          <LoginInput
-            placeholder='Username'
-            value={curState.email}
-            onChangeText={onChangeEmail}
-          />
-          <LoginInput
-            placeholder='Password'
-            value={curState.password}
-            onChangeText={onChangePassword}
-          />
+          <InputContain>
+            <LoginInput
+              placeholder='Username'
+              value={curState.email}
+              onChangeText={onChangeEmail}
+            />
+          </InputContain>
+          <HorizontalDivider width={60}/>
+          <InputContain>
+            <LoginInput
+              placeholder='Password'
+              value={curState.password}
+              onChangeText={onChangePassword}
+            />
+          </InputContain>
           {props.error && <Errorlogin /> }
           <ButtonContainer>
             <MyButton

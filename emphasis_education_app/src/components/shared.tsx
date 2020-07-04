@@ -21,8 +21,6 @@ export const MytextInput = styled(TextInput)`
 export const LoginInput = styled(TextInput)`
   fontFamily: ${({ theme }) => theme.font.main};
   fontSize: 18px;
-  border: 1px black solid;
-  border-radius: 10px;
   width: 80%;
   text-align: center;
 `;
@@ -59,6 +57,9 @@ export const MyButton = styled(TouchableOpacity)`
   background-color: ${({ disabled, theme}) => disabled ? 'grey' : theme.colors.purple} ;
   height: 40px;
   justify-content: center;
+  border-radius: 10px;
+  width: 150px;
+
 `;
 
 const d: number = 150;
@@ -228,3 +229,9 @@ export const IndividualField: React.FC<IIndividualFieldProps> = ({ value, label,
     </ThemedText>
   </GeneralSpacing>
 );
+
+export const HorizontalDivider = styled(View)<{width: number}>`
+  width: ${({ width }) => width}%;
+  border-bottom-color: grey;
+  border-bottom-width: 1px;
+`

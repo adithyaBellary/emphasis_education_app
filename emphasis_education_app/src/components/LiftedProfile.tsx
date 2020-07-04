@@ -19,6 +19,7 @@ interface ILiftedProfileProps {
 }
 
 const LiftedProfile: React.FC<ILiftedProfileProps> = ({ route }) => {
+  console.log('route in profile', route)
   const mainUserID: string = route.params.groupID
   // what i get passed here is what will go on the top of the profile page
   const options = { variables: { groupID: mainUserID }}
