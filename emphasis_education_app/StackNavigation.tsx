@@ -5,7 +5,6 @@ import { View, Text, ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import {useMutation} from '@apollo/react-hooks';
 
-
 import Login from './src/components/Login';
 import Chat from './src/components/Chat';
 import HomePage from './src/components/HomePage';
@@ -17,7 +16,6 @@ import Search from './src/components/AdminPage/LiftedSearch';
 import AdminPage from './src/components/AdminPage';
 import CreateChat from './src/components/CreateChat';
 import Settings from './src/components/Settings';
-import { Icon } from 'react-native-elements';
 
 import { LOGIN_TOKEN } from './src/constant';
 import { LOGIN } from './src/queries/Login';
@@ -204,14 +202,9 @@ const StackNavigation: React.FC = () => {
   const authContext = React.useMemo(
     () => ({
       login: (email: string, password: string) => {
-        // this is where we will call the mutation
-        console.log('data in login context', email, password)
         _login({ variables: { email, password }})
-        console.log('done logging in')
-        // dispatch({ type: 'LOGIN', token: LOGIN_TOKEN})
       },
       logout: async data => {
-        console.log('signing out in app')
         await AsyncStorage.clear();
         dispatch({ type: 'LOGOUT'})
       },
@@ -238,7 +231,6 @@ const StackNavigation: React.FC = () => {
         <RootStack userToken={userToken} error={loginError}/>
       </NavigationContainer>
     </AuthContext.Provider>
-
   )
 }
 

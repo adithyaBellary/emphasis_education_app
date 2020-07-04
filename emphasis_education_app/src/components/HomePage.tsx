@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useQuery, useLazyQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/react-hooks';
 // this will be needed to get the full screen dimensions
 // ill need to know the screen dimensions to position all the widgets
 import {
@@ -20,8 +20,6 @@ import {
 import { Icon } from 'react-native-elements';
 import Context from './Context/Context';
 import { Permission } from '../types';
-import AsyncStorage from '@react-native-community/async-storage';
-import { LOGIN_TOKEN } from '../constant';
 
 import { GET_USER } from '../queries/GetUser';
 
@@ -58,10 +56,7 @@ const MissionStatement: React.FC = () => {
 }
 
 const Home: React.FC<ILiftedHomeProps> = ( { navigation, route } ) => {
-  const [pageLoad, setPageLoad] = React.useState(true);
-  // we will need to refetch the logged in user
   const { loggedUser, setUser } = React.useContext(Context);
-  // console.log('logged user in home page', loggedUser)
   const changeScreens = (dest: string) => () =>  navigation.navigate(dest)
   const { data, loading, error } = useQuery(GET_USER, {
     variables: {
@@ -72,14 +67,6 @@ const Home: React.FC<ILiftedHomeProps> = ( { navigation, route } ) => {
       setUser({...data.getUser})
     }
   })
-  // const updateUser = async () => {
-  //   const userEmail = await AsyncStorage.getItem(LOGIN_TOKEN)
-  //   console.log('the user email in the home page:', userEmail)
-  //   // runQ({ variables: {
-  //   //   userEmail
-  //   // }})
-  // }
-  console.log('route', route)
 
   React.useEffect(() => {
     navigation.setOptions({
@@ -104,26 +91,11 @@ const Home: React.FC<ILiftedHomeProps> = ( { navigation, route } ) => {
       },
       headerLeft: () => null
     })
-    // get the stored user email
-    // await AsyncStorage.getItem(LOGIN_TOKEN)
-    // updateUser();
   }, [])
 
-  // if (!loading) {
-  //   console.log('data', data)
-  //   if (data) {
-  //     setUser({...data.getUser})
-  //   }
-  // }
-
-  if (loading) {
-    return (
-      <ActivityIndicator />
-    )
-  }
+  if (loading) { return <ActivityIndicator /> }
 
   if (error) {
-    console.log(error)
     return (
       <View><Text>there was an issue reloading the user</Text></View>
     )
@@ -150,16 +122,6 @@ const Home: React.FC<ILiftedHomeProps> = ( { navigation, route } ) => {
             reverse={true}
 
             color='#ffe599'
-            // style={{
-            //   shadowColor: 'black',
-            //   shadowOpacity: 0.5,
-            //   shadowRadius: 5,
-            //   // iOS
-            //   shadowOffset: {
-            //       width: 0,            // These can't both be 0
-            //       height: 1,           // i.e. the shadow has to be offset in some way
-            //   },
-            // }}
           />
           <Icon
             raised
@@ -169,15 +131,6 @@ const Home: React.FC<ILiftedHomeProps> = ( { navigation, route } ) => {
             reverse={true}
             iconStyle={{
               color: 'black',
-              // textShadowColor: 'red',
-              // textShadowOffset: {
-              //   height: 10,
-              //   width: 10
-              // },
-              // textShadowRadius: 20
-              // borderStyle: {
-              //   color: 'yellow'
-              // }
             }}
             containerStyle={{
               borderColor: 'grey',
@@ -196,9 +149,8 @@ const Home: React.FC<ILiftedHomeProps> = ( { navigation, route } ) => {
           <Icon
             name='search'
             // color='#b89cb0'
-            // onPress={changeScreens('Search')}
+            onPress={changeScreens('Search')}
             reverse={true}
-            raised
           />
           <Icon
             name='settings'
