@@ -185,9 +185,9 @@ const StackNavigation: React.FC = () => {
         console.log('login response', login)
         if (login.res) {
           console.log('login result', login.user)
-          setUser({...login.user});
+          // setUser({...login.user});
           await AsyncStorage.setItem(LOGIN_TOKEN, login.user.email)
-          dispatch({ type: 'LOGIN', token: LOGIN_TOKEN})
+          dispatch({ type: 'LOGIN', token: login.user.email})
         } else {
           console.log('login failed')
           setLoginError(true);

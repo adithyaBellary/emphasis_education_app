@@ -55,7 +55,8 @@ const MissionStatement: React.FC = () => {
   )
 }
 
-const Home: React.FC<ILiftedHomeProps> = ( { navigation, route } ) => {
+const Home: React.FC<ILiftedHomeProps> = ({ navigation, route }) => {
+  console.log('route in home', route)
   const { loggedUser, setUser } = React.useContext(Context);
   const changeScreens = (dest: string) => () =>  navigation.navigate(dest)
   const { data, loading, error } = useQuery(GET_USER, {
@@ -83,7 +84,6 @@ const Home: React.FC<ILiftedHomeProps> = ( { navigation, route } ) => {
             />
             <Text>Admin</Text>
           </CenteredDiv>
-
         // </PermissionedComponent>
       ),
       headerRightContainerStyle: {
