@@ -93,7 +93,15 @@ const Home: React.FC<ILiftedHomeProps> = ({ navigation, route }) => {
     })
   }, [])
 
-  if (loading) { return <ActivityIndicator /> }
+  if (loading) {
+    return (
+      <>
+        <ActivityIndicator />
+        <View><Text>home page</Text></View>
+      </>
+
+    )
+  }
 
   if (error) {
     return (

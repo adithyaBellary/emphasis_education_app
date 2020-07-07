@@ -235,3 +235,10 @@ export const HorizontalDivider = styled(View)<{width: number}>`
   border-bottom-color: grey;
   border-bottom-width: 1px;
 `
+
+export const IconRow = styled(View)`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+`;
