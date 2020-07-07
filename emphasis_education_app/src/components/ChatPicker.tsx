@@ -5,15 +5,18 @@ import {
   View,
   SafeAreaView,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import { Icon } from 'react-native-elements';
 
 import styled from 'styled-components';
 import Context from './Context/Context';
-import { PermissionedComponent } from './shared';
+import { PermissionedComponent, IconRow, GeneralSpacing } from './shared';
 import Accordion from './Accordion';
 
 import { Permission } from '../types';
+import { useLazyQuery } from '@apollo/react-hooks';
+import { GET_USER } from '../queries/GetUser';
 
 interface IChatPickerProps {
   navigation: any;
@@ -29,19 +32,23 @@ const IndChat = styled(TouchableOpacity)`
 const ChatsContain = styled(View)`
   padding: 0 10px;
 `
-
 const EmptyChat: React.FC = () => (
   <View>
     <Text>
-      You are currently not added to any chats. Please contact the Admins to be added to a chat
+      we empty
     </Text>
   </View>
 )
 
 const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
-  const { loggedUser } = React.useContext(Context);
+  const { loggedUser, setUser } = React.useContext(Context);
   console.log('logged user in chat picker', loggedUser);
-
+  const [runQ, { data, loading, error}] = useLazyQuery(GET_USER, {
+    onCompleted: ({ getUser }) => {
+      setUser({...getUser})
+    },
+    fetchPolicy: 'no-cache'
+  })
   const goToChat = (sub: string) => () => {
     navigation.navigate(
       'Chat',
@@ -51,6 +58,9 @@ const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
     )
   }
   const goToCreateChat = () => navigation.navigate('CreateChat');
+  const getClasses = () => {
+    runQ({ variables: { userEmail: loggedUser.email}})
+  }
 
   React.useEffect(() => {
     navigation.setOptions({
@@ -60,11 +70,20 @@ const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
         //   // this will need to be changed to the Admin later
         //   allowedPermission={Permission.Student}
         // >
+        <IconRow>
+          <GeneralSpacing u={0} d={0} r={10} l={10}>
+            <Icon
+              name='pluscircleo'
+              type='antdesign'
+              onPress={goToCreateChat}
+            />
+          </GeneralSpacing>
           <Icon
-            name='pluscircleo'
+            name='sync'
             type='antdesign'
-            onPress={goToCreateChat}
+            onPress={getClasses}
           />
+        </IconRow>
         // </PermissionedComponent>
       ),
       headerRightContainerStyle: {
@@ -73,28 +92,34 @@ const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
     })
   }, [])
   // add dropdown functionality
+  if (loading) {
+    return (
+      <>
+        <ActivityIndicator />
+        <View><Text>getting classes</Text></View>
+      </>
+    )
+  }
   return (
-    <>
-      <SafeAreaView>
-        <ChatsContain>
-          {loggedUser.classes ? loggedUser.classes.map((c) => (
-            <IndChat
-              onPress={goToChat(c.chatID!)}
-            >
-              <Text>{c.className}</Text>
-            </IndChat>
-          )) : (
-            <EmptyChat />
-          )}
-          {/* {loggedUser.classes ? loggedUser.classes.map(c => (
-            <Accordion
-              title={c.displayName}
-              data={loggedUser.classes!}
-            />
-          )) : <EmptyChat />} */}
-        </ChatsContain>
-      </SafeAreaView>
-    </>
+    <SafeAreaView>
+      <ChatsContain>
+        {loggedUser.classes ? loggedUser.classes.map((c) => (
+          <IndChat
+            onPress={goToChat(c.chatID!)}
+          >
+            <Text>{c.className}</Text>
+          </IndChat>
+        )) : (
+          <EmptyChat />
+        )}
+        {/* {loggedUser.classes ? loggedUser.classes.map(c => (
+          <Accordion
+            title={c.displayName}
+            data={loggedUser.classes!}
+          />
+        )) : <EmptyChat />} */}
+      </ChatsContain>
+    </SafeAreaView>
   )
 }
 

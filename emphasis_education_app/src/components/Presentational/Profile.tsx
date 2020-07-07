@@ -4,11 +4,11 @@ import {
   Text
 } from 'react-native';
 import styled from 'styled-components';
-import { Divider, Icon } from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 
 import { IUser } from '../../types';
 import Context from '../Context/Context';
-import { ContentContain, IndividualField } from '../shared';
+import { ContentContain, IndividualField, HorizontalDivider } from '../shared';
 
 interface IProfileProps {
   mainUserID: string
@@ -66,8 +66,7 @@ const Profile: React.FC<IProfileProps> = ({ family, mainUserID }) => {
           label={'Email'}
           labelSize={14}
         />
-        <Divider />
-        {/* ugh now i need to format the phoneNumber */}
+        <HorizontalDivider width={80}/>
         <IndividualField
           value={mainUser.phoneNumber}
           valueSize={16}

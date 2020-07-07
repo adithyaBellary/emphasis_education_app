@@ -5,7 +5,6 @@ import { View, Text, ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import {useMutation} from '@apollo/react-hooks';
 
-
 import Login from './src/components/Login';
 import Chat from './src/components/Chat';
 import HomePage from './src/components/HomePage';
@@ -21,7 +20,6 @@ import Settings from './src/components/Settings';
 import { LOGIN_TOKEN } from './src/constant';
 import { LOGIN } from './src/queries/Login';
 
-import Context from './src/components/Context/Context';
 import context, {EmptyUser, AuthContext} from './src/components/Context/Context';
 import { IUser, ILoginPayload } from './src/types';
 
@@ -30,7 +28,7 @@ const AuthStack = ({ error }) => {
   console.log('props in auth st', error)
   return (
   <AuthStackNav.Navigator initialRouteName={'Login'}>
-    <AuthStackNav.Screen name='Login'>
+    <AuthStackNav.Screen name='Login' options={{ headerShown: false}}>
       {_props => <Login {..._props} error={error}/>}
     </AuthStackNav.Screen>
     <AppStackNav.Screen
@@ -49,68 +47,63 @@ const AuthStack = ({ error }) => {
 
 const AppStackNav = createStackNavigator();
 
-const AppStack = () => {
-  return (
-    <AppStackNav.Navigator initialRouteName={'Home'}>
-      <AppStackNav.Screen
-        name="Home"
-        component={HomePage}
-        options={{
-          title: '' ,
-          // we chouldnt really be able to go back to the login page?
-          // headerLeft: () => null
-        }}
-      />
-      <AppStackNav.Screen
-        name="Search"
-        component={Search}
-        options={{ title: '' }}
-      />
-      <AppStackNav.Screen
-        name="Chat"
-        component={Chat}
-        options={{ title: 'Test Subject' }}
-      />
-      <AppStackNav.Screen
-        name="ChatPicker"
-        component={ChatPicker}
-        options={{
-          title: 'My Chats',
-        }}
-      />
-      <AppStackNav.Screen
-        name="MyProfile"
-        component={Profile}
-        options={{ title: 'My Profile' }}
-      />
-      <AppStackNav.Screen
-        name="AdminPage"
-        component={AdminPage}
-        options={{ title: 'Admin Page' }}
-      />
-      <AppStackNav.Screen
-        name='CreateChat'
-        component={CreateChat}
-        options={{ title: 'New Chat'}}
-      />
-      <AppStackNav.Screen
-        name='Settings'
-        component={Settings}
-        options={{ title: 'Settings'}}
-      />
-    </AppStackNav.Navigator>
-  )
-}
+const AppStack = ({ userToken }) => (
+  <AppStackNav.Navigator initialRouteName={'Home'}>
+    <AppStackNav.Screen
+      name="Home"
+      component={HomePage}
+      options={{
+        title: ''
+      }}
+      initialParams={{ token: userToken}}
+    />
+    <AppStackNav.Screen
+      name="Search"
+      component={Search}
+      options={{ title: '' }}
+    />
+    <AppStackNav.Screen
+      name="Chat"
+      component={Chat}
+      options={{ title: 'Test Subject' }}
+    />
+    <AppStackNav.Screen
+      name="ChatPicker"
+      component={ChatPicker}
+      options={{
+        title: 'My Chats',
+      }}
+    />
+    <AppStackNav.Screen
+      name="MyProfile"
+      component={Profile}
+      options={{ title: 'My Profile' }}
+    />
+    <AppStackNav.Screen
+      name="AdminPage"
+      component={AdminPage}
+      options={{ title: 'Admin Page' }}
+    />
+    <AppStackNav.Screen
+      name='CreateChat'
+      component={CreateChat}
+      options={{ title: 'New Chat'}}
+    />
+    <AppStackNav.Screen
+      name='Settings'
+      component={Settings}
+      options={{ title: 'Settings'}}
+    />
+  </AppStackNav.Navigator>
+)
 
 const RootStackNav = createStackNavigator();
-const RootStack = ({ userToken, error}) => {
-return (
+const RootStack = ({ userToken, error}) => (
   <RootStackNav.Navigator headerMode="none">
     { !!userToken ? (
-      <RootStackNav.Screen
-        name='App'
-        component={AppStack}
-      />
+      <RootStackNav.Screen name='App'>
+        {_props => <AppStack {..._props} userToken={userToken} /> }
+      </RootStackNav.Screen>
     ) : (
       <RootStackNav.Screen name='Auth'>
         {_props => <AuthStack {..._props} error={error}/> }
@@ -119,7 +112,11 @@ return (
     )}
   </RootStackNav.Navigator>
 )
-    }
+
+interface IState {
+  authLoading: boolean;
+  userToken: string;
+}
 
 const StackNavigation: React.FC = () => {
   const [{authLoading, userToken, signingOut}, dispatch] = React.useReducer(
@@ -166,8 +163,6 @@ const StackNavigation: React.FC = () => {
     _checkAuth()
   }, [])
 
-  const { setUser } = React.useContext(Context);
-
   const [loginError, setLoginError] = React.useState(false);
 
   const [_login, { data, error, loading}] = useMutation<ILoginPayload>(
@@ -176,10 +171,8 @@ const StackNavigation: React.FC = () => {
       onCompleted: async ({ login }) => {
         console.log('login response', login)
         if (login.res) {
-          console.log('login result', login.user)
-          setUser({...login.user});
-          await AsyncStorage.setItem(LOGIN_TOKEN, '_loggedIn')
-          dispatch({ type: 'LOGIN', token: LOGIN_TOKEN})
+          await AsyncStorage.setItem(LOGIN_TOKEN, login.user.email)
+          dispatch({ type: 'LOGIN', token: login.user.email})
         } else {
           console.log('login failed')
           setLoginError(true);
@@ -187,18 +180,16 @@ const StackNavigation: React.FC = () => {
       }
     }
   )
+  if (error) {
+    console.log('error logging in')
+  }
 
   const authContext = React.useMemo(
     () => ({
       login: (email: string, password: string) => {
-        // this is where we will call the mutation
-        console.log('data in login context', email, password)
         _login({ variables: { email, password }})
-
-        // dispatch({ type: 'LOGIN', token: LOGIN_TOKEN})
       },
       logout: async data => {
-        console.log('signing out in app')
         await AsyncStorage.clear();
         dispatch({ type: 'LOGOUT'})
       },
@@ -225,7 +216,6 @@ const StackNavigation: React.FC = () => {
         <RootStack userToken={userToken} error={loginError}/>
       </NavigationContainer>
     </AuthContext.Provider>
-
   )
 }
 

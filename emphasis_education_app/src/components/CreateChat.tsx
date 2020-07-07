@@ -4,7 +4,8 @@ import {
   Text,
   Button,
   Alert,
-  TouchableOpacity
+  TouchableOpacity,
+  View
 } from 'react-native';
 import {
   Input, Icon
@@ -17,6 +18,15 @@ import { CREATE_CHAT } from '../queries/CreateChat';
 import { ISearchInput, ISearchClassesPayload, ISearchUserPayload, ICreateChatInput, ICreateChatPayload, Permission } from '../types';
 import { IndividualResultContainer } from './AdminPage/IndividualResult';
 
+import Context from './Context/Context';
+
+const Test: React.FC = () => (
+  <View>
+    <Text>
+      hi
+    </Text>
+  </View>
+)
 interface ICreateChatProps {
   navigation: any;
   route: any;
@@ -37,11 +47,15 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
   const [selectedUsers, setSelectedUsers] = React.useState<ISelectedUsersProps[]>([])
   // const [selectedResults, setSelectedResults] = React.useState<string[]>([])
 
+  const { setUser } = React.useContext(Context)
+
   const [createChatMutation, {data: dataCreateChat, loading: loadingCreateChat, error}] = useMutation<ICreateChatPayload, ICreateChatInput>(
     CREATE_CHAT,
     {
       onCompleted: () => {
         Alert.alert('chat successfully made')
+        // update the user
+
       },
       onError: (e) => {
         console.log('error:', e)
@@ -50,7 +64,7 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
   );
 
   React.useEffect(() => {
-    runClassSearchQuery({variables: { searchTerm: classSearch}})
+    runClassSearchQuery({variables: { searchTerm: classSearch }})
   }, [classSearch])
   React.useEffect(() => {
     runUserSearchQuery({variables: { searchTerm: userSearch}})
