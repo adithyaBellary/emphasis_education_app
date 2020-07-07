@@ -20,14 +20,8 @@ import Settings from './src/components/Settings';
 import { LOGIN_TOKEN } from './src/constant';
 import { LOGIN } from './src/queries/Login';
 
-import Context from './src/components/Context/Context';
 import context, {EmptyUser, AuthContext} from './src/components/Context/Context';
 import { IUser, ILoginPayload } from './src/types';
-
-import {
-  PermissionedComponent,
-  CenteredDiv
-} from './src/components/shared';
 
 const AuthStackNav = createStackNavigator();
 const AuthStack = ({ error }) => {
@@ -53,76 +47,71 @@ const AuthStack = ({ error }) => {
 
 const AppStackNav = createStackNavigator();
 
-const AppStack = ({ userToken }) => {
-  console.log('user token in stacknav', userToken)
-  return (
-    <AppStackNav.Navigator initialRouteName={'Home'}>
-      <AppStackNav.Screen
-        name="Home"
-        component={HomePage}
-        options={{
-          title: ''
-        }}
-        initialParams={{ token: userToken}}
-      />
-      <AppStackNav.Screen
-        name="Search"
-        component={Search}
-        options={{ title: '' }}
-      />
-      <AppStackNav.Screen
-        name="Chat"
-        component={Chat}
-        options={{ title: 'Test Subject' }}
-      />
-      <AppStackNav.Screen
-        name="ChatPicker"
-        component={ChatPicker}
-        options={{
-          title: 'My Chats',
-        }}
-      />
-      <AppStackNav.Screen
-        name="MyProfile"
-        component={Profile}
-        options={{ title: 'My Profile' }}
-      />
-      <AppStackNav.Screen
-        name="AdminPage"
-        component={AdminPage}
-        options={{ title: 'Admin Page' }}
-      />
-      <AppStackNav.Screen
-        name='CreateChat'
-        component={CreateChat}
-        options={{ title: 'New Chat'}}
-      />
-      <AppStackNav.Screen
-        name='Settings'
-        component={Settings}
-        options={{ title: 'Settings'}}
-      />
-    </AppStackNav.Navigator>
-  )
-}
+const AppStack = ({ userToken }) => (
+  <AppStackNav.Navigator initialRouteName={'Home'}>
+    <AppStackNav.Screen
+      name="Home"
+      component={HomePage}
+      options={{
+        title: ''
+      }}
+      initialParams={{ token: userToken}}
+    />
+    <AppStackNav.Screen
+      name="Search"
+      component={Search}
+      options={{ title: '' }}
+    />
+    <AppStackNav.Screen
+      name="Chat"
+      component={Chat}
+      options={{ title: 'Test Subject' }}
+    />
+    <AppStackNav.Screen
+      name="ChatPicker"
+      component={ChatPicker}
+      options={{
+        title: 'My Chats',
+      }}
+    />
+    <AppStackNav.Screen
+      name="MyProfile"
+      component={Profile}
+      options={{ title: 'My Profile' }}
+    />
+    <AppStackNav.Screen
+      name="AdminPage"
+      component={AdminPage}
+      options={{ title: 'Admin Page' }}
+    />
+    <AppStackNav.Screen
+      name='CreateChat'
+      component={CreateChat}
+      options={{ title: 'New Chat'}}
+    />
+    <AppStackNav.Screen
+      name='Settings'
+      component={Settings}
+      options={{ title: 'Settings'}}
+    />
+  </AppStackNav.Navigator>
+)
 
 const RootStackNav = createStackNavigator();
-const RootStack = ({ userToken, error}) => {
-  return (
-    <RootStackNav.Navigator headerMode="none">
-      { !!userToken ? (
-        <RootStackNav.Screen name='App'>
-          {_props => <AppStack {..._props} userToken={userToken} /> }
-        </RootStackNav.Screen>
-      ) : (
-        <RootStackNav.Screen name='Auth'>
-          {_props => <AuthStack {..._props} error={error}/> }
-        </RootStackNav.Screen>
+const RootStack = ({ userToken, error}) => (
+  <RootStackNav.Navigator headerMode="none">
+    { !!userToken ? (
+      <RootStackNav.Screen name='App'>
+        {_props => <AppStack {..._props} userToken={userToken} /> }
+      </RootStackNav.Screen>
+    ) : (
+      <RootStackNav.Screen name='Auth'>
+        {_props => <AuthStack {..._props} error={error}/> }
+      </RootStackNav.Screen>
 
-      )}
-    </RootStackNav.Navigator>
-  )
-}
+    )}
+  </RootStackNav.Navigator>
+)
 
 interface IState {
   authLoading: boolean;
@@ -174,8 +163,6 @@ const StackNavigation: React.FC = () => {
     _checkAuth()
   }, [])
 
-  const { setUser } = React.useContext(Context);
-
   const [loginError, setLoginError] = React.useState(false);
 
   const [_login, { data, error, loading}] = useMutation<ILoginPayload>(
@@ -184,8 +171,6 @@ const StackNavigation: React.FC = () => {
       onCompleted: async ({ login }) => {
         console.log('login response', login)
         if (login.res) {
-          console.log('login result', login.user)
-          // setUser({...login.user});
           await AsyncStorage.setItem(LOGIN_TOKEN, login.user.email)
           dispatch({ type: 'LOGIN', token: login.user.email})
         } else {
