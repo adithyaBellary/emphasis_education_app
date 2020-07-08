@@ -10,13 +10,13 @@ import {
 import { Icon } from 'react-native-elements';
 
 import styled from 'styled-components';
-import Context from './Context/Context';
-import { PermissionedComponent, IconRow, GeneralSpacing } from './shared';
+import Context from '../Context/Context';
+import { PermissionedComponent, IconRow, GeneralSpacing } from '../shared';
 import Accordion from './Accordion';
 
-import { Permission } from '../types';
+import { Permission } from '../../types';
 import { useLazyQuery } from '@apollo/react-hooks';
-import { GET_USER } from '../queries/GetUser';
+import { GET_USER } from '../../queries/GetUser';
 
 interface IChatPickerProps {
   navigation: any;

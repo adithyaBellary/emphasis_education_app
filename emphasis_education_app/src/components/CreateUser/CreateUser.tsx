@@ -4,7 +4,7 @@ import {
   Text
 } from 'react-native'
 
-import { IUserInput, Permission } from '../types';
+import { IUserInput, Permission } from '../../types';
 import {
   CenteredDiv,
   ButtonContainer,
@@ -13,7 +13,7 @@ import {
   RadioButtonGroup,
   ThemedTextInput,
   ButtonGroupContain
-} from './shared';
+} from '../shared';
 
 interface ICreateUser {
   navigation: any;

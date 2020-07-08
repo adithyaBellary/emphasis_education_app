@@ -9,7 +9,7 @@ import { SEARCH_CLASSES } from '../../queries/SearchClasses';
 import { ISearchInput, ISearchClassesPayload } from '../../types';
 
 import { SearchContain } from './LiftedSearch';
-import ClassSearchResults from '../Presentational/ClassSearchResults';
+import ClassSearchResults from '../Search/ClassSearchResults';
 
 const ClassSearch = () => {
   const [searchTerm, setSearchTerm] = React.useState('');

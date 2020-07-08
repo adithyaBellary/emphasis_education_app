@@ -5,23 +5,23 @@ import { View, Text, ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import {useMutation} from '@apollo/react-hooks';
 
-import Login from './src/components/Login';
-import Chat from './src/components/Chat';
-import HomePage from './src/components/HomePage';
-import ChatPicker from './src/components/ChatPicker';
-import Profile from './src/components/LiftedProfile';
-import CreateUserContain from './src/components/CreateUserContainer';
-import ConfirmationScreen from './src/components/ConfirmationScreen';
-import Search from './src/components/AdminPage/LiftedSearch';
-import AdminPage from './src/components/AdminPage';
-import CreateChat from './src/components/CreateChat';
-import Settings from './src/components/Settings';
+import Login from './components/Login';
+import Chat from './components/Chat/Chat';
+import HomePage from './components/HomePage';
+import ChatPicker from './components/Chat/ChatPicker';
+import Profile from './components/Profile/LiftedProfile';
+import CreateUserContain from './components/CreateUser/CreateUserContainer';
+import ConfirmationScreen from './components/CreateUser/ConfirmationScreen';
+import Search from './components/AdminPage/LiftedSearch';
+import AdminPage from './components/AdminPage/AdminPage';
+import CreateChat from './components/Chat/CreateChat';
+import Settings from './components/Settings';
 
-import { LOGIN_TOKEN } from './src/constant';
-import { LOGIN } from './src/queries/Login';
+import { LOGIN_TOKEN } from './constant';
+import { LOGIN } from './queries/Login';
 
-import context, {EmptyUser, AuthContext} from './src/components/Context/Context';
-import { IUser, ILoginPayload } from './src/types';
+import context, {EmptyUser, AuthContext} from './components/Context/Context';
+import { IUser, ILoginPayload } from './types';
 
 const AuthStackNav = createStackNavigator();
 const AuthStack = ({ error }) => {

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { GiftedChat, Bubble } from 'react-native-gifted-chat';
+import { GiftedChat, Bubble, InputToolbar } from 'react-native-gifted-chat';
 import {
   ActivityIndicator,
   Text
@@ -19,6 +19,11 @@ interface IGiftedChatProps {
   refreshFn(): void;
 }
 
+// const CustomInput = () => (
+//   <InputToolbar
+
+//   />
+// )
 
 const MyGiftedChat: React.FC<IGiftedChatProps> = ({ queryLoading, refreshFn, chatID, curUser, sendMessage, messages }) => (
   <GiftedChat

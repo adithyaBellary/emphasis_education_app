@@ -5,14 +5,14 @@ import {
 // import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 import { useMutation, useQuery, useSubscription } from '@apollo/react-hooks';
 
-import GiftedChat from './Presentational/GiftedChat';
-import Context from './Context/Context';
+import GiftedChat from './GiftedChat';
+import Context from '../Context/Context';
 
-import { REFETCH_LIMIT } from '../constant';
-import { IMessage, IMessageUserType } from '../types';
-import { SUB } from '../queries/MessageReceived';
-import { SEND_MESSAGE } from '../queries/SendMessage';
-import { GET_MESSAGES } from '../queries/GetMessages';
+import { REFETCH_LIMIT } from '../../constant';
+import { IMessage, IMessageUserType } from '../../types';
+import { SUB } from '../../queries/MessageReceived';
+import { SEND_MESSAGE } from '../../queries/SendMessage';
+import { GET_MESSAGES } from '../../queries/GetMessages';
 
 interface IChatProps {
   // TODO type the navagation props

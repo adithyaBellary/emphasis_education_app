@@ -6,9 +6,8 @@ import {
 import { Divider } from 'react-native-elements';
 
 
-import { IUserInput } from '../types';
-import { ThemedText } from './shared';
-import  { IndividualField } from './shared';
+import { IUserInput } from '../../types';
+import { ThemedText, IndividualField } from '../shared';
 
 const IndividualItem: React.FC<IUserInput & {id: number}> = ({
   name, email, password, phoneNumber, userType, id, gender }) => {

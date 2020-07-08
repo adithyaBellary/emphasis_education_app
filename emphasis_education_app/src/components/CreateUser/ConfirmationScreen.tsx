@@ -10,11 +10,11 @@ import {
   MyButtonText,
   CenteredDiv,
   ContentContain
-} from './shared';
+} from '../shared';
 import { ICreateUserArr } from './CreateUserContainer';
 import IndividualItem from './DisplayIndividualMember';
 
-import { IUserInput } from '../types';
+import { IUserInput } from '../../types';
 
 interface IConfirmationScreenProps {
   createdUsers: ICreateUserArr | undefined;

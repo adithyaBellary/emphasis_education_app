@@ -7,7 +7,7 @@ import { useLazyQuery } from '@apollo/react-hooks';
 import { Input, Icon } from 'react-native-elements';
 import styled from 'styled-components';
 
-import SearchResults from '../Presentational/SearchResults';
+import SearchResults from '../Search/SearchResults';
 
 import { ISearchUserPayload, ISearchInput } from '../../types';
 import { SEARCH_USERS } from '../../queries/SearchUsers';

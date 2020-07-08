@@ -58,13 +58,6 @@ const InputContain = styled(View)`
 
 const Login: React.FC<ILoginProps> = props => {
 
-  // React.useEffect(() => {
-  //   props.navigation.setOptions({
-  //     headerLeft: () => null
-  //   })
-  // }, [])
-
-  // const { setUser } = useContext(Context);
   const { login } = useContext(AuthContext);
 
   const [curState, setState] = useState({
@@ -74,27 +67,6 @@ const Login: React.FC<ILoginProps> = props => {
     password: 'test01',
     name: 'Test User'
   })
-
-  // TODO use loading state to render spinner
-  // const [doLogin, { data, error, loading }] = useMutation<ILoginPayload>(
-  //   LOGIN,
-  //   {
-  //     variables: {
-  //       email: curState.email,
-  //       password: curState.password
-  //     },
-  //     onCompleted: async ( { login } ) => {
-  //       console.log('login result', login.user)
-  //       if (login.res) {
-  //         await successLogin(login)
-  //       } else {
-  //         errorLogin()
-  //       }
-  //     }
-  //   }
-  // )
-
-  // if (error) console.log('ERROR', error);
 
   const onChangeEmail = (email: string) => setState({
     ...curState,

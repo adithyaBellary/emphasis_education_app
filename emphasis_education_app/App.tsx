@@ -22,7 +22,7 @@ import { theme } from './src/theme';
 import context, {EmptyUser, AuthContext} from './src/components/Context/Context';
 import { IUser, ILoginPayload } from './src/types';
 
-import StackNavigation from './StackNavigation';
+import StackNavigation from './src/StackNavigation';
 
 const cache = new InMemoryCache();
 const httplink = new HttpLink({

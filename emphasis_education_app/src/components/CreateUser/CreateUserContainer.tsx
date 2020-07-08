@@ -5,13 +5,12 @@ import {
   View,
 } from 'react-native';
 
-import { IUserInput, IUsableUserInfo, ICreateUserPayload } from '../types';
+import { IUserInput, IUsableUserInfo, ICreateUserPayload } from '../../types';
 import CreateUser from './CreateUser';
-import { CREATE_USER } from '../queries/CreateUser';
+import { CREATE_USER } from '../../queries/CreateUser';
 
 import  ConfirmationScreen  from './ConfirmationScreen';
-import { AuthContext } from './Context/Context';
-
+import { AuthContext } from '../Context/Context';
 
 interface ICreateUserContainProps {
   navigation: any;

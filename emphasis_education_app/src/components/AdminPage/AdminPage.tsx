@@ -3,8 +3,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { View, Text } from 'react-native';
 
-import Search from './AdminPage/LiftedSearch';
-import classSearch from './AdminPage/LiftedClassSearch';
+import Search from './LiftedSearch';
+import classSearch from './LiftedClassSearch';
 
 interface IAdminPageProps {
   navigation: any;
