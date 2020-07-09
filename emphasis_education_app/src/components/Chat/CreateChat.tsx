@@ -20,13 +20,6 @@ import { IndividualResultContainer } from '../AdminPage/IndividualResult';
 
 import Context from '../Context/Context';
 
-const Test: React.FC = () => (
-  <View>
-    <Text>
-      hi
-    </Text>
-  </View>
-)
 interface ICreateChatProps {
   navigation: any;
   route: any;
