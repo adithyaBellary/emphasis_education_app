@@ -5,6 +5,7 @@ import {
   Text
 } from 'react-native';
 import { Icon } from 'react-native-elements';
+import ImagePicker from 'react-native-image-crop-picker';
 
 import {
   IMessageUserType,
@@ -20,6 +21,15 @@ interface IGiftedChatProps {
   sendMessage: any;
   messages: IMessage[] | undefined;
   refreshFn(): void;
+}
+
+const OpenImagePicker = () => {
+  console.log('picking')
+  ImagePicker.openPicker({
+    multiple: true
+  }).then(_images => {
+    console.log('images: ', _images)
+  })
 }
 
 const MyGiftedChat: React.FC<IGiftedChatProps> = ({ queryLoading, refreshFn, chatID, curUser, sendMessage, messages }) => {
@@ -90,7 +100,7 @@ const MyGiftedChat: React.FC<IGiftedChatProps> = ({ queryLoading, refreshFn, cha
         <Icon
           name='camerao'
           type='antdesign'
-          onPress={() => console.log('hellooooo')}
+          onPress={OpenImagePicker}
         />
       )}
     />
