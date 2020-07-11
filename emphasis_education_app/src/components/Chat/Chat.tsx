@@ -5,7 +5,7 @@ import {
 // import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 import { useMutation, useQuery, useSubscription } from '@apollo/react-hooks';
 
-import GiftedChat from './GiftedChat';
+import Chat from './GiftedChat';
 import Context from '../Context/Context';
 
 import { REFETCH_LIMIT } from '../../constant';
@@ -48,7 +48,7 @@ interface IMessagePayload {
   sendMessage: IMessageReceivedProps;
 }
 
-const Chat: React.FC<IChatProps> = props => {
+const LiftedChat: React.FC<IChatProps> = props => {
   const { loggedUser } = React.useContext(Context);
   const [curState, setState] = useState<IState>()
   const chatID: string = props.route.params.chatID;
@@ -146,7 +146,7 @@ const Chat: React.FC<IChatProps> = props => {
       { queryLoading ?
         <Text>loading Gifted Chat</Text> :
         (
-          <GiftedChat
+          <Chat
             queryLoading={queryLoading}
             // networkStatus={networkStatus}
             refreshFn={refreshFn}
@@ -161,4 +161,4 @@ const Chat: React.FC<IChatProps> = props => {
   )
 }
 
-export default Chat;
+export default LiftedChat;

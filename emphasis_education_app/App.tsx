@@ -18,6 +18,12 @@ import { ApolloProvider, useQuery, useMutation } from '@apollo/react-hooks';
 import { getMainDefinition } from 'apollo-utilities';
 import { ThemeProvider } from 'styled-components';
 
+import {decode, encode} from 'base-64'
+
+// if (!global.btoa) {  global.btoa = encode }
+
+// if (!global.atob) { global.atob = decode }
+
 import { theme } from './src/theme';
 import context, {EmptyUser, AuthContext} from './src/components/Context/Context';
 import { IUser, ILoginPayload } from './src/types';

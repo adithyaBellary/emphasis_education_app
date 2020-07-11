@@ -1,11 +1,25 @@
 import * as React from 'react';
-import { Actions, ActionsProps, GiftedChat, Bubble, InputToolbar, Composer } from 'react-native-gifted-chat';
+import {
+  Actions,
+  ActionsProps,
+  GiftedChat,
+  Bubble,
+  InputToolbar,
+  Composer,
+  Message,
+  MessageText,
+  MessageImage,
+} from 'react-native-gifted-chat';
 import {
   ActivityIndicator,
   Text
 } from 'react-native';
 import { Icon } from 'react-native-elements';
-import ImagePicker from 'react-native-image-crop-picker';
+// import ImagePicker from 'react-native-image-crop-picker';
+import ImagePicker from 'react-native-image-picker';
+import { useMutation } from '@apollo/react-hooks';
+
+import {decode, encode} from 'base-64'
 
 import {
   IMessageUserType,
@@ -23,34 +37,27 @@ interface IGiftedChatProps {
   refreshFn(): void;
 }
 
-const OpenImagePicker = () => {
-  console.log('picking')
-  ImagePicker.openPicker({
-    multiple: true
-  }).then(_images => {
-    console.log('images: ', _images)
-  })
-}
-
 const MyGiftedChat: React.FC<IGiftedChatProps> = ({ queryLoading, refreshFn, chatID, curUser, sendMessage, messages }) => {
+  // const []
+  const [image, setImage] = React.useState()
 
   const onSend = (props: IMessage[]) => {
     sendMessage({
       variables: {
         messages: [
           {
-            // this works, but i am not too sure about it
             id: 'messageID',
             text: props[0].text,
             user: curUser,
-            chatID: chatID
+            chatID: chatID,
+            image
           }
         ]
       }
     })
   }
 
-  const renderBubble = props => (
+  const renderBubble = (props) => (
     <Bubble
       {...props}
       textStyle={{
@@ -114,6 +121,52 @@ const MyGiftedChat: React.FC<IGiftedChatProps> = ({ queryLoading, refreshFn, cha
     />
   )
 
+  // const OpenImagePicker = () => {
+  //   console.log('picking')
+  //   ImagePicker.openPicker({
+  //     multiple: true,
+  //     writeTempFile: true,
+  //     includeBase64: true,
+  //     includeExif: true
+  //   }).then(_images => {
+  //     console.log('images: ', _images)
+  //   })
+  // }
+
+  const OpenImagePicker = () => {
+    ImagePicker.showImagePicker( async response => {
+      // console.log('reponse', response)
+      // console.log('reponse', response.uri)
+
+      if (response.didCancel) {
+        console.log('cance')
+      } else {
+        try {
+          const source = { uri: response.uri}
+          // console.log('b64', response.data)
+          // const localFIle = await fetch(response.uri)
+          // const blob = await localFIle.blob()
+          // console.log('blob', blob)
+          setImage(response.data)
+
+          const byteString = decode(response.data);
+          const mimString = 'image/jpeg';
+          const ab = new ArrayBuffer(byteString.length)
+          const ia = new Uint8Array(ab)
+          for (let i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i)
+          }
+
+          // write the Array Buffer to the blob
+          const blob = new Blob([ia]);
+          console.log('blob:', blob)
+        } catch (e) {
+          console.log('didnt work', e)
+        }
+      }
+    })
+  }
+
   return (
     <GiftedChat
       renderLoading={() => <ActivityIndicator />}
@@ -125,8 +178,6 @@ const MyGiftedChat: React.FC<IGiftedChatProps> = ({ queryLoading, refreshFn, cha
       }
       renderChatEmpty={() => <Text>we empty</Text>}
       renderInputToolbar={renderInputToolbar}
-      // renderComposer={renderComposer}
-      // renderActions={}
       messages={messages}
       inverted={false}
       renderBubble={renderBubble}
