@@ -10,6 +10,7 @@ subscription {
       name
       _id
     }
+    image
   }
 }
 `

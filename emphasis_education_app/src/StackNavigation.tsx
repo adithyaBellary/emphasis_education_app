@@ -12,10 +12,10 @@ import ChatPicker from './components/Chat/ChatPicker';
 import Profile from './components/Profile/LiftedProfile';
 import CreateUserContain from './components/CreateUser/CreateUserContainer';
 import ConfirmationScreen from './components/CreateUser/ConfirmationScreen';
-import Search from './components/AdminPage/LiftedSearch';
 import AdminPage from './components/AdminPage/AdminPage';
 import CreateChat from './components/Chat/CreateChat';
 import Settings from './components/Settings';
+import AboutUs from './components/AboutUs';
 
 import { LOGIN_TOKEN } from './constant';
 import { LOGIN } from './queries/Login';
@@ -58,9 +58,9 @@ const AppStack = ({ userToken }) => (
       initialParams={{ token: userToken}}
     />
     <AppStackNav.Screen
-      name="Search"
-      component={Search}
-      options={{ title: '' }}
+      name='AboutUs'
+      component={AboutUs}
+      options={{ title: 'About Us'}}
     />
     <AppStackNav.Screen
       name="Chat"

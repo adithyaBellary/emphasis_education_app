@@ -155,7 +155,7 @@ const Home: React.FC<ILiftedHomeProps> = ({ navigation, route }) => {
           <Icon
             name='search'
             // color='#b89cb0'
-            onPress={changeScreens('Search')}
+            onPress={changeScreens('AboutUs')}
             reverse={true}
           />
           <Icon

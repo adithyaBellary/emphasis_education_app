@@ -79,22 +79,22 @@ const MyGiftedChat: React.FC<IGiftedChatProps> = ({ queryLoading, refreshFn, cha
     })
   }
 
-  const _sendImage = () => {
-    console.log('sending image')
-    sendMessage({
-      variables: {
-        messages: [
-          {
-            id: 'messageID',
-            text: '',
-            user: curUser,
-            chatID,
-            image
-          }
-        ]
-      }
-    })
-  }
+  // const _sendImage = () => {
+  //   console.log('sending image')
+  //   sendMessage({
+  //     variables: {
+  //       messages: [
+  //         {
+  //           id: 'messageID',
+  //           text: '',
+  //           user: curUser,
+  //           chatID,
+  //           image
+  //         }
+  //       ]
+  //     }
+  //   })
+  // }
 
   const renderBubble = (props) => (
     <Bubble
@@ -231,6 +231,7 @@ const MyGiftedChat: React.FC<IGiftedChatProps> = ({ queryLoading, refreshFn, cha
         onSend={onSend}
         onLongPress={(ctx, currentMessage) => console.log('delete this', ctx, currentMessage)}
         user={curUser}
+        // keyboardShouldPersistTaps={'always'}
         // bottomOffset={60}
       />
       {/* </KeyboardAvoidingView> */}

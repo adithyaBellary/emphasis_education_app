@@ -5,6 +5,7 @@ import { View, Text } from 'react-native';
 
 import Search from './LiftedSearch';
 import classSearch from './LiftedClassSearch';
+import InviteUser from './InviteUser';
 
 interface IAdminPageProps {
   navigation: any;
@@ -61,6 +62,7 @@ const AdminPage: React.FC<IAdminPageProps> = () => {
     <Tab.Navigator>
       <Tab.Screen name="Users" component={UserStack} />
       <Tab.Screen name="Classes" component={classSearch} />
+      <Tab.Screen name="Invite User" component={InviteUser} />
     </Tab.Navigator>
   )
 }
