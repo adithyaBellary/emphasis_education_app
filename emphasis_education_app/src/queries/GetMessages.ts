@@ -11,6 +11,7 @@ query getMessages($chatID: String!, $init: Int!) {
       _id
       name
     }
+    image
   }
 }
 `;

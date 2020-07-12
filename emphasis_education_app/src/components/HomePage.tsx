@@ -23,8 +23,6 @@ import { Permission } from '../types';
 
 import { GET_USER } from '../queries/GetUser';
 
-// import Pic from './images/2020 Emphasis Education_Logo (FINAL) - transparent png files-03.png';
-
 interface ILiftedHomeProps {
   navigation: any;
   route: any;
@@ -169,7 +167,6 @@ const Home: React.FC<ILiftedHomeProps> = ({ navigation, route }) => {
         </IconContain>
       </IconSection>
       <MissionStatement />
-      {/* <Image source={Pic} style={{ width: 80, height: 80}}/> */}
     </CenteredDiv>
   )
 

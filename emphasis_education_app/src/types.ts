@@ -95,6 +95,7 @@ export interface IMessage {
   text: string;
   createdAt: number;
   user: IMessageUserType;
+  image?: string;
 }
 
 export interface IGetFamilyInput {

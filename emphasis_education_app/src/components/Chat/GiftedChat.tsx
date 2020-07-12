@@ -6,20 +6,21 @@ import {
   Bubble,
   InputToolbar,
   Composer,
-  Message,
-  MessageText,
-  MessageImage,
 } from 'react-native-gifted-chat';
 import {
   ActivityIndicator,
-  Text
+  Text,
+  View,
+  Image,
+  TouchableHighlight,
+  Alert,
+  KeyboardAvoidingView
 } from 'react-native';
 import { Icon } from 'react-native-elements';
-// import ImagePicker from 'react-native-image-crop-picker';
 import ImagePicker from 'react-native-image-picker';
 import { useMutation } from '@apollo/react-hooks';
 
-import {decode, encode} from 'base-64'
+import { SEND_MESSAGE } from '../../queries/SendMessage';
 
 import {
   IMessageUserType,
@@ -32,14 +33,35 @@ interface IGiftedChatProps {
   // networkStatus: number;
   chatID: string;
   curUser: IMessageUserType;
-  sendMessage: any;
   messages: IMessage[] | undefined;
   refreshFn(): void;
 }
 
-const MyGiftedChat: React.FC<IGiftedChatProps> = ({ queryLoading, refreshFn, chatID, curUser, sendMessage, messages }) => {
-  // const []
-  const [image, setImage] = React.useState()
+interface IMessageReceivedProps {
+  text: string;
+  MessageId: number;
+  createdAt: number;
+  user: IMessageUserType;
+  image?: string;
+}
+
+interface IMessagePayload {
+  sendMessage: IMessageReceivedProps;
+}
+
+const MyGiftedChat: React.FC<IGiftedChatProps> = ({ queryLoading, refreshFn, chatID, curUser, messages }) => {
+  const [image, setImage] = React.useState('')
+  const [imageSelected, setImageSelected] = React.useState(false);
+
+  const [sendMessage, { error }] = useMutation<IMessagePayload>(
+    SEND_MESSAGE,
+    {
+      onCompleted: data => {
+        console.log('send mut success:', data)
+        setImageSelected(false)
+      }
+    }
+  );
 
   const onSend = (props: IMessage[]) => {
     sendMessage({
@@ -50,6 +72,23 @@ const MyGiftedChat: React.FC<IGiftedChatProps> = ({ queryLoading, refreshFn, cha
             text: props[0].text,
             user: curUser,
             chatID: chatID,
+            image
+          }
+        ]
+      }
+    })
+  }
+
+  const _sendImage = () => {
+    console.log('sending image')
+    sendMessage({
+      variables: {
+        messages: [
+          {
+            id: 'messageID',
+            text: '',
+            user: curUser,
+            chatID,
             image
           }
         ]
@@ -80,18 +119,37 @@ const MyGiftedChat: React.FC<IGiftedChatProps> = ({ queryLoading, refreshFn, cha
     />
   );
 
+
+
   const renderComposer = props => (
-    <Composer
-      {...props}
-      multiline={true}
-      placeholder='Start typing your message here'
-      textInputStyle={{
-        fontFamily: theme.font.main,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    />
+    <>
+      {imageSelected && (
+        <View style={{padding: 10}}>
+          <TouchableHighlight onPress={() => Alert.alert('Remove the image?')}>
+            <Image
+              source={{uri: image}}
+              style={{
+                height: 75,
+                width: 50
+              }}
+            />
+          </TouchableHighlight>
+        </View>
+      )}
+      <Composer
+        {...props}
+        multiline={true}
+        placeholder='Start typing your message here'
+        textInputStyle={{
+          fontFamily: theme.font.main,
+          // display: 'flex',
+          // justifyContent: 'center',
+          // alignItems: 'center',
+          backgroundColor: 'grey',
+          // width: 10
+        }}
+      />
+    </>
   )
 
   const renderActions = props => (
@@ -118,48 +176,33 @@ const MyGiftedChat: React.FC<IGiftedChatProps> = ({ queryLoading, refreshFn, cha
       {...props}
       renderComposer={renderComposer}
       renderActions={renderActions}
+      containerStyle={{
+        backgroundColor: 'yellow',
+        borderRadius: 25,
+        // padding: 10
+        // margin: 10
+      }}
     />
   )
 
-  // const OpenImagePicker = () => {
-  //   console.log('picking')
-  //   ImagePicker.openPicker({
-  //     multiple: true,
-  //     writeTempFile: true,
-  //     includeBase64: true,
-  //     includeExif: true
-  //   }).then(_images => {
-  //     console.log('images: ', _images)
-  //   })
-  // }
+  const options = {
+    title: 'Select Photo to Send',
+    storageOptions: {
+      skipBackup: true,
+      path: 'images',
+    },
+  };
 
   const OpenImagePicker = () => {
-    ImagePicker.showImagePicker( async response => {
-      // console.log('reponse', response)
-      // console.log('reponse', response.uri)
-
+    ImagePicker.showImagePicker( options, (response) => {
       if (response.didCancel) {
         console.log('cance')
       } else {
         try {
-          const source = { uri: response.uri}
-          // console.log('b64', response.data)
-          // const localFIle = await fetch(response.uri)
-          // const blob = await localFIle.blob()
-          // console.log('blob', blob)
-          setImage(response.data)
-
-          const byteString = decode(response.data);
-          const mimString = 'image/jpeg';
-          const ab = new ArrayBuffer(byteString.length)
-          const ia = new Uint8Array(ab)
-          for (let i = 0; i < byteString.length; i++) {
-            ia[i] = byteString.charCodeAt(i)
-          }
-
-          // write the Array Buffer to the blob
-          const blob = new Blob([ia]);
-          console.log('blob:', blob)
+          const _pre = `data:${response.type};base64,`;
+          const source = `${_pre}${response.data}`
+          setImage(source)
+          setImageSelected(true)
         } catch (e) {
           console.log('didnt work', e)
         }
@@ -168,23 +211,32 @@ const MyGiftedChat: React.FC<IGiftedChatProps> = ({ queryLoading, refreshFn, cha
   }
 
   return (
-    <GiftedChat
-      renderLoading={() => <ActivityIndicator />}
-      listViewProps={
-        {
-          refreshing: queryLoading,
-          onRefresh: refreshFn
+    <>
+    {/* <View style={{flex: 1}}> */}
+    {/* <KeyboardAvoidingView behavior={'padding'} keyboardVerticalOffset={50}> */}
+      <GiftedChat
+        renderLoading={() => <ActivityIndicator />}
+        listViewProps={
+          {
+            refreshing: queryLoading,
+            onRefresh: refreshFn,
+            // marginBottom: 50
+          }
         }
-      }
-      renderChatEmpty={() => <Text>we empty</Text>}
-      renderInputToolbar={renderInputToolbar}
-      messages={messages}
-      inverted={false}
-      renderBubble={renderBubble}
-      onSend={onSend}
-      onLongPress={(ctx, currentMessage) => console.log('delete this', ctx, currentMessage)}
-      user={curUser}
-    />
+        renderChatEmpty={() => <Text>we empty</Text>}
+        renderInputToolbar={renderInputToolbar}
+        messages={messages}
+        inverted={false}
+        renderBubble={renderBubble}
+        onSend={onSend}
+        onLongPress={(ctx, currentMessage) => console.log('delete this', ctx, currentMessage)}
+        user={curUser}
+        // bottomOffset={60}
+      />
+      {/* </KeyboardAvoidingView> */}
+      {/* <KeyboardAvoidingView behavior={'padding'} keyboardVerticalOffset={0}/> */}
+    {/* </View> */}
+    </>
   )
 }
 
