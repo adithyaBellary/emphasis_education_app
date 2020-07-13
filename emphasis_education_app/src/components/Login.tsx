@@ -4,6 +4,8 @@ import {
   View,
   Text,
   SafeAreaView,
+  TouchableOpacity,
+  Image
 } from 'react-native';
 import styled from 'styled-components';
 import { MD5 } from 'crypto-js';
@@ -19,18 +21,21 @@ import {
 } from './shared';
 import Context, { AuthContext } from './Context/Context';
 
+import { IconRow, VerticalDivier, ThemedText, GeneralSpacing } from './shared';
+import { LogoWithText } from './Logo/LogoWithText';
+
 const PositionDiv = styled(View)`
   padding-top: 200px;
 `;
 
-const TitleText = styled(Text)`
-  font-size: 20px;
-  fontFamily: ${({ theme }) => theme.font.main};
-`;
+// const TitleText = styled(Text)`
+//   font-size: 20px;
+//   fontFamily: ${({ theme }) => theme.font.main};
+// `;
 
-const TitleContain = styled(View)`
-  padding-top: 100px;
-`;
+// const TitleContain = styled(View)`
+//   padding-top: 100px;
+// `;
 
 interface ILoginProps {
   // TODO type this shit
@@ -55,6 +60,40 @@ const getHash = (email: string): string => {
 const InputContain = styled(View)`
   padding: 10px;
 `
+interface ISecondaryLinkProps {
+  linkContent: string;
+}
+
+const SecondaryLink: React.FC<ISecondaryLinkProps> = ({ linkContent }) => (
+  <GeneralSpacing u={0} r={10} d={0} l={10}>
+    <TouchableOpacity onPress={() => console.log('clicked')}>
+      <ThemedText size={14} type={'light'}>
+        {linkContent}
+      </ThemedText>
+    </TouchableOpacity>
+  </GeneralSpacing>
+);
+
+const LoginImage = () => (
+  <GeneralSpacing u={0} r={0} d={50} l={0} >
+    <Image
+      source={{ uri: LogoWithText}}
+      style={{
+        height: 300,
+        width: 400
+      }}
+    />
+  </GeneralSpacing>
+)
+
+const ContentWrap: React.FC = ({ children }) => (
+  <SafeAreaView>
+    <CenteredDiv>
+      {children}
+    </CenteredDiv>
+  </SafeAreaView>
+);
+
 
 const Login: React.FC<ILoginProps> = props => {
 
@@ -79,54 +118,44 @@ const Login: React.FC<ILoginProps> = props => {
 
   return (
     <SafeAreaView>
-      <TitleContain>
-        <CenteredDiv>
-          <TitleText>
-            Emphasis Education
-          </TitleText>
+      <CenteredDiv>
+        <LoginImage />
+
+        <InputContain>
+          <LoginInput
+            placeholder='Username'
+            value={curState.email}
+            onChangeText={onChangeEmail}
+          />
+        </InputContain>
+
+        <HorizontalDivider width={60}/>
+
+        <InputContain>
+          <LoginInput
+            placeholder='Password'
+            value={curState.password}
+            onChangeText={onChangePassword}
+          />
+        </InputContain>
+
+        {props.error && <Errorlogin /> }
+
+        <ButtonContainer>
+          <MyButton
+            onPress={() => login(curState.email, curState.password)}
+          >
+            <MyButtonText>Login</MyButtonText>
+          </MyButton>
+        </ButtonContainer>
+
+        <IconRow>
+          <SecondaryLink linkContent={'Fist time user?'}/>
+          <VerticalDivier height={10}/>
+          <SecondaryLink linkContent={'Forgot Password'}/>
+        </IconRow>
+
         </CenteredDiv>
-      </TitleContain>
-      <PositionDiv>
-        <CenteredDiv>
-          <InputContain>
-            <LoginInput
-              placeholder='Username'
-              value={curState.email}
-              onChangeText={onChangeEmail}
-            />
-          </InputContain>
-          <HorizontalDivider width={60}/>
-          <InputContain>
-            <LoginInput
-              placeholder='Password'
-              value={curState.password}
-              onChangeText={onChangePassword}
-            />
-          </InputContain>
-          {props.error && <Errorlogin /> }
-          <ButtonContainer>
-            <MyButton
-              onPress={() => login(curState.email, curState.password)}
-            >
-              <MyButtonText>Login</MyButtonText>
-            </MyButton>
-          </ButtonContainer>
-          <ButtonContainer>
-            <MyButton
-              onPress={() => props.navigation.push('CreateUserContain')}
-            >
-              <MyButtonText>First time user?</MyButtonText>
-            </MyButton>
-          </ButtonContainer>
-          <ButtonContainer>
-            <MyButton
-              onPress={() => Alert.alert('run forgot password')}
-            >
-              <MyButtonText>Forgot Password?</MyButtonText>
-            </MyButton>
-          </ButtonContainer>
-        </CenteredDiv>
-      </PositionDiv>
     </SafeAreaView>
     )
   }

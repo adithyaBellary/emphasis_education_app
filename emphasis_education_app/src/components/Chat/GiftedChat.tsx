@@ -38,11 +38,7 @@ interface IGiftedChatProps {
 }
 
 interface IMessageReceivedProps {
-  text: string;
-  MessageId: number;
-  createdAt: number;
-  user: IMessageUserType;
-  image?: string;
+  res: Boolean
 }
 
 interface IMessagePayload {
@@ -57,7 +53,7 @@ const MyGiftedChat: React.FC<IGiftedChatProps> = ({ queryLoading, refreshFn, cha
     SEND_MESSAGE,
     {
       onCompleted: data => {
-        console.log('send mut success:', data)
+        console.log('data after sending message', data)
         setImageSelected(false)
       }
     }
@@ -78,23 +74,6 @@ const MyGiftedChat: React.FC<IGiftedChatProps> = ({ queryLoading, refreshFn, cha
       }
     })
   }
-
-  // const _sendImage = () => {
-  //   console.log('sending image')
-  //   sendMessage({
-  //     variables: {
-  //       messages: [
-  //         {
-  //           id: 'messageID',
-  //           text: '',
-  //           user: curUser,
-  //           chatID,
-  //           image
-  //         }
-  //       ]
-  //     }
-  //   })
-  // }
 
   const renderBubble = (props) => (
     <Bubble
@@ -118,8 +97,6 @@ const MyGiftedChat: React.FC<IGiftedChatProps> = ({ queryLoading, refreshFn, cha
       }}
     />
   );
-
-
 
   const renderComposer = props => (
     <>
@@ -151,6 +128,8 @@ const MyGiftedChat: React.FC<IGiftedChatProps> = ({ queryLoading, refreshFn, cha
       />
     </>
   )
+
+  if (error) { console.log('there was an issue sending the message') }
 
   const renderActions = props => (
     <Actions
