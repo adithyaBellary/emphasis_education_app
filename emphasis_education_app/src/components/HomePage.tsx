@@ -6,7 +6,7 @@ import {
   View,
   Text,
   Image,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 
 import styled from 'styled-components';
@@ -23,7 +23,7 @@ import { Permission } from '../types';
 
 import { GET_USER } from '../queries/GetUser';
 
-// import Pic from './images/2020 Emphasis Education_Logo (FINAL) - transparent png files-03.png';
+import { LogoWithoutText } from './Logo/LogoWithoutText';
 
 interface ILiftedHomeProps {
   navigation: any;
@@ -157,7 +157,7 @@ const Home: React.FC<ILiftedHomeProps> = ({ navigation, route }) => {
           <Icon
             name='search'
             // color='#b89cb0'
-            onPress={changeScreens('Search')}
+            onPress={changeScreens('AboutUs')}
             reverse={true}
           />
           <Icon
@@ -169,7 +169,6 @@ const Home: React.FC<ILiftedHomeProps> = ({ navigation, route }) => {
         </IconContain>
       </IconSection>
       <MissionStatement />
-      {/* <Image source={Pic} style={{ width: 80, height: 80}}/> */}
     </CenteredDiv>
   )
 

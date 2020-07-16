@@ -12,21 +12,14 @@ import {
 } from 'react-native-elements';
 import { useLazyQuery, useMutation } from '@apollo/react-hooks';
 
-import { SEARCH_CLASSES } from '../queries/SearchClasses';
-import { SEARCH_USERS } from '../queries/SearchUsers';
-import { CREATE_CHAT } from '../queries/CreateChat';
-import { ISearchInput, ISearchClassesPayload, ISearchUserPayload, ICreateChatInput, ICreateChatPayload, Permission } from '../types';
-import { IndividualResultContainer } from './AdminPage/IndividualResult';
+import { SEARCH_CLASSES } from '../../queries/SearchClasses';
+import { SEARCH_USERS } from '../../queries/SearchUsers';
+import { CREATE_CHAT } from '../../queries/CreateChat';
+import { ISearchInput, ISearchClassesPayload, ISearchUserPayload, ICreateChatInput, ICreateChatPayload, Permission } from '../../types';
+import { IndividualResultContainer } from '../AdminPage/IndividualResult';
 
-import Context from './Context/Context';
+import Context from '../Context/Context';
 
-const Test: React.FC = () => (
-  <View>
-    <Text>
-      hi
-    </Text>
-  </View>
-)
 interface ICreateChatProps {
   navigation: any;
   route: any;

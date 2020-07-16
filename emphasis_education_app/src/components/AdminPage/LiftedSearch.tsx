@@ -1,20 +1,15 @@
 import * as React from 'react';
 import {
   ActivityIndicator,
-  View,
 } from 'react-native';
 import { useLazyQuery } from '@apollo/react-hooks';
 import { Input, Icon } from 'react-native-elements';
-import styled from 'styled-components';
 
-import SearchResults from '../Presentational/SearchResults';
-
+import SearchResults from '../Search/SearchResults';
 import { ISearchUserPayload, ISearchInput } from '../../types';
 import { SEARCH_USERS } from '../../queries/SearchUsers';
 
-export const SearchContain = styled(View)`
-  padding-top: 20px;
-`
+import { ContentContain } from './common';
 
 interface ILiftedSearchProps {
   navigation: any;
@@ -30,7 +25,7 @@ const LiftedSearch: React.FC<ILiftedSearchProps> = ({ navigation }) => {
   console.log('data', data)
 
   return (
-    <SearchContain>
+    <ContentContain>
       <Input
         placeholder='Search for users'
         onChangeText={handleTextChange}
@@ -47,7 +42,7 @@ const LiftedSearch: React.FC<ILiftedSearchProps> = ({ navigation }) => {
         />
       )}
 
-    </SearchContain>
+    </ContentContain>
   )
 }
 

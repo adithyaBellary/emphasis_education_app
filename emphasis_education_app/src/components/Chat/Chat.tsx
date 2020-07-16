@@ -2,17 +2,16 @@ import React, { useState, useEffect } from 'react';
 import {
   Text
 } from 'react-native';
-// import { GiftedChat, Bubble } from 'react-native-gifted-chat';
-import { useMutation, useQuery, useSubscription } from '@apollo/react-hooks';
+import { useQuery, useSubscription } from '@apollo/react-hooks';
 
-import GiftedChat from './Presentational/GiftedChat';
-import Context from './Context/Context';
+import Chat from './GiftedChat';
+import Context from '../Context/Context';
 
-import { REFETCH_LIMIT } from '../constant';
-import { IMessage, IMessageUserType } from '../types';
-import { SUB } from '../queries/MessageReceived';
-import { SEND_MESSAGE } from '../queries/SendMessage';
-import { GET_MESSAGES } from '../queries/GetMessages';
+import { REFETCH_LIMIT } from '../../constant';
+import { IMessage, IMessageUserType } from '../../types';
+import { SUB } from '../../queries/MessageReceived';
+
+import { GET_MESSAGES } from '../../queries/GetMessages';
 
 interface IChatProps {
   // TODO type the navagation props
@@ -29,6 +28,7 @@ interface IMessageReceivedProps {
   MessageId: number;
   createdAt: number;
   user: IMessageUserType;
+  image?: string;
 }
 
 interface IMessageReceived {
@@ -44,13 +44,11 @@ interface IGetMessagesInput {
 }
 let initFetch: number = 0;
 
-interface IMessagePayload {
-  sendMessage: IMessageReceivedProps;
-}
 
-const Chat: React.FC<IChatProps> = props => {
+
+const LiftedChat: React.FC<IChatProps> = props => {
   const { loggedUser } = React.useContext(Context);
-  const [curState, setState] = useState<IState>()
+  const [curState, setState] = useState<IState>();
   const chatID: string = props.route.params.chatID;
   console.log('chatID', chatID)
   // lets cache this data
@@ -70,10 +68,8 @@ const Chat: React.FC<IChatProps> = props => {
     }
   )
 
-  if (errorMessage) {
-    console.log(errorMessage);
-  }
-  // TODO chatPicker might have to have state over this chat
+  if (errorMessage) { console.log('error', errorMessage) }
+
   const { data: subData } = useSubscription<IMessageReceived>(SUB)
 
   useEffect(() => {
@@ -92,7 +88,7 @@ const Chat: React.FC<IChatProps> = props => {
 
   useEffect(() => {
     if (!subData) { return }
-    const { MessageId: _id, text, createdAt, user } = subData.messageReceived;
+    const { MessageId: _id, text, createdAt, user, image } = subData.messageReceived;
     if (!curState ) {
       setState({
         messages: [
@@ -100,7 +96,8 @@ const Chat: React.FC<IChatProps> = props => {
             _id,
             text,
             createdAt,
-            user: user
+            user,
+            image
           }
         ]
       })
@@ -113,18 +110,12 @@ const Chat: React.FC<IChatProps> = props => {
           _id,
           text,
           createdAt,
-          user
+          user,
+          image
         }
       ]
     })
   }, [subData])
-  // TODO type this mutation
-  const [sendMessage, { error }] = useMutation<IMessagePayload>(SEND_MESSAGE);
-
-  if (error) {
-    console.log('there was an error getting the messages')
-    console.log(error)
-  }
 
   const curUser: IMessageUserType = {
     _id: loggedUser._id,
@@ -146,13 +137,11 @@ const Chat: React.FC<IChatProps> = props => {
       { queryLoading ?
         <Text>loading Gifted Chat</Text> :
         (
-          <GiftedChat
+          <Chat
             queryLoading={queryLoading}
-            // networkStatus={networkStatus}
             refreshFn={refreshFn}
             chatID={chatID}
             curUser={curUser}
-            sendMessage={sendMessage}
             messages={curState ? curState.messages : undefined}
           />
         )
@@ -161,4 +150,4 @@ const Chat: React.FC<IChatProps> = props => {
   )
 }
 
-export default Chat;
+export default LiftedChat;

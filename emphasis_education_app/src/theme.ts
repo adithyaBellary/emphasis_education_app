@@ -15,7 +15,8 @@ export const theme = {
     red: '#FF5834',
     magenta: '#C70039',
     magentaDark: '#940B3F',
-    purple: '#5A1846'
+    purple: '#5A1846',
+    purplePastel: '#B89CB0'
   },
   general: {
     spacing: {

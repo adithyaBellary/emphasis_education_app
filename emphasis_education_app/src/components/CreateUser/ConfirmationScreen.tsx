@@ -9,21 +9,23 @@ import {
   MyButton,
   MyButtonText,
   CenteredDiv,
-  ContentContain
-} from './shared';
+  ContentContain,
+  IconRow
+} from '../shared';
 import { ICreateUserArr } from './CreateUserContainer';
 import IndividualItem from './DisplayIndividualMember';
 
-import { IUserInput } from '../types';
+import { IUserInput } from '../../types';
 
 interface IConfirmationScreenProps {
+  navigation: any;
   createdUsers: ICreateUserArr | undefined;
   loading: boolean;
   submit(): void;
 }
 
 // we need to be able to edit info from here
-const ConfirmationScreen: React.FC<IConfirmationScreenProps> = ({ createdUsers, loading, submit }) => (
+const ConfirmationScreen: React.FC<IConfirmationScreenProps> = ({ createdUsers, loading, submit, navigation }) => (
   <View>
     <ContentContain>
       {createdUsers && createdUsers.users.map((user: IUserInput, index: number) => (
@@ -33,16 +35,23 @@ const ConfirmationScreen: React.FC<IConfirmationScreenProps> = ({ createdUsers, 
         />
       ))}
     </ContentContain>
-    <ButtonContainer>
-      <MyButton>
-        <MyButtonText
-          onPress={submit}
-        >
-          Submit
-        </MyButtonText>
-        {loading && <ActivityIndicator/>}
-      </MyButton>
-    </ButtonContainer>
+    <IconRow>
+      <ButtonContainer>
+        <MyButton onPress={submit}>
+          <MyButtonText>
+            Submit
+          </MyButtonText>
+          {loading && <ActivityIndicator/>}
+        </MyButton>
+      </ButtonContainer>
+      <ButtonContainer>
+        <MyButton onPress={() => navigation.navigate('Login')}>
+          <MyButtonText>
+            Back to Login
+          </MyButtonText>
+        </MyButton>
+      </ButtonContainer>
+    </IconRow>
   </View>
 )
 

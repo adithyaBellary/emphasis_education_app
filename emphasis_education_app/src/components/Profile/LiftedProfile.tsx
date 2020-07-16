@@ -6,11 +6,11 @@ import {
 } from 'react-native';
 import { useQuery } from '@apollo/react-hooks';
 
-import Context from './Context/Context';
-import Profile from './Presentational/Profile';
+import Context from '../Context/Context';
+import Profile from './Profile';
 
-import { GET_FAMILY } from '../queries/GetFamily';
-import { IGetFamilyInput, IGetFamilyPayload } from '../types';
+import { GET_FAMILY } from '../../queries/GetFamily';
+import { IGetFamilyInput, IGetFamilyPayload } from '../../types';
 
 interface ILiftedProfileProps {
   // TODO type the navagation props

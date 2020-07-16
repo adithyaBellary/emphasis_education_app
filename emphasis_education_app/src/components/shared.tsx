@@ -59,7 +59,6 @@ export const MyButton = styled(TouchableOpacity)`
   justify-content: center;
   border-radius: 10px;
   width: 150px;
-
 `;
 
 const d: number = 150;
@@ -232,8 +231,14 @@ export const IndividualField: React.FC<IIndividualFieldProps> = ({ value, label,
 
 export const HorizontalDivider = styled(View)<{width: number}>`
   width: ${({ width }) => width}%;
-  border-bottom-color: grey;
+  border-bottom-color: ${({ theme }) => theme.colors.purplePastel};
   border-bottom-width: 1px;
+`
+
+export const VerticalDivier = styled(View)<{height: number}>`
+  height: ${({ height }) => height}px;
+  border-right-color: grey;
+  border-right-width: 1px;
 `
 
 export const IconRow = styled(View)`
