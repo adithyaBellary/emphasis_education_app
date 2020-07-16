@@ -16,6 +16,7 @@ import AdminPage from './components/AdminPage/AdminPage';
 import CreateChat from './components/Chat/CreateChat';
 import Settings from './components/Settings';
 import AboutUs from './components/AboutUs';
+import EnterCode from './components/CreateUser/EnterCode';
 
 import { LOGIN_TOKEN } from './constant';
 import { LOGIN } from './queries/Login';
@@ -32,7 +33,12 @@ const AuthStack = ({ error }) => {
       {_props => <Login {..._props} error={error}/>}
     </AuthStackNav.Screen>
     <AppStackNav.Screen
-      name="CreateUserContain"
+      name='EnterCode'
+      component={EnterCode}
+      options={{ title: 'Enter Code'}}
+    />
+    <AppStackNav.Screen
+      name='CreateUserContain'
       component={CreateUserContain}
       options={{ title: 'Create User' }}
     />

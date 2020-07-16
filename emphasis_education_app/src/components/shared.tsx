@@ -59,7 +59,6 @@ export const MyButton = styled(TouchableOpacity)`
   justify-content: center;
   border-radius: 10px;
   width: 150px;
-
 `;
 
 const d: number = 150;

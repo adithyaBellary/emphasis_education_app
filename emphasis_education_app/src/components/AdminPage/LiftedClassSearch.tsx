@@ -8,7 +8,7 @@ import { Input, Icon } from 'react-native-elements';
 import { SEARCH_CLASSES } from '../../queries/SearchClasses';
 import { ISearchInput, ISearchClassesPayload } from '../../types';
 
-import { SearchContain } from './LiftedSearch';
+import { ContentContain } from './common';
 import ClassSearchResults from '../Search/ClassSearchResults';
 
 const ClassSearch = () => {
@@ -19,7 +19,7 @@ const ClassSearch = () => {
     runQuery({variables: {searchTerm}})
   }, [searchTerm])
   return (
-    <SearchContain>
+    <ContentContain>
       <Input
         placeholder='Search Classes'
         onChangeText={handleTextChange}
@@ -41,7 +41,7 @@ const ClassSearch = () => {
           searchResults={data ? data.searchClasses.classes: []}
         />
       )}
-    </SearchContain>
+    </ContentContain>
   )
 }
 

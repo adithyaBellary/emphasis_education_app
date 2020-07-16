@@ -6,7 +6,7 @@ import {
   View,
   Text,
   Image,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 
 import styled from 'styled-components';
@@ -22,6 +22,8 @@ import Context from './Context/Context';
 import { Permission } from '../types';
 
 import { GET_USER } from '../queries/GetUser';
+
+import { LogoWithoutText } from './Logo/LogoWithoutText';
 
 interface ILiftedHomeProps {
   navigation: any;

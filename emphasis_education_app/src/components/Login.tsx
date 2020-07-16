@@ -28,15 +28,6 @@ const PositionDiv = styled(View)`
   padding-top: 200px;
 `;
 
-// const TitleText = styled(Text)`
-//   font-size: 20px;
-//   fontFamily: ${({ theme }) => theme.font.main};
-// `;
-
-// const TitleContain = styled(View)`
-//   padding-top: 100px;
-// `;
-
 interface ILoginProps {
   // TODO type this shit
   navigation: any;
@@ -62,11 +53,12 @@ const InputContain = styled(View)`
 `
 interface ISecondaryLinkProps {
   linkContent: string;
+  onPress(): void;
 }
 
-const SecondaryLink: React.FC<ISecondaryLinkProps> = ({ linkContent }) => (
+const SecondaryLink: React.FC<ISecondaryLinkProps> = ({ linkContent, onPress }) => (
   <GeneralSpacing u={0} r={10} d={0} l={10}>
-    <TouchableOpacity onPress={() => console.log('clicked')}>
+    <TouchableOpacity onPress={onPress}>
       <ThemedText size={14} type={'light'}>
         {linkContent}
       </ThemedText>
@@ -116,48 +108,47 @@ const Login: React.FC<ILoginProps> = props => {
     password
   });
 
+  const changeScreens = (loc: string) => () => props.navigation.navigate(loc)
+
   return (
-    <SafeAreaView>
-      <CenteredDiv>
-        <LoginImage />
+    <ContentWrap>
+      <LoginImage />
 
-        <InputContain>
-          <LoginInput
-            placeholder='Username'
-            value={curState.email}
-            onChangeText={onChangeEmail}
-          />
-        </InputContain>
+      <InputContain>
+        <LoginInput
+          placeholder='Username'
+          value={curState.email}
+          onChangeText={onChangeEmail}
+        />
+      </InputContain>
 
-        <HorizontalDivider width={60}/>
+      <HorizontalDivider width={60}/>
 
-        <InputContain>
-          <LoginInput
-            placeholder='Password'
-            value={curState.password}
-            onChangeText={onChangePassword}
-          />
-        </InputContain>
+      <InputContain>
+        <LoginInput
+          placeholder='Password'
+          value={curState.password}
+          onChangeText={onChangePassword}
+        />
+      </InputContain>
 
-        {props.error && <Errorlogin /> }
+      {props.error && <Errorlogin /> }
 
-        <ButtonContainer>
-          <MyButton
-            onPress={() => login(curState.email, curState.password)}
-          >
-            <MyButtonText>Login</MyButtonText>
-          </MyButton>
-        </ButtonContainer>
+      <ButtonContainer>
+        <MyButton
+          onPress={() => login(curState.email, curState.password)}
+        >
+          <MyButtonText>Login</MyButtonText>
+        </MyButton>
+      </ButtonContainer>
 
-        <IconRow>
-          <SecondaryLink linkContent={'Fist time user?'}/>
-          <VerticalDivier height={10}/>
-          <SecondaryLink linkContent={'Forgot Password'}/>
-        </IconRow>
-
-        </CenteredDiv>
-    </SafeAreaView>
-    )
-  }
+      <IconRow>
+        <SecondaryLink linkContent={'Fist time user?'} onPress={changeScreens('EnterCode')} />
+        <VerticalDivier height={10}/>
+        <SecondaryLink linkContent={'Forgot Password'} onPress={changeScreens('CreateUserContain')} />
+      </IconRow>
+    </ContentWrap>
+  )
+}
 
 export default Login;
