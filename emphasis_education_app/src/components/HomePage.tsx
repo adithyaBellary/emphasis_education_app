@@ -171,7 +171,6 @@ const Home: React.FC<ILiftedHomeProps> = ({ navigation, route }) => {
       <MissionStatement />
     </CenteredDiv>
   )
-
 }
 
 export default Home;
