@@ -16,6 +16,7 @@ import {
   MyCircleButton,
   IconSection,
   PermissionedComponent,
+  GeneralSpacing
 } from './shared';
 import { Icon } from 'react-native-elements';
 import Context from './Context/Context';
@@ -54,6 +55,19 @@ const MissionStatement: React.FC = () => {
     <Text>this is the mission statement</Text>
   )
 }
+
+const LogiImage = () => (
+  <GeneralSpacing u={0} r={0} d={0} l={0}>
+    <Image
+      source={{ uri: LogoWithoutText}}
+      style={{
+        height: 200,
+        width: 200,
+        // backgroundColor: 'grey'
+      }}
+    />
+  </GeneralSpacing>
+)
 
 const Home: React.FC<ILiftedHomeProps> = ({ navigation, route }) => {
   console.log('route in home', route)
@@ -99,7 +113,6 @@ const Home: React.FC<ILiftedHomeProps> = ({ navigation, route }) => {
         <ActivityIndicator />
         <View><Text>home page</Text></View>
       </>
-
     )
   }
 
@@ -147,11 +160,7 @@ const Home: React.FC<ILiftedHomeProps> = ({ navigation, route }) => {
           />
         </IconContain>
 
-        <MyCircleButton>
-          <MyButtonText>
-            Emphasis Logo
-          </MyButtonText>
-        </MyCircleButton>
+        <LogiImage />
 
         <IconContain>
           <Icon
