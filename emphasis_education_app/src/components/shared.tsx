@@ -4,7 +4,7 @@ import {
   View,
   Text,
   TouchableOpacity,
-  EdgeInsetsPropType
+  ActivityIndicator
 } from 'react-native';
 import styled from 'styled-components';
 
@@ -59,6 +59,9 @@ export const MyButton = styled(TouchableOpacity)`
   justify-content: center;
   border-radius: 10px;
   width: 150px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 `;
 
 const d: number = 150;
@@ -75,7 +78,24 @@ export const MyButtonText = styled(Text)`
   text-align: center;
   font-size: 14px;
   fontFamily: ${({ theme }) => theme.font.main}
+  padding: 0 5px;
+  position: relative;
 `;
+
+interface IButtonProps {
+  buttonText: string;
+  loading: boolean;
+  onPress(): void;
+}
+
+export const ThemedButton: React.FC<IButtonProps> = ({ onPress, buttonText, loading }) => (
+  <MyButton onPress={onPress}>
+    <MyButtonText>
+      {buttonText}
+    </MyButtonText>
+    {loading && <ActivityIndicator />}
+  </MyButton>
+);
 
 export const CenteredDiv = styled(View)`
   align-items: center;

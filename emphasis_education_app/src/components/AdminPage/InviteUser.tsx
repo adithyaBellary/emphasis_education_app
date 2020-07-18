@@ -1,34 +1,33 @@
 import * as React from 'react';
-import { ActivityIndicator } from 'react-native';
 import {
   Input,
-  Button
 } from 'react-native-elements'
 import { useMutation } from '@apollo/react-hooks';
 
 import { ContentContain } from './common'
-import { MyButton, MyButtonText } from '../shared';
+import { ThemedButton } from '../shared';
 
 import { CREATE_CODE } from '../../queries/CreateCode';
 import { Alert } from 'react-native';
 
 interface ICreateCodeButtonProps {
+  loading: boolean;
   runMutation(): void;
 }
 
-const CreateCodeButton: React.FC<ICreateCodeButtonProps> = ({ runMutation }) => (
-  <MyButton onPress={runMutation}>
-    <MyButtonText>
-      Create Code
-    </MyButtonText>
-  </MyButton>
-)
+const CreateCodeButton: React.FC<ICreateCodeButtonProps> = ({ runMutation, loading }) => (
+  <ThemedButton
+    buttonText='Create Code'
+    loading={loading}
+    onPress={runMutation}
+  />
+);
 
 const InviteUser: React.FC = () => {
   const [email, setEmail] = React.useState('')
   const handleTextChange = (text: string) => setEmail(text)
 
-  const [runMut, { data }] = useMutation(CREATE_CODE)
+  const [runMut, { data, loading }] = useMutation(CREATE_CODE)
 
   const createCode = () => {
     runMut({ variables: {
@@ -52,7 +51,7 @@ const InviteUser: React.FC = () => {
         onChangeText={handleTextChange}
         placeholder='Enter new user email here'
       />
-      <CreateCodeButton runMutation={createCode}/>
+      <CreateCodeButton runMutation={createCode} loading={loading} />
     </ContentContain>
   )
 }

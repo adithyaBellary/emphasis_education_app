@@ -1,16 +1,12 @@
 import * as React from 'react';
 import {
   View,
-  Text,
-  ActivityIndicator
 } from 'react-native';
 import {
   ButtonContainer,
-  MyButton,
-  MyButtonText,
-  CenteredDiv,
   ContentContain,
-  IconRow
+  IconRow,
+  ThemedButton
 } from '../shared';
 import { ICreateUserArr } from './CreateUserContainer';
 import IndividualItem from './DisplayIndividualMember';
@@ -37,19 +33,19 @@ const ConfirmationScreen: React.FC<IConfirmationScreenProps> = ({ createdUsers, 
     </ContentContain>
     <IconRow>
       <ButtonContainer>
-        <MyButton onPress={submit}>
-          <MyButtonText>
-            Submit
-          </MyButtonText>
-          {loading && <ActivityIndicator/>}
-        </MyButton>
+        <ThemedButton
+          buttontext='Submit'
+          loading={loading}
+          onPress={submit}
+        />
+
       </ButtonContainer>
       <ButtonContainer>
-        <MyButton onPress={() => navigation.navigate('Login')}>
-          <MyButtonText>
-            Back to Login
-          </MyButtonText>
-        </MyButton>
+        <ThemedButton
+          buttontext='Back to Login'
+          loading={false}
+          onPress={() => navigation.navigate('Login')}
+        />
       </ButtonContainer>
     </IconRow>
   </View>

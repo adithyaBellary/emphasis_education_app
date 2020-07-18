@@ -25,12 +25,12 @@ import context, {EmptyUser, AuthContext} from './components/Context/Context';
 import { IUser, ILoginPayload } from './types';
 
 const AuthStackNav = createStackNavigator();
-const AuthStack = ({ error }) => {
+const AuthStack = ({ error, loading }) => {
   console.log('props in auth st', error)
   return (
   <AuthStackNav.Navigator initialRouteName={'Login'}>
     <AuthStackNav.Screen name='Login' options={{ headerShown: false}}>
-      {_props => <Login {..._props} error={error}/>}
+      {_props => <Login {..._props} error={error} loading={loading}/>}
     </AuthStackNav.Screen>
     <AppStackNav.Screen
       name='EnterCode'
@@ -104,7 +104,7 @@ const AppStack = ({ userToken }) => (
 )
 
 const RootStackNav = createStackNavigator();
-const RootStack = ({ userToken, error}) => (
+const RootStack = ({ userToken, error, loading }) => (
   <RootStackNav.Navigator headerMode="none">
     { !!userToken ? (
       <RootStackNav.Screen name='App'>
@@ -112,7 +112,7 @@ const RootStack = ({ userToken, error}) => (
       </RootStackNav.Screen>
     ) : (
       <RootStackNav.Screen name='Auth'>
-        {_props => <AuthStack {..._props} error={error}/> }
+        {_props => <AuthStack {..._props} error={error} loading={loading}/> }
       </RootStackNav.Screen>
 
     )}
@@ -219,7 +219,7 @@ const StackNavigation: React.FC = () => {
   return (
     <AuthContext.Provider value={authContext}>
       <NavigationContainer>
-        <RootStack userToken={userToken} error={loginError}/>
+        <RootStack userToken={userToken} error={loginError} loading={loading} />
       </NavigationContainer>
     </AuthContext.Provider>
   )

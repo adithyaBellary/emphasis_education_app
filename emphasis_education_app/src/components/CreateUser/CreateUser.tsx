@@ -8,11 +8,10 @@ import { IUserInput, Permission } from '../../types';
 import {
   CenteredDiv,
   ButtonContainer,
-  MyButton,
-  MyButtonText,
   RadioButtonGroup,
   ThemedTextInput,
-  ButtonGroupContain
+  ButtonGroupContain,
+  ThemedButton
 } from '../shared';
 
 interface ICreateUser {
@@ -104,24 +103,19 @@ const CreateUser: React.FC<ICreateUser> = props => {
       </CenteredDiv>
       <ButtonGroupContain>
         <ButtonContainer>
-          <MyButton
+          <ThemedButton
+            buttonText='Add another member'
+            loading={false}
             onPress={addMember}
-            // disabled={true}
-          >
-            <MyButtonText>
-              Add another member
-            </MyButtonText>
-          </MyButton>
+          />
         </ButtonContainer>
 
         <ButtonContainer>
-          <MyButton
+          <ThemedButton
+            buttonText='Submit'
+            loading={false}
             onPress={GoToConf}
-          >
-            <MyButtonText>
-              Submit
-            </MyButtonText>
-          </MyButton>
+          />
         </ButtonContainer>
       </ButtonGroupContain>
     </View>

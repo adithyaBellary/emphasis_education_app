@@ -19,7 +19,6 @@ import { ISearchInput, ISearchClassesPayload, ISearchUserPayload, ICreateChatInp
 import { IndividualResultContainer } from '../AdminPage/IndividualResult';
 
 import Context from '../Context/Context';
-
 interface ICreateChatProps {
   navigation: any;
   route: any;

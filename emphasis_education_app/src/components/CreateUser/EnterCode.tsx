@@ -9,7 +9,9 @@ import {
 import { CHECK_CODE } from '../../queries/CheckCode';
 
 import {
-  GeneralSpacing, MyButton, MyButtonText, ThemedText
+  GeneralSpacing,
+   ThemedText,
+   ThemedButton
 } from '../shared';
 
 interface IEnterCodeProps {
@@ -57,11 +59,12 @@ const EnterCode: React.FC<IEnterCodeProps> = ({ navigation }) => {
         onChangeText={onChangeTextCode}
       />
       { error && <ErrorMessage /> }
-      <MyButton onPress={_checkCode}>
-        <MyButtonText>
-          Submit Code
-        </MyButtonText>
-      </MyButton>
+      <ThemedButton
+        buttonText='Submit Code'
+        loading={loading}
+        onPress={_checkCode}
+      />
+
     </GeneralSpacing>
   );
 }
