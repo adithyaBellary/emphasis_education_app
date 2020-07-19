@@ -170,47 +170,49 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
           />
         }
       />
-      <Text>Selected Class: {selectedClasses}</Text>
-      <Text>Selected Users: {selectedUsers.map(u => `${u.email}, `)} </Text>
-      {/* let us display the results here so that we can easily have state over them */}
-      { userLoading ? <ActivityIndicator /> : (
-        userData ? userData.searchUsers.map((u, index) => {
-          let present = false;
-          selectedUsers.forEach(_user => {
-            if (_user._id === u._id) {
-              present = true;
-            }
-          });
-          return (
+      <GeneralSpacing u={0} r={20} d={0} l={20}>
+        <Text>Selected Class: {selectedClasses}</Text>
+        <Text>Selected Users: {selectedUsers.map(u => `${u.name}, `)} </Text>
+        {/* let us display the results here so that we can easily have state over them */}
+        { userLoading ? <ActivityIndicator /> : (
+          userData ? userData.searchUsers.map((u, index) => {
+            let present = false;
+            selectedUsers.forEach(_user => {
+              if (_user._id === u._id) {
+                present = true;
+              }
+            });
+            return (
+              <TouchableOpacity
+                onPress={addSelectedUsers(u._id, u.userType, u.email)}
+              >
+                <IndividualResultContainer>
+                  <Text>{u.name}</Text>
+                  <Icon
+                    name={present ? 'checkcircle' : 'pluscircleo'}
+                    type='antdesign'
+                  />
+                </IndividualResultContainer>
+              </TouchableOpacity>
+            )
+          }) : null
+        )}
+        { classLoading ? <ActivityIndicator /> : (
+          classData ? classData.searchClasses.classes.map(c => (
             <TouchableOpacity
-              onPress={addSelectedUsers(u._id, u.userType, u.email)}
+              onPress={addSelectedClasses(c)}
             >
               <IndividualResultContainer>
-                <Text>{u.name}</Text>
-                <Icon
-                  name={present ? 'checkcircle' : 'pluscircleo'}
-                  type='antdesign'
-                />
+              <Text>{c}</Text>
+              <Icon
+                name={selectedClasses === c ? 'checkcircle' : 'pluscircleo'}
+                type='antdesign'
+              />
               </IndividualResultContainer>
             </TouchableOpacity>
-          )
-        }) : null
-      )}
-      { classLoading ? <ActivityIndicator /> : (
-        classData ? classData.searchClasses.classes.map(c => (
-          <TouchableOpacity
-            onPress={addSelectedClasses(c)}
-          >
-            <IndividualResultContainer>
-            <Text>{c}</Text>
-            <Icon
-              name={selectedClasses === c ? 'checkcircle' : 'pluscircleo'}
-              type='antdesign'
-            />
-            </IndividualResultContainer>
-          </TouchableOpacity>
-        )) : null
-      )}
+          )) : null
+        )}
+      </GeneralSpacing>
     </>
   )
 }
