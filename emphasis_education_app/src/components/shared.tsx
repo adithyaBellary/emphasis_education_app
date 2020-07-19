@@ -7,6 +7,7 @@ import {
   ActivityIndicator
 } from 'react-native';
 import styled from 'styled-components';
+import { Input } from 'react-native-elements';
 
 import { Permission } from '../types';
 import Context from './Context/Context';
@@ -226,26 +227,52 @@ interface IIndividualFieldProps {
   label: string;
   valueSize: number;
   labelSize: number;
+  // be only able to edit the main user, so have these props be optional
+  editing?: boolean;
+  onChangeText?(text: string, label: string): void;
 };
 
 export const GeneralSpacing = styled(View)<{r: number, l: number, u: number, d: number}>`
   padding: ${({ u }) => u}px ${({ r }) => r}px ${({ d }) => d}px ${({ l }) => l}px
-`
+`;
 
-export const IndividualField: React.FC<IIndividualFieldProps> = ({ value, label, valueSize, labelSize}) => (
+export const IndividualField: React.FC<IIndividualFieldProps> = ({
+  value,
+  label,
+  valueSize,
+  labelSize,
+  editing,
+  onChangeText
+}) => (
   <GeneralSpacing u={5} r={0} d={5} l={0}>
-    <ThemedText
-      size={valueSize}
-      type={'main'}
-    >
-      {value}
-    </ThemedText>
-    <ThemedText
-      size={labelSize}
-      type={'light'}
-    >
-      {label}
-    </ThemedText>
+    {!editing ? (
+      <>
+        <ThemedText
+          size={valueSize}
+          type={'main'}
+        >
+          {value}
+        </ThemedText>
+        <ThemedText
+          size={labelSize}
+          type={'light'}
+        >
+          {label}
+        </ThemedText>
+      </>
+    ) : (
+      <Input
+        placeholder='placeholder'
+        style={{
+          padding: 0
+        }}
+        onChangeText={text => {
+          if(onChangeText) {
+            onChangeText(text, label)
+          }
+        }}
+      />
+    )}
   </GeneralSpacing>
 );
 

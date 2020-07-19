@@ -11,8 +11,9 @@ import Context from '../Context/Context';
 import { ContentContain, IndividualField, HorizontalDivider } from '../shared';
 
 interface IProfileProps {
-  mainUserID: string
-  family: IUser[]
+  editing: boolean;
+  mainUserID: string;
+  family: IUser[];
 }
 
 const Title = styled(Text)`
@@ -40,50 +41,60 @@ const IconContain = styled(View)`
   padding: 0 5px;
 `
 
-const UserInfoContain = styled(View)`
-`
+const Profile: React.FC<IProfileProps> = ({ family, mainUserID, editing }) => {
 
-const Profile: React.FC<IProfileProps> = ({ family, mainUserID }) => {
-
-  // let us put the logged in user in the top, so we need to get the context
-  const { loggedUser } = React.useContext(Context)
-  console.log('users in my profile', family)
+  // console.log('editing', editing)
   const mainUser: (IUser | undefined) = family.map(u => {
     if (u.groupID === mainUserID) { return u }
   })[0]
   console.log('mainUser', mainUser, mainUserID)
   if (!mainUser) { return <View><Text>could not find the user.</Text></View>; }
 
+  let mainUserCopy = Object.assign({}, mainUser)
+  console.log(mainUserCopy)
+
+  const onChangeText = (text: string, label: string) => {
+    mainUserCopy = {
+      ...mainUserCopy,
+      [label]: text
+    }
+    console.log('mainUserCopy', mainUserCopy)
+  }
+
   return (
     <ContentContain>
       <Title>
         {mainUser.name}
       </Title>
-      <UserInfoContain>
-        <IndividualField
-          value={mainUser.email}
-          valueSize={16}
-          label={'Email'}
-          labelSize={14}
-        />
-        <HorizontalDivider width={80}/>
-        <IndividualField
-          value={mainUser.phoneNumber}
-          valueSize={16}
-          label={'Phone Number'}
-          labelSize={14}
-        />
+      <IndividualField
+        value={mainUser.email}
+        valueSize={16}
+        label={'Email'}
+        labelSize={14}
+        editing={editing}
+        onChangeText={onChangeText}
+      />
+      {!editing && <HorizontalDivider width={80} />}
+      <IndividualField
+        value={mainUser.phoneNumber}
+        valueSize={16}
+        label={'Phone Number'}
+        labelSize={14}
+        editing={editing}
+        onChangeText={onChangeText}
+      />
 
-        {/* list the classes */}
-        {mainUser.classes && mainUser.classes.map(c => (
-          <IndividualField
-            value={c.className!}
-            valueSize={16}
-            label={'class'}
-            labelSize={14}
-          />
-        ))}
-      </UserInfoContain>
+      {/* list the classes */}
+      {/* lets not have this be editable */}
+      {mainUser.classes && mainUser.classes.map(c => (
+        <IndividualField
+          value={c.className!}
+          valueSize={16}
+          label={'class'}
+          labelSize={14}
+          // editing={editing}
+        />
+      ))}
       <TitleRow>
         <TitleWithIcon>
           Family Members
@@ -96,31 +107,31 @@ const Profile: React.FC<IProfileProps> = ({ family, mainUserID }) => {
           />
         </IconContain>
       </TitleRow>
-      <UserInfoContain>
-        {
-          family.map((user, index) => (
-            <>
-              {(user._id !== mainUser._id) && (
-                <>
-                  <IndividualField
-                    // key={index}
-                    value={user.name}
-                    valueSize={16}
-                    label={'Name'}
-                    labelSize={14}
-                  />
-                  <IndividualField
-                    // key={index}
-                    value={user.email}
-                    valueSize={16}
-                    label={'Email'}
-                    labelSize={14}
-                  />
-                </>
-              )}
-            </>
-          ))}
-      </UserInfoContain>
+      {
+        family.map((user, index) => (
+          <>
+            {(user._id !== mainUser._id) && (
+              <>
+                <IndividualField
+                  // key={index}
+                  value={user.name}
+                  valueSize={16}
+                  label={'Name'}
+                  labelSize={14}
+                  // editing={editing}
+                />
+                <IndividualField
+                  // key={index}
+                  value={user.email}
+                  valueSize={16}
+                  label={'Email'}
+                  labelSize={14}
+                  // editing={editing}
+                />
+              </>
+            )}
+          </>
+        ))}
     </ContentContain>
   )
 }
