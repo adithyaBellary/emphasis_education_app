@@ -17,8 +17,13 @@ import { SEARCH_USERS } from '../../queries/SearchUsers';
 import { CREATE_CHAT } from '../../queries/CreateChat';
 import { ISearchInput, ISearchClassesPayload, ISearchUserPayload, ICreateChatInput, ICreateChatPayload, Permission } from '../../types';
 import { IndividualResultContainer } from '../AdminPage/IndividualResult';
-
 import Context from '../Context/Context';
+
+import {
+  IconRow,
+  GeneralSpacing
+} from '../shared';
+
 interface ICreateChatProps {
   navigation: any;
   route: any;
@@ -47,10 +52,10 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
       onCompleted: () => {
         Alert.alert('chat successfully made')
         // update the user
-
       },
       onError: (e) => {
         console.log('error:', e)
+        Alert.alert('There was an error making the chat', e)
       }
     }
   );
@@ -64,14 +69,20 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
 
   navigation.setOptions({
     headerRight: () => (
-      <Button
-        title='Done'
-        onPress={createChat}
-        // TODO add disabled functionality
-        // disabled={}
-      />
+      <GeneralSpacing u={0} r={10} d={0} l={10}>
+        <IconRow>
+          <Button
+            title='Done'
+            onPress={createChat}
+            // TODO add disabled functionality
+            disabled={loadingCreateChat}
+          />
+          {loadingCreateChat && <ActivityIndicator />}
+        </IconRow>
+      </GeneralSpacing>
     )
   })
+
 
   const createChat = () => {
     console.log('creating a new chat with', selectedClasses, selectedUsers)
@@ -103,6 +114,7 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
         variables
       })
     } catch(e) {
+      console.log('error', e)
       Alert.alert('there was an error making this chat')
     }
   }

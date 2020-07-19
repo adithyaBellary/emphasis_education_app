@@ -42,10 +42,10 @@ const EnterCode: React.FC<IEnterCodeProps> = ({ navigation }) => {
     console.log(data)
     if (data.checkCode.res) {
       console.log('entered the correct code')
-      navigation.navigate('CreateUserContain')
     } else {
       console.log('entered the incorrect code')
     }
+    navigation.navigate('CreateUserContain')
   }
 
   return (

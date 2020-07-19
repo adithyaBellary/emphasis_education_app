@@ -35,15 +35,14 @@ const ConfirmationScreen: React.FC<IConfirmationScreenProps> = ({ createdUsers, 
     <IconRow>
       <ButtonContainer>
         <ThemedButton
-          buttontext='Submit'
+          buttonText='Submit'
           loading={loading}
           onPress={submit}
         />
-
       </ButtonContainer>
       <ButtonContainer>
         <ThemedButton
-          buttontext='Back to Login'
+          buttonText='Back to Login'
           loading={false}
           onPress={() => navigation.navigate('Login')}
         />
