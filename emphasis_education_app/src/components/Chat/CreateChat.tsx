@@ -33,6 +33,7 @@ interface ISelectedUsersProps {
   _id: string;
   email: string;
   userType: string;
+  name: string;
 }
 
 const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
@@ -55,7 +56,7 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
       },
       onError: (e) => {
         console.log('error:', e)
-        Alert.alert('There was an error making the chat', e)
+        Alert.alert('There was an error making the chat')
       }
     }
   );
@@ -122,17 +123,17 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
   const onUserTextChage = (text: string) => setUserSearch(text)
   const onClassTextChange = (text: string) => setClassSearch(text)
 
-  const addSelectedUsers = (userID: string, userType: string, userEmail: string) => () =>  {
+  const addSelectedUsers = (userID: string, userType: string, userEmail: string, name: string) => () =>  {
     let present = false;
     let _newArray = selectedUsers.reduce((acc, cur) => {
       if (cur._id === userID) {
         present = true;
         return acc
       } else {
-        return [...acc, {_id: cur._id, userType: cur.userType, email: cur.email}]
+        return [...acc, {_id: cur._id, userType: cur.userType, email: cur.email, name: cur.name}]
       }
     }, [] as ISelectedUsersProps[])
-    if (!present) { _newArray = [..._newArray, {_id: userID, userType, email: userEmail}] }
+    if (!present) { _newArray = [..._newArray, {_id: userID, userType, email: userEmail, name}] }
     console.log('_newArray', _newArray)
     setSelectedUsers([..._newArray])
   }
@@ -184,7 +185,7 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
             });
             return (
               <TouchableOpacity
-                onPress={addSelectedUsers(u._id, u.userType, u.email)}
+                onPress={addSelectedUsers(u._id, u.userType, u.email, u.name)}
               >
                 <IndividualResultContainer>
                   <Text>{u.name}</Text>
