@@ -117,6 +117,7 @@ const Home: React.FC<ILiftedHomeProps> = ({ navigation, route }) => {
   }
 
   if (error) {
+    console.log(error)
     return (
       <View><Text>there was an issue reloading the user</Text></View>
     )

@@ -21,25 +21,7 @@ const Title = styled(Text)`
   fontFamily: ${({ theme }) => theme.font.bold};
   font-size: 30px;
   padding: 10px 0;
-`
-
-const TitleWithIcon = styled(Text)`
-  fontFamily: ${({ theme }) => theme.font.bold};
-  font-size: 30px;
-  padding: 10px 0;
-
-`
-
-const TitleRow = styled(View)`
-  display: flex;
-  flexDirection: row;
-  justify-content: center;
-  align-items: center;
-`
-
-const IconContain = styled(View)`
-  padding: 0 5px;
-`
+`;
 
 const Profile: React.FC<IProfileProps> = ({ family, mainUserID, editing }) => {
 
@@ -54,18 +36,15 @@ const Profile: React.FC<IProfileProps> = ({ family, mainUserID, editing }) => {
   console.log(mainUserCopy)
 
   const onChangeText = (text: string, label: string) => {
-    mainUserCopy = {
-      ...mainUserCopy,
-      [label]: text
-    }
+    if (label === 'Email') { mainUserCopy.email = text }
+    if (label === 'Phone Number') { mainUserCopy.phoneNumber = text }
+
     console.log('mainUserCopy', mainUserCopy)
   }
 
   return (
     <ContentContain>
-      <Title>
-        {mainUser.name}
-      </Title>
+      <Title>{mainUser.name}</Title>
       <IndividualField
         value={mainUser.email}
         valueSize={16}
@@ -95,18 +74,7 @@ const Profile: React.FC<IProfileProps> = ({ family, mainUserID, editing }) => {
           // editing={editing}
         />
       ))}
-      <TitleRow>
-        <TitleWithIcon>
-          Family Members
-        </TitleWithIcon>
-        <IconContain>
-          <Icon
-            name='pluscircleo'
-            type='antdesign'
-            // onPress={}
-          />
-        </IconContain>
-      </TitleRow>
+      <Title>Family Members</Title>
       {
         family.map((user, index) => (
           <>

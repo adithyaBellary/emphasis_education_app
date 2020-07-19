@@ -101,6 +101,7 @@ const CreateUserContain: React.FC<ICreateUserContainProps> = props => {
           createdUsers={userInfo}
           submit={runCreateUserMut}
           loading={loading}
+          navigation={props.navigation}
         />
       )}
     </View>

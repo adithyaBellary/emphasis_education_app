@@ -262,7 +262,8 @@ export const IndividualField: React.FC<IIndividualFieldProps> = ({
       </>
     ) : (
       <Input
-        placeholder='placeholder'
+        placeholder={label}
+        defaultValue={value}
         style={{
           padding: 0
         }}
