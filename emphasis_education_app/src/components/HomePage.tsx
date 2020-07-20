@@ -136,9 +136,9 @@ const Home: React.FC<ILiftedHomeProps> = ({ navigation, route }) => {
             name='person'
             onPress={() => navigation.navigate(
               'MyProfile',
-              {
-                groupID: loggedUser.groupID
-              }
+              // {
+              //   groupID: loggedUser.groupID
+              // }
             )}
             type='fontisto'
             reverse={true}
