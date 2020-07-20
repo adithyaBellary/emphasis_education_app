@@ -37,16 +37,11 @@ const HeaderButtons: React.FC<IHeaderButtonProps> = ({ text, onPress}) => (
   </TouchableOpacity>
 )
 
-const LiftedProfile: React.FC<ILiftedProfileProps> = ({ route, navigation }) => {
+const LiftedProfile: React.FC<ILiftedProfileProps> = ({ navigation }) => {
   const [editing, setEditing] = React.useState(false);
-  // const mainUserID: string = route.params.groupID
   const { loggedUser } = React.useContext(Context);
-  console.log('loggedUser', loggedUser.groupID)
-  // what i get passed here is what will go on the top of the profile page
   const options = { variables: { groupID: loggedUser.groupID }}
   const { data, loading, error } = useQuery<IGetFamilyPayload, IGetFamilyInput>(GET_FAMILY, options)
-  // console.log('mainuserID', mainUserID)
-  // console.log('my profile data', data);
   if ( error ) { console.log('error loading the profile')}
   const toggleEdit = () => setEditing(_edit => !_edit)
 
@@ -75,7 +70,6 @@ const LiftedProfile: React.FC<ILiftedProfileProps> = ({ route, navigation }) => 
     {
       loading ? <ActivityIndicator /> : (
         <Profile
-          // mainUserID={mainUserID}
           family={data ? data.getFamily : []}
           editing={editing}
         />

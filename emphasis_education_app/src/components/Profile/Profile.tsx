@@ -25,16 +25,10 @@ const Title = styled(Text)`
 
 const Profile: React.FC<IProfileProps> = ({ family, editing }) => {
 
-  // console.log('editing', editing)
-  // const mainUser: (IUser | undefined) = family.map(u => {
-  //   if (u.groupID === mainUserID) { return u }
-  // })[0]
-  // console.log('mainUser', mainUser, mainUserID)
   const {loggedUser} = React.useContext(Context);
   if (!loggedUser) { return <View><Text>could not find the user.</Text></View>; }
 
   let mainUserCopy = Object.assign({}, loggedUser)
-  console.log(mainUserCopy)
 
   const onChangeText = (text: string, label: string) => {
     if (label === 'Email') { mainUserCopy.email = text }
@@ -72,7 +66,6 @@ const Profile: React.FC<IProfileProps> = ({ family, editing }) => {
           valueSize={16}
           label={'class'}
           labelSize={14}
-          // editing={editing}
         />
       ))}
       <Title>Family Members</Title>
@@ -87,7 +80,6 @@ const Profile: React.FC<IProfileProps> = ({ family, editing }) => {
                   valueSize={16}
                   label={'Name'}
                   labelSize={14}
-                  // editing={editing}
                 />
                 <IndividualField
                   // key={index}
@@ -95,7 +87,6 @@ const Profile: React.FC<IProfileProps> = ({ family, editing }) => {
                   valueSize={16}
                   label={'Email'}
                   labelSize={14}
-                  // editing={editing}
                 />
               </>
             )}

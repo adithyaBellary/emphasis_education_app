@@ -134,12 +134,7 @@ const Home: React.FC<ILiftedHomeProps> = ({ navigation, route }) => {
           <Icon
             raised
             name='person'
-            onPress={() => navigation.navigate(
-              'MyProfile',
-              // {
-              //   groupID: loggedUser.groupID
-              // }
-            )}
+            onPress={() => navigation.navigate('MyProfile')}
             type='fontisto'
             reverse={true}
 
