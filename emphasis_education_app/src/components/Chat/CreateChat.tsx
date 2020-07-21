@@ -204,11 +204,11 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
               onPress={addSelectedClasses(c)}
             >
               <IndividualResultContainer>
-              <Text>{c}</Text>
-              <Icon
-                name={selectedClasses === c ? 'checkcircle' : 'pluscircleo'}
-                type='antdesign'
-              />
+                <Text>{c}</Text>
+                <Icon
+                  name={selectedClasses === c ? 'checkcircle' : 'pluscircleo'}
+                  type='antdesign'
+                />
               </IndividualResultContainer>
             </TouchableOpacity>
           )) : null

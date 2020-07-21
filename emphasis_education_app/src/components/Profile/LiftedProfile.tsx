@@ -50,6 +50,7 @@ const LiftedProfile: React.FC<ILiftedProfileProps> = ({ route, navigation }) => 
   if ( error ) { console.log('error loading the profile')}
 
   const toggleEdit = () => setEditing(_edit => !_edit)
+  const goToAddMember = () => navigation.navigate('AddUserModal')
 
   React.useEffect(() => {
     navigation.setOptions({
@@ -78,6 +79,7 @@ const LiftedProfile: React.FC<ILiftedProfileProps> = ({ route, navigation }) => 
           currentUserID={currentUserID}
           family={data ? data.getFamily : []}
           editing={editing}
+          onPress={goToAddMember}
         />
       )
     }

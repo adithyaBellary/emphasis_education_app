@@ -54,13 +54,13 @@ interface ISecondaryLinkProps {
 }
 
 const SecondaryLink: React.FC<ISecondaryLinkProps> = ({ linkContent, onPress }) => (
-  <GeneralSpacing u={0} r={10} d={0} l={10}>
-    <TouchableOpacity onPress={onPress}>
+  <TouchableOpacity onPress={onPress}>
+    <GeneralSpacing u={0} r={10} d={0} l={10}>
       <ThemedText size={14} type={'light'}>
         {linkContent}
       </ThemedText>
-    </TouchableOpacity>
-  </GeneralSpacing>
+    </GeneralSpacing>
+  </TouchableOpacity>
 );
 
 const LoginImage = () => (
@@ -139,7 +139,7 @@ const Login: React.FC<ILoginProps> = props => {
       </ButtonContainer>
 
       <IconRow>
-        <SecondaryLink linkContent={'Fist time user?'} onPress={changeScreens('EnterCode')} />
+        <SecondaryLink linkContent={'First time user?'} onPress={changeScreens('EnterCode')} />
         <VerticalDivier height={10}/>
         <SecondaryLink linkContent={'Forgot Password'} onPress={changeScreens('CreateUserContain')} />
       </IconRow>

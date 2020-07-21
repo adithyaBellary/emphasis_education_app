@@ -21,6 +21,7 @@ interface IProfileProps {
   editing: boolean;
   currentUserID: string;
   family: IUser[];
+  onPress (): void;
 }
 
 const Title = styled(Text)`
@@ -30,7 +31,7 @@ const Title = styled(Text)`
   padding: 10px 0;
 `;
 
-const Profile: React.FC<IProfileProps> = ({ family, editing, currentUserID }) => {
+const Profile: React.FC<IProfileProps> = ({ family, editing, currentUserID, onPress }) => {
   const {loggedUser} = React.useContext(Context);
 
   console.log('the fam', family)
@@ -99,6 +100,7 @@ const Profile: React.FC<IProfileProps> = ({ family, editing, currentUserID }) =>
             <Icon
               name='pluscircleo'
               type='antdesign'
+              onPress={onPress}
             />
           </GeneralSpacing>
         {/* </PermissionedComponent> */}

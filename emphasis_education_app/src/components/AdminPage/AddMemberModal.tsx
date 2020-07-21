@@ -1,0 +1,137 @@
+import * as React from 'react';
+import {
+  View,
+  Text,
+  SafeAreaView,
+  TouchableOpacity,
+  ActivityIndicator
+} from 'react-native';
+import { Input, Icon } from 'react-native-elements';
+import { useLazyQuery } from '@apollo/react-hooks';
+
+import UserSearch from './LiftedSearch';
+
+import { GeneralSpacing, ThemedText } from '../shared';
+import { ISearchUserPayload, ISearchInput } from '../../types';
+import { SEARCH_USERS } from '../../queries/SearchUsers';
+import { IndividualResultContainer } from './IndividualResult';
+
+interface ICancelProps {
+  onPress (): void;
+}
+
+const Cancel: React.FC<ICancelProps> = ({ onPress }) => (
+  <TouchableOpacity onPress={onPress}>
+    <GeneralSpacing u={10} r={10} d={10} l={10}>
+      <ThemedText size={16} type='main'>
+        Cancel
+      </ThemedText>
+    </GeneralSpacing>
+  </TouchableOpacity>
+)
+
+interface IDoneProps {
+  onPress (): void
+}
+
+const Done: React.FC<IDoneProps> = ({ onPress }) => (
+  <TouchableOpacity onPress={onPress}>
+    <GeneralSpacing u={10} r={10} d={10} l={10}>
+    <ThemedText size={16} type='main'>
+        Done
+      </ThemedText>
+    </GeneralSpacing>
+  </TouchableOpacity>
+)
+
+interface IAddMemberProps {
+  navigation: any;
+}
+
+const ContentContain: React.FC = ({ children }) => (
+  <GeneralSpacing u={0} r={20} d={0} l={20}>
+    {children}
+  </GeneralSpacing>
+);
+
+interface ISelectedUsersProps {
+  _id: string;
+  email: string;
+  userType: string;
+  name: string;
+}
+
+const AddMember: React.FC<IAddMemberProps> = ({ navigation }) => {
+  const [searchString, setSearchString] = React.useState('');
+  const [runUserSearchQuery, {data: userData, loading: userLoading, error: userError}] = useLazyQuery<ISearchUserPayload, ISearchInput>(SEARCH_USERS)
+  const [selectedUsers, setSelectedUsers] = React.useState<ISelectedUsersProps[]>([])
+
+  React.useEffect(() => {
+    runUserSearchQuery({ variables: { searchTerm: searchString}})
+  }, [searchString])
+
+  const onChangeText = (text: string) => setSearchString(text);
+
+  const addSelectedUser = (userID: string, userType: string, userEmail: string, name: string) => () => {
+    let present = false;
+    let _newArray = selectedUsers.reduce((acc, cur) => {
+      if (cur._id === userID) {
+        present = true;
+        return acc
+      } else {
+        return [...acc, {_id: cur._id, userType: cur.userType, email: cur.email, name: cur.name}]
+      }
+    }, [] as ISelectedUsersProps[])
+    if (!present) { _newArray = [..._newArray, {_id: userID, userType, email: userEmail, name}] }
+    console.log('_newArray', _newArray)
+    setSelectedUsers([..._newArray])
+  }
+
+  return (
+    <SafeAreaView>
+      <IndividualResultContainer>
+        <Cancel onPress={() => navigation.goBack()}/>
+        <Done onPress={() => console.log('run the mutation')}/>
+      </IndividualResultContainer>
+      <Input
+        placeholder='Search for Users'
+        onChangeText={onChangeText}
+        leftIcon={
+          <Icon
+            name='search'
+          />
+        }
+      />
+      <Text>Selected Users: {selectedUsers.map(_u => _u.name)}, </Text>
+      <ContentContain>
+        {userLoading ? <ActivityIndicator /> : (
+          userData && userData.searchUsers.map(_user => {
+            let present = false;
+            selectedUsers.forEach(_u => {
+              if (_u._id === _user._id) {
+                present = true
+              }
+            })
+
+            return (
+              <TouchableOpacity
+                onPress={addSelectedUser(_user._id, _user.userType, _user.email, _user.name)}
+              >
+                <IndividualResultContainer>
+                  <Text>{_user.name}</Text>
+                  <Icon
+                    name={present ? 'checkcircle' : 'pluscircleo'}
+                    type='antdesign'
+                  />
+                </IndividualResultContainer>
+              </TouchableOpacity>
+            )
+          })
+        ) }
+      </ContentContain>
+    </SafeAreaView>
+  )
+
+};
+
+export default AddMember;
