@@ -36,7 +36,8 @@ const SearchResults: React.FC<ISearchResultsProps> = ({ searchResults, navigatio
               onPress={() => navigation.navigate(
                 'MyProfile',
                 {
-                  groupID: results.groupID
+                  groupID: results.groupID,
+                  currentUserID: results._id
                 }
               )}
             />

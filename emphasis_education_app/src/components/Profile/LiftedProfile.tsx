@@ -37,14 +37,19 @@ const HeaderButtons: React.FC<IHeaderButtonProps> = ({ text, onPress}) => (
   </TouchableOpacity>
 )
 
-const LiftedProfile: React.FC<ILiftedProfileProps> = ({ navigation }) => {
+const LiftedProfile: React.FC<ILiftedProfileProps> = ({ route, navigation }) => {
+  console.log('route', route)
   const [editing, setEditing] = React.useState(false);
   const { loggedUser } = React.useContext(Context);
-  const options = { variables: { groupID: loggedUser.groupID }}
+  // if we passed in routes then that means we have come from the admin page
+  const groupID = route.params ? route.params.groupID : loggedUser.groupID
+  const currentUserID = route.params ? route.params.currentUserID : loggedUser._id
+
+  const options = { variables: { groupID }}
   const { data, loading, error } = useQuery<IGetFamilyPayload, IGetFamilyInput>(GET_FAMILY, options)
   if ( error ) { console.log('error loading the profile')}
-  const toggleEdit = () => setEditing(_edit => !_edit)
 
+  const toggleEdit = () => setEditing(_edit => !_edit)
 
   React.useEffect(() => {
     navigation.setOptions({
@@ -70,6 +75,7 @@ const LiftedProfile: React.FC<ILiftedProfileProps> = ({ navigation }) => {
     {
       loading ? <ActivityIndicator /> : (
         <Profile
+          currentUserID={currentUserID}
           family={data ? data.getFamily : []}
           editing={editing}
         />

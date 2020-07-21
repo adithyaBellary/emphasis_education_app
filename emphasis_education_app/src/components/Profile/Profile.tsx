@@ -12,7 +12,7 @@ import { ContentContain, IndividualField, HorizontalDivider } from '../shared';
 
 interface IProfileProps {
   editing: boolean;
-  // mainUserID: string;
+  currentUserID: string;
   family: IUser[];
 }
 
@@ -23,12 +23,28 @@ const Title = styled(Text)`
   padding: 10px 0;
 `;
 
-const Profile: React.FC<IProfileProps> = ({ family, editing }) => {
-
+const Profile: React.FC<IProfileProps> = ({ family, editing, currentUserID }) => {
   const {loggedUser} = React.useContext(Context);
-  if (!loggedUser) { return <View><Text>could not find the user.</Text></View>; }
 
-  let mainUserCopy = Object.assign({}, loggedUser)
+  console.log('the fam', family)
+  let currentUser: IUser | undefined;
+
+  if ( currentUserID === loggedUser._id) {
+    // we are not coming from the admin page
+    currentUser = loggedUser
+  } else {
+    family.forEach(familyMember => {
+      if (familyMember._id === currentUserID) {
+        // we have found the selected user
+        currentUser = familyMember
+      }
+    })
+  }
+
+  console.log('currentUser', currentUser)
+  if (!currentUser) { return <View><Text>could not find the user.</Text></View>; }
+
+  let mainUserCopy = Object.assign({}, currentUser)
 
   const onChangeText = (text: string, label: string) => {
     if (label === 'Email') { mainUserCopy.email = text }
@@ -39,9 +55,9 @@ const Profile: React.FC<IProfileProps> = ({ family, editing }) => {
 
   return (
     <ContentContain>
-      <Title>{loggedUser.name}</Title>
+      <Title>{currentUser.name}</Title>
       <IndividualField
-        value={loggedUser.email}
+        value={currentUser.email}
         valueSize={16}
         label={'Email'}
         labelSize={14}
@@ -50,7 +66,7 @@ const Profile: React.FC<IProfileProps> = ({ family, editing }) => {
       />
       {!editing && <HorizontalDivider width={80} />}
       <IndividualField
-        value={loggedUser.phoneNumber}
+        value={currentUser.phoneNumber}
         valueSize={16}
         label={'Phone Number'}
         labelSize={14}
@@ -60,7 +76,7 @@ const Profile: React.FC<IProfileProps> = ({ family, editing }) => {
 
       {/* list the classes */}
       {/* lets not have this be editable */}
-      {loggedUser.classes && loggedUser.classes.map(c => (
+      {currentUser.classes && currentUser.classes.map(c => (
         <IndividualField
           value={c.className!}
           valueSize={16}
@@ -72,7 +88,7 @@ const Profile: React.FC<IProfileProps> = ({ family, editing }) => {
       {
         family.map((user, index) => (
           <>
-            {(user._id !== loggedUser._id) && (
+            {(user._id !== currentUser._id) && (
               <>
                 <IndividualField
                   // key={index}
@@ -88,6 +104,8 @@ const Profile: React.FC<IProfileProps> = ({ family, editing }) => {
                   label={'Email'}
                   labelSize={14}
                 />
+                {/* phone numer */}
+                {/* relationship */}
               </>
             )}
           </>
