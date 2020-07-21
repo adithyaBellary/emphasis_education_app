@@ -8,7 +8,14 @@ import { Icon } from 'react-native-elements';
 
 import { IUser } from '../../types';
 import Context from '../Context/Context';
-import { ContentContain, IndividualField, HorizontalDivider } from '../shared';
+import {
+  ContentContain,
+  IndividualField,
+  HorizontalDivider,
+  IconRow,
+  GeneralSpacing,
+  PermissionedComponent
+} from '../shared';
 
 interface IProfileProps {
   editing: boolean;
@@ -84,7 +91,18 @@ const Profile: React.FC<IProfileProps> = ({ family, editing, currentUserID }) =>
           labelSize={14}
         />
       ))}
-      <Title>Family Members</Title>
+      <IconRow>
+        <Title>Family Members</Title>
+        {/* <PermissionedComponent> */}
+        {/* only for admins */}
+          <GeneralSpacing u={0} r={0} d={0} l={10}>
+            <Icon
+              name='pluscircleo'
+              type='antdesign'
+            />
+          </GeneralSpacing>
+        {/* </PermissionedComponent> */}
+      </IconRow>
       {
         family.map((user, index) => (
           <>
