@@ -49,8 +49,6 @@ const Profile: React.FC<IProfileProps> = ({ family, editing, currentUserID, onPr
     })
   }
 
-  console.log('currentUser', currentUser)
-  console.log('family,', family)
   if (!currentUser) { return <View><Text>could not find the user.</Text></View>; }
 
   let mainUserCopy = Object.assign({}, currentUser)

@@ -52,24 +52,26 @@ const LiftedProfile: React.FC<ILiftedProfileProps> = ({ route, navigation }) => 
   const toggleEdit = () => setEditing(_edit => !_edit)
   const goToAddMember = () => navigation.navigate('AddUserModal', { groupID })
 
-  React.useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <>
-          {
-            !editing ? (
-              <HeaderButtons text='Edit' onPress={toggleEdit} />
-            ) : (
-              <IconRow>
-                <HeaderButtons text='Cancel' onPress={toggleEdit} />
-                <HeaderButtons text='Done' onPress={toggleEdit} />
-              </IconRow>
-            )
-          }
-        </>
-      )
-    })
-  }, [editing])
+  // let us not expose the profile editing yet
+
+  // React.useEffect(() => {
+  //   navigation.setOptions({
+  //     headerRight: () => (
+  //       <>
+  //         {
+  //           !editing ? (
+  //             <HeaderButtons text='Edit' onPress={toggleEdit} />
+  //           ) : (
+  //             <IconRow>
+  //               <HeaderButtons text='Cancel' onPress={toggleEdit} />
+  //               <HeaderButtons text='Done' onPress={toggleEdit} />
+  //             </IconRow>
+  //           )
+  //         }
+  //       </>
+  //     )
+  //   })
+  // }, [editing])
 
   return (
     <>
