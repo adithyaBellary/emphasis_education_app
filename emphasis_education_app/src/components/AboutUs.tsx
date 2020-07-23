@@ -4,7 +4,7 @@ import {
   Text
 } from 'react-native'
 
-const AboutUs: React.fc = () => (
+const AboutUs: React.FC = () => (
   <View>
     <Text>
       About us

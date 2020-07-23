@@ -34,7 +34,6 @@ const UserStack = () => (
       name="UserHome"
       component={Search}
       options={{
-        // so that we dont have any stacked headers
         header: () => null
       }}
     />

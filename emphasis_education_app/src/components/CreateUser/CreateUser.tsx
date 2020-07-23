@@ -8,11 +8,12 @@ import { IUserInput, Permission } from '../../types';
 import {
   CenteredDiv,
   ButtonContainer,
-  MyButton,
-  MyButtonText,
   RadioButtonGroup,
   ThemedTextInput,
-  ButtonGroupContain
+  ThemedButton,
+  IconRow,
+  GeneralSpacing,
+  ThemedText
 } from '../shared';
 
 interface ICreateUser {
@@ -67,29 +68,29 @@ const CreateUser: React.FC<ICreateUser> = props => {
   return (
     <View>
       <CenteredDiv>
-        <Text>Family member number {numUser}</Text>
+        <ThemedText size={14} type='main'>Family Member Number {numUser}</ThemedText>
         <ThemedTextInput
-          placeholder='Nmae'
+          placeholder='Name'
           value={curState.name}
           onChangeText={handleTextChange('name')}
         />
         <ThemedTextInput
-          placeholder='email'
+          placeholder='Email'
           value={curState.email}
           onChangeText={handleTextChange('email')}
         />
         <ThemedTextInput
-          placeholder='password'
+          placeholder='Password'
           value={curState.password}
           onChangeText={handleTextChange('password')}
         />
         <ThemedTextInput
-          placeholder='confirm password'
+          placeholder='Confirm Password'
           value={curState.confirmPassword}
           onChangeText={handleTextChange('confirmPassword')}
         />
         <ThemedTextInput
-          placeholder='phone number'
+          placeholder='Phone Number'
           value={curState.phoneNumber}
           onChangeText={handleTextChange('phoneNumber')}
         />
@@ -102,28 +103,26 @@ const CreateUser: React.FC<ICreateUser> = props => {
           onSelect={handleTextChange('userType')}
         />
       </CenteredDiv>
-      <ButtonGroupContain>
+
+      <GeneralSpacing u={60} r={0} d={0} l={0}>
+      <IconRow>
         <ButtonContainer>
-          <MyButton
+          <ThemedButton
+            buttonText='Add another member'
+            loading={false}
             onPress={addMember}
-            // disabled={true}
-          >
-            <MyButtonText>
-              Add another member
-            </MyButtonText>
-          </MyButton>
+          />
         </ButtonContainer>
 
         <ButtonContainer>
-          <MyButton
+          <ThemedButton
+            buttonText='Submit'
+            loading={false}
             onPress={GoToConf}
-          >
-            <MyButtonText>
-              Submit
-            </MyButtonText>
-          </MyButton>
+          />
         </ButtonContainer>
-      </ButtonGroupContain>
+      </IconRow>
+      </GeneralSpacing>
     </View>
   )
 }

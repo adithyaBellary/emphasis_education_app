@@ -17,8 +17,12 @@ import { SEARCH_USERS } from '../../queries/SearchUsers';
 import { CREATE_CHAT } from '../../queries/CreateChat';
 import { ISearchInput, ISearchClassesPayload, ISearchUserPayload, ICreateChatInput, ICreateChatPayload, Permission } from '../../types';
 import { IndividualResultContainer } from '../AdminPage/IndividualResult';
-
 import Context from '../Context/Context';
+
+import {
+  IconRow,
+  GeneralSpacing
+} from '../shared';
 
 interface ICreateChatProps {
   navigation: any;
@@ -29,6 +33,7 @@ interface ISelectedUsersProps {
   _id: string;
   email: string;
   userType: string;
+  name: string;
 }
 
 const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
@@ -48,10 +53,10 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
       onCompleted: () => {
         Alert.alert('chat successfully made')
         // update the user
-
       },
       onError: (e) => {
         console.log('error:', e)
+        Alert.alert('There was an error making the chat')
       }
     }
   );
@@ -65,14 +70,20 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
 
   navigation.setOptions({
     headerRight: () => (
-      <Button
-        title='Done'
-        onPress={createChat}
-        // TODO add disabled functionality
-        // disabled={}
-      />
+      <GeneralSpacing u={0} r={10} d={0} l={10}>
+        <IconRow>
+          <Button
+            title='Done'
+            onPress={createChat}
+            // TODO add disabled functionality
+            disabled={loadingCreateChat}
+          />
+          {loadingCreateChat && <ActivityIndicator />}
+        </IconRow>
+      </GeneralSpacing>
     )
   })
+
 
   const createChat = () => {
     console.log('creating a new chat with', selectedClasses, selectedUsers)
@@ -104,6 +115,7 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
         variables
       })
     } catch(e) {
+      console.log('error', e)
       Alert.alert('there was an error making this chat')
     }
   }
@@ -111,17 +123,17 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
   const onUserTextChage = (text: string) => setUserSearch(text)
   const onClassTextChange = (text: string) => setClassSearch(text)
 
-  const addSelectedUsers = (userID: string, userType: string, userEmail: string) => () =>  {
+  const addSelectedUsers = (userID: string, userType: string, userEmail: string, name: string) => () =>  {
     let present = false;
     let _newArray = selectedUsers.reduce((acc, cur) => {
       if (cur._id === userID) {
         present = true;
         return acc
       } else {
-        return [...acc, {_id: cur._id, userType: cur.userType, email: cur.email}]
+        return [...acc, {_id: cur._id, userType: cur.userType, email: cur.email, name: cur.name}]
       }
     }, [] as ISelectedUsersProps[])
-    if (!present) { _newArray = [..._newArray, {_id: userID, userType, email: userEmail}] }
+    if (!present) { _newArray = [..._newArray, {_id: userID, userType, email: userEmail, name}] }
     console.log('_newArray', _newArray)
     setSelectedUsers([..._newArray])
   }
@@ -159,47 +171,49 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
           />
         }
       />
-      <Text>Selected Class: {selectedClasses}</Text>
-      <Text>Selected Users: {selectedUsers.map(u => `${u.email}, `)} </Text>
-      {/* let us display the results here so that we can easily have state over them */}
-      { userLoading ? <ActivityIndicator /> : (
-        userData ? userData.searchUsers.map((u, index) => {
-          let present = false;
-          selectedUsers.forEach(_user => {
-            if (_user._id === u._id) {
-              present = true;
-            }
-          });
-          return (
+      <GeneralSpacing u={0} r={20} d={0} l={20}>
+        <Text>Selected Class: {selectedClasses}</Text>
+        <Text>Selected Users: {selectedUsers.map(u => `${u.name}, `)} </Text>
+        {/* let us display the results here so that we can easily have state over them */}
+        { userLoading ? <ActivityIndicator /> : (
+          userData ? userData.searchUsers.map((u, index) => {
+            let present = false;
+            selectedUsers.forEach(_user => {
+              if (_user._id === u._id) {
+                present = true;
+              }
+            });
+            return (
+              <TouchableOpacity
+                onPress={addSelectedUsers(u._id, u.userType, u.email, u.name)}
+              >
+                <IndividualResultContainer>
+                  <Text>{u.name}</Text>
+                  <Icon
+                    name={present ? 'checkcircle' : 'pluscircleo'}
+                    type='antdesign'
+                  />
+                </IndividualResultContainer>
+              </TouchableOpacity>
+            )
+          }) : null
+        )}
+        { classLoading ? <ActivityIndicator /> : (
+          classData ? classData.searchClasses.classes.map(c => (
             <TouchableOpacity
-              onPress={addSelectedUsers(u._id, u.userType, u.email)}
+              onPress={addSelectedClasses(c)}
             >
               <IndividualResultContainer>
-                <Text>{u.name}</Text>
+                <Text>{c}</Text>
                 <Icon
-                  name={present ? 'checkcircle' : 'pluscircleo'}
+                  name={selectedClasses === c ? 'checkcircle' : 'pluscircleo'}
                   type='antdesign'
                 />
               </IndividualResultContainer>
             </TouchableOpacity>
-          )
-        }) : null
-      )}
-      { classLoading ? <ActivityIndicator /> : (
-        classData ? classData.searchClasses.classes.map(c => (
-          <TouchableOpacity
-            onPress={addSelectedClasses(c)}
-          >
-            <IndividualResultContainer>
-            <Text>{c}</Text>
-            <Icon
-              name={selectedClasses === c ? 'checkcircle' : 'pluscircleo'}
-              type='antdesign'
-            />
-            </IndividualResultContainer>
-          </TouchableOpacity>
-        )) : null
-      )}
+          )) : null
+        )}
+      </GeneralSpacing>
     </>
   )
 }

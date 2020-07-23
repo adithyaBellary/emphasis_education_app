@@ -1,23 +1,20 @@
 import React, { useState, useContext } from 'react';
 import {
-  Alert,
   View,
   Text,
   SafeAreaView,
   TouchableOpacity,
-  Image
+  Image,
 } from 'react-native';
 import styled from 'styled-components';
 import { MD5 } from 'crypto-js';
 
 import {
-  MytextInput,
   ButtonContainer,
-  MyButton,
-  MyButtonText,
   CenteredDiv,
   LoginInput,
-  HorizontalDivider
+  HorizontalDivider,
+  ThemedButton
 } from './shared';
 import Context, { AuthContext } from './Context/Context';
 
@@ -29,10 +26,10 @@ const PositionDiv = styled(View)`
 `;
 
 interface ILoginProps {
-  // TODO type this shit
   navigation: any;
   route: any;
   error: boolean;
+  loading: boolean;
 }
 
 const ErrorText = styled(Text)`
@@ -57,13 +54,13 @@ interface ISecondaryLinkProps {
 }
 
 const SecondaryLink: React.FC<ISecondaryLinkProps> = ({ linkContent, onPress }) => (
-  <GeneralSpacing u={0} r={10} d={0} l={10}>
-    <TouchableOpacity onPress={onPress}>
+  <TouchableOpacity onPress={onPress}>
+    <GeneralSpacing u={0} r={10} d={0} l={10}>
       <ThemedText size={14} type={'light'}>
         {linkContent}
       </ThemedText>
-    </TouchableOpacity>
-  </GeneralSpacing>
+    </GeneralSpacing>
+  </TouchableOpacity>
 );
 
 const LoginImage = () => (
@@ -85,7 +82,6 @@ const ContentWrap: React.FC = ({ children }) => (
     </CenteredDiv>
   </SafeAreaView>
 );
-
 
 const Login: React.FC<ILoginProps> = props => {
 
@@ -135,15 +131,15 @@ const Login: React.FC<ILoginProps> = props => {
       {props.error && <Errorlogin /> }
 
       <ButtonContainer>
-        <MyButton
+        <ThemedButton
+          buttonText='Login'
+          loading={props.loading}
           onPress={() => login(curState.email, curState.password)}
-        >
-          <MyButtonText>Login</MyButtonText>
-        </MyButton>
+        />
       </ButtonContainer>
 
       <IconRow>
-        <SecondaryLink linkContent={'Fist time user?'} onPress={changeScreens('EnterCode')} />
+        <SecondaryLink linkContent={'First time user?'} onPress={changeScreens('EnterCode')} />
         <VerticalDivier height={10}/>
         <SecondaryLink linkContent={'Forgot Password'} onPress={changeScreens('CreateUserContain')} />
       </IconRow>

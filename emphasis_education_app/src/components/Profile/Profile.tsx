@@ -8,11 +8,20 @@ import { Icon } from 'react-native-elements';
 
 import { IUser } from '../../types';
 import Context from '../Context/Context';
-import { ContentContain, IndividualField, HorizontalDivider } from '../shared';
+import {
+  ContentContain,
+  IndividualField,
+  HorizontalDivider,
+  IconRow,
+  GeneralSpacing,
+  PermissionedComponent
+} from '../shared';
 
 interface IProfileProps {
-  mainUserID: string
-  family: IUser[]
+  editing: boolean;
+  currentUserID: string;
+  family: IUser[];
+  onPress (): void;
 }
 
 const Title = styled(Text)`
@@ -20,107 +29,106 @@ const Title = styled(Text)`
   fontFamily: ${({ theme }) => theme.font.bold};
   font-size: 30px;
   padding: 10px 0;
-`
+`;
 
-const TitleWithIcon = styled(Text)`
-  fontFamily: ${({ theme }) => theme.font.bold};
-  font-size: 30px;
-  padding: 10px 0;
+const Profile: React.FC<IProfileProps> = ({ family, editing, currentUserID, onPress }) => {
+  const {loggedUser} = React.useContext(Context);
 
-`
+  console.log('the fam', family)
+  let currentUser: IUser | undefined;
 
-const TitleRow = styled(View)`
-  display: flex;
-  flexDirection: row;
-  justify-content: center;
-  align-items: center;
-`
+  if ( currentUserID === loggedUser._id) {
+    // we are not coming from the admin page
+    currentUser = loggedUser
+  } else {
+    family.forEach(familyMember => {
+      if (familyMember._id === currentUserID) {
+        // we have found the selected user
+        currentUser = familyMember
+      }
+    })
+  }
 
-const IconContain = styled(View)`
-  padding: 0 5px;
-`
+  if (!currentUser) { return <View><Text>could not find the user.</Text></View>; }
 
-const UserInfoContain = styled(View)`
-`
+  let mainUserCopy = Object.assign({}, currentUser)
 
-const Profile: React.FC<IProfileProps> = ({ family, mainUserID }) => {
+  const onChangeText = (text: string, label: string) => {
+    if (label === 'Email') { mainUserCopy.email = text }
+    if (label === 'Phone Number') { mainUserCopy.phoneNumber = text }
 
-  // let us put the logged in user in the top, so we need to get the context
-  const { loggedUser } = React.useContext(Context)
-  console.log('users in my profile', family)
-  const mainUser: (IUser | undefined) = family.map(u => {
-    if (u.groupID === mainUserID) { return u }
-  })[0]
-  console.log('mainUser', mainUser, mainUserID)
-  if (!mainUser) { return <View><Text>could not find the user.</Text></View>; }
+    console.log('mainUserCopy', mainUserCopy)
+  }
 
   return (
     <ContentContain>
-      <Title>
-        {mainUser.name}
-      </Title>
-      <UserInfoContain>
-        <IndividualField
-          value={mainUser.email}
-          valueSize={16}
-          label={'Email'}
-          labelSize={14}
-        />
-        <HorizontalDivider width={80}/>
-        <IndividualField
-          value={mainUser.phoneNumber}
-          valueSize={16}
-          label={'Phone Number'}
-          labelSize={14}
-        />
+      <Title>{currentUser.name}</Title>
+      <IndividualField
+        value={currentUser.email}
+        valueSize={16}
+        label={'Email'}
+        labelSize={14}
+        editing={editing}
+        onChangeText={onChangeText}
+      />
+      {!editing && <HorizontalDivider width={80} />}
+      <IndividualField
+        value={currentUser.phoneNumber}
+        valueSize={16}
+        label={'Phone Number'}
+        labelSize={14}
+        editing={editing}
+        onChangeText={onChangeText}
+      />
 
-        {/* list the classes */}
-        {mainUser.classes && mainUser.classes.map(c => (
-          <IndividualField
-            value={c.className!}
-            valueSize={16}
-            label={'class'}
-            labelSize={14}
-          />
+      {/* list the classes */}
+      {/* lets not have this be editable */}
+      {currentUser.classes && currentUser.classes.map(c => (
+        <IndividualField
+          value={c.className!}
+          valueSize={16}
+          label={'class'}
+          labelSize={14}
+        />
+      ))}
+      <IconRow>
+        <Title>Family Members</Title>
+        {/* <PermissionedComponent> */}
+        {/* only for admins */}
+          <GeneralSpacing u={0} r={0} d={0} l={10}>
+            <Icon
+              name='pluscircleo'
+              type='antdesign'
+              onPress={onPress}
+            />
+          </GeneralSpacing>
+        {/* </PermissionedComponent> */}
+      </IconRow>
+      {
+        family.map((user, index) => (
+          <>
+            {(user._id !== currentUser._id) && (
+              <>
+                <IndividualField
+                  // key={index}
+                  value={user.name}
+                  valueSize={16}
+                  label={'Name'}
+                  labelSize={14}
+                />
+                <IndividualField
+                  // key={index}
+                  value={user.email}
+                  valueSize={16}
+                  label={'Email'}
+                  labelSize={14}
+                />
+                {/* phone numer */}
+                {/* relationship */}
+              </>
+            )}
+          </>
         ))}
-      </UserInfoContain>
-      <TitleRow>
-        <TitleWithIcon>
-          Family Members
-        </TitleWithIcon>
-        <IconContain>
-          <Icon
-            name='pluscircleo'
-            type='antdesign'
-            // onPress={}
-          />
-        </IconContain>
-      </TitleRow>
-      <UserInfoContain>
-        {
-          family.map((user, index) => (
-            <>
-              {(user._id !== mainUser._id) && (
-                <>
-                  <IndividualField
-                    // key={index}
-                    value={user.name}
-                    valueSize={16}
-                    label={'Name'}
-                    labelSize={14}
-                  />
-                  <IndividualField
-                    // key={index}
-                    value={user.email}
-                    valueSize={16}
-                    label={'Email'}
-                    labelSize={14}
-                  />
-                </>
-              )}
-            </>
-          ))}
-      </UserInfoContain>
     </ContentContain>
   )
 }

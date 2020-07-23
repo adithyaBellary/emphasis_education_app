@@ -11,7 +11,13 @@ import { Icon } from 'react-native-elements';
 
 import styled from 'styled-components';
 import Context from '../Context/Context';
-import { PermissionedComponent, IconRow, GeneralSpacing } from '../shared';
+import {
+  PermissionedComponent,
+  IconRow,
+  GeneralSpacing,
+  CenteredDiv,
+  ThemedText
+} from '../shared';
 import Accordion from './Accordion';
 
 import { Permission } from '../../types';
@@ -33,12 +39,15 @@ const ChatsContain = styled(View)`
   padding: 0 10px;
 `
 const EmptyChat: React.FC = () => (
-  <View>
-    <Text>
-      we empty
-    </Text>
-  </View>
-)
+  <CenteredDiv>
+    <GeneralSpacing u={10} r={10} d={10} l={10}>
+      <ThemedText size={16} type='light'>
+        You are currently not added to any Chats.
+        Please reach out to either Shweta or Sakthi to be added to one.
+      </ThemedText>
+    </GeneralSpacing>
+  </CenteredDiv>
+);
 
 const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
   const { loggedUser, setUser } = React.useContext(Context);
@@ -73,16 +82,16 @@ const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
         <IconRow>
           <GeneralSpacing u={0} d={0} r={10} l={10}>
             <Icon
-              name='pluscircleo'
+              name='sync'
               type='antdesign'
-              onPress={goToCreateChat}
+              onPress={getClasses}
             />
           </GeneralSpacing>
           <Icon
-            name='sync'
+            name='pluscircleo'
             type='antdesign'
-            onPress={getClasses}
-          />
+            onPress={goToCreateChat}
+            />
         </IconRow>
         // </PermissionedComponent>
       ),

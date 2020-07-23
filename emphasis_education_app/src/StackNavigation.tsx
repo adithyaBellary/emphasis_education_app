@@ -17,20 +17,22 @@ import CreateChat from './components/Chat/CreateChat';
 import Settings from './components/Settings';
 import AboutUs from './components/AboutUs';
 import EnterCode from './components/CreateUser/EnterCode';
+import AddMember from './components/AdminPage/AddMemberModal';
 
 import { LOGIN_TOKEN } from './constant';
 import { LOGIN } from './queries/Login';
 
 import context, {EmptyUser, AuthContext} from './components/Context/Context';
 import { IUser, ILoginPayload } from './types';
+import { createNativeWrapper } from 'react-native-gesture-handler';
 
 const AuthStackNav = createStackNavigator();
-const AuthStack = ({ error }) => {
+const AuthStack = ({ error, loading }) => {
   console.log('props in auth st', error)
   return (
   <AuthStackNav.Navigator initialRouteName={'Login'}>
     <AuthStackNav.Screen name='Login' options={{ headerShown: false}}>
-      {_props => <Login {..._props} error={error}/>}
+      {_props => <Login {..._props} error={error} loading={loading}/>}
     </AuthStackNav.Screen>
     <AppStackNav.Screen
       name='EnterCode'
@@ -103,16 +105,26 @@ const AppStack = ({ userToken }) => (
   </AppStackNav.Navigator>
 )
 
+const AppRootStackNav = createStackNavigator();
+const AppRootStack = ({ userToken, ...props }) => (
+  <AppRootStackNav.Navigator headerMode="none" mode='modal'>
+    <AppRootStackNav.Screen name="App">
+      {() => <AppStack {...props} userToken={userToken} />}
+    </AppRootStackNav.Screen>
+    <AppRootStackNav.Screen name='AddUserModal' component={AddMember} />
+  </AppRootStackNav.Navigator>
+)
+
 const RootStackNav = createStackNavigator();
-const RootStack = ({ userToken, error}) => (
+const RootStack = ({ userToken, error, loading }) => (
   <RootStackNav.Navigator headerMode="none">
     { !!userToken ? (
-      <RootStackNav.Screen name='App'>
-        {_props => <AppStack {..._props} userToken={userToken} /> }
+      <RootStackNav.Screen name='AppRoot'>
+        {_props => <AppRootStack {..._props} userToken={userToken} /> }
       </RootStackNav.Screen>
     ) : (
       <RootStackNav.Screen name='Auth'>
-        {_props => <AuthStack {..._props} error={error}/> }
+        {_props => <AuthStack {..._props} error={error} loading={loading}/> }
       </RootStackNav.Screen>
 
     )}
@@ -219,7 +231,7 @@ const StackNavigation: React.FC = () => {
   return (
     <AuthContext.Provider value={authContext}>
       <NavigationContainer>
-        <RootStack userToken={userToken} error={loginError}/>
+        <RootStack userToken={userToken} error={loginError} loading={loading} />
       </NavigationContainer>
     </AuthContext.Provider>
   )
