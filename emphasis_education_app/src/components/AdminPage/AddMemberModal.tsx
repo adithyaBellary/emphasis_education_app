@@ -4,17 +4,20 @@ import {
   Text,
   SafeAreaView,
   TouchableOpacity,
-  ActivityIndicator
+  ActivityIndicator,
+  Alert
 } from 'react-native';
 import { Input, Icon } from 'react-native-elements';
-import { useLazyQuery } from '@apollo/react-hooks';
+import { useLazyQuery, useMutation } from '@apollo/react-hooks';
 
 import UserSearch from './LiftedSearch';
 
-import { GeneralSpacing, ThemedText } from '../shared';
+import { GeneralSpacing, ThemedText, IconRow } from '../shared';
 import { ISearchUserPayload, ISearchInput } from '../../types';
 import { SEARCH_USERS } from '../../queries/SearchUsers';
 import { IndividualResultContainer } from './IndividualResult';
+
+import { ADD_FAMILY_MEMBER } from '../../queries/AddFamilyMember';
 
 interface ICancelProps {
   onPress (): void;
@@ -31,21 +34,28 @@ const Cancel: React.FC<ICancelProps> = ({ onPress }) => (
 )
 
 interface IDoneProps {
+  loading: boolean;
   onPress (): void
 }
 
-const Done: React.FC<IDoneProps> = ({ onPress }) => (
+const Done: React.FC<IDoneProps> = ({ onPress, loading }) => (
   <TouchableOpacity onPress={onPress}>
     <GeneralSpacing u={10} r={10} d={10} l={10}>
-    <ThemedText size={16} type='main'>
-        Done
-      </ThemedText>
+      <IconRow>
+        <ThemedText size={16} type='main'>
+          Done
+        </ThemedText>
+        {
+          loading && <ActivityIndicator />
+        }
+      </IconRow>
     </GeneralSpacing>
   </TouchableOpacity>
 )
 
 interface IAddMemberProps {
   navigation: any;
+  route: any;
 }
 
 const ContentContain: React.FC = ({ children }) => (
@@ -54,6 +64,7 @@ const ContentContain: React.FC = ({ children }) => (
   </GeneralSpacing>
 );
 
+// this can include just the name and the _id
 interface ISelectedUsersProps {
   _id: string;
   email: string;
@@ -61,10 +72,13 @@ interface ISelectedUsersProps {
   name: string;
 }
 
-const AddMember: React.FC<IAddMemberProps> = ({ navigation }) => {
+const AddMember: React.FC<IAddMemberProps> = ({ navigation, route }) => {
+  console.log('route', route)
   const [searchString, setSearchString] = React.useState('');
   const [runUserSearchQuery, {data: userData, loading: userLoading, error: userError}] = useLazyQuery<ISearchUserPayload, ISearchInput>(SEARCH_USERS)
   const [selectedUsers, setSelectedUsers] = React.useState<ISelectedUsersProps[]>([])
+
+  const [runMut, {data: mutationData, loading: mutationLoading, error: mutationError}] = useMutation(ADD_FAMILY_MEMBER)
 
   React.useEffect(() => {
     runUserSearchQuery({ variables: { searchTerm: searchString}})
@@ -83,15 +97,25 @@ const AddMember: React.FC<IAddMemberProps> = ({ navigation }) => {
       }
     }, [] as ISelectedUsersProps[])
     if (!present) { _newArray = [..._newArray, {_id: userID, userType, email: userEmail, name}] }
-    console.log('_newArray', _newArray)
     setSelectedUsers([..._newArray])
+  }
+
+  const addMembers = () => {
+    const options = {
+      familyID: route.params.groupID,
+      userEmails: selectedUsers.map(_user => _user.email)
+    }
+    runMut({ variables: options }).then(data => {
+      console.log('data on done', data)
+      Alert.alert('done adding this member')
+    })
   }
 
   return (
     <SafeAreaView>
       <IndividualResultContainer>
         <Cancel onPress={() => navigation.goBack()}/>
-        <Done onPress={() => console.log('run the mutation')}/>
+        <Done onPress={addMembers} loading={mutationLoading} />
       </IndividualResultContainer>
       <Input
         placeholder='Search for Users'
