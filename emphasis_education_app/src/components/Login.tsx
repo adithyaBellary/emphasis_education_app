@@ -18,7 +18,7 @@ import {
 } from './shared';
 import Context, { AuthContext } from './Context/Context';
 
-import { IconRow, VerticalDivier, ThemedText, GeneralSpacing } from './shared';
+import { IconRow, VerticalDivider, ThemedText, GeneralSpacing } from './shared';
 import { LogoWithText } from './Logo/LogoWithText';
 
 const PositionDiv = styled(View)`
@@ -140,7 +140,7 @@ const Login: React.FC<ILoginProps> = props => {
 
       <IconRow>
         <SecondaryLink linkContent={'First time user?'} onPress={changeScreens('EnterCode')} />
-        <VerticalDivier height={10}/>
+        <VerticalDivider height={10}/>
         <SecondaryLink linkContent={'Forgot Password'} onPress={changeScreens('CreateUserContain')} />
       </IconRow>
     </ContentWrap>

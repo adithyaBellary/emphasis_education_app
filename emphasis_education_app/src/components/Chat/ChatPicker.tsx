@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   ActivityIndicator,
+  EdgeInsetsPropType,
 } from 'react-native';
 import { Icon } from 'react-native-elements';
 
@@ -16,7 +17,9 @@ import {
   IconRow,
   GeneralSpacing,
   CenteredDiv,
-  ThemedText
+  ThemedText,
+  VerticalDivider,
+  HorizontalDivider,
 } from '../shared';
 import Accordion from './Accordion';
 
@@ -35,9 +38,12 @@ const IndChat = styled(TouchableOpacity)`
   height: 30px;
 `;
 
-const ChatsContain = styled(View)`
-  padding: 0 10px;
-`
+const ChatsContain: React.FC = ({ children }) => (
+  <GeneralSpacing u={0} r={10} d={0} l={10}>
+    {children}
+  </GeneralSpacing>
+);
+
 const EmptyChat: React.FC = () => (
   <CenteredDiv>
     <GeneralSpacing u={10} r={10} d={10} l={10}>
@@ -48,6 +54,61 @@ const EmptyChat: React.FC = () => (
     </GeneralSpacing>
   </CenteredDiv>
 );
+
+const IconRowLeft = styled(IconRow)`
+  justify-content: flex-start;
+`;
+
+const LeftText = styled(ThemedText)`
+  padding-right: 5px;
+`
+
+const RightText = styled(ThemedText)`
+  padding-left: 5px;
+`
+
+const Contain = styled(View)`
+  padding: 10px;
+
+  width: 80%;
+  border-bottom-width: 1px;
+  border-bottom-color: black;
+
+`
+
+const ChatContain: React.FC = ({ children }) => (
+  <GeneralSpacing u={10} r={10} d={10} l={10}>
+    {children}
+  </GeneralSpacing>
+);
+interface IChatDisplay {
+  mainText: string;
+  secondaryText: string;
+  subject: string;
+}
+
+const ChatDisplay: React.FC<IChatDisplay> = ({ mainText, secondaryText, subject }) => (
+  <ChatContain>
+    <TouchableOpacity>
+      <IconRowLeft>
+        <LeftText size={18} type='main'>
+          {mainText}
+        </LeftText>
+        <VerticalDivider height={15}/>
+        <RightText size={18} type='main'>
+          {subject}
+        </RightText>
+      </IconRowLeft>
+
+      <ThemedText size={14} type='light'>
+        {secondaryText}
+      </ThemedText>
+
+    </TouchableOpacity>
+
+    <HorizontalDivider width={80} />
+  </ChatContain>
+)
 
 const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
   const { loggedUser, setUser } = React.useContext(Context);
@@ -112,7 +173,7 @@ const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
   return (
     <SafeAreaView>
       <ChatsContain>
-        {loggedUser.classes ? loggedUser.classes.map((c) => (
+        {/* {loggedUser.classes ? loggedUser.classes.map((c) => (
           <IndChat
             onPress={goToChat(c.chatID!)}
           >
@@ -120,7 +181,10 @@ const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
           </IndChat>
         )) : (
           <EmptyChat />
-        )}
+        )} */}
+        <ChatDisplay subject='Math' mainText='Adithya Bellary' secondaryText='Tutor 1' />
+        <ChatDisplay subject='Math I' mainText='Amritha Bellary' secondaryText='Tutor 2' />
+
         {/* {loggedUser.classes ? loggedUser.classes.map(c => (
           <Accordion
             title={c.displayName}
