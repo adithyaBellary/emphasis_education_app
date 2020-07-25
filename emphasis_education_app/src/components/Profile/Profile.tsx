@@ -62,7 +62,7 @@ const Profile: React.FC<IProfileProps> = ({ family, editing, currentUserID, onPr
 
   return (
     <ContentContain>
-      <Title>{currentUser.name}</Title>
+      <Title>{currentUser.firstName} {currentUser.lastName}</Title>
       <IndividualField
         value={currentUser.email}
         valueSize={16}

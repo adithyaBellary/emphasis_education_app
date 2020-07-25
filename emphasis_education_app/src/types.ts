@@ -6,7 +6,9 @@ export interface IProps {
 
 // this determines state for the user input form
 export interface IUserInput {
-  name: string;
+  // name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
   confirmPassword: string;
@@ -16,7 +18,9 @@ export interface IUserInput {
 }
 
 export interface IUsableUserInfo {
-  name: string;
+  // name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
   phoneNumber: string;
@@ -26,7 +30,8 @@ export interface IUsableUserInfo {
 
 // this will be the user type that we get back from the backend
 export interface IUser {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phoneNumber: string;
   userType: Permission;
@@ -58,7 +63,8 @@ export interface Class {
   className: string;
   // userEmails: string[];
   userInfo: ChatUserInfo[];
-  tutorEmail: string;
+  // tutorEmail: string;
+  tutorInfo: ChatUserInfo;
   chatID: string;
 }
 
