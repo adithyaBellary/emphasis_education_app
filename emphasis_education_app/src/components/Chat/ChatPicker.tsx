@@ -23,7 +23,10 @@ import {
 } from '../shared';
 import Accordion from './Accordion';
 
-import { Permission } from '../../types';
+import {
+  Permission,
+  Class
+} from '../../types';
 import { useLazyQuery } from '@apollo/react-hooks';
 import { GET_USER } from '../../queries/GetUser';
 
@@ -82,33 +85,96 @@ const ChatContain: React.FC = ({ children }) => (
   </GeneralSpacing>
 );
 interface IChatDisplay {
+  chatID: string
   mainText: string;
-  secondaryText: string;
-  subject: string;
+  secondaryText?: string;
+  caption?: string;
+  goToChat (sub: string): () => void;
 }
 
-const ChatDisplay: React.FC<IChatDisplay> = ({ mainText, secondaryText, subject }) => (
+const ChatDisplay: React.FC<IChatDisplay> = ({ mainText, secondaryText, caption, chatID, goToChat }) => (
   <ChatContain>
-    <TouchableOpacity>
+    <TouchableOpacity onPress={goToChat(chatID)}>
       <IconRowLeft>
         <LeftText size={18} type='main'>
           {mainText}
         </LeftText>
-        <VerticalDivider height={15}/>
-        <RightText size={18} type='main'>
-          {subject}
-        </RightText>
+        {
+          secondaryText && (
+            <>
+              <VerticalDivider height={15}/>
+              <RightText size={18} type='main'>
+                {secondaryText}
+              </RightText>
+            </>
+          )
+        }
       </IconRowLeft>
 
-      <ThemedText size={14} type='light'>
-        {secondaryText}
-      </ThemedText>
+      {
+        caption && (
+          <ThemedText size={14} type='light'>
+            {caption}
+          </ThemedText>
+        )
+      }
+
 
     </TouchableOpacity>
 
     <HorizontalDivider width={80} />
   </ChatContain>
 )
+
+interface IIndividualChatProps {
+  chatID: string;
+  userType: Permission;
+  classObject: Class;
+  goToChat (sub: string): () => void;
+}
+
+const IndividualChat: React.FC<IIndividualChatProps> = ({ classObject, userType, chatID, goToChat }) => {
+
+  let caption;
+  let mainText: string = '';
+  let secondaryText: string = '';
+  console.log('userType', userType)
+
+  switch(userType) {
+    case 'Student':
+      mainText = classObject.displayName;
+      secondaryText = classObject.tutorEmail
+      // no caption
+      break;
+    case 'Parent' || 'Admin':
+      // mainText = need to find the users who are students among the userEmails field
+      secondaryText = classObject.displayName
+      caption = classObject.tutorEmail
+
+      break;
+    case 'Tutor':
+      mainText = classObject.displayName
+      // caption = stringify the users names
+      // no need for secondaryTExt?
+      break
+    // case 'Admin':
+
+
+    //   break;
+    default:
+      break;
+  }
+
+  return (
+    <ChatDisplay
+      chatID={chatID}
+      caption={caption}
+      mainText={mainText}
+      secondaryText={secondaryText}
+      goToChat={goToChat}
+    />
+  )
+}
 
 const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
   const { loggedUser, setUser } = React.useContext(Context);
@@ -173,17 +239,17 @@ const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
   return (
     <SafeAreaView>
       <ChatsContain>
-        {/* {loggedUser.classes ? loggedUser.classes.map((c) => (
-          <IndChat
-            onPress={goToChat(c.chatID!)}
-          >
-            <Text>{c.className}</Text>
-          </IndChat>
-        )) : (
-          <EmptyChat />
-        )} */}
-        <ChatDisplay subject='Math' mainText='Adithya Bellary' secondaryText='Tutor 1' />
-        <ChatDisplay subject='Math I' mainText='Amritha Bellary' secondaryText='Tutor 2' />
+        {
+          loggedUser.classes ? loggedUser.classes.map(_class => (
+            <IndividualChat
+              chatID={_class.chatID}
+              userType={loggedUser.userType}
+              classObject={_class}
+              goToChat={goToChat}
+            />
+          )) : <EmptyChat />
+        }
+
 
         {/* {loggedUser.classes ? loggedUser.classes.map(c => (
           <Accordion

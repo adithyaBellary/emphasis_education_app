@@ -50,10 +50,10 @@ export interface Class {
   // we wont be sending this to the backend
   // _id?: string;
   displayName: string;
-  className?: string;
-  userEmails?: string[];
-  tutorEmail?: string;
-  chatID?: string;
+  className: string;
+  userEmails: string[];
+  tutorEmail: string;
+  chatID: string;
 }
 
 export interface ICreateChatInput {
