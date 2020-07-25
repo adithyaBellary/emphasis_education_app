@@ -45,13 +45,19 @@ export interface ICreateUserPayload {
   createUser: ICreateUserResponse;
 }
 
+interface ChatUserInfo {
+  name: string;
+  email: string;
+}
+
 // make all of these optional because we know almost nothing on user creation
 export interface Class {
   // we wont be sending this to the backend
   // _id?: string;
   displayName: string;
   className: string;
-  userEmails: string[];
+  // userEmails: string[];
+  userInfo: ChatUserInfo[];
   tutorEmail: string;
   chatID: string;
 }

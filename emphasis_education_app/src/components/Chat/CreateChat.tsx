@@ -29,6 +29,7 @@ interface ICreateChatProps {
   route: any;
 }
 
+// what if we just sent the email and name
 interface ISelectedUsersProps {
   _id: string;
   email: string;
@@ -45,7 +46,7 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
   const [selectedUsers, setSelectedUsers] = React.useState<ISelectedUsersProps[]>([])
   // const [selectedResults, setSelectedResults] = React.useState<string[]>([])
 
-  const { setUser } = React.useContext(Context)
+  // const { setUser } = React.useContext(Context)
 
   const [createChatMutation, {data: dataCreateChat, loading: loadingCreateChat, error}] = useMutation<ICreateChatPayload, ICreateChatInput>(
     CREATE_CHAT,
@@ -87,7 +88,6 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
 
   const createChat = () => {
     console.log('creating a new chat with', selectedClasses, selectedUsers)
-    // we need to get the
     try {
       let tutorEmail: string = ''
       const userEmails = selectedUsers.reduce<string[]>((acc, cur) => {

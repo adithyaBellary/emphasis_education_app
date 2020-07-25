@@ -139,6 +139,8 @@ const IndividualChat: React.FC<IIndividualChatProps> = ({ classObject, userType,
   let mainText: string = '';
   let secondaryText: string = '';
   console.log('userType', userType)
+  console.log('classObject', classObject)
+  const userNames: string[] = classObject.userInfo.map(_user => _user.name);
 
   switch(userType) {
     case 'Student':
@@ -148,6 +150,7 @@ const IndividualChat: React.FC<IIndividualChatProps> = ({ classObject, userType,
       break;
     case 'Parent' || 'Admin':
       // mainText = need to find the users who are students among the userEmails field
+      // mainText = `${}`
       secondaryText = classObject.displayName
       caption = classObject.tutorEmail
 

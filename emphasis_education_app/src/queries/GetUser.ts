@@ -12,8 +12,14 @@ export const GET_USER = gql`
       classes {
         displayName
         className
-        userEmails
-        tutorEmail
+        userInfo{
+          name
+          email
+        }
+        tutorInfo {
+          name
+          email
+        }
         chatID
       }
       groupID
