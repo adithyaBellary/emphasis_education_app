@@ -3,7 +3,8 @@ import gql from 'graphql-tag';
 export const GET_USER = gql`
   query getUser($userEmail: String!) {
     getUser(userEmail: $userEmail) {
-      name
+      firstName
+      lastName
       email
       phoneNumber
       userType
@@ -12,8 +13,16 @@ export const GET_USER = gql`
       classes {
         displayName
         className
-        userEmails
-        tutorEmail
+        userInfo{
+          firstName
+          lastName
+          email
+        }
+        tutorInfo {
+          firstName
+          lastName
+          email
+        }
         chatID
       }
       groupID

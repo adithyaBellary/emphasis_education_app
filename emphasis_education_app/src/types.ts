@@ -6,7 +6,9 @@ export interface IProps {
 
 // this determines state for the user input form
 export interface IUserInput {
-  name: string;
+  // name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
   confirmPassword: string;
@@ -16,7 +18,9 @@ export interface IUserInput {
 }
 
 export interface IUsableUserInfo {
-  name: string;
+  // name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
   phoneNumber: string;
@@ -26,7 +30,8 @@ export interface IUsableUserInfo {
 
 // this will be the user type that we get back from the backend
 export interface IUser {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phoneNumber: string;
   userType: Permission;
@@ -45,22 +50,32 @@ export interface ICreateUserPayload {
   createUser: ICreateUserResponse;
 }
 
+export interface ChatUserInfo {
+  firstName: string;
+  lastName: string;
+  email: string;
+}
+
 // make all of these optional because we know almost nothing on user creation
 export interface Class {
   // we wont be sending this to the backend
   // _id?: string;
   displayName: string;
-  className?: string;
-  userEmails?: string[];
-  tutorEmail?: string;
-  chatID?: string;
+  className: string;
+  // userEmails: string[];
+  userInfo: ChatUserInfo[];
+  // tutorEmail: string;
+  tutorInfo: ChatUserInfo;
+  chatID: string;
 }
 
 export interface ICreateChatInput {
   displayName: string;
   className: string;
-  tutorEmail: string;
-  userEmails: string[];
+  // tutorEmail: string;
+  // userEmails: string[];
+  userInfo: ChatUserInfo[];
+  tutorInfo: ChatUserInfo;
 }
 
 export interface ICreateChatPayload {

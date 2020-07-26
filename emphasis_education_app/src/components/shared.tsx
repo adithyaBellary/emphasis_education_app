@@ -281,13 +281,13 @@ export const HorizontalDivider = styled(View)<{width: number}>`
   width: ${({ width }) => width}%;
   border-bottom-color: ${({ theme }) => theme.colors.purplePastel};
   border-bottom-width: 1px;
-`
+`;
 
-export const VerticalDivier = styled(View)<{height: number}>`
+export const VerticalDivider = styled(View)<{height: number}>`
   height: ${({ height }) => height}px;
   border-right-color: grey;
   border-right-width: 1px;
-`
+`;
 
 export const IconRow = styled(View)`
   display: flex;

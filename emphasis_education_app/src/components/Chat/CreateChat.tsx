@@ -19,6 +19,8 @@ import { ISearchInput, ISearchClassesPayload, ISearchUserPayload, ICreateChatInp
 import { IndividualResultContainer } from '../AdminPage/IndividualResult';
 import Context from '../Context/Context';
 
+import { ChatUserInfo } from '../../types';
+
 import {
   IconRow,
   GeneralSpacing
@@ -29,11 +31,13 @@ interface ICreateChatProps {
   route: any;
 }
 
+// what if we just sent the email and name
 interface ISelectedUsersProps {
   _id: string;
   email: string;
   userType: string;
-  name: string;
+  firstName: string;
+  lastName: string;
 }
 
 const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
@@ -45,14 +49,13 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
   const [selectedUsers, setSelectedUsers] = React.useState<ISelectedUsersProps[]>([])
   // const [selectedResults, setSelectedResults] = React.useState<string[]>([])
 
-  const { setUser } = React.useContext(Context)
+  // const { setUser } = React.useContext(Context)
 
   const [createChatMutation, {data: dataCreateChat, loading: loadingCreateChat, error}] = useMutation<ICreateChatPayload, ICreateChatInput>(
     CREATE_CHAT,
     {
       onCompleted: () => {
         Alert.alert('chat successfully made')
-        // update the user
       },
       onError: (e) => {
         console.log('error:', e)
@@ -87,28 +90,42 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
 
   const createChat = () => {
     console.log('creating a new chat with', selectedClasses, selectedUsers)
-    // we need to get the
     try {
-      let tutorEmail: string = ''
-      const userEmails = selectedUsers.reduce<string[]>((acc, cur) => {
+      let tutorEmail: string = '';
+      let tutorFirstName: string = '';
+      let tutorLastName: string = '';
+      const userInfo = selectedUsers.reduce<ChatUserInfo[]>((acc, cur) => {
         if (cur.userType === Permission.Tutor) {
           if (!tutorEmail) {
             tutorEmail = cur.email
+            tutorFirstName = cur.firstName
+            tutorLastName = cur.lastName
             console.log('setting', tutorEmail)
           }
           return acc
         } else {
-          return [...acc, cur.email]
+          const chatUserInfo: ChatUserInfo = {
+            firstName: cur.firstName,
+            lastName: cur.lastName,
+            email: cur.email
+          }
+          return [...acc, chatUserInfo]
         }
-      }, [] as string[])
+      }, [] as ChatUserInfo[])
 
       if (!tutorEmail) {throw Error}
-
+      const tutorInfo: ChatUserInfo = {
+        firstName: tutorFirstName,
+        lastName: tutorLastName,
+        email: tutorEmail
+      }
+      console.log('tutor stuff', tutorInfo)
+      console.log('user stuff', userInfo)
       const variables: ICreateChatInput = {
         displayName: 'Test Display Name',
         className: selectedClasses,
-        tutorEmail,
-        userEmails
+        userInfo,
+        tutorInfo
       }
 
       createChatMutation({
@@ -123,17 +140,17 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
   const onUserTextChage = (text: string) => setUserSearch(text)
   const onClassTextChange = (text: string) => setClassSearch(text)
 
-  const addSelectedUsers = (userID: string, userType: string, userEmail: string, name: string) => () =>  {
+  const addSelectedUsers = (userID: string, userType: string, userEmail: string, firstName: string, lastName: string) => () =>  {
     let present = false;
-    let _newArray = selectedUsers.reduce((acc, cur) => {
+    let _newArray: ISelectedUsersProps[] = selectedUsers.reduce((acc, cur) => {
       if (cur._id === userID) {
         present = true;
         return acc
       } else {
-        return [...acc, {_id: cur._id, userType: cur.userType, email: cur.email, name: cur.name}]
+        return [...acc, {_id: cur._id, userType: cur.userType, email: cur.email, firstName: cur.firstName, lastName: cur.lastName}]
       }
     }, [] as ISelectedUsersProps[])
-    if (!present) { _newArray = [..._newArray, {_id: userID, userType, email: userEmail, name}] }
+    if (!present) { _newArray = [..._newArray, {_id: userID, userType, email: userEmail, firstName, lastName}] }
     console.log('_newArray', _newArray)
     setSelectedUsers([..._newArray])
   }
@@ -173,7 +190,7 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
       />
       <GeneralSpacing u={0} r={20} d={0} l={20}>
         <Text>Selected Class: {selectedClasses}</Text>
-        <Text>Selected Users: {selectedUsers.map(u => `${u.name}, `)} </Text>
+        <Text>Selected Users: {selectedUsers.map(u => `${u.firstName}, `)} </Text>
         {/* let us display the results here so that we can easily have state over them */}
         { userLoading ? <ActivityIndicator /> : (
           userData ? userData.searchUsers.map((u, index) => {
@@ -185,10 +202,10 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
             });
             return (
               <TouchableOpacity
-                onPress={addSelectedUsers(u._id, u.userType, u.email, u.name)}
+                onPress={addSelectedUsers(u._id, u.userType, u.email, u.firstName, u.lastName)}
               >
                 <IndividualResultContainer>
-                  <Text>{u.name}</Text>
+                  <Text>{u.firstName} {u.lastName}</Text>
                   <Icon
                     name={present ? 'checkcircle' : 'pluscircleo'}
                     type='antdesign'

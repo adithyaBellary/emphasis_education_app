@@ -29,7 +29,7 @@ const SearchResults: React.FC<ISearchResultsProps> = ({ searchResults, navigatio
             // onPress={}
           >
             <ThemedText size={14} type='main'>
-              {results.name}
+              {results.firstName} { results.lastName}
             </ThemedText>
             <Icon
               name='user'

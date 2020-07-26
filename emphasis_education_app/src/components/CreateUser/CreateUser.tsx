@@ -24,7 +24,9 @@ interface ICreateUser {
 }
 
 const EmptyData: IUserInput = {
-  name: '',
+  // name: '',
+  firstName: '',
+  lastName: '',
   email: '',
   password: '',
   confirmPassword: '',
@@ -37,7 +39,9 @@ const CreateUser: React.FC<ICreateUser> = props => {
   const [numUser, setNumUser] = React.useState<number>(1)
 
   const [curState, setState] = useState<IUserInput>({
-    name: 'test name',
+    // name: 'test name',
+    firstName: 'test',
+    lastName: 'name',
     email: 'test01@gmail.com',
     password: 'test01',
     confirmPassword: 'test01',
@@ -49,10 +53,10 @@ const CreateUser: React.FC<ICreateUser> = props => {
   const handleTextChange = (name: string) => (text: string) => setState({...curState, [name]: text})
   const clearData = () => setState(EmptyData);
 
-  const canSubmit = (): boolean => {
-    return !!curState.name &&
-     !!curState.phoneNumber
-  }
+  // const canSubmit = (): boolean => {
+  //   return !!curState.name &&
+  //    !!curState.phoneNumber
+  // }
 
   const GoToConf = () => {
     props.saveUserInfo(curState);
@@ -71,8 +75,13 @@ const CreateUser: React.FC<ICreateUser> = props => {
         <ThemedText size={14} type='main'>Family Member Number {numUser}</ThemedText>
         <ThemedTextInput
           placeholder='Name'
-          value={curState.name}
-          onChangeText={handleTextChange('name')}
+          value={curState.firstName}
+          onChangeText={handleTextChange('firstName')}
+        />
+        <ThemedTextInput
+          placeholder='Name'
+          value={curState.lastName}
+          onChangeText={handleTextChange('lastName')}
         />
         <ThemedTextInput
           placeholder='Email'
