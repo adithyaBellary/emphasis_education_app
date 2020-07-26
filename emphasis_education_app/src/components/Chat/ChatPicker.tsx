@@ -140,24 +140,26 @@ const IndividualChat: React.FC<IIndividualChatProps> = ({ classObject, userType,
   let secondaryText: string = '';
   console.log('userType', userType)
   console.log('classObject', classObject)
-  const userNames: string[] = classObject.userInfo.map(_user => _user.name);
+  const userFirstName: string[] = classObject.userInfo.map(_user => _user.firstName);
 
   switch(userType) {
     case 'Student':
-      mainText = classObject.displayName;
-      secondaryText = classObject.tutorInfo.name
+      mainText = classObject.className;
+      // mainText = `${['hi', 'hello'].join(', ')}`
+      secondaryText = classObject.tutorInfo.firstName
       // no caption
+      caption = 'test caption'
       break;
     case 'Parent' || 'Admin':
       // mainText = need to find the users who are students among the userEmails field
-      mainText = `${userNames}`
-      secondaryText = classObject.displayName
-      caption = classObject.tutorInfo.name
+      mainText = `${userFirstName.join(', ')}`
+      secondaryText = classObject.className
+      caption = `${classObject.tutorInfo.firstName} ${classObject.tutorInfo.lastName}`
 
       break;
     case 'Tutor':
-      mainText = classObject.displayName
-      // caption = stringify the users names
+      mainText = `${userFirstName.join(', ')}`
+      caption = classObject.className
       // no need for secondaryTExt?
       break
     // case 'Admin':
