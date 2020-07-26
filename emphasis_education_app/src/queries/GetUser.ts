@@ -14,11 +14,13 @@ export const GET_USER = gql`
         displayName
         className
         userInfo{
-          name
+          firstName
+          lastName
           email
         }
         tutorInfo {
-          name
+          firstName
+          lastName
           email
         }
         chatID

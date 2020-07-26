@@ -50,8 +50,9 @@ export interface ICreateUserPayload {
   createUser: ICreateUserResponse;
 }
 
-interface ChatUserInfo {
-  name: string;
+export interface ChatUserInfo {
+  firstName: string;
+  lastName: string;
   email: string;
 }
 
@@ -71,8 +72,10 @@ export interface Class {
 export interface ICreateChatInput {
   displayName: string;
   className: string;
-  tutorEmail: string;
-  userEmails: string[];
+  // tutorEmail: string;
+  // userEmails: string[];
+  userInfo: ChatUserInfo[];
+  tutorInfo: ChatUserInfo;
 }
 
 export interface ICreateChatPayload {
