@@ -55,7 +55,7 @@ const ClassSearch = () => {
           />
         }
       />
-      {loading ? <ActivityIndicator /> : (
+      {loading ? <ActivityIndicator animating={loading} /> : (
         <ClassSearchResults
           searchResults={data ? data.searchClasses.classes: []}
         />

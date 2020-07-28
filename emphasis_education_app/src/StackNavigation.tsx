@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-community/async-storage';
-import { View, Text, ActivityIndicator } from 'react-native';
+import { View, Text, ActivityIndicator, Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import {useMutation} from '@apollo/react-hooks';
 
@@ -222,11 +222,7 @@ const StackNavigation: React.FC = () => {
 
   if (authLoading) {
     return (
-      <ActivityIndicator>
-        <View>
-          <Text>we are loading</Text>
-        </View>
-      </ActivityIndicator>
+      <ActivityIndicator animating={authLoading} />
     )
   }
 

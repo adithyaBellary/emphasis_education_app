@@ -47,7 +47,7 @@ const Done: React.FC<IDoneProps> = ({ onPress, loading }) => (
           Done
         </ThemedText>
         {
-          loading && <ActivityIndicator />
+          loading && <ActivityIndicator animating={loading} />
         }
       </IconRow>
     </GeneralSpacing>
@@ -129,7 +129,7 @@ const AddMember: React.FC<IAddMemberProps> = ({ navigation, route }) => {
       />
       <Text>Selected Users: {selectedUsers.map(_u => _u.name)}, </Text>
       <ContentContain>
-        {userLoading ? <ActivityIndicator /> : (
+        {userLoading ? <ActivityIndicator animating={userLoading} /> : (
           userData && userData.searchUsers.map(_user => {
             let present = false;
             selectedUsers.forEach(_u => {

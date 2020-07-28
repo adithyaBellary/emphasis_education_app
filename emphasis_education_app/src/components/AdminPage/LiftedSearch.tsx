@@ -35,7 +35,7 @@ const LiftedSearch: React.FC<ILiftedSearchProps> = ({ navigation }) => {
           />
         }
       />
-      {loading ? <ActivityIndicator /> : (
+      {loading ? <ActivityIndicator animating={loading} /> : (
         <SearchResults
           searchResults={data ? data.searchUsers : []}
           navigation={navigation}

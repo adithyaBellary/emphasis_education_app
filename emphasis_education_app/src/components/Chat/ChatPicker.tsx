@@ -242,7 +242,7 @@ const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
   if (loading) {
     return (
       <>
-        <ActivityIndicator />
+        <ActivityIndicator animating={loading} />
         <View><Text>getting classes</Text></View>
       </>
     )

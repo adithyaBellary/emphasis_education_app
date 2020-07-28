@@ -94,7 +94,7 @@ export const ThemedButton: React.FC<IButtonProps> = ({ onPress, buttonText, load
     <MyButtonText>
       {buttonText}
     </MyButtonText>
-    {loading && <ActivityIndicator />}
+    {loading && <ActivityIndicator animating={loading} />}
   </MyButton>
 );
 

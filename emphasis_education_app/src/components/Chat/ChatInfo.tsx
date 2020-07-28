@@ -42,7 +42,7 @@ const Done: React.FC<IDoneProps> = ({ onPress, loading }) => (
           Done
         </ThemedText>
         {
-          loading && <ActivityIndicator />
+          loading && <ActivityIndicator animating={loading} />
         }
       </IconRow>
     </GeneralSpacing>

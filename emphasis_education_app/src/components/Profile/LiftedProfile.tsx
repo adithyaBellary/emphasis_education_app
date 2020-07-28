@@ -76,7 +76,7 @@ const LiftedProfile: React.FC<ILiftedProfileProps> = ({ route, navigation }) => 
   return (
     <>
     {
-      loading ? <ActivityIndicator /> : (
+      loading ? <ActivityIndicator animating={loading} /> : (
         <Profile
           currentUserID={currentUserID}
           family={data ? data.getFamily : []}
