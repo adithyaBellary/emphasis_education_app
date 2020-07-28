@@ -10,7 +10,7 @@ export const IndividualResultContainer = styled(View)`
   display: flex;
   flexDirection: row;
   justifyContent: space-between;
-`
+`;
 
 const IndividualResult: React.FC = ({ children }) => {
 

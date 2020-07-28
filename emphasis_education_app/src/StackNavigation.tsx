@@ -18,6 +18,7 @@ import Settings from './components/Settings';
 import AboutUs from './components/AboutUs';
 import EnterCode from './components/CreateUser/EnterCode';
 import AddMember from './components/AdminPage/AddMemberModal';
+import ChatInfo from './components/Chat/ChatInfo';
 
 import { LOGIN_TOKEN } from './constant';
 import { LOGIN } from './queries/Login';
@@ -112,6 +113,7 @@ const AppRootStack = ({ userToken, ...props }) => (
       {() => <AppStack {...props} userToken={userToken} />}
     </AppRootStackNav.Screen>
     <AppRootStackNav.Screen name='AddUserModal' component={AddMember} />
+    <AppRootStackNav.Screen name='ChatInfo' component={ChatInfo} />
   </AppRootStackNav.Navigator>
 )
 

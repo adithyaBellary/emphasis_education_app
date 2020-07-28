@@ -6,7 +6,6 @@ import {
   SafeAreaView,
   TouchableOpacity,
   ActivityIndicator,
-  EdgeInsetsPropType,
 } from 'react-native';
 import { Icon } from 'react-native-elements';
 
@@ -94,7 +93,7 @@ interface IChatDisplay {
 
 const ChatDisplay: React.FC<IChatDisplay> = ({ mainText, secondaryText, caption, chatID, goToChat }) => (
   <ChatContain>
-    <TouchableOpacity onPress={goToChat(chatID)}>
+    <TouchableOpacity onPress={goToChat(chatID)} onLongPress={() => console.log('long press')}>
       <IconRowLeft>
         <LeftText size={18} type='main'>
           {mainText}
@@ -229,7 +228,14 @@ const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
       ),
       headerRightContainerStyle: {
         padding: 10
-      }
+      },
+      headerTitle: () => (
+        <TouchableOpacity onPress={() => navigation.navigate('ChatInfo')}>
+          <Text>
+            is this working?
+          </Text>
+        </TouchableOpacity>
+      )
     })
   }, [])
   // add dropdown functionality
