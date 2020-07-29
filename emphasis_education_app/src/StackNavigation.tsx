@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-community/async-storage';
-import { View, Text, ActivityIndicator } from 'react-native';
+import { View, Text, ActivityIndicator, Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import {useMutation} from '@apollo/react-hooks';
 
@@ -18,6 +18,7 @@ import Settings from './components/Settings';
 import AboutUs from './components/AboutUs';
 import EnterCode from './components/CreateUser/EnterCode';
 import AddMember from './components/AdminPage/AddMemberModal';
+import ChatInfo from './components/Chat/ChatInfo';
 
 import { LOGIN_TOKEN } from './constant';
 import { LOGIN } from './queries/Login';
@@ -112,6 +113,7 @@ const AppRootStack = ({ userToken, ...props }) => (
       {() => <AppStack {...props} userToken={userToken} />}
     </AppRootStackNav.Screen>
     <AppRootStackNav.Screen name='AddUserModal' component={AddMember} />
+    <AppRootStackNav.Screen name='ChatInfo' component={ChatInfo} />
   </AppRootStackNav.Navigator>
 )
 
@@ -199,7 +201,7 @@ const StackNavigation: React.FC = () => {
     }
   )
   if (error) {
-    console.log('error logging in')
+    console.log('error logging in', error)
   }
 
   const authContext = React.useMemo(
@@ -220,11 +222,7 @@ const StackNavigation: React.FC = () => {
 
   if (authLoading) {
     return (
-      <ActivityIndicator>
-        <View>
-          <Text>we are loading</Text>
-        </View>
-      </ActivityIndicator>
+      <ActivityIndicator animating={authLoading} />
     )
   }
 

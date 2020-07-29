@@ -23,6 +23,7 @@ interface ICancelProps {
   onPress (): void;
 }
 
+// convert to SecondaryLink
 const Cancel: React.FC<ICancelProps> = ({ onPress }) => (
   <TouchableOpacity onPress={onPress}>
     <GeneralSpacing u={10} r={10} d={10} l={10}>
@@ -46,7 +47,7 @@ const Done: React.FC<IDoneProps> = ({ onPress, loading }) => (
           Done
         </ThemedText>
         {
-          loading && <ActivityIndicator />
+          loading && <ActivityIndicator animating={loading} />
         }
       </IconRow>
     </GeneralSpacing>
@@ -86,7 +87,7 @@ const AddMember: React.FC<IAddMemberProps> = ({ navigation, route }) => {
 
   const onChangeText = (text: string) => setSearchString(text);
 
-  const addSelectedUser = (userID: string, userType: string, userEmail: string, name: string) => () => {
+  const addSelectedUser = (userID: string, userType: string, userEmail: string, firstName: string, lastName: string) => () => {
     let present = false;
     let _newArray = selectedUsers.reduce((acc, cur) => {
       if (cur._id === userID) {
@@ -128,7 +129,7 @@ const AddMember: React.FC<IAddMemberProps> = ({ navigation, route }) => {
       />
       <Text>Selected Users: {selectedUsers.map(_u => _u.name)}, </Text>
       <ContentContain>
-        {userLoading ? <ActivityIndicator /> : (
+        {userLoading ? <ActivityIndicator animating={userLoading} /> : (
           userData && userData.searchUsers.map(_user => {
             let present = false;
             selectedUsers.forEach(_u => {
@@ -139,10 +140,10 @@ const AddMember: React.FC<IAddMemberProps> = ({ navigation, route }) => {
 
             return (
               <TouchableOpacity
-                onPress={addSelectedUser(_user._id, _user.userType, _user.email, _user.name)}
+                onPress={addSelectedUser(_user._id, _user.userType, _user.email, _user.firstName, _user.lastName)}
               >
                 <IndividualResultContainer>
-                  <Text>{_user.name}</Text>
+                  <Text>{_user.firstName} {_user.lastName}</Text>
                   <Icon
                     name={present ? 'checkcircle' : 'pluscircleo'}
                     type='antdesign'

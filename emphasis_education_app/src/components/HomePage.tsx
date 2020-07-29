@@ -110,7 +110,7 @@ const Home: React.FC<ILiftedHomeProps> = ({ navigation, route }) => {
   if (loading) {
     return (
       <>
-        <ActivityIndicator />
+        <ActivityIndicator animating={loading} />
         <View><Text>home page</Text></View>
       </>
     )

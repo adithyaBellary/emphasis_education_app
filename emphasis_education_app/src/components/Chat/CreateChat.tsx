@@ -81,7 +81,7 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
             // TODO add disabled functionality
             disabled={loadingCreateChat}
           />
-          {loadingCreateChat && <ActivityIndicator />}
+          {loadingCreateChat && <ActivityIndicator animating={loadingCreateChat} />}
         </IconRow>
       </GeneralSpacing>
     )
@@ -192,7 +192,7 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
         <Text>Selected Class: {selectedClasses}</Text>
         <Text>Selected Users: {selectedUsers.map(u => `${u.firstName}, `)} </Text>
         {/* let us display the results here so that we can easily have state over them */}
-        { userLoading ? <ActivityIndicator /> : (
+        { userLoading ? <ActivityIndicator animating={userLoading} /> : (
           userData ? userData.searchUsers.map((u, index) => {
             let present = false;
             selectedUsers.forEach(_user => {
@@ -215,7 +215,7 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
             )
           }) : null
         )}
-        { classLoading ? <ActivityIndicator /> : (
+        { classLoading ? <ActivityIndicator animating={classLoading} /> : (
           classData ? classData.searchClasses.classes.map(c => (
             <TouchableOpacity
               onPress={addSelectedClasses(c)}

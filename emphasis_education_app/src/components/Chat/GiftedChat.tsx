@@ -194,7 +194,7 @@ const MyGiftedChat: React.FC<IGiftedChatProps> = ({ queryLoading, refreshFn, cha
     {/* <View style={{flex: 1}}> */}
     {/* <KeyboardAvoidingView behavior={'padding'} keyboardVerticalOffset={50}> */}
       <GiftedChat
-        renderLoading={() => <ActivityIndicator />}
+        renderLoading={() => <ActivityIndicator animating={true} />}
         listViewProps={
           {
             refreshing: queryLoading,
