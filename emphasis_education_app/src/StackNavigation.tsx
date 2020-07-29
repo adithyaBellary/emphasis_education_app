@@ -201,7 +201,7 @@ const StackNavigation: React.FC = () => {
     }
   )
   if (error) {
-    console.log('error logging in')
+    console.log('error logging in', error)
   }
 
   const authContext = React.useMemo(
