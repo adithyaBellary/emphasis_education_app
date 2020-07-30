@@ -66,15 +66,6 @@ export const MyButton = styled(TouchableOpacity)`
   align-items: center;
 `;
 
-const d: number = 150;
-export const MyCircleButton = styled(TouchableOpacity)`
-  background-color: ${({theme}) => theme.primary.backgroundColor };
-  width: ${d}px;
-  height: ${d}px;
-  border-radius: ${d/2}px;
-  justify-content: center;
-`;
-
 export const MyButtonText = styled(Text)`
   color: white;
   text-align: center;
