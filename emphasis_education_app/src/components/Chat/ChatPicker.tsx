@@ -8,8 +8,9 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { Icon } from 'react-native-elements';
-
 import styled from 'styled-components';
+import { useLazyQuery } from '@apollo/react-hooks';
+
 import Context from '../Context/Context';
 import {
   PermissionedComponent,
@@ -19,15 +20,16 @@ import {
   ThemedText,
   VerticalDivider,
   HorizontalDivider,
+  FONT_STYLES,
 } from '../shared';
-import Accordion from './Accordion';
-
+import { GET_USER } from '../../queries/GetUser';
 import {
   Permission,
   Class
 } from '../../types';
-import { useLazyQuery } from '@apollo/react-hooks';
-import { GET_USER } from '../../queries/GetUser';
+
+import Accordion from './Accordion';
+import { EmptyChatPicker } from './common';
 
 interface IChatPickerProps {
   navigation: any;
@@ -46,16 +48,6 @@ const ChatsContain: React.FC = ({ children }) => (
   </GeneralSpacing>
 );
 
-const EmptyChat: React.FC = () => (
-  <CenteredDiv>
-    <GeneralSpacing u={10} r={10} d={10} l={10}>
-      <ThemedText size={16} type='light'>
-        You are currently not added to any Chats.
-        Please reach out to either Shweta or Sakthi to be added to one.
-      </ThemedText>
-    </GeneralSpacing>
-  </CenteredDiv>
-);
 
 const IconRowLeft = styled(IconRow)`
   justify-content: flex-start;
@@ -84,43 +76,40 @@ const ChatContain: React.FC = ({ children }) => (
   </GeneralSpacing>
 );
 interface IChatDisplay {
+  className: string;
   chatID: string
   mainText: string;
   secondaryText?: string;
   caption?: string;
-  goToChat (sub: string): () => void;
+  goToChat (sub: string, sec: string): () => void;
 }
 
-const ChatDisplay: React.FC<IChatDisplay> = ({ mainText, secondaryText, caption, chatID, goToChat }) => (
+const ChatDisplay: React.FC<IChatDisplay> = ({ mainText, secondaryText, caption, chatID, goToChat, className }) => (
   <ChatContain>
-    <TouchableOpacity onPress={goToChat(chatID)} onLongPress={() => console.log('long press')}>
+    <TouchableOpacity onPress={goToChat(chatID, className)} onLongPress={() => console.log('long press')}>
       <IconRowLeft>
-        <LeftText size={18} type='main'>
+        <LeftText size={18} type={FONT_STYLES.MAIN}>
           {mainText}
         </LeftText>
         {
           secondaryText && (
             <>
               <VerticalDivider height={15}/>
-              <RightText size={18} type='main'>
+              <RightText size={18} type={FONT_STYLES.MAIN}>
                 {secondaryText}
               </RightText>
             </>
           )
         }
       </IconRowLeft>
-
       {
         caption && (
-          <ThemedText size={14} type='light'>
+          <ThemedText size={14} type={FONT_STYLES.LIGHT}>
             {caption}
           </ThemedText>
         )
       }
-
-
     </TouchableOpacity>
-
     <HorizontalDivider width={80} />
   </ChatContain>
 )
@@ -129,7 +118,7 @@ interface IIndividualChatProps {
   chatID: string;
   userType: Permission;
   classObject: Class;
-  goToChat (sub: string): () => void;
+  goToChat (sub: string, sec: string): () => void;
 }
 
 const IndividualChat: React.FC<IIndividualChatProps> = ({ classObject, userType, chatID, goToChat }) => {
@@ -176,6 +165,7 @@ const IndividualChat: React.FC<IIndividualChatProps> = ({ classObject, userType,
       mainText={mainText}
       secondaryText={secondaryText}
       goToChat={goToChat}
+      className={classObject.className}
     />
   )
 }
@@ -189,11 +179,12 @@ const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
     },
     fetchPolicy: 'no-cache'
   })
-  const goToChat = (sub: string) => () => {
+  const goToChat = (sub: string, className: string) => () => {
     navigation.navigate(
       'Chat',
       {
-        chatID: sub
+        chatID: sub,
+        className
       }
     )
   }
@@ -228,14 +219,7 @@ const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
       ),
       headerRightContainerStyle: {
         padding: 10
-      },
-      headerTitle: () => (
-        <TouchableOpacity onPress={() => navigation.navigate('ChatInfo')}>
-          <Text>
-            is this working?
-          </Text>
-        </TouchableOpacity>
-      )
+      }
     })
   }, [])
   // add dropdown functionality
@@ -258,7 +242,7 @@ const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
               classObject={_class}
               goToChat={goToChat}
             />
-          )) : <EmptyChat />
+          )) : <EmptyChatPicker />
         }
 
 

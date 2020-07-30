@@ -9,7 +9,8 @@ import {
 import {
   GeneralSpacing,
   ThemedText,
-  IconRow
+  IconRow,
+  FONT_STYLES
 } from '../shared';
 
 import { IndividualResultContainer } from '../AdminPage/IndividualResult';
@@ -22,7 +23,7 @@ interface ICancelProps {
 const Cancel: React.FC<ICancelProps> = ({ onPress }) => (
   <TouchableOpacity onPress={onPress}>
     <GeneralSpacing u={10} r={10} d={10} l={10}>
-      <ThemedText size={16} type='main'>
+      <ThemedText size={16} type={FONT_STYLES.MAIN}>
         Cancel
       </ThemedText>
     </GeneralSpacing>
@@ -38,7 +39,7 @@ const Done: React.FC<IDoneProps> = ({ onPress, loading }) => (
   <TouchableOpacity onPress={onPress}>
     <GeneralSpacing u={10} r={10} d={10} l={10}>
       <IconRow>
-        <ThemedText size={16} type='main'>
+        <ThemedText size={16} type={FONT_STYLES.MAIN}>
           Done
         </ThemedText>
         {

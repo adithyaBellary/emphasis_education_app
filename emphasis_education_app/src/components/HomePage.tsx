@@ -125,9 +125,6 @@ const Home: React.FC<ILiftedHomeProps> = ({ navigation, route }) => {
 
   return (
     <CenteredDiv>
-      <Title>
-        emphasis education home page
-      </Title>
 
       <IconSection>
         <IconContain>

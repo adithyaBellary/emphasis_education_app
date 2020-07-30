@@ -18,7 +18,13 @@ import {
 } from './shared';
 import Context, { AuthContext } from './Context/Context';
 
-import { IconRow, VerticalDivider, ThemedText, GeneralSpacing } from './shared';
+import {
+  IconRow,
+  VerticalDivider,
+  ThemedText,
+  GeneralSpacing,
+  FONT_STYLES
+} from './shared';
 import { LogoWithText } from './Logo/LogoWithText';
 
 const PositionDiv = styled(View)`
@@ -56,7 +62,7 @@ interface ISecondaryLinkProps {
 const SecondaryLink: React.FC<ISecondaryLinkProps> = ({ linkContent, onPress }) => (
   <TouchableOpacity onPress={onPress}>
     <GeneralSpacing u={0} r={10} d={0} l={10}>
-      <ThemedText size={14} type={'light'}>
+      <ThemedText size={14} type={FONT_STYLES.LIGHT}>
         {linkContent}
       </ThemedText>
     </GeneralSpacing>

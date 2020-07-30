@@ -9,7 +9,8 @@ import { ContentContain } from './common'
 import {
   ThemedButton,
   ThemedText,
-  GeneralSpacing
+  GeneralSpacing,
+  FONT_STYLES
 } from '../shared';
 
 import { CREATE_CODE } from '../../queries/CreateCode';
@@ -58,7 +59,7 @@ const InviteUser: React.FC = () => {
         placeholder='Enter new user email here'
       />
       <GeneralSpacing u={10} r={0} d={10} l={10}>
-        <ThemedText size={16} type='main'>
+        <ThemedText size={16} type={FONT_STYLES.MAIN}>
           Created Code: {code}
         </ThemedText>
       </GeneralSpacing>

@@ -10,8 +10,9 @@ import styled from 'styled-components';
 import { Input } from 'react-native-elements';
 
 import { Permission } from '../types';
+import { theme } from '../theme';
+
 import Context from './Context/Context';
-// import { useLinkProps } from '@react-navigation/native';
 
 export const MytextInput = styled(TextInput)`
   padding: 10px 0;
@@ -133,8 +134,8 @@ const RadioButtonOuter = styled(TouchableOpacity)`
   border-color: grey;
   align-items: center;
   justify-content: center;
-
 `
+
 const RadioButtonInner = styled(View)`
   height: ${RADIO_BUTTON_INNER_DIAMETER}px;
   width: ${RADIO_BUTTON_INNER_DIAMETER}px;
@@ -217,8 +218,20 @@ export const RadioButtonGroup: React.FC<IRadioButtonGroupProps> = ({titles, onSe
 export const ContentContain = styled(View)`
   padding: 20px;
 `
-export const ThemedText = styled(Text)<{ size: number, type: string}>`
-  fontFamily: ${({ theme, type }) => type === 'light' ? theme.font.light : theme.font.main}
+export enum FONT_STYLES {
+  MAIN = 'main',
+  LIGHT = 'light',
+  BOLD = 'bold'
+}
+
+export const FONT_MAP: {[ x in FONT_STYLES ]: string } = {
+  [FONT_STYLES.MAIN]: theme.font.main,
+  [FONT_STYLES.LIGHT]: theme.font.light,
+  [FONT_STYLES.BOLD]: theme.font.bold
+}
+
+export const ThemedText = styled(Text)<{ size: number, type: FONT_STYLES}>`
+  fontFamily: ${({ type }) => FONT_MAP[type]}
   fontSize: ${props => props.size}px;
 `
 
@@ -249,13 +262,13 @@ export const IndividualField: React.FC<IIndividualFieldProps> = ({
       <>
         <ThemedText
           size={valueSize}
-          type={'main'}
+          type={FONT_STYLES.MAIN}
         >
           {value}
         </ThemedText>
         <ThemedText
           size={labelSize}
-          type={'light'}
+          type={FONT_STYLES.LIGHT}
         >
           {label}
         </ThemedText>
@@ -295,3 +308,9 @@ export const IconRow = styled(View)`
   align-items: center;
   justify-content: center;
 `;
+
+export const TitleText: React.FC<{ title: string }> = ({ title }) => (
+  <ThemedText size={20} type={FONT_STYLES.MAIN}>
+    {title}
+  </ThemedText>
+);

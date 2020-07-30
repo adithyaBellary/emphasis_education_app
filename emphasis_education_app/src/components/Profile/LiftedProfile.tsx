@@ -13,7 +13,8 @@ import { IGetFamilyInput, IGetFamilyPayload } from '../../types';
 import {
   GeneralSpacing,
   ThemedText,
-  IconRow
+  IconRow,
+  FONT_STYLES
 } from '../shared';
 
 interface ILiftedProfileProps {
@@ -30,7 +31,7 @@ interface IHeaderButtonProps {
 const HeaderButtons: React.FC<IHeaderButtonProps> = ({ text, onPress}) => (
   <TouchableOpacity onPress={onPress}>
     <GeneralSpacing u={0} r={20} d={0} l={0}>
-      <ThemedText size={18} type='main'>
+      <ThemedText size={18} type={FONT_STYLES.MAIN}>
         {text}
       </ThemedText>
     </GeneralSpacing>

@@ -25,7 +25,7 @@ import { LOGIN } from './queries/Login';
 
 import context, {EmptyUser, AuthContext} from './components/Context/Context';
 import { IUser, ILoginPayload } from './types';
-import { createNativeWrapper } from 'react-native-gesture-handler';
+import { TitleText } from './components/shared';
 
 const AuthStackNav = createStackNavigator();
 const AuthStack = ({ error, loading }) => {
@@ -62,46 +62,56 @@ const AppStack = ({ userToken }) => (
       name="Home"
       component={HomePage}
       options={{
-        title: ''
+        headerTitle: () => <TitleText title='Home' />
       }}
       initialParams={{ token: userToken}}
     />
     <AppStackNav.Screen
       name='AboutUs'
       component={AboutUs}
-      options={{ title: 'About Us'}}
+      options={{
+        headerTitle: () => <TitleText title='About Us' />
+      }}
     />
     <AppStackNav.Screen
       name="Chat"
       component={Chat}
-      options={{ title: 'Test Subject' }}
+      // options={{ title: 'Test Subject' }}
     />
     <AppStackNav.Screen
       name="ChatPicker"
       component={ChatPicker}
       options={{
-        title: 'My Chats',
+        headerTitle: () => <TitleText title='My Chats' />
       }}
     />
     <AppStackNav.Screen
       name="MyProfile"
       component={Profile}
-      options={{ title: 'My Profile' }}
+      options={{
+        headerTitle: () => <TitleText title='My Profile' />
+      }}
     />
     <AppStackNav.Screen
       name="AdminPage"
       component={AdminPage}
-      options={{ title: 'Admin Page' }}
+      options={{
+        headerTitle: () => <TitleText title='Admin Page' />
+      }}
     />
     <AppStackNav.Screen
       name='CreateChat'
       component={CreateChat}
-      options={{ title: 'New Chat'}}
+      options={{
+        headerTitle: () => <TitleText title='Create Chat' />
+      }}
     />
     <AppStackNav.Screen
       name='Settings'
       component={Settings}
-      options={{ title: 'Settings'}}
+      options={{
+        headerTitle: () => <TitleText title='Settings' />
+      }}
     />
   </AppStackNav.Navigator>
 )
