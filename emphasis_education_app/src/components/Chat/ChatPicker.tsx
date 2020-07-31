@@ -27,6 +27,7 @@ import {
   Permission,
   Class
 } from '../../types';
+import { theme } from '../../theme';
 
 import Accordion from './Accordion';
 import { EmptyChatPicker } from './common';
@@ -110,7 +111,7 @@ const ChatDisplay: React.FC<IChatDisplay> = ({ mainText, secondaryText, caption,
         )
       }
     </TouchableOpacity>
-    <HorizontalDivider width={80} />
+    <HorizontalDivider width={100} color={theme.colors.lightOrange}/>
   </ChatContain>
 )
 
@@ -133,13 +134,10 @@ const IndividualChat: React.FC<IIndividualChatProps> = ({ classObject, userType,
   switch(userType) {
     case 'Student':
       mainText = classObject.className;
-      // mainText = `${['hi', 'hello'].join(', ')}`
       secondaryText = classObject.tutorInfo.firstName
-      // no caption
       caption = 'test caption'
       break;
     case 'Parent' || 'Admin':
-      // mainText = need to find the users who are students among the userEmails field
       mainText = `${userFirstName.join(', ')}`
       secondaryText = classObject.className
       caption = `${classObject.tutorInfo.firstName} ${classObject.tutorInfo.lastName}`
@@ -148,7 +146,6 @@ const IndividualChat: React.FC<IIndividualChatProps> = ({ classObject, userType,
     case 'Tutor':
       mainText = `${userFirstName.join(', ')}`
       caption = classObject.className
-      // no need for secondaryTExt?
       break
     // case 'Admin':
 

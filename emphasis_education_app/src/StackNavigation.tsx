@@ -26,6 +26,7 @@ import { LOGIN } from './queries/Login';
 import context, {EmptyUser, AuthContext} from './components/Context/Context';
 import { IUser, ILoginPayload } from './types';
 import { TitleText } from './components/shared';
+import { theme } from './theme';
 
 const AuthStackNav = createStackNavigator();
 const AuthStack = ({ error, loading }) => {
@@ -82,14 +83,20 @@ const AppStack = ({ userToken }) => (
       name="ChatPicker"
       component={ChatPicker}
       options={{
-        headerTitle: () => <TitleText title='My Chats' />
+        headerTitle: () => <TitleText title='My Chats' />,
+        headerStyle: {
+          backgroundColor: theme.colors.lightOrange
+        }
       }}
     />
     <AppStackNav.Screen
       name="MyProfile"
       component={Profile}
       options={{
-        headerTitle: () => <TitleText title='My Profile' />
+        headerTitle: () => <TitleText title='My Profile' />,
+        headerStyle: {
+          backgroundColor: theme.colors.lightPink
+        }
       }}
     />
     <AppStackNav.Screen

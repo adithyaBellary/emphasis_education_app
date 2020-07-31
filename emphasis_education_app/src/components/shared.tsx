@@ -281,9 +281,9 @@ export const IndividualField: React.FC<IIndividualFieldProps> = ({
   </GeneralSpacing>
 );
 
-export const HorizontalDivider = styled(View)<{width: number}>`
+export const HorizontalDivider = styled(View)<{width: number, color: string}>`
   width: ${({ width }) => width}%;
-  border-bottom-color: ${({ theme }) => theme.colors.purplePastel};
+  border-bottom-color: ${({ color }) => color};
   border-bottom-width: 1px;
 `;
 

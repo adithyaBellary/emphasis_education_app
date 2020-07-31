@@ -16,6 +16,7 @@ import {
   GeneralSpacing,
   PermissionedComponent
 } from '../shared';
+import { theme } from '../../theme';
 
 interface IProfileProps {
   editing: boolean;
@@ -71,7 +72,7 @@ const Profile: React.FC<IProfileProps> = ({ family, editing, currentUserID, onPr
         editing={editing}
         onChangeText={onChangeText}
       />
-      {!editing && <HorizontalDivider width={80} />}
+      {!editing && <HorizontalDivider width={80} color={theme.colors.lightPink}/>}
       <IndividualField
         value={currentUser.phoneNumber}
         valueSize={16}
