@@ -35,7 +35,6 @@ const Title = styled(Text)`
 const Profile: React.FC<IProfileProps> = ({ family, editing, currentUserID, onPress }) => {
   const {loggedUser} = React.useContext(Context);
 
-  console.log('the fam', family)
   let currentUser: IUser | undefined;
 
   if ( currentUserID === loggedUser._id) {
@@ -112,7 +111,7 @@ const Profile: React.FC<IProfileProps> = ({ family, editing, currentUserID, onPr
               <>
                 <IndividualField
                   // key={index}
-                  value={user.name}
+                  value={`${user.firstName} ${user.lastName}`}
                   valueSize={16}
                   label={'Name'}
                   labelSize={14}

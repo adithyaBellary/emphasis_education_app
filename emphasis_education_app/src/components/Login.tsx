@@ -9,6 +9,8 @@ import {
 import styled from 'styled-components';
 import { MD5 } from 'crypto-js';
 
+import { theme } from '../theme';
+
 import {
   ButtonContainer,
   CenteredDiv,
@@ -17,7 +19,6 @@ import {
   ThemedButton
 } from './shared';
 import Context, { AuthContext } from './Context/Context';
-
 import {
   IconRow,
   VerticalDivider,
@@ -124,7 +125,7 @@ const Login: React.FC<ILoginProps> = props => {
         />
       </InputContain>
 
-      <HorizontalDivider width={60}/>
+      <HorizontalDivider width={60} color={theme.colors.purple}/>
 
       <InputContain>
         <LoginInput

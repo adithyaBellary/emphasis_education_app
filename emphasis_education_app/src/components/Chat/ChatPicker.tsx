@@ -64,12 +64,17 @@ const RightText = styled(ThemedText)`
 
 const Contain = styled(View)`
   padding: 10px;
-
   width: 80%;
   border-bottom-width: 1px;
   border-bottom-color: black;
-
 `
+
+const SpacedItemRow = styled(View)`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`;
 
 const ChatContain: React.FC = ({ children }) => (
   <GeneralSpacing u={10} r={10} d={10} l={10}>
@@ -85,32 +90,63 @@ interface IChatDisplay {
   goToChat (sub: string, sec: string): () => void;
 }
 
+const triggerDeleteAlert = (chatID: string) => () =>  (
+  Alert.alert(
+    'Confirm Delete',
+    'Are you sure you want to delete this chat?',
+    [
+      {
+        text: 'Delete',
+        onPress: () => console.log('confirmed')
+      },
+      {
+        text: 'Cancel',
+        onPress: () => console.log('canceled'),
+        style: 'cancel'
+      },
+    ]
+  )
+)
+
 const ChatDisplay: React.FC<IChatDisplay> = ({ mainText, secondaryText, caption, chatID, goToChat, className }) => (
   <ChatContain>
-    <TouchableOpacity onPress={goToChat(chatID, className)} onLongPress={() => console.log('long press')}>
-      <IconRowLeft>
-        <LeftText size={18} type={FONT_STYLES.MAIN}>
-          {mainText}
-        </LeftText>
+    <SpacedItemRow>
+      <TouchableOpacity onPress={goToChat(chatID, className)} onLongPress={() => console.log('long press')}>
+        <IconRowLeft>
+          <LeftText size={18} type={FONT_STYLES.MAIN}>
+            {mainText}
+          </LeftText>
+          {
+            secondaryText && (
+              <>
+                <VerticalDivider height={15}/>
+                <RightText size={18} type={FONT_STYLES.MAIN}>
+                  {secondaryText}
+                </RightText>
+              </>
+            )
+          }
+        </IconRowLeft>
         {
-          secondaryText && (
-            <>
-              <VerticalDivider height={15}/>
-              <RightText size={18} type={FONT_STYLES.MAIN}>
-                {secondaryText}
-              </RightText>
-            </>
+          caption && (
+            <ThemedText size={14} type={FONT_STYLES.LIGHT}>
+              {caption}
+            </ThemedText>
           )
         }
-      </IconRowLeft>
-      {
-        caption && (
-          <ThemedText size={14} type={FONT_STYLES.LIGHT}>
-            {caption}
-          </ThemedText>
-        )
-      }
-    </TouchableOpacity>
+      </TouchableOpacity>
+      {/* <Icon
+        name='trash'
+        type='evilicon'
+      /> */}
+
+      {/* wrap in permissioned component */}
+      <Icon
+        name='trash-o'
+        type='font-awesome'
+        onPress={triggerDeleteAlert(chatID)}
+      />
+    </SpacedItemRow>
     <HorizontalDivider width={100} color={theme.colors.lightOrange}/>
   </ChatContain>
 )
@@ -210,7 +246,7 @@ const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
             name='pluscircleo'
             type='antdesign'
             onPress={goToCreateChat}
-            />
+          />
         </IconRow>
         // </PermissionedComponent>
       ),
@@ -219,7 +255,6 @@ const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
       }
     })
   }, [])
-  // add dropdown functionality
   if (loading) {
     return (
       <>
@@ -238,17 +273,10 @@ const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
               userType={loggedUser.userType}
               classObject={_class}
               goToChat={goToChat}
+              key={_class.chatID}
             />
           )) : <EmptyChatPicker />
         }
-
-
-        {/* {loggedUser.classes ? loggedUser.classes.map(c => (
-          <Accordion
-            title={c.displayName}
-            data={loggedUser.classes!}
-          />
-        )) : <EmptyChat />} */}
       </ChatsContain>
     </SafeAreaView>
   )

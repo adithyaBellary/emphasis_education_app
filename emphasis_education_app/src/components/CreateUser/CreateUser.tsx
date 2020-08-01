@@ -103,6 +103,7 @@ const CreateUser: React.FC<ICreateUser> = props => {
           placeholder='Phone Number'
           value={curState.phoneNumber}
           onChangeText={handleTextChange('phoneNumber')}
+          // textContentType=''
         />
         <RadioButtonGroup
           titles={['Male', 'Female']}

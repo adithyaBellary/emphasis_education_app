@@ -12,8 +12,6 @@ import {
 import styled from 'styled-components';
 import {
   CenteredDiv,
-  MyButtonText,
-  MyCircleButton,
   IconSection,
   PermissionedComponent,
   GeneralSpacing
