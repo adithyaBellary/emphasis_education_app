@@ -47,15 +47,13 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
   const [runUserSearchQuery, {data: userData, loading: userLoading, error: userError}] = useLazyQuery<ISearchUserPayload, ISearchInput>(SEARCH_USERS)
   const [selectedClasses, setSelectedClasses] = React.useState<string>('')
   const [selectedUsers, setSelectedUsers] = React.useState<ISelectedUsersProps[]>([])
-  // const [selectedResults, setSelectedResults] = React.useState<string[]>([])
-
-  // const { setUser } = React.useContext(Context)
 
   const [createChatMutation, {data: dataCreateChat, loading: loadingCreateChat, error}] = useMutation<ICreateChatPayload, ICreateChatInput>(
     CREATE_CHAT,
     {
       onCompleted: () => {
         Alert.alert('chat successfully made')
+        navigation.goBack();
       },
       onError: (e) => {
         console.log('error:', e)
