@@ -212,6 +212,11 @@ const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
     },
     fetchPolicy: 'no-cache'
   })
+
+  React.useEffect(() => {
+    getClasses();
+  }, [])
+
   const goToChat = (sub: string, className: string) => () => {
     navigation.navigate(
       'Chat',
