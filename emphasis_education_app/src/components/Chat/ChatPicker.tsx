@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { Icon } from 'react-native-elements';
 import styled from 'styled-components';
-import { useLazyQuery } from '@apollo/react-hooks';
+import { useLazyQuery, useMutation } from '@apollo/react-hooks';
 
 import Context from '../Context/Context';
 import {
@@ -23,6 +23,7 @@ import {
   FONT_STYLES,
 } from '../shared';
 import { GET_USER } from '../../queries/GetUser';
+import { DELETE_CHAT } from '../../queries/DeleteChat';
 import {
   Permission,
   Class
@@ -88,77 +89,106 @@ interface IChatDisplay {
   secondaryText?: string;
   caption?: string;
   goToChat (sub: string, sec: string): () => void;
+  getClasses (): void;
 }
 
-const triggerDeleteAlert = (chatID: string) => () =>  (
-  Alert.alert(
-    'Confirm Delete',
-    'Are you sure you want to delete this chat?',
-    [
-      {
-        text: 'Delete',
-        onPress: () => console.log('confirmed')
-      },
-      {
-        text: 'Cancel',
-        onPress: () => console.log('canceled'),
-        style: 'cancel'
-      },
-    ]
-  )
+const LoadingScreen: React.FC<{ loading: boolean }> = ({ loading }) => (
+  <View>
+    <Text>
+      the chat is deleting
+    </Text>
+    <ActivityIndicator animating={loading} />
+  </View>
 )
 
-const ChatDisplay: React.FC<IChatDisplay> = ({ mainText, secondaryText, caption, chatID, goToChat, className }) => (
-  <ChatContain>
-    <SpacedItemRow>
-      <TouchableOpacity onPress={goToChat(chatID, className)} onLongPress={() => console.log('long press')}>
-        <IconRowLeft>
-          <LeftText size={18} type={FONT_STYLES.MAIN}>
-            {mainText}
-          </LeftText>
-          {
-            secondaryText && (
-              <>
-                <VerticalDivider height={15}/>
-                <RightText size={18} type={FONT_STYLES.MAIN}>
-                  {secondaryText}
-                </RightText>
-              </>
-            )
-          }
-        </IconRowLeft>
+const ChatDisplay: React.FC<IChatDisplay> = ({ mainText, secondaryText, caption, chatID, goToChat, className, getClasses }) => {
+
+  const [delChat, { data, loading, error }] = useMutation(DELETE_CHAT, {
+    onCompleted: () => {
+      console.log('done deleting chat')
+      // getClasses();
+    }
+  });
+
+  const options = { variables: { chatID } };
+
+  const triggerMutation = () => delChat(options)
+
+  const triggerDeleteAlert = () =>  (
+    Alert.alert(
+      'Confirm Delete',
+      'Are you sure you want to delete this chat?',
+      [
         {
-          caption && (
-            <ThemedText size={14} type={FONT_STYLES.LIGHT}>
-              {caption}
-            </ThemedText>
-          )
-        }
-      </TouchableOpacity>
-      {/* <Icon
-        name='trash'
-        type='evilicon'
-      /> */}
+          text: 'Delete',
+          onPress: () => triggerMutation()
+        },
+        {
+          text: 'Cancel',
+          onPress: () => console.log('canceled'),
+          style: 'cancel'
+        },
+      ]
+    )
+  )
 
-      {/* wrap in permissioned component */}
-      <Icon
-        name='trash-o'
-        type='font-awesome'
-        onPress={triggerDeleteAlert(chatID)}
-      />
-    </SpacedItemRow>
-    <HorizontalDivider width={100} color={theme.colors.lightOrange}/>
-  </ChatContain>
-)
+  return (
+    <>
+      { loading ? <LoadingScreen loading={loading} /> : (
+        <ChatContain>
+          <SpacedItemRow>
+            <TouchableOpacity onPress={goToChat(chatID, className)} onLongPress={() => console.log('long press')}>
+              <IconRowLeft>
+                <LeftText size={18} type={FONT_STYLES.MAIN}>
+                  {mainText}
+                </LeftText>
+                {
+                  secondaryText && (
+                    <>
+                      <VerticalDivider height={15} />
+                      <RightText size={18} type={FONT_STYLES.MAIN}>
+                        {secondaryText}
+                      </RightText>
+                    </>
+                  )
+                }
+              </IconRowLeft>
+              {
+                caption && (
+                  <ThemedText size={14} type={FONT_STYLES.LIGHT}>
+                    {caption}
+                  </ThemedText>
+                )
+              }
+            </TouchableOpacity>
+            {/* <Icon
+              name='trash'
+              type='evilicon'
+            /> */}
+
+            {/* wrap in permissioned component */}
+            <Icon
+              name='trash-o'
+              type='font-awesome'
+              onPress={triggerDeleteAlert}
+            />
+          </SpacedItemRow>
+          <HorizontalDivider width={100} color={theme.colors.lightOrange}/>
+        </ChatContain>
+      )}
+    </>
+  )
+}
 
 interface IIndividualChatProps {
   chatID: string;
   userType: Permission;
   classObject: Class;
   goToChat (sub: string, sec: string): () => void;
+  getClasses (): void;
 }
 
-const IndividualChat: React.FC<IIndividualChatProps> = ({ classObject, userType, chatID, goToChat }) => {
+const IndividualChat: React.FC<IIndividualChatProps> = ({ classObject, userType, chatID, goToChat, getClasses }) => {
 
   let caption;
   let mainText: string = '';
@@ -199,6 +229,7 @@ const IndividualChat: React.FC<IIndividualChatProps> = ({ classObject, userType,
       secondaryText={secondaryText}
       goToChat={goToChat}
       className={classObject.className}
+      getClasses={getClasses}
     />
   )
 }
@@ -279,6 +310,7 @@ const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
               classObject={_class}
               goToChat={goToChat}
               key={_class.chatID}
+              getClasses={getClasses}
             />
           )) : <EmptyChatPicker />
         }
