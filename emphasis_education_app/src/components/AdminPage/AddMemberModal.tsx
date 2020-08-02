@@ -10,14 +10,13 @@ import {
 import { Input, Icon } from 'react-native-elements';
 import { useLazyQuery, useMutation } from '@apollo/react-hooks';
 
-import UserSearch from './LiftedSearch';
-
-import { GeneralSpacing, ThemedText, IconRow } from '../shared';
+import { GeneralSpacing, ThemedText, IconRow, FONT_STYLES } from '../shared';
 import { ISearchUserPayload, ISearchInput } from '../../types';
 import { SEARCH_USERS } from '../../queries/SearchUsers';
-import { IndividualResultContainer } from './IndividualResult';
-
 import { ADD_FAMILY_MEMBER } from '../../queries/AddFamilyMember';
+
+import { IndividualResultContainer } from './IndividualResult';
+import UserSearch from './LiftedSearch';
 
 interface ICancelProps {
   onPress (): void;
@@ -27,7 +26,7 @@ interface ICancelProps {
 const Cancel: React.FC<ICancelProps> = ({ onPress }) => (
   <TouchableOpacity onPress={onPress}>
     <GeneralSpacing u={10} r={10} d={10} l={10}>
-      <ThemedText size={16} type='main'>
+      <ThemedText size={16} type={FONT_STYLES.MAIN}>
         Cancel
       </ThemedText>
     </GeneralSpacing>
@@ -43,7 +42,7 @@ const Done: React.FC<IDoneProps> = ({ onPress, loading }) => (
   <TouchableOpacity onPress={onPress}>
     <GeneralSpacing u={10} r={10} d={10} l={10}>
       <IconRow>
-        <ThemedText size={16} type='main'>
+        <ThemedText size={16} type={FONT_STYLES.MAIN}>
           Done
         </ThemedText>
         {

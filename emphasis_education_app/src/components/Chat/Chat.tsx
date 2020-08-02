@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Text
+  Text,
+  TouchableOpacity
 } from 'react-native';
 import { useQuery, useSubscription } from '@apollo/react-hooks';
 
@@ -10,11 +11,13 @@ import Context from '../Context/Context';
 import { REFETCH_LIMIT } from '../../constant';
 import { IMessage, IMessageUserType } from '../../types';
 import { SUB } from '../../queries/MessageReceived';
-
 import { GET_MESSAGES } from '../../queries/GetMessages';
+import {
+  ThemedText,
+  FONT_STYLES
+} from '../shared';
 
 interface IChatProps {
-  // TODO type the navagation props
   navigation: any;
   route: any;
 }
@@ -44,13 +47,11 @@ interface IGetMessagesInput {
 }
 let initFetch: number = 0;
 
-
-
-const LiftedChat: React.FC<IChatProps> = props => {
+const LiftedChat: React.FC<IChatProps> = ({ navigation, route }) => {
   const { loggedUser } = React.useContext(Context);
   const [curState, setState] = useState<IState>();
-  const chatID: string = props.route.params.chatID;
-  console.log('chatID', chatID)
+  const chatID: string = route.params.chatID;
+  const className: string = route.params.className;
   // lets cache this data
   const { data: getMessages, loading: queryLoading, refetch, error: errorMessage } = useQuery<
       IGetMessages,
@@ -117,9 +118,21 @@ const LiftedChat: React.FC<IChatProps> = props => {
     })
   }, [subData])
 
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: () => (
+        <TouchableOpacity onPress={() => navigation.navigate('ChatInfo')}>
+          <ThemedText size={20} type={FONT_STYLES.MAIN} >
+            {className}
+          </ThemedText>
+        </TouchableOpacity>
+      )
+    })
+  }, [])
+
   const curUser: IMessageUserType = {
     _id: loggedUser._id,
-    name: loggedUser.name,
+    name: `${loggedUser.firstName} ${loggedUser.lastName}`,
     email: loggedUser.email,
   }
 

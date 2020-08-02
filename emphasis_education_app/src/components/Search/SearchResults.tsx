@@ -5,7 +5,8 @@ import { IUser } from '../../types';
 import IndividualResult from '../AdminPage/IndividualResult';
 import {
   ThemedText,
-  GeneralSpacing
+  GeneralSpacing,
+  FONT_STYLES
 } from '../shared';
 
 interface ISearchResultsProps {
@@ -28,7 +29,7 @@ const SearchResults: React.FC<ISearchResultsProps> = ({ searchResults, navigatio
             key={index}
             // onPress={}
           >
-            <ThemedText size={14} type='main'>
+            <ThemedText size={14} type={FONT_STYLES.MAIN}>
               {results.firstName} { results.lastName}
             </ThemedText>
             <Icon

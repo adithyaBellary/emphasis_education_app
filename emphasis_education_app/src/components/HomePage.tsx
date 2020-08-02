@@ -12,8 +12,6 @@ import {
 import styled from 'styled-components';
 import {
   CenteredDiv,
-  MyButtonText,
-  MyCircleButton,
   IconSection,
   PermissionedComponent,
   GeneralSpacing
@@ -125,9 +123,6 @@ const Home: React.FC<ILiftedHomeProps> = ({ navigation, route }) => {
 
   return (
     <CenteredDiv>
-      <Title>
-        emphasis education home page
-      </Title>
 
       <IconSection>
         <IconContain>

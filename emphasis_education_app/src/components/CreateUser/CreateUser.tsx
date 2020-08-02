@@ -13,7 +13,8 @@ import {
   ThemedButton,
   IconRow,
   GeneralSpacing,
-  ThemedText
+  ThemedText,
+  FONT_STYLES
 } from '../shared';
 
 interface ICreateUser {
@@ -72,7 +73,7 @@ const CreateUser: React.FC<ICreateUser> = props => {
   return (
     <View>
       <CenteredDiv>
-        <ThemedText size={14} type='main'>Family Member Number {numUser}</ThemedText>
+        <ThemedText size={14} type={FONT_STYLES.MAIN}>Family Member Number {numUser}</ThemedText>
         <ThemedTextInput
           placeholder='Name'
           value={curState.firstName}
@@ -102,6 +103,7 @@ const CreateUser: React.FC<ICreateUser> = props => {
           placeholder='Phone Number'
           value={curState.phoneNumber}
           onChangeText={handleTextChange('phoneNumber')}
+          // textContentType=''
         />
         <RadioButtonGroup
           titles={['Male', 'Female']}

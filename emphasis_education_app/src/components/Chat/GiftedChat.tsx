@@ -19,14 +19,13 @@ import {
 import { Icon } from 'react-native-elements';
 import ImagePicker from 'react-native-image-picker';
 import { useMutation } from '@apollo/react-hooks';
-
 import { SEND_MESSAGE } from '../../queries/SendMessage';
-
 import {
   IMessageUserType,
   IMessage
 } from '../../types';
 import { theme } from '../../theme';
+import { EmptyChat } from './common';
 
 interface IGiftedChatProps {
   queryLoading: boolean;
@@ -202,7 +201,7 @@ const MyGiftedChat: React.FC<IGiftedChatProps> = ({ queryLoading, refreshFn, cha
             // marginBottom: 50
           }
         }
-        renderChatEmpty={() => <Text>we empty</Text>}
+        renderChatEmpty={() => <EmptyChat />}
         renderInputToolbar={renderInputToolbar}
         messages={messages}
         inverted={false}

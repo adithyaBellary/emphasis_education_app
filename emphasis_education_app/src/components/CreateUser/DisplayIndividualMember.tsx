@@ -7,14 +7,14 @@ import { Divider } from 'react-native-elements';
 
 
 import { IUserInput } from '../../types';
-import { ThemedText, IndividualField } from '../shared';
+import { ThemedText, IndividualField, FONT_STYLES } from '../shared';
 
 const IndividualItem: React.FC<IUserInput & {id: number}> = ({
   name, email, password, phoneNumber, userType, id, gender }) => {
 
   return (
     <View>
-      <ThemedText size={18} type={'main'}>
+      <ThemedText size={18} type={FONT_STYLES.MAIN}>
         Family member {id}
       </ThemedText>
       <Divider />

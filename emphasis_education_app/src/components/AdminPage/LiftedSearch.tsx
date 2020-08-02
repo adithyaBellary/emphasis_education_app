@@ -34,6 +34,7 @@ const LiftedSearch: React.FC<ILiftedSearchProps> = ({ navigation }) => {
             name='search'
           />
         }
+        // textContentType='telephoneNumber'
       />
       {loading ? <ActivityIndicator animating={loading} /> : (
         <SearchResults

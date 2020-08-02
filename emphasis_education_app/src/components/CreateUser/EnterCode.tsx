@@ -11,7 +11,8 @@ import { CHECK_CODE } from '../../queries/CheckCode';
 import {
   GeneralSpacing,
    ThemedText,
-   ThemedButton
+   ThemedButton,
+   FONT_STYLES
 } from '../shared';
 
 interface IEnterCodeProps {
@@ -20,7 +21,7 @@ navigation: any;
 }
 
 const ErrorMessage: React.FC = () => (
-  <ThemedText type='main' size={14} >
+  <ThemedText type={FONT_STYLES.MAIN} size={14} >
     You entered the wrong code
   </ThemedText>
 )
