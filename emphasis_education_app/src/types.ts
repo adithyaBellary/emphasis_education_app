@@ -28,6 +28,10 @@ export interface IUsableUserInfo {
   gender: string;
 }
 
+interface AdminChat {
+  chatID: string
+}
+
 // this will be the user type that we get back from the backend
 export interface IUser {
   firstName: string;
@@ -40,6 +44,7 @@ export interface IUser {
   classes?: Class[];
   _id: string;
   gender: string;
+  adminChat: AdminChat
 }
 
 interface ICreateUserResponse {

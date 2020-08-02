@@ -27,6 +27,9 @@ export const GET_USER = gql`
       }
       groupID
       gender
+      adminChat {
+        chatID
+      }
     }
   }
 `
