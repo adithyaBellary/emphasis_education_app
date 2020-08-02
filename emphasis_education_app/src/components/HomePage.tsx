@@ -13,6 +13,7 @@ import styled from 'styled-components';
 import {
   CenteredDiv,
   IconSection,
+  IconRow,
   PermissionedComponent,
   GeneralSpacing
 } from './shared';
@@ -88,6 +89,7 @@ const Home: React.FC<ILiftedHomeProps> = ({ navigation, route }) => {
         //   // allowedPermission={Permission.Admin}
         //   allowedPermission={Permission.Student}
         // >
+        <IconRow>
           <CenteredDiv>
             <Icon
               name='user'
@@ -96,6 +98,18 @@ const Home: React.FC<ILiftedHomeProps> = ({ navigation, route }) => {
             />
             <Text>Admin</Text>
           </CenteredDiv>
+          <CenteredDiv>
+            <Icon
+              name='user'
+              type='antdesign'
+              onPress={() => navigation.navigate('Chat', {
+                chatID: loggedUser.adminChat.chatID,
+                className: 'Admin'
+              })}
+            />
+            <Text>Admin Chat</Text>
+          </CenteredDiv>
+          </IconRow>
         // </PermissionedComponent>
       ),
       headerRightContainerStyle: {
