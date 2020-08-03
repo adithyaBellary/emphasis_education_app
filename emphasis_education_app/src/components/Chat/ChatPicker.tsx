@@ -143,7 +143,7 @@ const ChatDisplay: React.FC<IChatDisplay> = ({ mainText, secondaryText, caption,
                   {mainText}
                 </LeftText>
                 {
-                  secondaryText && (
+                  !!secondaryText && (
                     <>
                       <VerticalDivider height={15} />
                       <RightText size={18} type={FONT_STYLES.MAIN}>
