@@ -29,6 +29,11 @@ export const GET_USER = gql`
       gender
       adminChat {
         chatID
+        user {
+          firstName
+          lastName
+          email
+        }
       }
     }
   }

@@ -19,6 +19,7 @@ import AboutUs from './components/AboutUs';
 import EnterCode from './components/CreateUser/EnterCode';
 import AddMember from './components/AdminPage/AddMemberModal';
 import ChatInfo from './components/Chat/ChatInfo';
+import AdminChatPicker from './components/AdminPage/AdminChatPicker';
 
 import { LOGIN_TOKEN } from './constant';
 import { LOGIN } from './queries/Login';

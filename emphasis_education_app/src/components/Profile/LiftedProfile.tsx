@@ -45,10 +45,10 @@ const LiftedProfile: React.FC<ILiftedProfileProps> = ({ route, navigation }) => 
   // if we passed in routes then that means we have come from the admin page
   const groupID = route.params ? route.params.groupID : loggedUser.groupID
   const currentUserID = route.params ? route.params.currentUserID : loggedUser._id
-  console.log('groupID', groupID)
+  console.log('groupID', groupID, currentUserID)
   const options = { variables: { groupID }}
   const { data, loading, error } = useQuery<IGetFamilyPayload, IGetFamilyInput>(GET_FAMILY, options)
-  if ( error ) { console.log('error loading the profile')}
+  if ( error ) { console.log('error loading the profile', error)}
 
   const toggleEdit = () => setEditing(_edit => !_edit)
   const goToAddMember = () => navigation.navigate('AddUserModal', { groupID })

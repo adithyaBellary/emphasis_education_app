@@ -102,13 +102,13 @@ export const IconSection = styled(View)`
 `;
 
 interface IPermissionProps {
-  allowedPermission: Permission;
+  allowedPermissions: Permission[];
 }
 
-export const PermissionedComponent: React.FC<IPermissionProps> = ({ allowedPermission, children}) => {
+export const PermissionedComponent: React.FC<IPermissionProps> = ({ allowedPermissions, children}) => {
   const {loggedUser} = React.useContext(Context)
 
-  if(loggedUser.userType === allowedPermission) {
+  if(allowedPermissions.includes(loggedUser.userType)) {
     return <>{children}</>
   } else {
     return null;

@@ -22,7 +22,6 @@ const LiftedSearch: React.FC<ILiftedSearchProps> = ({ navigation }) => {
   React.useEffect(() => {
     runQuery({variables: {searchTerm}})
   }, [searchTerm])
-  console.log('data', data)
 
   return (
     <ContentContain>

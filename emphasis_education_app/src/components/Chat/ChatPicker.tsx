@@ -30,7 +30,6 @@ import {
 } from '../../types';
 import { theme } from '../../theme';
 
-import Accordion from './Accordion';
 import { EmptyChatPicker } from './common';
 
 interface IChatPickerProps {
@@ -44,7 +43,7 @@ const IndChat = styled(TouchableOpacity)`
   height: 30px;
 `;
 
-const ChatsContain: React.FC = ({ children }) => (
+export const ChatsContain: React.FC = ({ children }) => (
   <GeneralSpacing u={0} r={10} d={0} l={10}>
     {children}
   </GeneralSpacing>
@@ -143,7 +142,7 @@ const ChatDisplay: React.FC<IChatDisplay> = ({ mainText, secondaryText, caption,
                   {mainText}
                 </LeftText>
                 {
-                  secondaryText && (
+                  !!secondaryText && (
                     <>
                       <VerticalDivider height={15} />
                       <RightText size={18} type={FONT_STYLES.MAIN}>
@@ -166,12 +165,15 @@ const ChatDisplay: React.FC<IChatDisplay> = ({ mainText, secondaryText, caption,
               type='evilicon'
             /> */}
 
-            {/* wrap in permissioned component */}
-            <Icon
-              name='trash-o'
-              type='font-awesome'
-              onPress={triggerDeleteAlert}
-            />
+            <PermissionedComponent
+              allowedPermissions={[Permission.Admin]}
+            >
+              <Icon
+                name='trash-o'
+                type='font-awesome'
+                onPress={triggerDeleteAlert}
+              />
+            </PermissionedComponent>
           </SpacedItemRow>
           <HorizontalDivider width={100} color={theme.colors.lightOrange}/>
         </ChatContain>
@@ -203,7 +205,7 @@ const IndividualChat: React.FC<IIndividualChatProps> = ({ classObject, userType,
       secondaryText = classObject.tutorInfo.firstName
       caption = 'test caption'
       break;
-    case 'Parent' || 'Admin':
+    case 'Parent':
       mainText = `${userFirstName.join(', ')}`
       secondaryText = classObject.className
       caption = `${classObject.tutorInfo.firstName} ${classObject.tutorInfo.lastName}`
@@ -213,10 +215,12 @@ const IndividualChat: React.FC<IIndividualChatProps> = ({ classObject, userType,
       mainText = `${userFirstName.join(', ')}`
       caption = classObject.className
       break
-    // case 'Admin':
+    case 'Admin':
+      mainText = `${userFirstName.join(', ')}`
+      secondaryText = classObject.className
+      caption = `${classObject.tutorInfo.firstName} ${classObject.tutorInfo.lastName}`
 
-
-    //   break;
+      break;
     default:
       break;
   }
@@ -265,11 +269,6 @@ const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
   React.useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        // <PermissionedComponent
-        //   // allowedPermission={Permission.Admin}
-        //   // this will need to be changed to the Admin later
-        //   allowedPermission={Permission.Student}
-        // >
         <IconRow>
           <GeneralSpacing u={0} d={0} r={10} l={10}>
             <Icon
@@ -278,13 +277,16 @@ const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
               onPress={getClasses}
             />
           </GeneralSpacing>
-          <Icon
-            name='pluscircleo'
-            type='antdesign'
-            onPress={goToCreateChat}
-          />
+          <PermissionedComponent
+            allowedPermissions={[Permission.Admin]}
+          >
+            <Icon
+              name='pluscircleo'
+              type='antdesign'
+              onPress={goToCreateChat}
+            />
+          </PermissionedComponent>
         </IconRow>
-        // </PermissionedComponent>
       ),
       headerRightContainerStyle: {
         padding: 10
