@@ -68,6 +68,17 @@ const LogiImage = () => (
   </GeneralSpacing>
 )
 
+const AdminIcon: React.FC<{ changeScreens (dest: string): () => void }> = ({ changeScreens }) => (
+  <CenteredDiv>
+    <Icon
+      name='user'
+      type='antdesign'
+      onPress={changeScreens('AdminPage')}
+      />
+    <Text>Admin</Text>
+  </CenteredDiv>
+);
+
 const Home: React.FC<ILiftedHomeProps> = ({ navigation, route }) => {
   console.log('route in home', route)
   const { loggedUser, setUser } = React.useContext(Context);
@@ -85,32 +96,31 @@ const Home: React.FC<ILiftedHomeProps> = ({ navigation, route }) => {
   React.useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        // <PermissionedComponent
-        //   // allowedPermission={Permission.Admin}
-        //   allowedPermission={Permission.Student}
-        // >
         <IconRow>
-          <CenteredDiv>
-            <Icon
-              name='user'
-              type='antdesign'
-              onPress={changeScreens('AdminPage')}
-            />
-            <Text>Admin</Text>
-          </CenteredDiv>
-          <CenteredDiv>
-            <Icon
-              name='user'
-              type='antdesign'
-              onPress={() => navigation.navigate('Chat', {
-                chatID: loggedUser.adminChat[0].chatID,
-                className: 'Admin'
-              })}
-            />
-            <Text>Admin Chat</Text>
-          </CenteredDiv>
-          </IconRow>
-        // </PermissionedComponent>
+          <PermissionedComponent allowedPermissions={[
+            Permission.Admin
+          ]}>
+            <AdminIcon changeScreens={changeScreens}/>
+          </PermissionedComponent>
+
+          <PermissionedComponent allowedPermissions={[
+            Permission.Student,
+            Permission.Parent,
+            Permission.Tutor
+          ]}>
+            <CenteredDiv>
+              <Icon
+                name='user'
+                type='antdesign'
+                onPress={() => navigation.navigate('Chat', {
+                  chatID: loggedUser.adminChat[0].chatID,
+                  className: 'Admin'
+                })}
+              />
+              <Text>Admin Chat</Text>
+            </CenteredDiv>
+          </PermissionedComponent>
+        </IconRow>
       ),
       headerRightContainerStyle: {
         padding: 10
