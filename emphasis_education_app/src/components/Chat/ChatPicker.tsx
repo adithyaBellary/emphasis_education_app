@@ -44,7 +44,7 @@ const IndChat = styled(TouchableOpacity)`
   height: 30px;
 `;
 
-const ChatsContain: React.FC = ({ children }) => (
+export const ChatsContain: React.FC = ({ children }) => (
   <GeneralSpacing u={0} r={10} d={0} l={10}>
     {children}
   </GeneralSpacing>

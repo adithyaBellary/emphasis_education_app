@@ -103,7 +103,7 @@ const Home: React.FC<ILiftedHomeProps> = ({ navigation, route }) => {
               name='user'
               type='antdesign'
               onPress={() => navigation.navigate('Chat', {
-                chatID: loggedUser.adminChat.chatID,
+                chatID: loggedUser.adminChat[0].chatID,
                 className: 'Admin'
               })}
             />
