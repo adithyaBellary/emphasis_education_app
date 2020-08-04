@@ -30,7 +30,6 @@ import {
 } from '../../types';
 import { theme } from '../../theme';
 
-import Accordion from './Accordion';
 import { EmptyChatPicker } from './common';
 
 interface IChatPickerProps {
@@ -166,12 +165,15 @@ const ChatDisplay: React.FC<IChatDisplay> = ({ mainText, secondaryText, caption,
               type='evilicon'
             /> */}
 
-            {/* wrap in permissioned component */}
-            <Icon
-              name='trash-o'
-              type='font-awesome'
-              onPress={triggerDeleteAlert}
-            />
+            <PermissionedComponent
+              allowedPermissions={[Permission.Admin]}
+            >
+              <Icon
+                name='trash-o'
+                type='font-awesome'
+                onPress={triggerDeleteAlert}
+              />
+            </PermissionedComponent>
           </SpacedItemRow>
           <HorizontalDivider width={100} color={theme.colors.lightOrange}/>
         </ChatContain>
@@ -267,11 +269,6 @@ const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
   React.useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        // <PermissionedComponent
-        //   // allowedPermission={Permission.Admin}
-        //   // this will need to be changed to the Admin later
-        //   allowedPermission={Permission.Student}
-        // >
         <IconRow>
           <GeneralSpacing u={0} d={0} r={10} l={10}>
             <Icon
@@ -280,13 +277,16 @@ const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
               onPress={getClasses}
             />
           </GeneralSpacing>
-          <Icon
-            name='pluscircleo'
-            type='antdesign'
-            onPress={goToCreateChat}
-          />
+          <PermissionedComponent
+            allowedPermissions={[Permission.Admin]}
+          >
+            <Icon
+              name='pluscircleo'
+              type='antdesign'
+              onPress={goToCreateChat}
+            />
+          </PermissionedComponent>
         </IconRow>
-        // </PermissionedComponent>
       ),
       headerRightContainerStyle: {
         padding: 10

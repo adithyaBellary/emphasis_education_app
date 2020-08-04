@@ -6,7 +6,7 @@ import {
 import styled from 'styled-components';
 import { Icon } from 'react-native-elements';
 
-import { IUser } from '../../types';
+import { IUser, Permission } from '../../types';
 import Context from '../Context/Context';
 import {
   ContentContain,
@@ -93,8 +93,9 @@ const Profile: React.FC<IProfileProps> = ({ family, editing, currentUserID, onPr
       ))}
       <IconRow>
         <Title>Family Members</Title>
-        {/* <PermissionedComponent> */}
-        {/* only for admins */}
+        <PermissionedComponent
+          allowedPermissions={[Permission.Admin]}
+        >
           <GeneralSpacing u={0} r={0} d={0} l={10}>
             <Icon
               name='pluscircleo'
@@ -102,7 +103,7 @@ const Profile: React.FC<IProfileProps> = ({ family, editing, currentUserID, onPr
               onPress={onPress}
             />
           </GeneralSpacing>
-        {/* </PermissionedComponent> */}
+        </PermissionedComponent>
       </IconRow>
       {
         family.map((user, index) => (
