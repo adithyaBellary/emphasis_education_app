@@ -1,10 +1,5 @@
 import * as React from 'react';
-import {
-  View,
-  Text
-} from 'react-native'
 import { Icon } from 'react-native-elements'
-// import { createStackNavigator } from '@react-navigation/stack';
 
 import Context from '../Context/Context';
 import IndividualResult from './IndividualResult';
@@ -24,9 +19,6 @@ const AdminChatPicker: React.FC<IAdminChatPickerProps> = ({ navigation }) => {
 
   return (
     <SearchResultsContainer>
-      <Text>
-        the admin chat pickerrrr
-      </Text>
       {
         loggedUser.adminChat.map(_adminChat => (
           <IndividualResult>
@@ -39,12 +31,11 @@ const AdminChatPicker: React.FC<IAdminChatPickerProps> = ({ navigation }) => {
                   chatID: _adminChat.chatID,
                   className: 'Admin Chat'
                 }
-                )}
+              )}
             />
           </IndividualResult>
         ))
       }
-
     </SearchResultsContainer>
   )
 }
