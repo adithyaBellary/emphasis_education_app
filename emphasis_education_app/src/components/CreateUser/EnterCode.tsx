@@ -1,5 +1,8 @@
 import * as React from 'react';
 import {
+  TextInput
+} from 'react-native'
+import {
   Input
 } from 'react-native-elements';
 import {
@@ -59,6 +62,10 @@ const EnterCode: React.FC<IEnterCodeProps> = ({ navigation }) => {
         placeholder='Enter your code'
         onChangeText={onChangeTextCode}
       />
+      {/* <TextInput
+        // value='h
+        keyboardType='numeric'
+      /> */}
       { error && <ErrorMessage /> }
       <ThemedButton
         buttonText='Submit Code'

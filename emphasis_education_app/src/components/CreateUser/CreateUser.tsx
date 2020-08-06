@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import {
   View,
-  Text
+  Text,
+  TextInput
 } from 'react-native'
 
 import { IUserInput, Permission } from '../../types';
@@ -38,9 +39,10 @@ const EmptyData: IUserInput = {
 
 const CreateUser: React.FC<ICreateUser> = props => {
   const [numUser, setNumUser] = React.useState<number>(1)
+  const [numberInput, setNumberInput] = React.useState();
+  const [DOB, SetDOB] = React.useState();
 
   const [curState, setState] = useState<IUserInput>({
-    // name: 'test name',
     firstName: 'test',
     lastName: 'name',
     email: 'test01@gmail.com',
@@ -54,6 +56,7 @@ const CreateUser: React.FC<ICreateUser> = props => {
   const handleTextChange = (name: string) => (text: string) => setState({...curState, [name]: text})
   const clearData = () => setState(EmptyData);
 
+  // add this
   // const canSubmit = (): boolean => {
   //   return !!curState.name &&
   //    !!curState.phoneNumber
@@ -68,6 +71,30 @@ const CreateUser: React.FC<ICreateUser> = props => {
     props.saveUserInfo(curState);
     setNumUser(numUser + 1);
     clearData();
+  }
+
+  const handlePhoneNumberInput = (number: string) => {
+    const justNumbers: string = number.replaceAll('-', '').replace('(', '').replace(')', '').replace(' ', '')
+    if (justNumbers.length > 3 && justNumbers.length <= 6) {
+      // add the first dash
+      setNumberInput(`${justNumbers.slice(0,3)}-${justNumbers.slice(3)}`)
+    } else if (justNumbers.length > 6) {
+      setNumberInput(`${justNumbers.slice(0,3)}-${justNumbers.slice(3,6)}-${justNumbers.slice(6)}`)
+    } else {
+      setNumberInput(justNumbers)
+    }
+  }
+
+  const handleDOBInput = (DOB: string) => {
+    const justNumbers: string = DOB.replaceAll('/', '')
+    console.log('just nums', justNumbers)
+    if (justNumbers.length > 2 && justNumbers.length <= 4) {
+      SetDOB(`${justNumbers.slice(0,2)}/${justNumbers.slice(2)}`)
+    } else if (justNumbers.length > 4) {
+      SetDOB(`${justNumbers.slice(0,2)}/${justNumbers.slice(2,4)}/${justNumbers.slice(4)}`)
+    } else {
+      SetDOB(justNumbers)
+    }
   }
 
   return (
@@ -103,7 +130,26 @@ const CreateUser: React.FC<ICreateUser> = props => {
           placeholder='Phone Number'
           value={curState.phoneNumber}
           onChangeText={handleTextChange('phoneNumber')}
-          // textContentType=''
+        />
+        <TextInput
+          keyboardType='number-pad'
+          placeholder='Enter Phone Number (###) ###-####'
+          value={numberInput}
+          onChangeText={number => handlePhoneNumberInput(number)}
+          style={{
+            fontSize: 20,
+          }}
+          maxLength={12}
+        />
+        <TextInput
+          keyboardType='number-pad'
+          placeholder='Enter DOB MM/DD/YYYY'
+          value={DOB}
+          onChangeText={number => handleDOBInput(number)}
+          style={{
+            fontSize: 20,
+          }}
+          maxLength={10}
         />
         <RadioButtonGroup
           titles={['Male', 'Female']}
@@ -116,23 +162,23 @@ const CreateUser: React.FC<ICreateUser> = props => {
       </CenteredDiv>
 
       <GeneralSpacing u={60} r={0} d={0} l={0}>
-      <IconRow>
-        <ButtonContainer>
-          <ThemedButton
-            buttonText='Add another member'
-            loading={false}
-            onPress={addMember}
-          />
-        </ButtonContainer>
+        <IconRow>
+          <ButtonContainer>
+            <ThemedButton
+              buttonText='Add another member'
+              loading={false}
+              onPress={addMember}
+            />
+          </ButtonContainer>
 
-        <ButtonContainer>
-          <ThemedButton
-            buttonText='Submit'
-            loading={false}
-            onPress={GoToConf}
-          />
-        </ButtonContainer>
-      </IconRow>
+          <ButtonContainer>
+            <ThemedButton
+              buttonText='Submit'
+              loading={false}
+              onPress={GoToConf}
+            />
+          </ButtonContainer>
+        </IconRow>
       </GeneralSpacing>
     </View>
   )
