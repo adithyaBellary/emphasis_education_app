@@ -53,12 +53,26 @@ const CreateUser: React.FC<ICreateUser> = props => {
 
   const handleTextChange = (name: string) => (text: string) => setState({...curState, [name]: text})
   const clearData = () => setState(EmptyData);
+  const checkPassword = (): boolean => curState.password === curState.confirmPassword
+  const checkPhoneNumber = (): boolean => curState.phoneNumber.length === 12
+  const checkdob = (): boolean => curState.dob.length === 10
 
-  // add this
-  // const canSubmit = (): boolean => {
-  //   return !!curState.name &&
-  //    !!curState.phoneNumber
-  // }
+  const canSubmit = (): boolean => {
+    return (
+      !!curState.firstName &&
+      !!curState.lastName &&
+      !!curState.email &&
+      !!curState.password &&
+      !!curState.confirmPassword &&
+      !!curState.phoneNumber &&
+      !!curState.userType &&
+      !!curState.gender &&
+      !!curState.dob &&
+      checkPassword() &&
+      checkPhoneNumber() &&
+      checkdob()
+    )
+  }
 
   const GoToConf = () => {
     props.saveUserInfo(curState);
@@ -152,6 +166,7 @@ const CreateUser: React.FC<ICreateUser> = props => {
               buttonText='Add another member'
               loading={false}
               onPress={addMember}
+              disabled={!canSubmit()}
             />
           </ButtonContainer>
 
@@ -160,6 +175,7 @@ const CreateUser: React.FC<ICreateUser> = props => {
               buttonText='Submit'
               loading={false}
               onPress={GoToConf}
+              disabled={!canSubmit()}
             />
           </ButtonContainer>
         </IconRow>

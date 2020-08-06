@@ -92,11 +92,12 @@ export const MyButtonText = styled(Text)`
 interface IButtonProps {
   buttonText: string;
   loading: boolean;
+  disabled?: boolean;
   onPress(): void;
 }
 
-export const ThemedButton: React.FC<IButtonProps> = ({ onPress, buttonText, loading }) => (
-  <MyButton onPress={onPress}>
+export const ThemedButton: React.FC<IButtonProps> = ({ onPress, buttonText, loading, disabled }) => (
+  <MyButton onPress={onPress} disabled={disabled} >
     <MyButtonText>
       {buttonText}
     </MyButtonText>
