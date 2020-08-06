@@ -6,7 +6,6 @@ export interface IProps {
 
 // this determines state for the user input form
 export interface IUserInput {
-  // name: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -19,7 +18,6 @@ export interface IUserInput {
 }
 
 export interface IUsableUserInfo {
-  // name: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -27,6 +25,7 @@ export interface IUsableUserInfo {
   phoneNumber: string;
   userType: Permission;
   gender: string;
+  dob: string;
 }
 
 interface AdminChatUser {

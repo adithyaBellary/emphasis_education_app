@@ -25,7 +25,7 @@ export interface ICreateUserArr {
 
 const CreateUserContain: React.FC<ICreateUserContainProps> = props => {
   const [userInfo, setUserInfo] = React.useState<ICreateUserArr>();
-  const [showConf, setSHowConf] = React.useState(false);
+  const [showConf, setShowConf] = React.useState(false);
 
   React.useEffect(() => {
     if (showConf) {
@@ -79,7 +79,7 @@ const CreateUserContain: React.FC<ICreateUserContainProps> = props => {
 
   const GoToConfirmation = () => {
     console.log('going to conf screen', userInfo)
-    setSHowConf(true);
+    setShowConf(true);
   }
 
   if (error) {

@@ -99,12 +99,12 @@ const CreateUser: React.FC<ICreateUser> = props => {
       <CenteredDiv>
         <ThemedText size={14} type={FONT_STYLES.MAIN}>Family Member Number {numUser}</ThemedText>
         <ThemedTextInput
-          placeholder='Name'
+          placeholder='First Name'
           value={curState.firstName}
           onChangeText={handleTextChange('firstName')}
         />
         <ThemedTextInput
-          placeholder='Name'
+          placeholder='Last Name'
           value={curState.lastName}
           onChangeText={handleTextChange('lastName')}
         />
