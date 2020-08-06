@@ -15,7 +15,8 @@ import {
   IconRow,
   GeneralSpacing,
   ThemedText,
-  FONT_STYLES
+  FONT_STYLES,
+  ThemedNumberInput
 } from '../shared';
 
 interface ICreateUser {
@@ -126,12 +127,22 @@ const CreateUser: React.FC<ICreateUser> = props => {
           value={curState.confirmPassword}
           onChangeText={handleTextChange('confirmPassword')}
         />
-        <ThemedTextInput
+        {/* <ThemedTextInput
           placeholder='Phone Number'
           value={curState.phoneNumber}
           onChangeText={handleTextChange('phoneNumber')}
+        /> */}
+        <ThemedNumberInput
+          placeholder='Enter Phone Number (###) ###-####'
+          value={numberInput}
+          onChangeText={number => handlePhoneNumberInput(number)}
         />
-        <TextInput
+        <ThemedNumberInput
+          placeholder='Enter DOB MM/DD/YYYY'
+          value={DOB}
+          onChangeText={number => handleDOBInput(number)}
+        />
+        {/* <TextInput
           keyboardType='number-pad'
           placeholder='Enter Phone Number (###) ###-####'
           value={numberInput}
@@ -150,7 +161,7 @@ const CreateUser: React.FC<ICreateUser> = props => {
             fontSize: 20,
           }}
           maxLength={10}
-        />
+        /> */}
         <RadioButtonGroup
           titles={['Male', 'Female']}
           onSelect={handleTextChange('gender')}

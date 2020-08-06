@@ -47,6 +47,15 @@ export const ThemedTextInput: React.FC<IThemedInputProps> = props => (
   </InputContain>
 )
 
+export const ThemedNumberInput: React.FC<IThemedInputProps> = props => (
+  <InputContain>
+    <MytextInput
+      {...props}
+      keyboardType='number-pad'
+    />
+  </InputContain>
+)
+
 export const ButtonContainer = styled(View)`
   padding: 10px;
 `;
