@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import {
-  View,
-  Text,
-  TextInput
+  View
 } from 'react-native'
 
 import { IUserInput, Permission } from '../../types';
@@ -27,7 +25,6 @@ interface ICreateUser {
 }
 
 const EmptyData: IUserInput = {
-  // name: '',
   firstName: '',
   lastName: '',
   email: '',
@@ -35,13 +32,12 @@ const EmptyData: IUserInput = {
   confirmPassword: '',
   phoneNumber: '',
   userType: Permission.Student,
-  gender: ''
+  gender: '',
+  dob: ''
 }
 
 const CreateUser: React.FC<ICreateUser> = props => {
   const [numUser, setNumUser] = React.useState<number>(1)
-  const [numberInput, setNumberInput] = React.useState();
-  const [DOB, SetDOB] = React.useState();
 
   const [curState, setState] = useState<IUserInput>({
     firstName: 'test',
@@ -51,7 +47,8 @@ const CreateUser: React.FC<ICreateUser> = props => {
     confirmPassword: 'test01',
     phoneNumber: '2',
     userType: Permission.Student,
-    gender: ''
+    gender: '',
+    dob: ''
   });
 
   const handleTextChange = (name: string) => (text: string) => setState({...curState, [name]: text})
@@ -78,23 +75,22 @@ const CreateUser: React.FC<ICreateUser> = props => {
     const justNumbers: string = number.replaceAll('-', '').replace('(', '').replace(')', '').replace(' ', '')
     if (justNumbers.length > 3 && justNumbers.length <= 6) {
       // add the first dash
-      setNumberInput(`${justNumbers.slice(0,3)}-${justNumbers.slice(3)}`)
+      setState({ ...curState, 'phoneNumber': `${justNumbers.slice(0,3)}-${justNumbers.slice(3)}` })
     } else if (justNumbers.length > 6) {
-      setNumberInput(`${justNumbers.slice(0,3)}-${justNumbers.slice(3,6)}-${justNumbers.slice(6)}`)
+      setState({ ...curState, 'phoneNumber': `${justNumbers.slice(0,3)}-${justNumbers.slice(3,6)}-${justNumbers.slice(6)}`})
     } else {
-      setNumberInput(justNumbers)
+      setState({ ...curState, 'phoneNumber': justNumbers})
     }
   }
 
   const handleDOBInput = (DOB: string) => {
     const justNumbers: string = DOB.replaceAll('/', '')
-    console.log('just nums', justNumbers)
     if (justNumbers.length > 2 && justNumbers.length <= 4) {
-      SetDOB(`${justNumbers.slice(0,2)}/${justNumbers.slice(2)}`)
+      setState({ ...curState, 'dob': `${justNumbers.slice(0,2)}/${justNumbers.slice(2)}`})
     } else if (justNumbers.length > 4) {
-      SetDOB(`${justNumbers.slice(0,2)}/${justNumbers.slice(2,4)}/${justNumbers.slice(4)}`)
+      setState({ ...curState, 'dob': `${justNumbers.slice(0,2)}/${justNumbers.slice(2,4)}/${justNumbers.slice(4)}`})
     } else {
-      SetDOB(justNumbers)
+      setState({ ...curState, 'dob': justNumbers})
     }
   }
 
@@ -127,41 +123,18 @@ const CreateUser: React.FC<ICreateUser> = props => {
           value={curState.confirmPassword}
           onChangeText={handleTextChange('confirmPassword')}
         />
-        {/* <ThemedTextInput
-          placeholder='Phone Number'
+        <ThemedNumberInput
+          placeholder='Enter Phone Number (###) ###-####'
           value={curState.phoneNumber}
-          onChangeText={handleTextChange('phoneNumber')}
-        /> */}
-        <ThemedNumberInput
-          placeholder='Enter Phone Number (###) ###-####'
-          value={numberInput}
           onChangeText={number => handlePhoneNumberInput(number)}
-        />
-        <ThemedNumberInput
-          placeholder='Enter DOB MM/DD/YYYY'
-          value={DOB}
-          onChangeText={number => handleDOBInput(number)}
-        />
-        {/* <TextInput
-          keyboardType='number-pad'
-          placeholder='Enter Phone Number (###) ###-####'
-          value={numberInput}
-          onChangeText={number => handlePhoneNumberInput(number)}
-          style={{
-            fontSize: 20,
-          }}
           maxLength={12}
         />
-        <TextInput
-          keyboardType='number-pad'
+        <ThemedNumberInput
           placeholder='Enter DOB MM/DD/YYYY'
-          value={DOB}
+          value={curState.dob}
           onChangeText={number => handleDOBInput(number)}
-          style={{
-            fontSize: 20,
-          }}
           maxLength={10}
-        /> */}
+        />
         <RadioButtonGroup
           titles={['Male', 'Female']}
           onSelect={handleTextChange('gender')}

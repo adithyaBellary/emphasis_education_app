@@ -15,6 +15,7 @@ export interface IUserInput {
   phoneNumber: string;
   userType: Permission;
   gender: string;
+  dob: string;
 }
 
 export interface IUsableUserInfo {

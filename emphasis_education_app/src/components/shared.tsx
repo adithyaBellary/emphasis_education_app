@@ -47,11 +47,16 @@ export const ThemedTextInput: React.FC<IThemedInputProps> = props => (
   </InputContain>
 )
 
-export const ThemedNumberInput: React.FC<IThemedInputProps> = props => (
+interface IThemedNumberInputProps extends IThemedInputProps {
+  maxLength: number;
+}
+
+export const ThemedNumberInput: React.FC<IThemedNumberInputProps> = props => (
   <InputContain>
     <MytextInput
       {...props}
       keyboardType='number-pad'
+      maxLength={props.maxLength}
     />
   </InputContain>
 )
