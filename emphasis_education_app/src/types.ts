@@ -52,6 +52,7 @@ export interface IUser {
   _id: string;
   gender: string;
   adminChat: AdminChat[]
+  dob: string;
 }
 
 interface ICreateUserResponse {

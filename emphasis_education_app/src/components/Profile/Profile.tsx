@@ -81,6 +81,15 @@ const Profile: React.FC<IProfileProps> = ({ family, editing, currentUserID, onPr
         onChangeText={onChangeText}
       />
 
+      <IndividualField
+        value={currentUser.dob}
+        valueSize={16}
+        label={'Date of Birth'}
+        labelSize={14}
+        editing={editing}
+        onChangeText={onChangeText}
+      />
+
       {/* list the classes */}
       {/* lets not have this be editable */}
       {currentUser.classes && currentUser.classes.map(c => (
