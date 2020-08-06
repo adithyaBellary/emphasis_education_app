@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
-  View,
-  Text
+  View
 } from 'react-native'
 
 import { IUserInput, Permission } from '../../types';
@@ -14,7 +13,8 @@ import {
   IconRow,
   GeneralSpacing,
   ThemedText,
-  FONT_STYLES
+  FONT_STYLES,
+  ThemedNumberInput
 } from '../shared';
 
 interface ICreateUser {
@@ -25,7 +25,6 @@ interface ICreateUser {
 }
 
 const EmptyData: IUserInput = {
-  // name: '',
   firstName: '',
   lastName: '',
   email: '',
@@ -33,14 +32,14 @@ const EmptyData: IUserInput = {
   confirmPassword: '',
   phoneNumber: '',
   userType: Permission.Student,
-  gender: ''
+  gender: '',
+  dob: ''
 }
 
 const CreateUser: React.FC<ICreateUser> = props => {
   const [numUser, setNumUser] = React.useState<number>(1)
 
   const [curState, setState] = useState<IUserInput>({
-    // name: 'test name',
     firstName: 'test',
     lastName: 'name',
     email: 'test01@gmail.com',
@@ -48,16 +47,32 @@ const CreateUser: React.FC<ICreateUser> = props => {
     confirmPassword: 'test01',
     phoneNumber: '2',
     userType: Permission.Student,
-    gender: ''
+    gender: '',
+    dob: ''
   });
 
   const handleTextChange = (name: string) => (text: string) => setState({...curState, [name]: text})
   const clearData = () => setState(EmptyData);
+  const checkPassword = (): boolean => curState.password === curState.confirmPassword
+  const checkPhoneNumber = (): boolean => curState.phoneNumber.length === 12
+  const checkdob = (): boolean => curState.dob.length === 10
 
-  // const canSubmit = (): boolean => {
-  //   return !!curState.name &&
-  //    !!curState.phoneNumber
-  // }
+  const canSubmit = (): boolean => {
+    return (
+      !!curState.firstName &&
+      !!curState.lastName &&
+      !!curState.email &&
+      !!curState.password &&
+      !!curState.confirmPassword &&
+      !!curState.phoneNumber &&
+      !!curState.userType &&
+      !!curState.gender &&
+      !!curState.dob &&
+      checkPassword() &&
+      checkPhoneNumber() &&
+      checkdob()
+    )
+  }
 
   const GoToConf = () => {
     props.saveUserInfo(curState);
@@ -70,17 +85,40 @@ const CreateUser: React.FC<ICreateUser> = props => {
     clearData();
   }
 
+  const handlePhoneNumberInput = (number: string) => {
+    const justNumbers: string = number.replaceAll('-', '').replace('(', '').replace(')', '').replace(' ', '')
+    if (justNumbers.length > 3 && justNumbers.length <= 6) {
+      // add the first dash
+      setState({ ...curState, 'phoneNumber': `${justNumbers.slice(0,3)}-${justNumbers.slice(3)}` })
+    } else if (justNumbers.length > 6) {
+      setState({ ...curState, 'phoneNumber': `${justNumbers.slice(0,3)}-${justNumbers.slice(3,6)}-${justNumbers.slice(6)}`})
+    } else {
+      setState({ ...curState, 'phoneNumber': justNumbers})
+    }
+  }
+
+  const handleDOBInput = (DOB: string) => {
+    const justNumbers: string = DOB.replaceAll('/', '')
+    if (justNumbers.length > 2 && justNumbers.length <= 4) {
+      setState({ ...curState, 'dob': `${justNumbers.slice(0,2)}/${justNumbers.slice(2)}`})
+    } else if (justNumbers.length > 4) {
+      setState({ ...curState, 'dob': `${justNumbers.slice(0,2)}/${justNumbers.slice(2,4)}/${justNumbers.slice(4)}`})
+    } else {
+      setState({ ...curState, 'dob': justNumbers})
+    }
+  }
+
   return (
     <View>
       <CenteredDiv>
         <ThemedText size={14} type={FONT_STYLES.MAIN}>Family Member Number {numUser}</ThemedText>
         <ThemedTextInput
-          placeholder='Name'
+          placeholder='First Name'
           value={curState.firstName}
           onChangeText={handleTextChange('firstName')}
         />
         <ThemedTextInput
-          placeholder='Name'
+          placeholder='Last Name'
           value={curState.lastName}
           onChangeText={handleTextChange('lastName')}
         />
@@ -99,11 +137,17 @@ const CreateUser: React.FC<ICreateUser> = props => {
           value={curState.confirmPassword}
           onChangeText={handleTextChange('confirmPassword')}
         />
-        <ThemedTextInput
-          placeholder='Phone Number'
+        <ThemedNumberInput
+          placeholder='Enter Phone Number (###) ###-####'
           value={curState.phoneNumber}
-          onChangeText={handleTextChange('phoneNumber')}
-          // textContentType=''
+          onChangeText={number => handlePhoneNumberInput(number)}
+          maxLength={12}
+        />
+        <ThemedNumberInput
+          placeholder='Enter DOB MM/DD/YYYY'
+          value={curState.dob}
+          onChangeText={number => handleDOBInput(number)}
+          maxLength={10}
         />
         <RadioButtonGroup
           titles={['Male', 'Female']}
@@ -116,23 +160,25 @@ const CreateUser: React.FC<ICreateUser> = props => {
       </CenteredDiv>
 
       <GeneralSpacing u={60} r={0} d={0} l={0}>
-      <IconRow>
-        <ButtonContainer>
-          <ThemedButton
-            buttonText='Add another member'
-            loading={false}
-            onPress={addMember}
-          />
-        </ButtonContainer>
+        <IconRow>
+          <ButtonContainer>
+            <ThemedButton
+              buttonText='Add another member'
+              loading={false}
+              onPress={addMember}
+              disabled={!canSubmit()}
+            />
+          </ButtonContainer>
 
-        <ButtonContainer>
-          <ThemedButton
-            buttonText='Submit'
-            loading={false}
-            onPress={GoToConf}
-          />
-        </ButtonContainer>
-      </IconRow>
+          <ButtonContainer>
+            <ThemedButton
+              buttonText='Submit'
+              loading={false}
+              onPress={GoToConf}
+              disabled={!canSubmit()}
+            />
+          </ButtonContainer>
+        </IconRow>
       </GeneralSpacing>
     </View>
   )

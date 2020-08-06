@@ -47,6 +47,20 @@ export const ThemedTextInput: React.FC<IThemedInputProps> = props => (
   </InputContain>
 )
 
+interface IThemedNumberInputProps extends IThemedInputProps {
+  maxLength: number;
+}
+
+export const ThemedNumberInput: React.FC<IThemedNumberInputProps> = props => (
+  <InputContain>
+    <MytextInput
+      {...props}
+      keyboardType='number-pad'
+      maxLength={props.maxLength}
+    />
+  </InputContain>
+)
+
 export const ButtonContainer = styled(View)`
   padding: 10px;
 `;
@@ -78,11 +92,12 @@ export const MyButtonText = styled(Text)`
 interface IButtonProps {
   buttonText: string;
   loading: boolean;
+  disabled?: boolean;
   onPress(): void;
 }
 
-export const ThemedButton: React.FC<IButtonProps> = ({ onPress, buttonText, loading }) => (
-  <MyButton onPress={onPress}>
+export const ThemedButton: React.FC<IButtonProps> = ({ onPress, buttonText, loading, disabled }) => (
+  <MyButton onPress={onPress} disabled={disabled} >
     <MyButtonText>
       {buttonText}
     </MyButtonText>
