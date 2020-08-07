@@ -5,7 +5,7 @@ import {
   View,
 } from 'react-native';
 
-import { IUserInput, IUsableUserInfo, ICreateUserPayload } from '../../types';
+import { IUserInput, IUsableUserInfo, GenericResponse } from '../../types';
 import CreateUser from './CreateUser';
 import { CREATE_USER } from '../../queries/CreateUser';
 
@@ -26,6 +26,7 @@ export interface ICreateUserArr {
 const CreateUserContain: React.FC<ICreateUserContainProps> = props => {
   const [userInfo, setUserInfo] = React.useState<ICreateUserArr>();
   const [showConf, setShowConf] = React.useState(false);
+  const [submitDisabled, setSubmitDisabled] = React.useState(false);
 
   React.useEffect(() => {
     if (showConf) {
@@ -53,23 +54,29 @@ const CreateUserContain: React.FC<ICreateUserContainProps> = props => {
     })
   }
 
-  const [createUserMut, { loading, error }] = useMutation<ICreateUserPayload>(
+  const [createUserMut, { data, loading, error }] = useMutation(
     CREATE_USER,
     {
       onCompleted: ({ createUser }) => {
-        Alert.alert(createUser.success ? SuccessMessaging : ErrorMessaging );
-        // or if we want to go automatically
-        // props.navigation.navigate('Login')
+        console.log('Done running create user mutation: ', createUser)
+        const { res, message }: GenericResponse = createUser;
+        Alert.alert(res ? SuccessMessaging : message || ErrorMessaging );
+        setSubmitDisabled(true);
       }
     }
   )
 
+  if(error) {
+    Alert.alert(data?.message || 'Something went wrong creating this user!!! unique')
+  }
+
+
   const runCreateUserMut = (): void => {
-    console.log('userInfo before running mutaion', userInfo)
+    // console.log('userInfo before running mutaion', userInfo)
     const _users: IUsableUserInfo[] = userInfo.users.map(({confirmPassword, ...rest }) => {
       return rest;
     })
-    console.log('userInfo before running mutaion', _users)
+    // console.log('userInfo before running mutaion', _users)
     createUserMut({
       variables: {
         users: _users
@@ -82,10 +89,10 @@ const CreateUserContain: React.FC<ICreateUserContainProps> = props => {
     setShowConf(true);
   }
 
-  if (error) {
-    console.log('there was something wrong with creating the user');
-    console.log(error);
-  }
+  // if (error) {
+  //   console.log('there was something wrong with creating the user');
+  //   console.log(error);
+  // }
 
   return (
     <View>
@@ -102,6 +109,7 @@ const CreateUserContain: React.FC<ICreateUserContainProps> = props => {
           submit={runCreateUserMut}
           loading={loading}
           navigation={props.navigation}
+          submitDisabled={submitDisabled}
         />
       )}
     </View>

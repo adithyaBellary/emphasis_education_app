@@ -45,11 +45,11 @@ const CreateUser: React.FC<ICreateUser> = props => {
     email: 'test01@gmail.com',
     password: 'test01',
     confirmPassword: 'test01',
-    phoneNumber: '2',
+    phoneNumber: '222-222-2222',
     userType: Permission.Student,
-    gender: '',
-    dob: ''
-  });
+    gender: 'Male',
+    dob: '22/22/2222'
+  } as IUserInput);
 
   const handleTextChange = (name: string) => (text: string) => setState({...curState, [name]: text})
   const clearData = () => setState(EmptyData);
