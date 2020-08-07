@@ -199,7 +199,7 @@ interface IRadioButtonGroupProps {
   onSelect(el: string): void;
 }
 
-export const RadioButtonGroup: React.FC<IRadioButtonGroupProps> = ({titles, onSelect}) => {
+export const RadioButtonGroup: React.FC<IRadioButtonGroupProps> = ({ titles, onSelect }) => {
   // this is the conponent that should hold state over the individual radio buttons
   const [selectedElement, setSelectedElement] = React.useState('');
   const selectElement = (el: string) => {

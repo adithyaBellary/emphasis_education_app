@@ -5,7 +5,7 @@ import {
   View,
 } from 'react-native';
 
-import { IUserInput, IUsableUserInfo, ICreateUserPayload } from '../../types';
+import { IUserInput, IUsableUserInfo, GenericResponse } from '../../types';
 import CreateUser from './CreateUser';
 import { CREATE_USER } from '../../queries/CreateUser';
 
@@ -26,6 +26,7 @@ export interface ICreateUserArr {
 const CreateUserContain: React.FC<ICreateUserContainProps> = props => {
   const [userInfo, setUserInfo] = React.useState<ICreateUserArr>();
   const [showConf, setShowConf] = React.useState(false);
+  const [submitDisabled, setSubmitDisabled] = React.useState(false);
 
   React.useEffect(() => {
     if (showConf) {
@@ -53,11 +54,13 @@ const CreateUserContain: React.FC<ICreateUserContainProps> = props => {
     })
   }
 
-  const [createUserMut, { loading, error }] = useMutation<ICreateUserPayload>(
+  const [createUserMut, { loading, error }] = useMutation<GenericResponse>(
     CREATE_USER,
     {
-      onCompleted: ({ createUser }) => {
-        Alert.alert(createUser.success ? SuccessMessaging : ErrorMessaging );
+      onCompleted: ({ res, message }) => {
+        console.log('Done running create user mutation: ', message)
+        Alert.alert(res ? SuccessMessaging : message || ErrorMessaging );
+        setSubmitDisabled(true);
         // or if we want to go automatically
         // props.navigation.navigate('Login')
       }
@@ -102,6 +105,7 @@ const CreateUserContain: React.FC<ICreateUserContainProps> = props => {
           submit={runCreateUserMut}
           loading={loading}
           navigation={props.navigation}
+          submitDisabled={submitDisabled}
         />
       )}
     </View>

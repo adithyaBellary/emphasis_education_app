@@ -40,16 +40,16 @@ const CreateUser: React.FC<ICreateUser> = props => {
   const [numUser, setNumUser] = React.useState<number>(1)
 
   const [curState, setState] = useState<IUserInput>({
-    firstName: 'test',
-    lastName: 'name',
-    email: 'test01@gmail.com',
-    password: 'test01',
-    confirmPassword: 'test01',
-    phoneNumber: '2',
-    userType: Permission.Student,
-    gender: '',
-    dob: ''
-  });
+    // firstName: 'test',
+    // lastName: 'name',
+    // email: 'test01@gmail.com',
+    // password: 'test01',
+    // confirmPassword: 'test01',
+    // phoneNumber: '2',
+    // userType: Permission.Student,
+    // gender: '',
+    // dob: ''
+  } as IUserInput);
 
   const handleTextChange = (name: string) => (text: string) => setState({...curState, [name]: text})
   const clearData = () => setState(EmptyData);

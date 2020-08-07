@@ -1,7 +1,8 @@
 import * as React from 'react';
 import {
   View,
-  ScrollView
+  ScrollView,
+  FlatList
 } from 'react-native';
 import {
   ButtonContainer,
@@ -18,12 +19,13 @@ interface IConfirmationScreenProps {
   navigation: any;
   createdUsers: ICreateUserArr | undefined;
   loading: boolean;
+  submitDisabled: boolean
   submit(): void;
 }
 
 // we need to be able to edit info from here
-const ConfirmationScreen: React.FC<IConfirmationScreenProps> = ({ createdUsers, loading, submit, navigation }) => (
-  <View>
+const ConfirmationScreen: React.FC<IConfirmationScreenProps> = ({ createdUsers, loading, submit, submitDisabled, navigation }) => (
+  <ScrollView>
     <ContentContain>
       {createdUsers && createdUsers.users.map((user: IUserInput, index: number) => (
         <IndividualItem
@@ -38,6 +40,7 @@ const ConfirmationScreen: React.FC<IConfirmationScreenProps> = ({ createdUsers, 
           buttonText='Submit'
           loading={loading}
           onPress={submit}
+          disabled={submitDisabled}
         />
       </ButtonContainer>
       <ButtonContainer>
@@ -48,7 +51,7 @@ const ConfirmationScreen: React.FC<IConfirmationScreenProps> = ({ createdUsers, 
         />
       </ButtonContainer>
     </IconRow>
-  </View>
+  </ScrollView>
 )
 
 export default ConfirmationScreen;
