@@ -54,25 +54,29 @@ const CreateUserContain: React.FC<ICreateUserContainProps> = props => {
     })
   }
 
-  const [createUserMut, { loading, error }] = useMutation<GenericResponse>(
+  const [createUserMut, { data, loading, error }] = useMutation(
     CREATE_USER,
     {
-      onCompleted: ({ res, message }) => {
-        console.log('Done running create user mutation: ', message)
+      onCompleted: ({ createUser }) => {
+        console.log('Done running create user mutation: ', createUser)
+        const { res, message }: GenericResponse = createUser;
         Alert.alert(res ? SuccessMessaging : message || ErrorMessaging );
         setSubmitDisabled(true);
-        // or if we want to go automatically
-        // props.navigation.navigate('Login')
       }
     }
   )
 
+  if(error) {
+    Alert.alert(data?.message || 'Something went wrong creating this user!!! unique')
+  }
+
+
   const runCreateUserMut = (): void => {
-    console.log('userInfo before running mutaion', userInfo)
+    // console.log('userInfo before running mutaion', userInfo)
     const _users: IUsableUserInfo[] = userInfo.users.map(({confirmPassword, ...rest }) => {
       return rest;
     })
-    console.log('userInfo before running mutaion', _users)
+    // console.log('userInfo before running mutaion', _users)
     createUserMut({
       variables: {
         users: _users
@@ -85,10 +89,10 @@ const CreateUserContain: React.FC<ICreateUserContainProps> = props => {
     setShowConf(true);
   }
 
-  if (error) {
-    console.log('there was something wrong with creating the user');
-    console.log(error);
-  }
+  // if (error) {
+  //   console.log('there was something wrong with creating the user');
+  //   console.log(error);
+  // }
 
   return (
     <View>

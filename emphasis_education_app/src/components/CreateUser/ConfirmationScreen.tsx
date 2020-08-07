@@ -29,6 +29,7 @@ const ConfirmationScreen: React.FC<IConfirmationScreenProps> = ({ createdUsers, 
     <ContentContain>
       {createdUsers && createdUsers.users.map((user: IUserInput, index: number) => (
         <IndividualItem
+          key={index}
           id={index + 1}
           {...user}
         />
