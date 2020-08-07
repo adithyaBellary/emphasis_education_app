@@ -131,7 +131,7 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
       })
     } catch(e) {
       console.log('error', e)
-      Alert.alert('there was an error making this chat')
+      Alert.alert('there was an error making this chat. please make sure that you have selected at least 1 tutor, 1 student, and a class')
     }
   }
 
