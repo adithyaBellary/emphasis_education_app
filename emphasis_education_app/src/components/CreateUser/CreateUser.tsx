@@ -51,11 +51,14 @@ const CreateUser: React.FC<ICreateUser> = props => {
     dob: '22/22/2222'
   } as IUserInput);
 
+  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
   const handleTextChange = (name: string) => (text: string) => setState({...curState, [name]: text})
   const clearData = () => setState(EmptyData);
   const checkPassword = (): boolean => curState.password === curState.confirmPassword
   const checkPhoneNumber = (): boolean => curState.phoneNumber.length === 12
   const checkdob = (): boolean => curState.dob.length === 10
+  const checkEmail = (): boolean => re.test(curState.email)
 
   const canSubmit = (): boolean => {
     return (
@@ -70,7 +73,8 @@ const CreateUser: React.FC<ICreateUser> = props => {
       !!curState.dob &&
       checkPassword() &&
       checkPhoneNumber() &&
-      checkdob()
+      checkdob() &&
+      checkEmail()
     )
   }
 
