@@ -1,29 +1,24 @@
 import * as React from 'react';
 import { useQuery } from '@apollo/react-hooks';
-// this will be needed to get the full screen dimensions
-// ill need to know the screen dimensions to position all the widgets
+import { Icon } from 'react-native-elements';
 import {
   View,
   Text,
-  Image,
   ActivityIndicator,
 } from 'react-native';
-
 import styled from 'styled-components';
+
+import { MissionStatement, HeaderTitle, LogiImage } from './logos';
+
 import {
   CenteredDiv,
   IconSection,
   IconRow,
   PermissionedComponent,
-  GeneralSpacing
-} from './shared';
-import { Icon } from 'react-native-elements';
-import Context from './Context/Context';
-import { Permission } from '../types';
-
-import { GET_USER } from '../queries/GetUser';
-
-import { LogoWithoutText } from './Logo/LogoWithoutText';
+} from '../shared';
+import Context from '../Context/Context';
+import { Permission } from '../../types';
+import { GET_USER } from '../../queries/GetUser';
 
 interface ILiftedHomeProps {
   navigation: any;
@@ -48,25 +43,6 @@ const IconContain = styled(View)`
   flex-direction: row;
   justify-content: space-between;
 `
-
-const MissionStatement: React.FC = () => {
-  return (
-    <Text>this is the mission statement</Text>
-  )
-}
-
-const LogiImage = () => (
-  <GeneralSpacing u={0} r={0} d={0} l={0}>
-    <Image
-      source={{ uri: LogoWithoutText}}
-      style={{
-        height: 200,
-        width: 200,
-        // backgroundColor: 'grey'
-      }}
-    />
-  </GeneralSpacing>
-)
 
 const AdminIcon: React.FC<{ changeScreens (dest: string): () => void }> = ({ changeScreens }) => (
   <CenteredDiv>
@@ -147,6 +123,7 @@ const Home: React.FC<ILiftedHomeProps> = ({ navigation, route }) => {
 
   return (
     <CenteredDiv>
+      <HeaderTitle />
 
       <IconSection>
         <IconContain>

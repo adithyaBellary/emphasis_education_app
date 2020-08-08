@@ -11,6 +11,7 @@ import { Input } from 'react-native-elements';
 
 import { Permission } from '../types';
 import { theme } from '../theme';
+import { MAX_WIDTH, MAX_HEIGHT } from '../constant';
 
 import Context from './Context/Context';
 
@@ -112,8 +113,8 @@ export const CenteredDiv = styled(View)`
 // TODO make this em or %. not straight px
 export const IconSection = styled(View)`
   width: 100%;
-  padding: 150px 0 100px 0;
   align-items: center;
+  margin-top: ${MAX_HEIGHT * 0.1}px;
 `;
 
 interface IPermissionProps {
