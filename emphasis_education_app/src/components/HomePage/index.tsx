@@ -1,27 +1,24 @@
 import * as React from 'react';
 import { useQuery } from '@apollo/react-hooks';
-// this will be needed to get the full screen dimensions
-// ill need to know the screen dimensions to position all the widgets
+import { Icon } from 'react-native-elements';
 import {
   View,
   Text,
-  Image,
   ActivityIndicator,
 } from 'react-native';
-
 import styled from 'styled-components';
+
+import { MissionStatement, HeaderTitle, LogiImage } from './logos';
+
 import {
   CenteredDiv,
   IconSection,
   IconRow,
   PermissionedComponent,
-  GeneralSpacing
-} from './shared';
-import { Icon } from 'react-native-elements';
-import Context from './Context/Context';
-import { Permission } from '../types';
-
-import { GET_USER } from '../queries/GetUser';
+} from '../shared';
+import Context from '../Context/Context';
+import { Permission } from '../../types';
+import { GET_USER } from '../../queries/GetUser';
 
 interface ILiftedHomeProps {
   navigation: any;
@@ -47,44 +44,6 @@ const IconContain = styled(View)`
   justify-content: space-between;
 `
 
-const MissionStatement = () => (
-  <GeneralSpacing u={0} r={0} d={0} l={0}>
-    <Image
-      source={require('../images/MissionStatement.png')}
-      style={{
-        height: 100,
-        width: 400,
-        resizeMode: 'contain'
-      }}
-    />
-  </GeneralSpacing>
-)
-
-const HeaderTitle = () => (
-  <GeneralSpacing u={0} r={0} d={0} l={0}>
-    <Image
-      source={require('../images/HomePageHeaderTitle.png') }
-      style={{
-        height: 100,
-        width: 400,
-        resizeMode: 'contain',
-      }}
-    />
-  </GeneralSpacing>
-)
-
-const LogiImage = () => (
-  <GeneralSpacing u={0} r={0} d={0} l={0}>
-    <Image
-      source={require('../images/HomePageLogo.png')}
-      style={{
-        height: 200,
-        width: 200,
-      }}
-    />
-  </GeneralSpacing>
-)
-
 const AdminIcon: React.FC<{ changeScreens (dest: string): () => void }> = ({ changeScreens }) => (
   <CenteredDiv>
     <Icon
@@ -95,6 +54,10 @@ const AdminIcon: React.FC<{ changeScreens (dest: string): () => void }> = ({ cha
     <Text>Admin</Text>
   </CenteredDiv>
 );
+
+const FlexView = styled(View)<{ flex: number}>`
+  flex: ${({flex}) => flex}
+`
 
 const Home: React.FC<ILiftedHomeProps> = ({ navigation, route }) => {
   console.log('route in home', route)
