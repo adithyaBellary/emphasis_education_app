@@ -24,6 +24,7 @@ import { Permission } from '../types';
 import { GET_USER } from '../queries/GetUser';
 
 import { LogoWithoutText } from './Logo/LogoWithoutText';
+import { HomePageHeaderTitle } from './Logo/HomePageHeaderTitle';
 
 interface ILiftedHomeProps {
   navigation: any;
@@ -49,16 +50,37 @@ const IconContain = styled(View)`
   justify-content: space-between;
 `
 
-const MissionStatement: React.FC = () => {
-  return (
-    <Text>this is the mission statement</Text>
-  )
-}
+const MissionStatement = () => (
+  <GeneralSpacing u={0} r={0} d={0} l={0}>
+    <Image
+      source={require('../images/MissionStatement.png')}
+      style={{
+        height: 100,
+        width: 400,
+        resizeMode: 'contain'
+      }}
+    />
+  </GeneralSpacing>
+)
+
+const HeaderTitle = () => (
+  <GeneralSpacing u={0} r={0} d={0} l={0}>
+    <Image
+      source={require('../images/HomePageHeaderTitle.png') }
+      style={{
+        height: 100,
+        width: 400,
+        resizeMode: 'contain',
+        // backgroundColor: 'grey'
+      }}
+    />
+  </GeneralSpacing>
+)
 
 const LogiImage = () => (
   <GeneralSpacing u={0} r={0} d={0} l={0}>
     <Image
-      source={{ uri: LogoWithoutText}}
+      source={require('../images/HomePageLogo.png')}
       style={{
         height: 200,
         width: 200,
@@ -147,6 +169,7 @@ const Home: React.FC<ILiftedHomeProps> = ({ navigation, route }) => {
 
   return (
     <CenteredDiv>
+      <HeaderTitle />
 
       <IconSection>
         <IconContain>
