@@ -7,7 +7,6 @@ import {
   Image,
 } from 'react-native';
 import styled from 'styled-components';
-import { MD5 } from 'crypto-js';
 
 import { theme } from '../theme';
 
@@ -18,7 +17,7 @@ import {
   HorizontalDivider,
   ThemedButton
 } from './shared';
-import Context, { AuthContext } from './Context/Context';
+import { AuthContext } from './Context/Context';
 import {
   IconRow,
   VerticalDivider,
@@ -26,11 +25,6 @@ import {
   GeneralSpacing,
   FONT_STYLES
 } from './shared';
-import { LogoWithText } from './Logo/LogoWithText';
-
-const PositionDiv = styled(View)`
-  padding-top: 200px;
-`;
 
 interface ILoginProps {
   navigation: any;
@@ -47,10 +41,6 @@ const ErrorText = styled(Text)`
 const Errorlogin: React.FC = () => (
   <ErrorText>there was an issue logging in</ErrorText>
 );
-
-const getHash = (email: string): string => {
-  return MD5(email).toString();
-}
 
 const InputContain = styled(View)`
   padding: 10px;
@@ -73,7 +63,7 @@ const SecondaryLink: React.FC<ISecondaryLinkProps> = ({ linkContent, onPress }) 
 const LoginImage = () => (
   <GeneralSpacing u={0} r={0} d={50} l={0} >
     <Image
-      source={{ uri: LogoWithText}}
+      source={require('../images/LogoWithText.png')}
       style={{
         height: 300,
         width: 400

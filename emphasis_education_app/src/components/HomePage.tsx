@@ -23,9 +23,6 @@ import { Permission } from '../types';
 
 import { GET_USER } from '../queries/GetUser';
 
-import { LogoWithoutText } from './Logo/LogoWithoutText';
-import { HomePageHeaderTitle } from './Logo/HomePageHeaderTitle';
-
 interface ILiftedHomeProps {
   navigation: any;
   route: any;
@@ -71,7 +68,6 @@ const HeaderTitle = () => (
         height: 100,
         width: 400,
         resizeMode: 'contain',
-        // backgroundColor: 'grey'
       }}
     />
   </GeneralSpacing>
@@ -84,7 +80,6 @@ const LogiImage = () => (
       style={{
         height: 200,
         width: 200,
-        // backgroundColor: 'grey'
       }}
     />
   </GeneralSpacing>
