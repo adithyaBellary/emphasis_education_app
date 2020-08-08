@@ -55,10 +55,6 @@ const AdminIcon: React.FC<{ changeScreens (dest: string): () => void }> = ({ cha
   </CenteredDiv>
 );
 
-const FlexView = styled(View)<{ flex: number}>`
-  flex: ${({flex}) => flex}
-`
-
 const Home: React.FC<ILiftedHomeProps> = ({ navigation, route }) => {
   console.log('route in home', route)
   const { loggedUser, setUser } = React.useContext(Context);
