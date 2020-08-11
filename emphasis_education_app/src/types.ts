@@ -6,27 +6,43 @@ export interface IProps {
 
 // this determines state for the user input form
 export interface IUserInput {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
   confirmPassword: string;
   phoneNumber: string;
   userType: Permission;
   gender: string;
+  dob: string;
 }
 
 export interface IUsableUserInfo {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
   phoneNumber: string;
   userType: Permission;
   gender: string;
+  dob: string;
+}
+
+interface AdminChatUser {
+  firstName: string;
+  lastName: string;
+  email: string;
+}
+
+interface AdminChat {
+  chatID: string;
+  user: AdminChatUser;
 }
 
 // this will be the user type that we get back from the backend
 export interface IUser {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phoneNumber: string;
   userType: Permission;
@@ -35,14 +51,27 @@ export interface IUser {
   classes?: Class[];
   _id: string;
   gender: string;
+  adminChat: AdminChat[]
+  dob: string;
 }
 
-interface ICreateUserResponse {
-  success: boolean;
+export interface GenericResponse {
+  res: boolean;
+  message?: string;
 }
 
-export interface ICreateUserPayload {
-  createUser: ICreateUserResponse;
+// interface ICreateUserResponse {
+//   success: boolean;
+// }
+
+// export interface ICreateUserPayload {
+//   createUser: ICreateUserResponse;
+// }
+
+export interface ChatUserInfo {
+  firstName: string;
+  lastName: string;
+  email: string;
 }
 
 // make all of these optional because we know almost nothing on user creation
@@ -50,17 +79,17 @@ export interface Class {
   // we wont be sending this to the backend
   // _id?: string;
   displayName: string;
-  className?: string;
-  userEmails?: string[];
-  tutorEmail?: string;
-  chatID?: string;
+  className: string;
+  userInfo: ChatUserInfo[];
+  tutorInfo: ChatUserInfo;
+  chatID: string;
 }
 
 export interface ICreateChatInput {
   displayName: string;
   className: string;
-  tutorEmail: string;
-  userEmails: string[];
+  userInfo: ChatUserInfo[];
+  tutorInfo: ChatUserInfo;
 }
 
 export interface ICreateChatPayload {

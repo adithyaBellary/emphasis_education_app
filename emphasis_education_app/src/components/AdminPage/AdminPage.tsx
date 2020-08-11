@@ -6,6 +6,8 @@ import { View, Text } from 'react-native';
 import Search from './LiftedSearch';
 import classSearch from './LiftedClassSearch';
 import InviteUser from './InviteUser';
+import AdminChatPicker from './AdminChatPicker';
+import { TitleText } from '../shared';
 
 interface IAdminPageProps {
   navigation: any;
@@ -34,17 +36,16 @@ const UserStack = () => (
       name="UserHome"
       component={Search}
       options={{
-        // so that we dont have any stacked headers
         header: () => null
       }}
     />
-    <stack.Screen
+    {/* <stack.Screen
       name="UserProfile"
       component={Classes}
       options={{
         header: () => null
       }}
-    />
+    /> */}
   </stack.Navigator>
 )
 
@@ -60,9 +61,10 @@ const AdminPage: React.FC<IAdminPageProps> = () => {
 
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Users" component={UserStack} />
+      <Tab.Screen name="Users" component={Search} />
       <Tab.Screen name="Classes" component={classSearch} />
       <Tab.Screen name="Invite User" component={InviteUser} />
+      <Tab.Screen name="Admin Chats" component={AdminChatPicker} />
     </Tab.Navigator>
   )
 }

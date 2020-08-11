@@ -22,7 +22,6 @@ const LiftedSearch: React.FC<ILiftedSearchProps> = ({ navigation }) => {
   React.useEffect(() => {
     runQuery({variables: {searchTerm}})
   }, [searchTerm])
-  console.log('data', data)
 
   return (
     <ContentContain>
@@ -34,8 +33,9 @@ const LiftedSearch: React.FC<ILiftedSearchProps> = ({ navigation }) => {
             name='search'
           />
         }
+        // textContentType='telephoneNumber'
       />
-      {loading ? <ActivityIndicator /> : (
+      {loading ? <ActivityIndicator animating={loading} /> : (
         <SearchResults
           searchResults={data ? data.searchUsers : []}
           navigation={navigation}

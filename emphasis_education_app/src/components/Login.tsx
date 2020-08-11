@@ -1,38 +1,36 @@
 import React, { useState, useContext } from 'react';
 import {
-  Alert,
   View,
   Text,
   SafeAreaView,
   TouchableOpacity,
-  Image
+  Image,
 } from 'react-native';
 import styled from 'styled-components';
-import { MD5 } from 'crypto-js';
+
+import { theme } from '../theme';
 
 import {
-  MytextInput,
   ButtonContainer,
-  MyButton,
-  MyButtonText,
   CenteredDiv,
   LoginInput,
-  HorizontalDivider
+  HorizontalDivider,
+  ThemedButton
 } from './shared';
-import Context, { AuthContext } from './Context/Context';
-
-import { IconRow, VerticalDivier, ThemedText, GeneralSpacing } from './shared';
-import { LogoWithText } from './Logo/LogoWithText';
-
-const PositionDiv = styled(View)`
-  padding-top: 200px;
-`;
+import { AuthContext } from './Context/Context';
+import {
+  IconRow,
+  VerticalDivider,
+  ThemedText,
+  GeneralSpacing,
+  FONT_STYLES
+} from './shared';
 
 interface ILoginProps {
-  // TODO type this shit
   navigation: any;
   route: any;
   error: boolean;
+  loading: boolean;
 }
 
 const ErrorText = styled(Text)`
@@ -44,10 +42,6 @@ const Errorlogin: React.FC = () => (
   <ErrorText>there was an issue logging in</ErrorText>
 );
 
-const getHash = (email: string): string => {
-  return MD5(email).toString();
-}
-
 const InputContain = styled(View)`
   padding: 10px;
 `
@@ -57,19 +51,19 @@ interface ISecondaryLinkProps {
 }
 
 const SecondaryLink: React.FC<ISecondaryLinkProps> = ({ linkContent, onPress }) => (
-  <GeneralSpacing u={0} r={10} d={0} l={10}>
-    <TouchableOpacity onPress={onPress}>
-      <ThemedText size={14} type={'light'}>
+  <TouchableOpacity onPress={onPress}>
+    <GeneralSpacing u={0} r={10} d={0} l={10}>
+      <ThemedText size={14} type={FONT_STYLES.LIGHT}>
         {linkContent}
       </ThemedText>
-    </TouchableOpacity>
-  </GeneralSpacing>
+    </GeneralSpacing>
+  </TouchableOpacity>
 );
 
 const LoginImage = () => (
   <GeneralSpacing u={0} r={0} d={50} l={0} >
     <Image
-      source={{ uri: LogoWithText}}
+      source={require('../images/LogoWithText.png')}
       style={{
         height: 300,
         width: 400
@@ -85,7 +79,6 @@ const ContentWrap: React.FC = ({ children }) => (
     </CenteredDiv>
   </SafeAreaView>
 );
-
 
 const Login: React.FC<ILoginProps> = props => {
 
@@ -122,7 +115,7 @@ const Login: React.FC<ILoginProps> = props => {
         />
       </InputContain>
 
-      <HorizontalDivider width={60}/>
+      <HorizontalDivider width={60} color={theme.colors.purple}/>
 
       <InputContain>
         <LoginInput
@@ -135,16 +128,16 @@ const Login: React.FC<ILoginProps> = props => {
       {props.error && <Errorlogin /> }
 
       <ButtonContainer>
-        <MyButton
+        <ThemedButton
+          buttonText='Login'
+          loading={props.loading}
           onPress={() => login(curState.email, curState.password)}
-        >
-          <MyButtonText>Login</MyButtonText>
-        </MyButton>
+        />
       </ButtonContainer>
 
       <IconRow>
-        <SecondaryLink linkContent={'Fist time user?'} onPress={changeScreens('EnterCode')} />
-        <VerticalDivier height={10}/>
+        <SecondaryLink linkContent={'First time user?'} onPress={changeScreens('EnterCode')} />
+        <VerticalDivider height={10}/>
         <SecondaryLink linkContent={'Forgot Password'} onPress={changeScreens('CreateUserContain')} />
       </IconRow>
     </ContentWrap>

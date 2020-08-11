@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-community/async-storage';
-import { View, Text, ActivityIndicator } from 'react-native';
+import { View, Text, ActivityIndicator, Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import {useMutation} from '@apollo/react-hooks';
 
@@ -17,20 +17,25 @@ import CreateChat from './components/Chat/CreateChat';
 import Settings from './components/Settings';
 import AboutUs from './components/AboutUs';
 import EnterCode from './components/CreateUser/EnterCode';
+import AddMember from './components/AdminPage/AddMemberModal';
+import ChatInfo from './components/Chat/ChatInfo';
+import AdminChatPicker from './components/AdminPage/AdminChatPicker';
 
 import { LOGIN_TOKEN } from './constant';
 import { LOGIN } from './queries/Login';
 
 import context, {EmptyUser, AuthContext} from './components/Context/Context';
 import { IUser, ILoginPayload } from './types';
+import { TitleText } from './components/shared';
+import { theme } from './theme';
 
 const AuthStackNav = createStackNavigator();
-const AuthStack = ({ error }) => {
+const AuthStack = ({ error, loading }) => {
   console.log('props in auth st', error)
   return (
   <AuthStackNav.Navigator initialRouteName={'Login'}>
     <AuthStackNav.Screen name='Login' options={{ headerShown: false}}>
-      {_props => <Login {..._props} error={error}/>}
+      {_props => <Login {..._props} error={error} loading={loading}/>}
     </AuthStackNav.Screen>
     <AppStackNav.Screen
       name='EnterCode'
@@ -59,60 +64,87 @@ const AppStack = ({ userToken }) => (
       name="Home"
       component={HomePage}
       options={{
-        title: ''
+        headerTitle: () => <TitleText title='Home' />
       }}
       initialParams={{ token: userToken}}
     />
     <AppStackNav.Screen
       name='AboutUs'
       component={AboutUs}
-      options={{ title: 'About Us'}}
+      options={{
+        headerTitle: () => <TitleText title='About Us' />
+      }}
     />
     <AppStackNav.Screen
       name="Chat"
       component={Chat}
-      options={{ title: 'Test Subject' }}
+      // options={{ title: 'Test Subject' }}
     />
     <AppStackNav.Screen
       name="ChatPicker"
       component={ChatPicker}
       options={{
-        title: 'My Chats',
+        headerTitle: () => <TitleText title='My Chats' />,
+        headerStyle: {
+          backgroundColor: theme.colors.lightOrange
+        }
       }}
     />
     <AppStackNav.Screen
       name="MyProfile"
       component={Profile}
-      options={{ title: 'My Profile' }}
+      options={{
+        headerTitle: () => <TitleText title='My Profile' />,
+        headerStyle: {
+          backgroundColor: theme.colors.lightPink
+        }
+      }}
     />
     <AppStackNav.Screen
       name="AdminPage"
       component={AdminPage}
-      options={{ title: 'Admin Page' }}
+      options={{
+        headerTitle: () => <TitleText title='Admin Page' />
+      }}
     />
     <AppStackNav.Screen
       name='CreateChat'
       component={CreateChat}
-      options={{ title: 'New Chat'}}
+      options={{
+        headerTitle: () => <TitleText title='Create Chat' />
+      }}
     />
     <AppStackNav.Screen
       name='Settings'
       component={Settings}
-      options={{ title: 'Settings'}}
+      options={{
+        headerTitle: () => <TitleText title='Settings' />
+      }}
     />
   </AppStackNav.Navigator>
 )
 
+const AppRootStackNav = createStackNavigator();
+const AppRootStack = ({ userToken, ...props }) => (
+  <AppRootStackNav.Navigator headerMode="none" mode='modal'>
+    <AppRootStackNav.Screen name="App">
+      {() => <AppStack {...props} userToken={userToken} />}
+    </AppRootStackNav.Screen>
+    <AppRootStackNav.Screen name='AddUserModal' component={AddMember} />
+    <AppRootStackNav.Screen name='ChatInfo' component={ChatInfo} />
+  </AppRootStackNav.Navigator>
+)
+
 const RootStackNav = createStackNavigator();
-const RootStack = ({ userToken, error}) => (
+const RootStack = ({ userToken, error, loading }) => (
   <RootStackNav.Navigator headerMode="none">
     { !!userToken ? (
-      <RootStackNav.Screen name='App'>
-        {_props => <AppStack {..._props} userToken={userToken} /> }
+      <RootStackNav.Screen name='AppRoot'>
+        {_props => <AppRootStack {..._props} userToken={userToken} /> }
       </RootStackNav.Screen>
     ) : (
       <RootStackNav.Screen name='Auth'>
-        {_props => <AuthStack {..._props} error={error}/> }
+        {_props => <AuthStack {..._props} error={error} loading={loading}/> }
       </RootStackNav.Screen>
 
     )}
@@ -187,7 +219,7 @@ const StackNavigation: React.FC = () => {
     }
   )
   if (error) {
-    console.log('error logging in')
+    console.log('error logging in', error)
   }
 
   const authContext = React.useMemo(
@@ -208,18 +240,14 @@ const StackNavigation: React.FC = () => {
 
   if (authLoading) {
     return (
-      <ActivityIndicator>
-        <View>
-          <Text>we are loading</Text>
-        </View>
-      </ActivityIndicator>
+      <ActivityIndicator animating={authLoading} />
     )
   }
 
   return (
     <AuthContext.Provider value={authContext}>
       <NavigationContainer>
-        <RootStack userToken={userToken} error={loginError}/>
+        <RootStack userToken={userToken} error={loginError} loading={loading} />
       </NavigationContainer>
     </AuthContext.Provider>
   )

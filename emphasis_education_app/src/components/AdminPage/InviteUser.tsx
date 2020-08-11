@@ -1,34 +1,39 @@
 import * as React from 'react';
-import { ActivityIndicator } from 'react-native';
+import { Alert } from 'react-native';
 import {
   Input,
-  Button
 } from 'react-native-elements'
 import { useMutation } from '@apollo/react-hooks';
 
 import { ContentContain } from './common'
-import { MyButton, MyButtonText } from '../shared';
+import {
+  ThemedButton,
+  ThemedText,
+  GeneralSpacing,
+  FONT_STYLES
+} from '../shared';
 
 import { CREATE_CODE } from '../../queries/CreateCode';
-import { Alert } from 'react-native';
 
 interface ICreateCodeButtonProps {
+  loading: boolean;
   runMutation(): void;
 }
 
-const CreateCodeButton: React.FC<ICreateCodeButtonProps> = ({ runMutation }) => (
-  <MyButton onPress={runMutation}>
-    <MyButtonText>
-      Create Code
-    </MyButtonText>
-  </MyButton>
-)
+const CreateCodeButton: React.FC<ICreateCodeButtonProps> = ({ runMutation, loading }) => (
+  <ThemedButton
+    buttonText='Create Code'
+    loading={loading}
+    onPress={runMutation}
+  />
+);
 
 const InviteUser: React.FC = () => {
   const [email, setEmail] = React.useState('')
+  const [code, setCode] = React.useState('')
   const handleTextChange = (text: string) => setEmail(text)
 
-  const [runMut, { data }] = useMutation(CREATE_CODE)
+  const [runMut, { data, loading }] = useMutation(CREATE_CODE)
 
   const createCode = () => {
     runMut({ variables: {
@@ -36,6 +41,7 @@ const InviteUser: React.FC = () => {
     }}).then(({ data }) => {
       if (data.createCode.res) {
         console.log('success creating the code')
+        setCode(data.createCode.code)
         Alert.alert('Successfully created the code')
       } else {
         Alert.alert('Unsuccessfully created the code')
@@ -52,7 +58,12 @@ const InviteUser: React.FC = () => {
         onChangeText={handleTextChange}
         placeholder='Enter new user email here'
       />
-      <CreateCodeButton runMutation={createCode}/>
+      <GeneralSpacing u={10} r={0} d={10} l={10}>
+        <ThemedText size={16} type={FONT_STYLES.MAIN}>
+          Created Code: {code}
+        </ThemedText>
+      </GeneralSpacing>
+      <CreateCodeButton runMutation={createCode} loading={loading} />
     </ContentContain>
   )
 }

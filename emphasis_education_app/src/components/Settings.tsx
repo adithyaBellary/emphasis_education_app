@@ -4,7 +4,7 @@ import {
   Text,
 } from 'react-native';
 
-import { ButtonContainer, MyButton, MyButtonText } from './shared';
+import { ButtonContainer, MyButton, MyButtonText, ThemedButton } from './shared';
 import { AuthContext } from './Context/Context';
 
 interface ISettingsProps {
@@ -22,11 +22,11 @@ const Settings: React.FC<ISettingsProps> = () => {
         settings
       </Text>
       <ButtonContainer>
-        <MyButton
+        <ThemedButton
+          buttonText='Logout'
+          loading={false}
           onPress={() => logout()}
-        >
-          <MyButtonText>logout</MyButtonText>
-        </MyButton>
+        />
       </ButtonContainer>
     </View>
   )

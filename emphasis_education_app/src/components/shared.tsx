@@ -4,13 +4,16 @@ import {
   View,
   Text,
   TouchableOpacity,
-  EdgeInsetsPropType
+  ActivityIndicator
 } from 'react-native';
 import styled from 'styled-components';
+import { Input } from 'react-native-elements';
 
 import { Permission } from '../types';
+import { theme } from '../theme';
+import { MAX_WIDTH, MAX_HEIGHT } from '../constant';
+
 import Context from './Context/Context';
-// import { useLinkProps } from '@react-navigation/native';
 
 export const MytextInput = styled(TextInput)`
   padding: 10px 0;
@@ -45,6 +48,20 @@ export const ThemedTextInput: React.FC<IThemedInputProps> = props => (
   </InputContain>
 )
 
+interface IThemedNumberInputProps extends IThemedInputProps {
+  maxLength: number;
+}
+
+export const ThemedNumberInput: React.FC<IThemedNumberInputProps> = props => (
+  <InputContain>
+    <MytextInput
+      {...props}
+      keyboardType='number-pad'
+      maxLength={props.maxLength}
+    />
+  </InputContain>
+)
+
 export const ButtonContainer = styled(View)`
   padding: 10px;
 `;
@@ -59,15 +76,9 @@ export const MyButton = styled(TouchableOpacity)`
   justify-content: center;
   border-radius: 10px;
   width: 150px;
-`;
-
-const d: number = 150;
-export const MyCircleButton = styled(TouchableOpacity)`
-  background-color: ${({theme}) => theme.primary.backgroundColor };
-  width: ${d}px;
-  height: ${d}px;
-  border-radius: ${d/2}px;
-  justify-content: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 `;
 
 export const MyButtonText = styled(Text)`
@@ -75,7 +86,25 @@ export const MyButtonText = styled(Text)`
   text-align: center;
   font-size: 14px;
   fontFamily: ${({ theme }) => theme.font.main}
+  padding: 0 5px;
+  position: relative;
 `;
+
+interface IButtonProps {
+  buttonText: string;
+  loading: boolean;
+  disabled?: boolean;
+  onPress(): void;
+}
+
+export const ThemedButton: React.FC<IButtonProps> = ({ onPress, buttonText, loading, disabled }) => (
+  <MyButton onPress={onPress} disabled={disabled} >
+    <MyButtonText>
+      {buttonText}
+    </MyButtonText>
+    {loading && <ActivityIndicator animating={loading} />}
+  </MyButton>
+);
 
 export const CenteredDiv = styled(View)`
   align-items: center;
@@ -84,18 +113,18 @@ export const CenteredDiv = styled(View)`
 // TODO make this em or %. not straight px
 export const IconSection = styled(View)`
   width: 100%;
-  padding: 150px 0 100px 0;
   align-items: center;
+  margin-top: ${MAX_HEIGHT * 0.1}px;
 `;
 
 interface IPermissionProps {
-  allowedPermission: Permission;
+  allowedPermissions: Permission[];
 }
 
-export const PermissionedComponent: React.FC<IPermissionProps> = ({ allowedPermission, children}) => {
+export const PermissionedComponent: React.FC<IPermissionProps> = ({ allowedPermissions, children}) => {
   const {loggedUser} = React.useContext(Context)
 
-  if(loggedUser.userType === allowedPermission) {
+  if(allowedPermissions.includes(loggedUser.userType)) {
     return <>{children}</>
   } else {
     return null;
@@ -112,8 +141,8 @@ const RadioButtonOuter = styled(TouchableOpacity)`
   border-color: grey;
   align-items: center;
   justify-content: center;
-
 `
+
 const RadioButtonInner = styled(View)`
   height: ${RADIO_BUTTON_INNER_DIAMETER}px;
   width: ${RADIO_BUTTON_INNER_DIAMETER}px;
@@ -171,7 +200,7 @@ interface IRadioButtonGroupProps {
   onSelect(el: string): void;
 }
 
-export const RadioButtonGroup: React.FC<IRadioButtonGroupProps> = ({titles, onSelect}) => {
+export const RadioButtonGroup: React.FC<IRadioButtonGroupProps> = ({ titles, onSelect }) => {
   // this is the conponent that should hold state over the individual radio buttons
   const [selectedElement, setSelectedElement] = React.useState('');
   const selectElement = (el: string) => {
@@ -196,8 +225,20 @@ export const RadioButtonGroup: React.FC<IRadioButtonGroupProps> = ({titles, onSe
 export const ContentContain = styled(View)`
   padding: 20px;
 `
-export const ThemedText = styled(Text)<{ size: number, type: string}>`
-  fontFamily: ${({ theme, type }) => type === 'light' ? theme.font.light : theme.font.main}
+export enum FONT_STYLES {
+  MAIN = 'main',
+  LIGHT = 'light',
+  BOLD = 'bold'
+}
+
+export const FONT_MAP: {[ x in FONT_STYLES ]: string } = {
+  [FONT_STYLES.MAIN]: theme.font.main,
+  [FONT_STYLES.LIGHT]: theme.font.light,
+  [FONT_STYLES.BOLD]: theme.font.bold
+}
+
+export const ThemedText = styled(Text)<{ size: number, type: FONT_STYLES}>`
+  fontFamily: ${({ type }) => FONT_MAP[type]}
   fontSize: ${props => props.size}px;
 `
 
@@ -206,40 +247,67 @@ interface IIndividualFieldProps {
   label: string;
   valueSize: number;
   labelSize: number;
+  // be only able to edit the main user, so have these props be optional
+  editing?: boolean;
+  onChangeText?(text: string, label: string): void;
 };
 
 export const GeneralSpacing = styled(View)<{r: number, l: number, u: number, d: number}>`
   padding: ${({ u }) => u}px ${({ r }) => r}px ${({ d }) => d}px ${({ l }) => l}px
-`
+`;
 
-export const IndividualField: React.FC<IIndividualFieldProps> = ({ value, label, valueSize, labelSize}) => (
+export const IndividualField: React.FC<IIndividualFieldProps> = ({
+  value,
+  label,
+  valueSize,
+  labelSize,
+  editing,
+  onChangeText
+}) => (
   <GeneralSpacing u={5} r={0} d={5} l={0}>
-    <ThemedText
-      size={valueSize}
-      type={'main'}
-    >
-      {value}
-    </ThemedText>
-    <ThemedText
-      size={labelSize}
-      type={'light'}
-    >
-      {label}
-    </ThemedText>
+    {!editing ? (
+      <>
+        <ThemedText
+          size={valueSize}
+          type={FONT_STYLES.MAIN}
+        >
+          {value}
+        </ThemedText>
+        <ThemedText
+          size={labelSize}
+          type={FONT_STYLES.LIGHT}
+        >
+          {label}
+        </ThemedText>
+      </>
+    ) : (
+      <Input
+        placeholder={label}
+        defaultValue={value}
+        style={{
+          padding: 0
+        }}
+        onChangeText={text => {
+          if(onChangeText) {
+            onChangeText(text, label)
+          }
+        }}
+      />
+    )}
   </GeneralSpacing>
 );
 
-export const HorizontalDivider = styled(View)<{width: number}>`
+export const HorizontalDivider = styled(View)<{width: number, color: string}>`
   width: ${({ width }) => width}%;
-  border-bottom-color: ${({ theme }) => theme.colors.purplePastel};
+  border-bottom-color: ${({ color }) => color};
   border-bottom-width: 1px;
-`
+`;
 
-export const VerticalDivier = styled(View)<{height: number}>`
+export const VerticalDivider = styled(View)<{height: number}>`
   height: ${({ height }) => height}px;
   border-right-color: grey;
   border-right-width: 1px;
-`
+`;
 
 export const IconRow = styled(View)`
   display: flex;
@@ -247,3 +315,9 @@ export const IconRow = styled(View)`
   align-items: center;
   justify-content: center;
 `;
+
+export const TitleText: React.FC<{ title: string }> = ({ title }) => (
+  <ThemedText size={20} type={FONT_STYLES.MAIN}>
+    {title}
+  </ThemedText>
+);

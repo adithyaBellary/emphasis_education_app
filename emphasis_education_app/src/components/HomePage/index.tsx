@@ -1,29 +1,25 @@
 import * as React from 'react';
 import { useQuery } from '@apollo/react-hooks';
-// this will be needed to get the full screen dimensions
-// ill need to know the screen dimensions to position all the widgets
+import { Icon } from 'react-native-elements';
 import {
   View,
   Text,
-  Image,
   ActivityIndicator,
 } from 'react-native';
-
 import styled from 'styled-components';
+
+import { MissionStatement, HeaderTitle, LogiImage } from './logos';
+
 import {
   CenteredDiv,
-  MyButtonText,
-  MyCircleButton,
   IconSection,
+  IconRow,
   PermissionedComponent,
-} from './shared';
-import { Icon } from 'react-native-elements';
-import Context from './Context/Context';
-import { Permission } from '../types';
-
-import { GET_USER } from '../queries/GetUser';
-
-import { LogoWithoutText } from './Logo/LogoWithoutText';
+} from '../shared';
+import Context from '../Context/Context';
+import { Permission } from '../../types';
+import { GET_USER } from '../../queries/GetUser';
+import { theme } from '../../theme';
 
 interface ILiftedHomeProps {
   navigation: any;
@@ -49,11 +45,16 @@ const IconContain = styled(View)`
   justify-content: space-between;
 `
 
-const MissionStatement: React.FC = () => {
-  return (
-    <Text>this is the mission statement</Text>
-  )
-}
+const AdminIcon: React.FC<{ changeScreens (dest: string): () => void }> = ({ changeScreens }) => (
+  <CenteredDiv>
+    <Icon
+      name='user'
+      type='antdesign'
+      onPress={changeScreens('AdminPage')}
+      />
+    <Text>Admin</Text>
+  </CenteredDiv>
+);
 
 const Home: React.FC<ILiftedHomeProps> = ({ navigation, route }) => {
   console.log('route in home', route)
@@ -72,19 +73,31 @@ const Home: React.FC<ILiftedHomeProps> = ({ navigation, route }) => {
   React.useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        // <PermissionedComponent
-        //   // allowedPermission={Permission.Admin}
-        //   allowedPermission={Permission.Student}
-        // >
-          <CenteredDiv>
-            <Icon
-              name='user'
-              type='antdesign'
-              onPress={changeScreens('AdminPage')}
-            />
-            <Text>Admin</Text>
-          </CenteredDiv>
-        // </PermissionedComponent>
+        <IconRow>
+          <PermissionedComponent allowedPermissions={[
+            Permission.Admin
+          ]}>
+            <AdminIcon changeScreens={changeScreens}/>
+          </PermissionedComponent>
+
+          <PermissionedComponent allowedPermissions={[
+            Permission.Student,
+            Permission.Parent,
+            Permission.Tutor
+          ]}>
+            <CenteredDiv>
+              <Icon
+                name='user'
+                type='antdesign'
+                onPress={() => navigation.navigate('Chat', {
+                  chatID: loggedUser.adminChat[0].chatID,
+                  className: 'Admin'
+                })}
+              />
+              <Text>Admin Chat</Text>
+            </CenteredDiv>
+          </PermissionedComponent>
+        </IconRow>
       ),
       headerRightContainerStyle: {
         padding: 10
@@ -96,14 +109,14 @@ const Home: React.FC<ILiftedHomeProps> = ({ navigation, route }) => {
   if (loading) {
     return (
       <>
-        <ActivityIndicator />
+        <ActivityIndicator animating={loading} />
         <View><Text>home page</Text></View>
       </>
-
     )
   }
 
   if (error) {
+    console.log(error)
     return (
       <View><Text>there was an issue reloading the user</Text></View>
     )
@@ -111,25 +124,18 @@ const Home: React.FC<ILiftedHomeProps> = ({ navigation, route }) => {
 
   return (
     <CenteredDiv>
-      <Title>
-        emphasis education home page
-      </Title>
+      <HeaderTitle />
 
       <IconSection>
         <IconContain>
           <Icon
             raised
             name='person'
-            onPress={() => navigation.navigate(
-              'MyProfile',
-              {
-                groupID: loggedUser.groupID
-              }
-            )}
+            onPress={() => navigation.navigate('MyProfile')}
             type='fontisto'
             reverse={true}
 
-            color='#ffe599'
+            color={theme.colors.lightPink}
           />
           <Icon
             raised
@@ -147,22 +153,18 @@ const Home: React.FC<ILiftedHomeProps> = ({ navigation, route }) => {
           />
         </IconContain>
 
-        <MyCircleButton>
-          <MyButtonText>
-            Emphasis Logo
-          </MyButtonText>
-        </MyCircleButton>
+        <LogiImage />
 
         <IconContain>
           <Icon
             name='search'
-            // color='#b89cb0'
+            color={theme.colors.purplePastel}
             onPress={changeScreens('AboutUs')}
             reverse={true}
           />
           <Icon
             name='settings'
-            color='#e792aa'
+            color={theme.colors.yellow}
             onPress={changeScreens('Settings')}
             reverse={true}
           />

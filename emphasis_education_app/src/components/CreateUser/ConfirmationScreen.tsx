@@ -1,16 +1,14 @@
 import * as React from 'react';
 import {
   View,
-  Text,
-  ActivityIndicator
+  ScrollView,
+  FlatList
 } from 'react-native';
 import {
   ButtonContainer,
-  MyButton,
-  MyButtonText,
-  CenteredDiv,
   ContentContain,
-  IconRow
+  IconRow,
+  ThemedButton
 } from '../shared';
 import { ICreateUserArr } from './CreateUserContainer';
 import IndividualItem from './DisplayIndividualMember';
@@ -21,15 +19,17 @@ interface IConfirmationScreenProps {
   navigation: any;
   createdUsers: ICreateUserArr | undefined;
   loading: boolean;
+  submitDisabled: boolean
   submit(): void;
 }
 
 // we need to be able to edit info from here
-const ConfirmationScreen: React.FC<IConfirmationScreenProps> = ({ createdUsers, loading, submit, navigation }) => (
-  <View>
+const ConfirmationScreen: React.FC<IConfirmationScreenProps> = ({ createdUsers, loading, submit, submitDisabled, navigation }) => (
+  <ScrollView>
     <ContentContain>
       {createdUsers && createdUsers.users.map((user: IUserInput, index: number) => (
         <IndividualItem
+          key={index}
           id={index + 1}
           {...user}
         />
@@ -37,22 +37,22 @@ const ConfirmationScreen: React.FC<IConfirmationScreenProps> = ({ createdUsers, 
     </ContentContain>
     <IconRow>
       <ButtonContainer>
-        <MyButton onPress={submit}>
-          <MyButtonText>
-            Submit
-          </MyButtonText>
-          {loading && <ActivityIndicator/>}
-        </MyButton>
+        <ThemedButton
+          buttonText='Submit'
+          loading={loading}
+          onPress={submit}
+          disabled={submitDisabled}
+        />
       </ButtonContainer>
       <ButtonContainer>
-        <MyButton onPress={() => navigation.navigate('Login')}>
-          <MyButtonText>
-            Back to Login
-          </MyButtonText>
-        </MyButton>
+        <ThemedButton
+          buttonText='Back to Login'
+          loading={false}
+          onPress={() => navigation.navigate('Login')}
+        />
       </ButtonContainer>
     </IconRow>
-  </View>
+  </ScrollView>
 )
 
 export default ConfirmationScreen;
