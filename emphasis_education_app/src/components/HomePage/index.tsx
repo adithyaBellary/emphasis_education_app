@@ -19,6 +19,7 @@ import {
 import Context from '../Context/Context';
 import { Permission } from '../../types';
 import { GET_USER } from '../../queries/GetUser';
+import { theme } from '../../theme';
 
 interface ILiftedHomeProps {
   navigation: any;
@@ -134,7 +135,7 @@ const Home: React.FC<ILiftedHomeProps> = ({ navigation, route }) => {
             type='fontisto'
             reverse={true}
 
-            color='#ffe599'
+            color={theme.colors.lightPink}
           />
           <Icon
             raised
@@ -157,13 +158,13 @@ const Home: React.FC<ILiftedHomeProps> = ({ navigation, route }) => {
         <IconContain>
           <Icon
             name='search'
-            // color='#b89cb0'
+            color={theme.colors.purplePastel}
             onPress={changeScreens('AboutUs')}
             reverse={true}
           />
           <Icon
             name='settings'
-            color='#e792aa'
+            color={theme.colors.yellow}
             onPress={changeScreens('Settings')}
             reverse={true}
           />

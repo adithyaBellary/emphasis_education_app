@@ -34,7 +34,9 @@ target 'emphasis_education_app' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
-  pod 'QBImagePickerController', :path => '../node_modules/react-native-image-crop-picker/ios/QBImagePicker/QBImagePickerController.podspec'
+  # pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
+  # pod 'QBImagePickerController', :path => '../node_modules/react-native-image-crop-picker/ios/QBImagePicker/QBImagePickerController.podspec'
 
   target 'emphasis_education_appTests' do
     inherit! :search_paths
