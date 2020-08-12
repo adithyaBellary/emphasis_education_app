@@ -26,7 +26,8 @@ import { GET_USER } from '../../queries/GetUser';
 import { DELETE_CHAT } from '../../queries/DeleteChat';
 import {
   Permission,
-  Class
+  Class,
+  ChatUserInfo
 } from '../../types';
 import { theme } from '../../theme';
 
@@ -87,7 +88,9 @@ interface IChatDisplay {
   mainText: string;
   secondaryText?: string;
   caption?: string;
-  goToChat (sub: string, sec: string): () => void;
+  tutorInfo: ChatUserInfo;
+  userInfo: ChatUserInfo[];
+  goToChat (sub: string, sec: string, tutorInfo: ChatUserInfo, userInfo: ChatUserInfo[]): () => void;
   getClasses (): void;
 }
 
@@ -100,7 +103,7 @@ const LoadingScreen: React.FC<{ loading: boolean }> = ({ loading }) => (
   </View>
 )
 
-const ChatDisplay: React.FC<IChatDisplay> = ({ mainText, secondaryText, caption, chatID, goToChat, className, getClasses }) => {
+const ChatDisplay: React.FC<IChatDisplay> = ({ mainText, secondaryText, caption, chatID, goToChat, className, getClasses, tutorInfo, userInfo }) => {
 
   const [delChat, { data, loading, error }] = useMutation(DELETE_CHAT, {
     onCompleted: () => {
@@ -136,7 +139,7 @@ const ChatDisplay: React.FC<IChatDisplay> = ({ mainText, secondaryText, caption,
       { loading ? <LoadingScreen loading={loading} /> : (
         <ChatContain>
           <SpacedItemRow>
-            <TouchableOpacity onPress={goToChat(chatID, className)} onLongPress={() => console.log('long press')}>
+            <TouchableOpacity onPress={goToChat(chatID, className, tutorInfo, userInfo)} onLongPress={() => console.log('long press')}>
               <IconRowLeft>
                 <LeftText size={18} type={FONT_STYLES.MAIN}>
                   {mainText}
@@ -186,7 +189,7 @@ interface IIndividualChatProps {
   chatID: string;
   userType: Permission;
   classObject: Class;
-  goToChat (sub: string, sec: string): () => void;
+  goToChat (sub: string, sec: string, tutorInfo: ChatUserInfo, userInfo: ChatUserInfo[]): () => void;
   getClasses (): void;
 }
 
@@ -234,6 +237,8 @@ const IndividualChat: React.FC<IIndividualChatProps> = ({ classObject, userType,
       goToChat={goToChat}
       className={classObject.className}
       getClasses={getClasses}
+      tutorInfo={classObject.tutorInfo}
+      userInfo={classObject.userInfo}
     />
   )
 }
@@ -252,12 +257,14 @@ const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
     getClasses();
   }, [])
 
-  const goToChat = (sub: string, className: string) => () => {
+  const goToChat = (sub: string, className: string, tutorInfo: ChatUserInfo, userInfo: ChatUserInfo[]) => () => {
     navigation.navigate(
       'Chat',
       {
         chatID: sub,
-        className
+        className,
+        tutorInfo,
+        userInfo
       }
     )
   }

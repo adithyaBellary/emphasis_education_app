@@ -10,10 +10,12 @@ import {
   GeneralSpacing,
   ThemedText,
   IconRow,
-  FONT_STYLES
+  FONT_STYLES,
+  ContentContain
 } from '../shared';
 
 import { IndividualResultContainer } from '../AdminPage/IndividualResult';
+import { ChatUserInfo } from 'src/types';
 
 interface ICancelProps {
   onPress (): void;
@@ -52,9 +54,13 @@ const Done: React.FC<IDoneProps> = ({ onPress, loading }) => (
 
 interface IChatInfoProps {
   navigation: any;
+  route: any;
 }
 
-const ChatInfo: React.FC<IChatInfoProps> = ({ navigation }) => {
+const ChatInfo: React.FC<IChatInfoProps> = ({ navigation, route }) => {
+  const className: string = route.params.className;
+  const tutorInfo: ChatUserInfo = route.params.tutorInfo;
+  const userInfo: ChatUserInfo[] = route.params.userInfo;
 
   return (
     <SafeAreaView>
@@ -63,9 +69,23 @@ const ChatInfo: React.FC<IChatInfoProps> = ({ navigation }) => {
         <Done onPress={() => console.log('clicked')} loading={false} />
 
       </IndividualResultContainer>
-      <Text>
-        Chat Info
-      </Text>
+      <ContentContain>
+        <ThemedText size={14} type={FONT_STYLES.MAIN}>
+          Class Name: {className}
+        </ThemedText>
+        <ThemedText size={14} type={FONT_STYLES.MAIN}>
+          Tutor Name: {tutorInfo.firstName} {tutorInfo.lastName}
+        </ThemedText>
+        <ThemedText size={14} type={FONT_STYLES.MAIN}>User(s)</ThemedText>
+        {userInfo.map(_user => (
+
+          <ThemedText size={14} type={FONT_STYLES.MAIN}>
+            {_user.firstName} {_user.lastName}
+          </ThemedText>
+
+        ))}
+      </ContentContain>
+
     </SafeAreaView>
   )
 }

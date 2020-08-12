@@ -9,7 +9,7 @@ import Chat from './GiftedChat';
 import Context from '../Context/Context';
 
 import { REFETCH_LIMIT } from '../../constant';
-import { IMessage, IMessageUserType } from '../../types';
+import { IMessage, IMessageUserType, ChatUserInfo } from '../../types';
 import { SUB } from '../../queries/MessageReceived';
 import { GET_MESSAGES } from '../../queries/GetMessages';
 import {
@@ -52,6 +52,10 @@ const LiftedChat: React.FC<IChatProps> = ({ navigation, route }) => {
   const [curState, setState] = useState<IState>();
   const chatID: string = route.params.chatID;
   const className: string = route.params.className;
+  const tutorInfo: ChatUserInfo = route.params.tutorInfo;
+  const userInfo: ChatUserInfo[] = route.params.userInfo;
+  console.log('tutor', tutorInfo)
+  console.log('user', userInfo)
   // lets cache this data
   const { data: getMessages, loading: queryLoading, refetch, error: errorMessage } = useQuery<
       IGetMessages,
@@ -121,7 +125,7 @@ const LiftedChat: React.FC<IChatProps> = ({ navigation, route }) => {
   useEffect(() => {
     navigation.setOptions({
       headerTitle: () => (
-        <TouchableOpacity onPress={() => navigation.navigate('ChatInfo')}>
+        <TouchableOpacity onPress={() => navigation.navigate('ChatInfo', { className, tutorInfo, userInfo })}>
           <ThemedText size={20} type={FONT_STYLES.MAIN} >
             {className}
           </ThemedText>
