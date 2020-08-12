@@ -72,7 +72,10 @@ const AppStack = ({ userToken }) => (
       name='AboutUs'
       component={AboutUs}
       options={{
-        headerTitle: () => <TitleText title='About Us' />
+        headerTitle: () => <TitleText title='About Us' />,
+        headerStyle: {
+          backgroundColor: theme.colors.purplePastel
+        }
       }}
     />
     <AppStackNav.Screen
