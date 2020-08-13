@@ -1,14 +1,13 @@
 import * as React from 'react';
-import { useQuery } from '@apollo/react-hooks'
-import qs from 'qs';
+import { useQuery, useMutation } from '@apollo/react-hooks'
 import {
-  View,
-  Text,
-  Linking,
   TextInput,
   ActivityIndicator
 } from 'react-native'
 import styled from 'styled-components';
+
+import { SEARCH_CLASSES } from '../queries/SearchClasses'
+import { SEND_EMAIL } from '../queries/SendEmail';
 
 import {
   ContentContain as Contain,
@@ -19,7 +18,6 @@ import {
   HorizontalDivider,
   ThemedButton
 } from './shared';
-import { SEARCH_CLASSES } from '../queries/SearchClasses'
 
 const SectionTitle: React.FC<{ title: string }> = ({ title }) => (
   <GeneralSpacing u={10} r={10} d={10} l={10} >
@@ -29,7 +27,7 @@ const SectionTitle: React.FC<{ title: string }> = ({ title }) => (
       </ThemedText>
     </CenteredDiv>
   </GeneralSpacing>
-)
+);
 
 const ClassList: React.FC<{ classList: string[] }> = ({ classList }) => (
   <>
@@ -43,63 +41,42 @@ const ClassList: React.FC<{ classList: string[] }> = ({ classList }) => (
       ))
     }
   </>
-)
+);
 
 const StyledTextInput = styled(TextInput)`
   height: 100px
   border: black solid 1px;
-`
-
-const ADMIN_EMAIL = 'adithya.bellary@gmail.com';
+`;
 
 const AboutUs: React.FC = () => {
 
   const options = { variables: { searchTerm: '' }}
-  const { data, loading, error } = useQuery(SEARCH_CLASSES, options);
+  const { data: classData, loading: classLoading, error } = useQuery(SEARCH_CLASSES, options);
   const [message, setMessage] = React.useState('')
 
+  const [runMutation, { data: emailData, loading: emailLoading }] = useMutation(SEND_EMAIL);
 
+  if (error) { console.log('error', error) }
 
-  if (error) {
-    console.log('error', error)
-  }
-
-  if (loading) { return <ActivityIndicator animating={loading} />}
-
-  const sendEmail = () => {
-    const query = qs.stringify({
-      subject: 'Message',
-      body: message,
-    });
-    let url = `mailto:${ADMIN_EMAIL}?${query}`;
-
-    return Linking.openURL(url);
-  }
-
-  const send = () => {
-    // sendEmail().then(() => console.log('we done'))
-    console.log('sending the email. should prob send this to the backend')
-  }
+  if (classLoading) { return <ActivityIndicator animating={classLoading} />}
 
   return (
     <Contain>
       <SectionTitle title='Classes that we offer' />
-      {data && <ClassList classList={data.searchClasses.classes}/>}
+      {classData && <ClassList classList={classData.searchClasses.classes}/>}
       <SectionTitle title='Send us a message!' />
-
       <StyledTextInput
         multiline
         defaultValue={'fjdslafjd'}
         onChangeText={text => setMessage(text)}
         value={message}
       />
-
       <ThemedButton
         buttonText='Send email'
-        loading={false}
-        onPress={() => send()}
+        loading={emailLoading}
+        onPress={() => runMutation({ variables: { subject: 'Test Subject', body: message }})}
+        disabled={message.length === 0}
       />
-
     </Contain>
   )
 };
