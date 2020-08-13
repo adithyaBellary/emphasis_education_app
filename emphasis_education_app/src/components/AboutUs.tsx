@@ -8,6 +8,7 @@ import styled from 'styled-components';
 
 import { SEARCH_CLASSES } from '../queries/SearchClasses'
 import { SEND_EMAIL } from '../queries/SendEmail';
+import Context from './Context/Context';
 
 import {
   ContentContain as Contain,
@@ -53,6 +54,7 @@ const AboutUs: React.FC = () => {
   const options = { variables: { searchTerm: '' }}
   const { data: classData, loading: classLoading, error } = useQuery(SEARCH_CLASSES, options);
   const [message, setMessage] = React.useState('')
+  const { loggedUser } = React.useContext(Context);
 
   const [runMutation, { data: emailData, loading: emailLoading }] = useMutation(SEND_EMAIL);
 
@@ -74,7 +76,7 @@ const AboutUs: React.FC = () => {
       <ThemedButton
         buttonText='Send email'
         loading={emailLoading}
-        onPress={() => runMutation({ variables: { subject: 'Test Subject', body: message }})}
+        onPress={() => runMutation({ variables: { subject: `Message from ${loggedUser.firstName} ${loggedUser.lastName}`, body: message }})}
         disabled={message.length === 0}
       />
     </Contain>
