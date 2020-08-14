@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "426282861244",
+    "firebase_url": "https://emphasis-app-41390.firebaseio.com",
+    "project_id": "emphasis-app-41390",
+    "storage_bucket": "emphasis-app-41390.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:426282861244:android:74bd3a762ce632339306b9",
+        "android_client_info": {
+          "package_name": "com.emphasis_education_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "426282861244-vjfagjboobvmnrfau6ma7vljconqb7js.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.emphasis_education_app",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "426282861244-jfb6mkqqbsaulqdgd6hv0p3crjsslc7m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChW1wql6x_JQEKGv0Zy1sIzFAfezYn0hM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "426282861244-jfb6mkqqbsaulqdgd6hv0p3crjsslc7m.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "426282861244-et65s62slpi9anlfjdm0d0gpdpj1rg52.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.emphasis-education-app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
