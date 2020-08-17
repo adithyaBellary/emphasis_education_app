@@ -25,8 +25,6 @@ const Wrapper: React.FC = ({ children }) => {
     requestUserPermission()
   }, [])
 
-
-
   return (
     <>
       {children}
