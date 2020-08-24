@@ -28,8 +28,9 @@ const Wrapper: React.FC = ({ children }) => {
   }, [])
 
   React.useEffect(() => {
+    // this should not be used to update state at all
     const unsub = messaging().setBackgroundMessageHandler(async payload => {
-      console.log('i am being handled. this is the payload', payload)
+      console.log('i am being handled by the background message handler. this is the payload', payload)
     })
 
     return unsub

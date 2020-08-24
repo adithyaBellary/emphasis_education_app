@@ -196,7 +196,6 @@ const StackNavigation: React.FC = () => {
     } catch (e) {
       console.log('checking for login failed')
     }
-    console.log('userToken', userToken)
     dispatch({ type: 'CHECK_LOGIN', token: userToken})
   }
 
