@@ -3,11 +3,11 @@ import messaging from '@react-native-firebase/messaging';
 
 const getFCMToken = async () => {
   const fcmToken = await messaging().getToken();
-  if (fcmToken) {
-    console.log('got fcm token')
-  } else {
-    console.log('failed')
-  }
+  // if (fcmToken) {
+  //   console.log('got fcm token')
+  // } else {
+  //   console.log('failed')
+  // }
 }
 
 const requestUserPermission = async () => {
@@ -25,6 +25,24 @@ const Wrapper: React.FC = ({ children }) => {
 
   React.useEffect(() => {
     requestUserPermission()
+  }, [])
+
+  // when we open the app from a notification while the app is in ht ebackground
+  React.useEffect(() => {
+    messaging().onNotificationOpenedApp(message => {
+      console.log('we are coming from a background state', message)
+    })
+
+    // return fcn;
+  }, [])
+
+  React.useEffect(() => {
+    messaging().getInitialNotification().then(message => {
+      if (message) {
+        console.log('we are coming from a quit state', message)
+      }
+    })
+    // return fcn;
   }, [])
 
   React.useEffect(() => {

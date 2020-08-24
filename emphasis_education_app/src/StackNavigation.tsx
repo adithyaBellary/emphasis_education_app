@@ -19,12 +19,12 @@ import AboutUs from './components/AboutUs';
 import EnterCode from './components/CreateUser/EnterCode';
 import AddMember from './components/AdminPage/AddMemberModal';
 import ChatInfo from './components/Chat/ChatInfo';
-import AdminChatPicker from './components/AdminPage/AdminChatPicker';
+// import AdminChatPicker from './components/AdminPage/AdminChatPicker';
 
 import { LOGIN_TOKEN } from './constant';
 import { LOGIN } from './queries/Login';
 
-import context, {EmptyUser, AuthContext} from './components/Context/Context';
+import {AuthContext} from './components/Context/Context';
 import { IUser, ILoginPayload } from './types';
 import { TitleText } from './components/shared';
 import { theme } from './theme';
@@ -149,15 +149,14 @@ const RootStack = ({ userToken, error, loading }) => (
       <RootStackNav.Screen name='Auth'>
         {_props => <AuthStack {..._props} error={error} loading={loading}/> }
       </RootStackNav.Screen>
-
     )}
   </RootStackNav.Navigator>
 )
 
-interface IState {
-  authLoading: boolean;
-  userToken: string;
-}
+// interface IState {
+//   authLoading: boolean;
+//   userToken: string;
+// }
 
 const StackNavigation: React.FC = () => {
   const [{authLoading, userToken, signingOut}, dispatch] = React.useReducer(
@@ -209,7 +208,6 @@ const StackNavigation: React.FC = () => {
     LOGIN,
     {
       onCompleted: async ({ login }) => {
-        console.log('login response', login)
         if (login.res) {
           await AsyncStorage.setItem(LOGIN_TOKEN, login.user.email)
           dispatch({ type: 'LOGIN', token: login.user.email})
