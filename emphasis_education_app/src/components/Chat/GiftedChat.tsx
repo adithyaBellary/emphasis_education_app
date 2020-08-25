@@ -59,6 +59,8 @@ const MyGiftedChat: React.FC<IGiftedChatProps> = ({ queryLoading, refreshFn, cha
   );
 
   const onSend = (props: IMessage[]) => {
+    console.log('curUser', curUser)
+    console.log('chatID', chatID)
     sendMessage({
       variables: {
         messages: [
