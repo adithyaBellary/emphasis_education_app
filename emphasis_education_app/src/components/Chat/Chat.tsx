@@ -54,8 +54,8 @@ const LiftedChat: React.FC<IChatProps> = ({ navigation, route }) => {
   const className: string = route.params.className;
   const tutorInfo: ChatUserInfo = route.params.tutorInfo;
   const userInfo: ChatUserInfo[] = route.params.userInfo;
-  console.log('tutor', tutorInfo)
-  console.log('user', userInfo)
+  // console.log('tutor', tutorInfo)
+  // console.log('user', userInfo)
   // lets cache this data
   const { data: getMessages, loading: queryLoading, refetch, error: errorMessage } = useQuery<
       IGetMessages,

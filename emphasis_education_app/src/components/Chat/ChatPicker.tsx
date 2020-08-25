@@ -10,6 +10,7 @@ import {
 import { Icon } from 'react-native-elements';
 import styled from 'styled-components';
 import { useLazyQuery, useMutation } from '@apollo/react-hooks';
+import messaging from '@react-native-firebase/messaging';
 
 import Context from '../Context/Context';
 import {
@@ -27,7 +28,8 @@ import { DELETE_CHAT } from '../../queries/DeleteChat';
 import {
   Permission,
   Class,
-  ChatUserInfo
+  ChatUserInfo,
+  IUser
 } from '../../types';
 import { theme } from '../../theme';
 
@@ -107,7 +109,7 @@ const ChatDisplay: React.FC<IChatDisplay> = ({ mainText, secondaryText, caption,
 
   const [delChat, { data, loading, error }] = useMutation(DELETE_CHAT, {
     onCompleted: () => {
-      console.log('done deleting chat')
+      // console.log('done deleting chat')
       // getClasses();
     }
   });
@@ -198,8 +200,8 @@ const IndividualChat: React.FC<IIndividualChatProps> = ({ classObject, userType,
   let caption;
   let mainText: string = '';
   let secondaryText: string = '';
-  console.log('userType', userType)
-  console.log('classObject', classObject)
+  // console.log('userType', userType)
+  // console.log('classObject', classObject)
   const userFirstName: string[] = classObject.userInfo.map(_user => _user.firstName);
 
   switch(userType) {
@@ -245,9 +247,29 @@ const IndividualChat: React.FC<IIndividualChatProps> = ({ classObject, userType,
 
 const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
   const { loggedUser, setUser } = React.useContext(Context);
-  console.log('logged user in chat picker', loggedUser);
+  // console.log('logged user in chat picker', loggedUser);
   const [runQ, { data, loading, error}] = useLazyQuery(GET_USER, {
     onCompleted: ({ getUser }) => {
+      // subscribe to the topics for each of the new classes
+      // easiest way could just be subscribing to all classes and not
+      // worrying which ones we have already subscribed to
+
+      // unclear how i would handle unsunscribing to the topics though
+
+      // this is flawed because we need to manually refresh the page to trigger the
+      // topic subscription code. this user will not be sent push notifications until the
+      // subscription code is run
+      console.log('getUser', getUser.classes)
+
+      getUser.classes.forEach(_class => {
+        // subscribe to the class
+        console.log('subscribing to the chat', _class.chatID)
+        messaging()
+          .subscribeToTopic(_class.chatID)
+          .then(() => console.log('successfully subscribed to the topic'))
+          .catch(e => console.log('was not able to subscribe to the topic', e))
+      })
+
       setUser({...getUser})
     },
     fetchPolicy: 'no-cache'

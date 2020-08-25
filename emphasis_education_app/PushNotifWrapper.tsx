@@ -27,7 +27,7 @@ const Wrapper: React.FC = ({ children }) => {
     requestUserPermission()
   }, [])
 
-  // when we open the app from a notification while the app is in ht ebackground
+  // when we open the app from a notification while the app is in the ebackground
   React.useEffect(() => {
     messaging().onNotificationOpenedApp(message => {
       console.log('we are coming from a background state', message)

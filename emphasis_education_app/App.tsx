@@ -68,9 +68,9 @@ const App = () => {
     <ApolloProvider client={client}>
       <ThemeProvider theme={theme}>
         <context.Provider value={value}>
-          <PushNotifWrapper>
+          {/* <PushNotifWrapper> */}
             <StackNavigation />
-          </PushNotifWrapper>
+          {/* </PushNotifWrapper> */}
         </context.Provider>
       </ThemeProvider>
     </ApolloProvider>
