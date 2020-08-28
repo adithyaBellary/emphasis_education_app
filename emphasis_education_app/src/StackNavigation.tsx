@@ -10,15 +10,17 @@ import Chat from './components/Chat/Chat';
 import HomePage from './components/HomePage';
 import ChatPicker from './components/Chat/ChatPicker';
 import Profile from './components/Profile/LiftedProfile';
-import CreateUserContain from './components/CreateUser/CreateUserContainer';
-import ConfirmationScreen from './components/CreateUser/ConfirmationScreen';
+import CreateUserContain from './components/UserManagement/CreateUserContainer';
+import ConfirmationScreen from './components/UserManagement/ConfirmationScreen';
 import AdminPage from './components/AdminPage/AdminPage';
 import CreateChat from './components/Chat/CreateChat';
 import Settings from './components/Settings';
 import AboutUs from './components/AboutUs';
-import EnterCode from './components/CreateUser/EnterCode';
+import EnterCode from './components/UserManagement/EnterCode';
 import AddMember from './components/AdminPage/AddMemberModal';
 import ChatInfo from './components/Chat/ChatInfo';
+import ForgotPassword from './components/UserManagement/ForgotPassword';
+
 // import AdminChatPicker from './components/AdminPage/AdminChatPicker';
 
 import { LOGIN_TOKEN } from './constant';
@@ -51,6 +53,11 @@ const AuthStack = ({ error, loading }) => {
       name="ConfirmationScreen"
       component={ConfirmationScreen}
       options={{ title: '' }}
+    />
+    <AppStackNav.Screen
+      name="ForgotPassword"
+      component={ForgotPassword}
+      options={{ title: 'ForgotPassword' }}
     />
   </AuthStackNav.Navigator>
   )
