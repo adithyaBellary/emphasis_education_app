@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {
   View,
-  Text
+  Alert
 } from 'react-native'
 import { Input } from 'react-native-elements';
 import { useMutation } from '@apollo/react-hooks'
@@ -28,16 +28,13 @@ const ForgotPassword: React.FC = () => {
 
   const onChangeText = (email: string) => setEmail(email);
   const _forgotPassword = () => {
-    console.log('email', email)
     runMut({ variables: { email }}).then(() => {
-      console.log('ran')
+      Alert.alert('Successfully sent the forgot password email')
     })
-    .catch(e => console.log('error', e))
+    .catch(e => console.log('Error with the forgot password mutation', e))
   }
 
-  if (error) {
-    console.log('there was an error', error)
-  }
+  if (error) { console.log('there was an error', error) }
 
   return (
     <View>
