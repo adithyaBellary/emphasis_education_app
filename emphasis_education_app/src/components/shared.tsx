@@ -237,9 +237,10 @@ export const FONT_MAP: {[ x in FONT_STYLES ]: string } = {
   [FONT_STYLES.BOLD]: theme.font.bold
 }
 
-export const ThemedText = styled(Text)<{ size: number, type: FONT_STYLES}>`
+export const ThemedText = styled(Text)<{ size: number, type: FONT_STYLES, error?: boolean }>`
   fontFamily: ${({ type }) => FONT_MAP[type]}
   fontSize: ${props => props.size}px;
+  ${({ error }) => error && 'color: red'}
 `
 
 interface IIndividualFieldProps {

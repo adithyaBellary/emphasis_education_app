@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Image,
+  ScrollView,
 } from 'react-native';
 import styled from 'styled-components';
 
@@ -73,11 +74,13 @@ const LoginImage = () => (
 )
 
 const ContentWrap: React.FC = ({ children }) => (
-  <SafeAreaView>
-    <CenteredDiv>
-      {children}
-    </CenteredDiv>
-  </SafeAreaView>
+  <ScrollView>
+    <SafeAreaView>
+      <CenteredDiv>
+        {children}
+      </CenteredDiv>
+    </SafeAreaView>
+  </ScrollView>
 );
 
 const Login: React.FC<ILoginProps> = props => {
@@ -138,7 +141,7 @@ const Login: React.FC<ILoginProps> = props => {
       <IconRow>
         <SecondaryLink linkContent={'First time user?'} onPress={changeScreens('EnterCode')} />
         <VerticalDivider height={10}/>
-        <SecondaryLink linkContent={'Forgot Password'} onPress={changeScreens('CreateUserContain')} />
+        <SecondaryLink linkContent={'Forgot Password'} onPress={changeScreens('ForgotPassword')} />
       </IconRow>
     </ContentWrap>
   )

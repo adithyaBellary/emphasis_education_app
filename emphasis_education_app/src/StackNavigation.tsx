@@ -10,15 +10,17 @@ import Chat from './components/Chat/Chat';
 import HomePage from './components/HomePage';
 import ChatPicker from './components/Chat/ChatPicker';
 import Profile from './components/Profile/LiftedProfile';
-import CreateUserContain from './components/CreateUser/CreateUserContainer';
-import ConfirmationScreen from './components/CreateUser/ConfirmationScreen';
+import CreateUserContain from './components/UserManagement/CreateUserContainer';
+import ConfirmationScreen from './components/UserManagement/ConfirmationScreen';
 import AdminPage from './components/AdminPage/AdminPage';
 import CreateChat from './components/Chat/CreateChat';
 import Settings from './components/Settings';
 import AboutUs from './components/AboutUs';
-import EnterCode from './components/CreateUser/EnterCode';
+import EnterCode from './components/UserManagement/EnterCode';
 import AddMember from './components/AdminPage/AddMemberModal';
 import ChatInfo from './components/Chat/ChatInfo';
+import ForgotPassword from './components/UserManagement/ForgotPassword';
+
 // import AdminChatPicker from './components/AdminPage/AdminChatPicker';
 
 import { LOGIN_TOKEN } from './constant';
@@ -30,9 +32,7 @@ import { TitleText } from './components/shared';
 import { theme } from './theme';
 
 const AuthStackNav = createStackNavigator();
-const AuthStack = ({ error, loading }) => {
-  console.log('props in auth st', error)
-  return (
+const AuthStack = ({ error, loading }) => (
   <AuthStackNav.Navigator initialRouteName={'Login'}>
     <AuthStackNav.Screen name='Login' options={{ headerShown: false}}>
       {_props => <Login {..._props} error={error} loading={loading}/>}
@@ -52,9 +52,13 @@ const AuthStack = ({ error, loading }) => {
       component={ConfirmationScreen}
       options={{ title: '' }}
     />
+    <AppStackNav.Screen
+      name="ForgotPassword"
+      component={ForgotPassword}
+      options={{ title: 'Forgot Password' }}
+    />
   </AuthStackNav.Navigator>
-  )
-}
+)
 
 const AppStackNav = createStackNavigator();
 
@@ -81,7 +85,6 @@ const AppStack = ({ userToken }) => (
     <AppStackNav.Screen
       name="Chat"
       component={Chat}
-      // options={{ title: 'Test Subject' }}
     />
     <AppStackNav.Screen
       name="ChatPicker"
@@ -153,11 +156,6 @@ const RootStack = ({ userToken, error, loading }) => (
   </RootStackNav.Navigator>
 )
 
-// interface IState {
-//   authLoading: boolean;
-//   userToken: string;
-// }
-
 const StackNavigation: React.FC = () => {
   const [{authLoading, userToken, signingOut}, dispatch] = React.useReducer(
     ( prevState, action) => {
@@ -219,7 +217,7 @@ const StackNavigation: React.FC = () => {
     }
   )
   if (error) {
-    console.log('error logging in', error)
+    console.log('error logging in. Could be the internet', error)
   }
 
   const authContext = React.useMemo(

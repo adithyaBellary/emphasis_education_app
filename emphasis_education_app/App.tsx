@@ -22,7 +22,6 @@ import { theme } from './src/theme';
 import context, {EmptyUser, AuthContext} from './src/components/Context/Context';
 import { IUser, ILoginPayload } from './src/types';
 import StackNavigation from './src/StackNavigation';
-
 import PushNotifWrapper from './PushNotifWrapper';
 
 const cache = new InMemoryCache();

@@ -80,3 +80,5 @@ amplify-gradle-config.json
 amplifyxc.config
 
 config/
+
+.env

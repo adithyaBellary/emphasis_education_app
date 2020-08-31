@@ -14,6 +14,7 @@ import {
    ThemedButton,
    FONT_STYLES
 } from '../shared';
+import { theme } from '../../theme';
 
 interface IEnterCodeProps {
 navigation: any;
@@ -47,6 +48,7 @@ const EnterCode: React.FC<IEnterCodeProps> = ({ navigation }) => {
     } else {
       console.log('entered the incorrect code')
     }
+    navigation.navigate('CreateUserContain')
   }
 
   return (
@@ -54,10 +56,16 @@ const EnterCode: React.FC<IEnterCodeProps> = ({ navigation }) => {
       <Input
         placeholder='Enter your email'
         onChangeText={onChangeTextEmail}
+        inputStyle={{
+          fontFamily: `${theme.font.main}`
+        }}
       />
       <Input
         placeholder='Enter your code'
         onChangeText={onChangeTextCode}
+        inputStyle={{
+          fontFamily: `${theme.font.main}`
+        }}
       />
       { error && <ErrorMessage /> }
       <ThemedButton
