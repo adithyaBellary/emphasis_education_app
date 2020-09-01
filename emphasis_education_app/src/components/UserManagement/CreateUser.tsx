@@ -90,7 +90,6 @@ const CreateUser: React.FC<ICreateUser> = props => {
   const handlePhoneNumberInput = (number: string) => {
     const justNumbers: string = number.replace(/[^0-9]/g, '')
     if (justNumbers.length > 3 && justNumbers.length <= 6) {
-      // add the first dash
       setState({ ...curState, 'phoneNumber': `${justNumbers.slice(0,3)}-${justNumbers.slice(3)}` })
     } else if (justNumbers.length > 6) {
       setState({ ...curState, 'phoneNumber': `${justNumbers.slice(0,3)}-${justNumbers.slice(3,6)}-${justNumbers.slice(6)}`})
