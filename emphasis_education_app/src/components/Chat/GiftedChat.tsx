@@ -123,7 +123,7 @@ const MyGiftedChat: React.FC<IGiftedChatProps> = ({ queryLoading, refreshFn, cha
           // display: 'flex',
           // justifyContent: 'center',
           // alignItems: 'center',
-          backgroundColor: 'grey',
+          // backgroundColor: 'grey',
           // width: 10
         }}
       />
@@ -136,10 +136,10 @@ const MyGiftedChat: React.FC<IGiftedChatProps> = ({ queryLoading, refreshFn, cha
     <Actions
       {...props}
       containerStyle={{
-        backgroundColor: 'grey',
+        // backgroundColor: 'grey',
       }}
       wrapperStyle={{
-        backgroundColor: 'yellow'
+        // backgroundColor: 'yellow'
       }}
       icon={() => (
         <Icon
@@ -157,7 +157,7 @@ const MyGiftedChat: React.FC<IGiftedChatProps> = ({ queryLoading, refreshFn, cha
       renderComposer={renderComposer}
       renderActions={renderActions}
       containerStyle={{
-        backgroundColor: 'yellow',
+        // backgroundColor: 'yellow',
         borderRadius: 25,
         // padding: 10
         // margin: 10
@@ -171,14 +171,23 @@ const MyGiftedChat: React.FC<IGiftedChatProps> = ({ queryLoading, refreshFn, cha
       skipBackup: true,
       path: 'images',
     },
+    permissionDenied: {
+      title: 'Permission Denied',
+      text: 'You have previously denied camera and/or photo library access permission. Please allow access to use this feature.',
+      reTryTitle: 'Go To Permissions',
+      okTitle: 'Cancel'
+    }
   };
 
   const OpenImagePicker = () => {
     ImagePicker.showImagePicker( options, (response) => {
       if (response.didCancel) {
         console.log('cance')
+      } else  if (response.error) {
+        console.log('error', response.error)
       } else {
         try {
+          console.log('setting the image', response)
           const _pre = `data:${response.type};base64,`;
           const source = `${_pre}${response.data}`
           setImage(source)
