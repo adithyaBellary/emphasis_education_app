@@ -14,13 +14,13 @@ import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
 import { WebSocketLink } from 'apollo-link-ws';
 import { split } from 'apollo-link';
-import { ApolloProvider, useQuery, useMutation } from '@apollo/react-hooks';
+import { ApolloProvider } from '@apollo/react-hooks';
 import { getMainDefinition } from 'apollo-utilities';
 import { ThemeProvider } from 'styled-components';
 
 import { theme } from './src/theme';
-import context, {EmptyUser, AuthContext} from './src/components/Context/Context';
-import { IUser, ILoginPayload } from './src/types';
+import context, { IContext } from './src/components/Context/Context';
+import { IUser } from './src/types';
 import StackNavigation from './src/StackNavigation';
 import PushNotifWrapper from './PushNotifWrapper';
 
@@ -58,7 +58,7 @@ const App = () => {
 
   const [user, setUser] = React.useState<IUser>({} as IUser);
   const updateUser = (newUser: IUser) => setUser(newUser)
-  const value = {
+  const value: IContext = {
     loggedUser: user,
     setUser: updateUser
   }

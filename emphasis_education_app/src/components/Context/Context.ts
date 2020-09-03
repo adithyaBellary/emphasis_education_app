@@ -1,31 +1,9 @@
 import * as React from 'react';
-import { IUser, Permission } from '../../types';
+import { IUser } from '../../types';
 
-interface IContext {
+export interface IContext {
   loggedUser: IUser;
   setUser( user: IUser): void;
-}
-
-export let EmptyUser: IUser = {
-  name: '',
-  email: '',
-  phoneNumber: '',
-  groupID: '',
-  userType: Permission.Student,
-  chatIDs: ['chat1', 'chat2'],
-  classes: [],
-  _id: '_id',
-  gender: 'F'
-}
-
-const setUser = (user: IUser) => {
-  console.log('calling setuser in context')
-  EmptyUser = user;
-}
-
-export const DummyData: IContext = {
-  loggedUser: EmptyUser,
-  setUser: setUser,
 }
 
 interface IAuthContextProps {
