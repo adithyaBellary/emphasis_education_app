@@ -246,7 +246,8 @@ const IndividualChat: React.FC<IIndividualChatProps> = ({ classObject, userType,
 }
 
 const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
-  const { loggedUser, setUser } = React.useContext(GeneralContext);
+  const { loggedUser, setUser, notifications } = React.useContext(GeneralContext);
+  console.log('notifications badge', notifications);
   // console.log('logged user in chat picker', loggedUser);
   const [runQ, { data, loading, error}] = useLazyQuery(GET_USER, {
     onCompleted: ({ getUser }) => {

@@ -57,7 +57,7 @@ const AdminIcon: React.FC<{ changeScreens (dest: string): () => void }> = ({ cha
 );
 
 const Home: React.FC<ILiftedHomeProps> = ({ navigation, route }) => {
-  console.log('route in home', route)
+  // console.log('route in home', route)
   const { loggedUser, setUser } = React.useContext(GeneralContext);
   const changeScreens = (dest: string) => () =>  navigation.navigate(dest)
   const { data, loading, error } = useQuery(GET_USER, {
@@ -65,7 +65,7 @@ const Home: React.FC<ILiftedHomeProps> = ({ navigation, route }) => {
       userEmail: route.params.token
     },
     onCompleted: data => {
-      console.log('data oncomplete', data)
+      // console.log('data oncomplete', data)
       setUser({...data.getUser})
     }
   })

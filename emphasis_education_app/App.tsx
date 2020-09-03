@@ -19,7 +19,7 @@ import { getMainDefinition } from 'apollo-utilities';
 import { ThemeProvider } from 'styled-components';
 
 import { theme } from './src/theme';
-import { GeneralContext, IContext } from './src/components/Context/Context';
+import { GeneralContext, IContext, INotifications } from './src/components/Context/Context';
 import { IUser } from './src/types';
 import StackNavigation from './src/StackNavigation';
 import PushNotifWrapper from './PushNotifWrapper';
@@ -57,10 +57,24 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 const App = () => {
 
   const [user, setUser] = React.useState<IUser>({} as IUser);
+  const [notifications, incrementNotifications] = React.useState<INotifications>({} as INotifications);
   const updateUser = (newUser: IUser) => setUser(newUser)
+  const incrementNotificationCounter = (chatID: string) => {
+    let oldVal: number = 1;
+    console.log('old notifs', notifications[chatID])
+    if (notifications[chatID]) {
+      console.log('we have an old one')
+      oldVal = notifications[chatID] + 1
+    }
+    console.log('notifications in the handleer', notifications)
+    console.log('new notifs', {...notifications, [chatID]: oldVal})
+    incrementNotifications({...notifications, [chatID]: oldVal})
+  }
+
   const value: IContext = {
-    notifications: {},
     loggedUser: user,
+    notifications,
+    incrementNotificationCounter,
     setUser: updateUser
   }
 
