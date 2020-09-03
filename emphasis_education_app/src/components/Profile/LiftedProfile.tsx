@@ -5,7 +5,7 @@ import {
 } from 'react-native';
 import { useQuery } from '@apollo/react-hooks';
 
-import Context from '../Context/Context';
+import { GeneralContext } from '../Context/Context';
 import Profile from './Profile';
 
 import { GET_FAMILY } from '../../queries/GetFamily';
@@ -13,7 +13,6 @@ import { IGetFamilyInput, IGetFamilyPayload } from '../../types';
 import {
   GeneralSpacing,
   ThemedText,
-  IconRow,
   FONT_STYLES
 } from '../shared';
 
@@ -41,7 +40,7 @@ const HeaderButtons: React.FC<IHeaderButtonProps> = ({ text, onPress}) => (
 const LiftedProfile: React.FC<ILiftedProfileProps> = ({ route, navigation }) => {
   console.log('route', route)
   const [editing, setEditing] = React.useState(false);
-  const { loggedUser } = React.useContext(Context);
+  const { loggedUser } = React.useContext(GeneralContext);
   // if we passed in routes then that means we have come from the admin page
   const groupID = route.params ? route.params.groupID : loggedUser.groupID
   const currentUserID = route.params ? route.params.currentUserID : loggedUser._id

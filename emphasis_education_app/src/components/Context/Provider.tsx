@@ -1,13 +1,13 @@
 import * as React from 'react';
 
-import context, { IContext } from './Context';
+import { GeneralContext, IContext } from './Context';
 
 const ContextProvider: React.FC = ({ children }) => (
-  <context.Provider
+  <GeneralContext.Provider
     value={{} as IContext}
   >
     {children}
-  </context.Provider>
+  </GeneralContext.Provider>
 )
 
 export default ContextProvider;

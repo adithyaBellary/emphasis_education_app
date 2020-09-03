@@ -13,7 +13,7 @@ import { Permission } from '../types';
 import { theme } from '../theme';
 import { MAX_WIDTH, MAX_HEIGHT } from '../constant';
 
-import Context from './Context/Context';
+import { GeneralContext } from './Context/Context';
 
 export const MytextInput = styled(TextInput)`
   padding: 10px 0;
@@ -122,7 +122,7 @@ interface IPermissionProps {
 }
 
 export const PermissionedComponent: React.FC<IPermissionProps> = ({ allowedPermissions, children}) => {
-  const {loggedUser} = React.useContext(Context)
+  const {loggedUser} = React.useContext(GeneralContext)
 
   if(allowedPermissions.includes(loggedUser.userType)) {
     return <>{children}</>

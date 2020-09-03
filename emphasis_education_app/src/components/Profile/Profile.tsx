@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { Icon } from 'react-native-elements';
 
 import { IUser, Permission } from '../../types';
-import Context from '../Context/Context';
+import { GeneralContext } from '../Context/Context';
 import {
   ContentContain,
   IndividualField,
@@ -33,7 +33,7 @@ const Title = styled(Text)`
 `;
 
 const Profile: React.FC<IProfileProps> = ({ family, editing, currentUserID, onPress }) => {
-  const {loggedUser} = React.useContext(Context);
+  const {loggedUser} = React.useContext(GeneralContext);
 
   let currentUser: IUser | undefined;
 

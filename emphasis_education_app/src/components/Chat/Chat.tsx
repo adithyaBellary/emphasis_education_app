@@ -6,7 +6,7 @@ import {
 import { useQuery, useSubscription } from '@apollo/react-hooks';
 
 import Chat from './GiftedChat';
-import Context from '../Context/Context';
+import { GeneralContext } from '../Context/Context';
 
 import { REFETCH_LIMIT } from '../../constant';
 import { IMessage, IMessageUserType, ChatUserInfo } from '../../types';
@@ -48,7 +48,7 @@ interface IGetMessagesInput {
 let initFetch: number = 0;
 
 const LiftedChat: React.FC<IChatProps> = ({ navigation, route }) => {
-  const { loggedUser } = React.useContext(Context);
+  const { loggedUser } = React.useContext(GeneralContext);
   const [curState, setState] = useState<IState>();
   const chatID: string = route.params.chatID;
   const className: string = route.params.className;

@@ -16,7 +16,7 @@ import {
   IconRow,
   PermissionedComponent,
 } from '../shared';
-import Context from '../Context/Context';
+import { GeneralContext } from '../Context/Context';
 import { Permission } from '../../types';
 import { GET_USER } from '../../queries/GetUser';
 import { theme } from '../../theme';
@@ -58,7 +58,7 @@ const AdminIcon: React.FC<{ changeScreens (dest: string): () => void }> = ({ cha
 
 const Home: React.FC<ILiftedHomeProps> = ({ navigation, route }) => {
   console.log('route in home', route)
-  const { loggedUser, setUser } = React.useContext(Context);
+  const { loggedUser, setUser } = React.useContext(GeneralContext);
   const changeScreens = (dest: string) => () =>  navigation.navigate(dest)
   const { data, loading, error } = useQuery(GET_USER, {
     variables: {

@@ -17,7 +17,6 @@ import { SEARCH_USERS } from '../../queries/SearchUsers';
 import { CREATE_CHAT } from '../../queries/CreateChat';
 import { ISearchInput, ISearchClassesPayload, ISearchUserPayload, ICreateChatInput, ICreateChatPayload, Permission } from '../../types';
 import { IndividualResultContainer } from '../AdminPage/IndividualResult';
-import Context from '../Context/Context';
 
 import { ChatUserInfo } from '../../types';
 

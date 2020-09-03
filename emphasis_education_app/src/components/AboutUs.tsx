@@ -8,7 +8,7 @@ import styled from 'styled-components';
 
 import { SEARCH_CLASSES } from '../queries/SearchClasses'
 import { SEND_EMAIL } from '../queries/SendEmail';
-import Context from './Context/Context';
+import { GeneralContext } from './Context/Context';
 
 import {
   ContentContain as Contain,
@@ -54,7 +54,7 @@ const AboutUs: React.FC = () => {
   const options = { variables: { searchTerm: '' }}
   const { data: classData, loading: classLoading, error } = useQuery(SEARCH_CLASSES, options);
   const [message, setMessage] = React.useState('')
-  const { loggedUser } = React.useContext(Context);
+  const { loggedUser } = React.useContext(GeneralContext);
 
   const [runMutation, { data: emailData, loading: emailLoading }] = useMutation(SEND_EMAIL);
 

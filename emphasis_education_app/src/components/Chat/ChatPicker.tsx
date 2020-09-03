@@ -12,7 +12,7 @@ import styled from 'styled-components';
 import { useLazyQuery, useMutation } from '@apollo/react-hooks';
 import messaging from '@react-native-firebase/messaging';
 
-import Context from '../Context/Context';
+import { GeneralContext } from '../Context/Context';
 import {
   PermissionedComponent,
   IconRow,
@@ -246,7 +246,7 @@ const IndividualChat: React.FC<IIndividualChatProps> = ({ classObject, userType,
 }
 
 const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
-  const { loggedUser, setUser } = React.useContext(Context);
+  const { loggedUser, setUser } = React.useContext(GeneralContext);
   // console.log('logged user in chat picker', loggedUser);
   const [runQ, { data, loading, error}] = useLazyQuery(GET_USER, {
     onCompleted: ({ getUser }) => {

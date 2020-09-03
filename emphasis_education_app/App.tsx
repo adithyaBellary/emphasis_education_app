@@ -19,7 +19,7 @@ import { getMainDefinition } from 'apollo-utilities';
 import { ThemeProvider } from 'styled-components';
 
 import { theme } from './src/theme';
-import context, { IContext } from './src/components/Context/Context';
+import { GeneralContext, IContext } from './src/components/Context/Context';
 import { IUser } from './src/types';
 import StackNavigation from './src/StackNavigation';
 import PushNotifWrapper from './PushNotifWrapper';
@@ -59,6 +59,7 @@ const App = () => {
   const [user, setUser] = React.useState<IUser>({} as IUser);
   const updateUser = (newUser: IUser) => setUser(newUser)
   const value: IContext = {
+    notifications: {},
     loggedUser: user,
     setUser: updateUser
   }
@@ -66,11 +67,11 @@ const App = () => {
   return (
     <ApolloProvider client={client}>
       <ThemeProvider theme={theme}>
-        <context.Provider value={value}>
+        <GeneralContext.Provider value={value}>
           <PushNotifWrapper>
             <StackNavigation />
           </PushNotifWrapper>
-        </context.Provider>
+        </GeneralContext.Provider>
       </ThemeProvider>
     </ApolloProvider>
   )
