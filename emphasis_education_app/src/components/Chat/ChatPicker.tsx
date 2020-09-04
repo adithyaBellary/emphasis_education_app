@@ -17,7 +17,6 @@ import {
   PermissionedComponent,
   IconRow,
   GeneralSpacing,
-  CenteredDiv,
   ThemedText,
   VerticalDivider,
   HorizontalDivider,
@@ -65,12 +64,12 @@ const RightText = styled(ThemedText)`
   padding-left: 5px;
 `
 
-const Contain = styled(View)`
-  padding: 10px;
-  width: 80%;
-  border-bottom-width: 1px;
-  border-bottom-color: black;
-`
+// const Contain = styled(View)`
+//   padding: 10px;
+//   width: 80%;
+//   border-bottom-width: 1px;
+//   border-bottom-color: black;
+// `
 
 const SpacedItemRow = styled(View)`
   display: flex;
@@ -92,6 +91,7 @@ interface IChatDisplay {
   caption?: string;
   tutorInfo: ChatUserInfo;
   userInfo: ChatUserInfo[];
+  displayNotificationBadge: boolean;
   goToChat (sub: string, sec: string, tutorInfo: ChatUserInfo, userInfo: ChatUserInfo[]): () => void;
   getClasses (): void;
 }
@@ -105,7 +105,19 @@ const LoadingScreen: React.FC<{ loading: boolean }> = ({ loading }) => (
   </View>
 )
 
-const ChatDisplay: React.FC<IChatDisplay> = ({ mainText, secondaryText, caption, chatID, goToChat, className, getClasses, tutorInfo, userInfo }) => {
+const Badge = styled(View)`
+  height: 20px;
+  width: 20px;
+  border-radius: 10px;
+  background-color: grey;
+  margin-right: 10px;
+`
+
+const NotificationBadge: React.FC = () => (
+  <Badge />
+)
+
+const ChatDisplay: React.FC<IChatDisplay> = ({ mainText, secondaryText, caption, chatID, goToChat, className, getClasses, tutorInfo, userInfo, displayNotificationBadge }) => {
 
   const [delChat, { data, loading, error }] = useMutation(DELETE_CHAT, {
     onCompleted: () => {
@@ -136,39 +148,47 @@ const ChatDisplay: React.FC<IChatDisplay> = ({ mainText, secondaryText, caption,
     )
   )
 
+  const onPress = (
+    chatID: string,
+    className: string,
+    tutorInfo: ChatUserInfo,
+    userInfo: ChatUserInfo[]
+  ) => () => {
+    goToChat(chatID, className, tutorInfo, userInfo)()
+  }
+
   return (
     <>
       { loading ? <LoadingScreen loading={loading} /> : (
         <ChatContain>
           <SpacedItemRow>
-            <TouchableOpacity onPress={goToChat(chatID, className, tutorInfo, userInfo)} onLongPress={() => console.log('long press')}>
-              <IconRowLeft>
-                <LeftText size={18} type={FONT_STYLES.MAIN}>
-                  {mainText}
-                </LeftText>
+            <IconRow>
+              {displayNotificationBadge && <NotificationBadge />}
+              <TouchableOpacity onPress={onPress(chatID, className, tutorInfo, userInfo)} onLongPress={() => console.log('long press')}>
+                <IconRowLeft>
+                  <LeftText size={18} type={FONT_STYLES.MAIN}>
+                    {mainText}
+                  </LeftText>
+                  {
+                    !!secondaryText && (
+                      <>
+                        <VerticalDivider height={15} />
+                        <RightText size={18} type={FONT_STYLES.MAIN}>
+                          {secondaryText}
+                        </RightText>
+                      </>
+                    )
+                  }
+                </IconRowLeft>
                 {
-                  !!secondaryText && (
-                    <>
-                      <VerticalDivider height={15} />
-                      <RightText size={18} type={FONT_STYLES.MAIN}>
-                        {secondaryText}
-                      </RightText>
-                    </>
+                  caption && (
+                    <ThemedText size={14} type={FONT_STYLES.LIGHT}>
+                      {caption}
+                    </ThemedText>
                   )
                 }
-              </IconRowLeft>
-              {
-                caption && (
-                  <ThemedText size={14} type={FONT_STYLES.LIGHT}>
-                    {caption}
-                  </ThemedText>
-                )
-              }
-            </TouchableOpacity>
-            {/* <Icon
-              name='trash'
-              type='evilicon'
-            /> */}
+              </TouchableOpacity>
+            </IconRow>
 
             <PermissionedComponent
               allowedPermissions={[Permission.Admin]}
@@ -191,11 +211,12 @@ interface IIndividualChatProps {
   chatID: string;
   userType: Permission;
   classObject: Class;
+  displayNotificationBadge: boolean;
   goToChat (sub: string, sec: string, tutorInfo: ChatUserInfo, userInfo: ChatUserInfo[]): () => void;
   getClasses (): void;
 }
 
-const IndividualChat: React.FC<IIndividualChatProps> = ({ classObject, userType, chatID, goToChat, getClasses }) => {
+const IndividualChat: React.FC<IIndividualChatProps> = ({ classObject, userType, chatID, goToChat, getClasses, displayNotificationBadge }) => {
 
   let caption;
   let mainText: string = '';
@@ -224,7 +245,6 @@ const IndividualChat: React.FC<IIndividualChatProps> = ({ classObject, userType,
       mainText = `${userFirstName.join(', ')}`
       secondaryText = classObject.className
       caption = `${classObject.tutorInfo.firstName} ${classObject.tutorInfo.lastName}`
-
       break;
     default:
       break;
@@ -241,12 +261,13 @@ const IndividualChat: React.FC<IIndividualChatProps> = ({ classObject, userType,
       getClasses={getClasses}
       tutorInfo={classObject.tutorInfo}
       userInfo={classObject.userInfo}
+      displayNotificationBadge={displayNotificationBadge}
     />
   )
 }
 
 const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
-  const { loggedUser, setUser, notifications } = React.useContext(GeneralContext);
+  const { loggedUser, setUser, notifications, clearNotificationCounter } = React.useContext(GeneralContext);
   console.log('notifications badge', notifications);
   // console.log('logged user in chat picker', loggedUser);
   const [runQ, { data, loading, error}] = useLazyQuery(GET_USER, {
@@ -343,6 +364,7 @@ const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
               goToChat={goToChat}
               key={_class.chatID}
               getClasses={getClasses}
+              displayNotificationBadge={!!notifications[_class.chatID]}
             />
           )) : <EmptyChatPicker />
         }

@@ -7,12 +7,13 @@ export interface INotifications {
   [x: string]: number
 }
 
-// make this a general purpose context?
+// will also need to add a function to clear the messages of a specific chat when it becomes read
 export interface IContext {
   // manage number of notifications for each chat
   notifications: INotifications;
   loggedUser: IUser;
   incrementNotificationCounter (chatID: string): void;
+  clearNotificationCounter (chatID: string): void;
   setUser( user: IUser): void;
 }
 

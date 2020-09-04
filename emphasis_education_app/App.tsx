@@ -70,11 +70,15 @@ const App = () => {
     console.log('new notifs', {...notifications, [chatID]: oldVal})
     incrementNotifications({...notifications, [chatID]: oldVal})
   }
+  const clearNotificationCounter = (chatID: string) => {
+    incrementNotifications({ ...notifications, [chatID]: 0})
+  }
 
   const value: IContext = {
     loggedUser: user,
     notifications,
     incrementNotificationCounter,
+    clearNotificationCounter,
     setUser: updateUser
   }
 
