@@ -16,14 +16,13 @@ import { SEARCH_USERS } from '../../queries/SearchUsers';
 import { ADD_FAMILY_MEMBER } from '../../queries/AddFamilyMember';
 
 import { IndividualResultContainer } from './IndividualResult';
-import UserSearch from './LiftedSearch';
 
-interface ICancelProps {
+interface CancelProps {
   onPress (): void;
 }
 
 // convert to SecondaryLink
-const Cancel: React.FC<ICancelProps> = ({ onPress }) => (
+const Cancel: React.FC<CancelProps> = ({ onPress }) => (
   <TouchableOpacity onPress={onPress}>
     <GeneralSpacing u={10} r={10} d={10} l={10}>
       <ThemedText size={16} type={FONT_STYLES.MAIN}>
@@ -33,12 +32,12 @@ const Cancel: React.FC<ICancelProps> = ({ onPress }) => (
   </TouchableOpacity>
 )
 
-interface IDoneProps {
+interface DoneProps {
   loading: boolean;
   onPress (): void
 }
 
-const Done: React.FC<IDoneProps> = ({ onPress, loading }) => (
+const Done: React.FC<DoneProps> = ({ onPress, loading }) => (
   <TouchableOpacity onPress={onPress}>
     <GeneralSpacing u={10} r={10} d={10} l={10}>
       <IconRow>
@@ -53,7 +52,7 @@ const Done: React.FC<IDoneProps> = ({ onPress, loading }) => (
   </TouchableOpacity>
 )
 
-interface IAddMemberProps {
+interface AddMemberProps {
   navigation: any;
   route: any;
 }
@@ -65,18 +64,18 @@ const ContentContain: React.FC = ({ children }) => (
 );
 
 // this can include just the name and the _id
-interface ISelectedUsersProps {
+interface SelectedUsersProps {
   _id: string;
   email: string;
   userType: string;
   name: string;
 }
 
-const AddMember: React.FC<IAddMemberProps> = ({ navigation, route }) => {
+const AddMember: React.FC<AddMemberProps> = ({ navigation, route }) => {
   console.log('route', route)
   const [searchString, setSearchString] = React.useState('');
   const [runUserSearchQuery, {data: userData, loading: userLoading, error: userError}] = useLazyQuery<ISearchUserPayload, ISearchInput>(SEARCH_USERS)
-  const [selectedUsers, setSelectedUsers] = React.useState<ISelectedUsersProps[]>([])
+  const [selectedUsers, setSelectedUsers] = React.useState<SelectedUsersProps[]>([])
 
   const [runMut, {data: mutationData, loading: mutationLoading, error: mutationError}] = useMutation(ADD_FAMILY_MEMBER)
 

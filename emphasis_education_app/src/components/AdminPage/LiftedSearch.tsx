@@ -11,11 +11,11 @@ import { SEARCH_USERS } from '../../queries/SearchUsers';
 
 import { ContentContain } from './common';
 
-interface ILiftedSearchProps {
+interface LiftedSearchProps {
   navigation: any;
 }
 
-const LiftedSearch: React.FC<ILiftedSearchProps> = ({ navigation }) => {
+const LiftedSearch: React.FC<LiftedSearchProps> = ({ navigation }) => {
   const [searchTerm, setSearchTerm] = React.useState('');
   const [runQuery, { data, loading, error }] = useLazyQuery<ISearchUserPayload, ISearchInput>(SEARCH_USERS)
   const handleTextChange = (text: string) => setSearchTerm(text)

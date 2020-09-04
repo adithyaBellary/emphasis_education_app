@@ -15,7 +15,7 @@ import {
   ThemedNumberInput
 } from '../shared';
 
-interface ICreateUser {
+interface CreateUser {
   navigation: any;
   route: any;
   GoToConfirmationScreen(): void;
@@ -34,7 +34,7 @@ const EmptyData: IUserInput = {
   dob: ''
 }
 
-const CreateUser: React.FC<ICreateUser> = props => {
+const CreateUser: React.FC<CreateUser> = props => {
   const [numUser, setNumUser] = React.useState<number>(1)
 
   const [curState, setState] = useState<IUserInput>({

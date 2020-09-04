@@ -6,11 +6,6 @@ import { GeneralContext } from './src/components/Context/Context';
 
 const getFCMToken = async () => {
   const fcmToken = await messaging().getToken();
-  // if (fcmToken) {
-  //   console.log('got fcm token')
-  // } else {
-  //   console.log('failed')
-  // }
 }
 
 const requestUserPermission = async () => {
@@ -20,8 +15,6 @@ const requestUserPermission = async () => {
     getFCMToken();
   }
 }
-
-// TODO: write the push notif handler functions
 
 // this is going to serve as a wrapper to request permissiong for push notis and such
 const Wrapper: React.FC = ({ children }) => {
@@ -74,9 +67,7 @@ const Wrapper: React.FC = ({ children }) => {
   }, [])
 
   return (
-    <>
-      {children}
-    </>
+    <>{children}</>
   )
 }
 

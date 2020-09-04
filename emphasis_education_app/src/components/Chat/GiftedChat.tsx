@@ -27,7 +27,7 @@ import {
 import { theme } from '../../theme';
 import { EmptyChat } from './common';
 
-interface IGiftedChatProps {
+interface GiftedChatProps {
   queryLoading: boolean;
   // networkStatus: number;
   chatID: string;
@@ -36,19 +36,19 @@ interface IGiftedChatProps {
   refreshFn(): void;
 }
 
-interface IMessageReceivedProps {
+interface MessageReceivedProps {
   res: Boolean
 }
 
-interface IMessagePayload {
-  sendMessage: IMessageReceivedProps;
+interface MessagePayload {
+  sendMessage: MessageReceivedProps;
 }
 
-const MyGiftedChat: React.FC<IGiftedChatProps> = ({ queryLoading, refreshFn, chatID, curUser, messages }) => {
+const MyGiftedChat: React.FC<GiftedChatProps> = ({ queryLoading, refreshFn, chatID, curUser, messages }) => {
   const [image, setImage] = React.useState('')
   const [imageSelected, setImageSelected] = React.useState(false);
 
-  const [sendMessage, { error }] = useMutation<IMessagePayload>(
+  const [sendMessage, { error }] = useMutation<MessagePayload>(
     SEND_MESSAGE,
     {
       onCompleted: data => {

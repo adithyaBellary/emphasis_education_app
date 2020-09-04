@@ -21,7 +21,7 @@ import { Permission } from '../../types';
 import { GET_USER } from '../../queries/GetUser';
 import { theme } from '../../theme';
 
-interface ILiftedHomeProps {
+interface LiftedHomeProps {
   navigation: any;
   route: any;
 }
@@ -33,10 +33,6 @@ interface UserType {
 export interface GetUser {
   getUser: UserType;
 }
-
-const Title = styled(Text)`
-  fontFamily: 'Nunito'
-`
 
 const IconContain = styled(View)`
   width: 80%;
@@ -56,7 +52,7 @@ const AdminIcon: React.FC<{ changeScreens (dest: string): () => void }> = ({ cha
   </CenteredDiv>
 );
 
-const Home: React.FC<ILiftedHomeProps> = ({ navigation, route }) => {
+const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
   // console.log('route in home', route)
   const { loggedUser, setUser } = React.useContext(GeneralContext);
   const changeScreens = (dest: string) => () =>  navigation.navigate(dest)
@@ -118,7 +114,7 @@ const Home: React.FC<ILiftedHomeProps> = ({ navigation, route }) => {
   if (error) {
     console.log(error)
     return (
-      <View><Text>there was an issue reloading the userrrr</Text></View>
+      <View><Text>there was an issue reloading the user</Text></View>
     )
   }
 

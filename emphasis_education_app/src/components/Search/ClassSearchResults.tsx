@@ -5,10 +5,10 @@ import { ISearchClassesPayload } from '../../types';
 import { SearchResultsContainer } from './SearchResults';
 import IndividualResult from '../AdminPage/IndividualResult';
 
-interface IClassSearchResultsProps {
+interface ClassSearchResultsProps {
   searchResults: string[];
 }
-const ClassSearchResults: React.FC<IClassSearchResultsProps> = ({ searchResults }) => {
+const ClassSearchResults: React.FC<ClassSearchResultsProps> = ({ searchResults }) => {
 
   return (
     <SearchResultsContainer>

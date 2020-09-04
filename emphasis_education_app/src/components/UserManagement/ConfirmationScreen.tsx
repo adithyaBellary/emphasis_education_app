@@ -15,7 +15,7 @@ import IndividualItem from './DisplayIndividualMember';
 
 import { IUserInput } from '../../types';
 
-interface IConfirmationScreenProps {
+interface ConfirmationScreenProps {
   navigation: any;
   createdUsers: ICreateUserArr | undefined;
   loading: boolean;
@@ -24,7 +24,7 @@ interface IConfirmationScreenProps {
 }
 
 // we need to be able to edit info from here
-const ConfirmationScreen: React.FC<IConfirmationScreenProps> = ({ createdUsers, loading, submit, submitDisabled, navigation }) => (
+const ConfirmationScreen: React.FC<ConfirmationScreenProps> = ({ createdUsers, loading, submit, submitDisabled, navigation }) => (
   <ScrollView>
     <ContentContain>
       {createdUsers && createdUsers.users.map((user: IUserInput, index: number) => (

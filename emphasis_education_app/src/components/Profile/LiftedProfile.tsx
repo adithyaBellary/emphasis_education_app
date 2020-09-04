@@ -16,18 +16,18 @@ import {
   FONT_STYLES
 } from '../shared';
 
-interface ILiftedProfileProps {
+interface LiftedProfileProps {
   // TODO type the navagation props
   navigation: any;
   route: any;
 }
 
-interface IHeaderButtonProps {
+interface HeaderButtonProps {
   text: string;
   onPress(): void;
 }
 
-const HeaderButtons: React.FC<IHeaderButtonProps> = ({ text, onPress}) => (
+const HeaderButtons: React.FC<HeaderButtonProps> = ({ text, onPress}) => (
   <TouchableOpacity onPress={onPress}>
     <GeneralSpacing u={0} r={20} d={0} l={0}>
       <ThemedText size={18} type={FONT_STYLES.MAIN}>
@@ -37,7 +37,7 @@ const HeaderButtons: React.FC<IHeaderButtonProps> = ({ text, onPress}) => (
   </TouchableOpacity>
 )
 
-const LiftedProfile: React.FC<ILiftedProfileProps> = ({ route, navigation }) => {
+const LiftedProfile: React.FC<LiftedProfileProps> = ({ route, navigation }) => {
   console.log('route', route)
   const [editing, setEditing] = React.useState(false);
   const { loggedUser } = React.useContext(GeneralContext);

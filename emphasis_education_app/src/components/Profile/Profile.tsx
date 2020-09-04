@@ -18,7 +18,7 @@ import {
 } from '../shared';
 import { theme } from '../../theme';
 
-interface IProfileProps {
+interface ProfileProps {
   editing: boolean;
   currentUserID: string;
   family: IUser[];
@@ -32,7 +32,7 @@ const Title = styled(Text)`
   padding: 10px 0;
 `;
 
-const Profile: React.FC<IProfileProps> = ({ family, editing, currentUserID, onPress }) => {
+const Profile: React.FC<ProfileProps> = ({ family, editing, currentUserID, onPress }) => {
   const {loggedUser} = React.useContext(GeneralContext);
 
   let currentUser: IUser | undefined;

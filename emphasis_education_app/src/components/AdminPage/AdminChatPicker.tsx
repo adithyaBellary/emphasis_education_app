@@ -8,13 +8,13 @@ import { ThemedText, FONT_STYLES } from '../shared';
 import { SearchResultsContainer } from '../Search/SearchResults';
 
 
-interface IAdminChatPickerProps {
+interface AdminChatPickerProps {
   navigation: any;
   route: any;
 }
 
 // let us get the chats from the context
-const AdminChatPicker: React.FC<IAdminChatPickerProps> = ({ navigation }) => {
+const AdminChatPicker: React.FC<AdminChatPickerProps> = ({ navigation }) => {
   const { loggedUser } = React.useContext(GeneralContext);
 
   return (

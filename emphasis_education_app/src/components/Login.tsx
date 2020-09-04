@@ -27,7 +27,7 @@ import {
   FONT_STYLES
 } from './shared';
 
-interface ILoginProps {
+interface LoginProps {
   navigation: any;
   route: any;
   error: boolean;
@@ -46,12 +46,12 @@ const Errorlogin: React.FC = () => (
 const InputContain = styled(View)`
   padding: 10px;
 `
-interface ISecondaryLinkProps {
+interface SecondaryLinkProps {
   linkContent: string;
   onPress(): void;
 }
 
-const SecondaryLink: React.FC<ISecondaryLinkProps> = ({ linkContent, onPress }) => (
+const SecondaryLink: React.FC<SecondaryLinkProps> = ({ linkContent, onPress }) => (
   <TouchableOpacity onPress={onPress}>
     <GeneralSpacing u={0} r={10} d={0} l={10}>
       <ThemedText size={14} type={FONT_STYLES.LIGHT}>
@@ -83,7 +83,7 @@ const ContentWrap: React.FC = ({ children }) => (
   </ScrollView>
 );
 
-const Login: React.FC<ILoginProps> = props => {
+const Login: React.FC<LoginProps> = props => {
 
   const { login } = useContext(AuthContext);
 

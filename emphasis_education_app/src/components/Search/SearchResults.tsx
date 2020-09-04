@@ -9,7 +9,7 @@ import {
   FONT_STYLES
 } from '../shared';
 
-interface ISearchResultsProps {
+interface SearchResultsProps {
   searchResults: IUser[];
   navigation: any;
 }
@@ -20,7 +20,7 @@ export const SearchResultsContainer: React.FC = ({ children }) => (
   </GeneralSpacing>
 );
 
-const SearchResults: React.FC<ISearchResultsProps> = ({ searchResults, navigation }) => (
+const SearchResults: React.FC<SearchResultsProps> = ({ searchResults, navigation }) => (
   <SearchResultsContainer>
     {searchResults.map((results, index) => (
       <IndividualResult

@@ -21,7 +21,7 @@ import { Permission, ChatUserInfo, } from '../../types';
 import { EmptyChatPicker } from './common';
 import IndividualChat from './IndividualChat';
 
-interface IChatPickerProps {
+interface ChatPickerProps {
   navigation: any;
   route: any;
 }
@@ -32,7 +32,7 @@ export const ChatsContain: React.FC = ({ children }) => (
   </GeneralSpacing>
 );
 
-const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
+const ChatPicker: React.FC<ChatPickerProps> = ({ navigation }) => {
   const { loggedUser, setUser, notifications, clearNotificationCounter } = React.useContext(GeneralContext);
   console.log('notifications badge', notifications);
   // console.log('logged user in chat picker', loggedUser);

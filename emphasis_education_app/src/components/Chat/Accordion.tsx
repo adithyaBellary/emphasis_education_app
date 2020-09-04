@@ -6,12 +6,12 @@ import {
   TouchableOpacity
 } from 'react-native';
 
-interface IAccordionProps {
+interface AccordionProps {
   title: string;
   // the data will be an array of the classes
   data: any[];
 }
-const Accordion: React.FC<IAccordionProps> = ({ title, data}) => {
+const Accordion: React.FC<AccordionProps> = ({ title, data}) => {
   const [expanded, setExpanded] = React.useState(false);
   const toggleExpanded = () => () => setExpanded(state => !state)
   return (

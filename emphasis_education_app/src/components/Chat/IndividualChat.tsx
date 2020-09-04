@@ -149,7 +149,7 @@ const ChatDisplay: React.FC<ChatDisplayProps> = ({
   )
 }
 
-interface IndividualChatProps {
+interface ndividualChatProps {
   chatID: string;
   userType: Permission;
   classObject: Class;
@@ -159,7 +159,7 @@ interface IndividualChatProps {
   clearNotificationCounter (chatID: string): void;
 }
 
-const IndividualChat: React.FC<IndividualChatProps> = ({
+const IndividualChat: React.FC<ndividualChatProps> = ({
   classObject,
   userType,
   chatID,
