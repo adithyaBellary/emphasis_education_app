@@ -4,10 +4,10 @@ import { IUser } from '../../types';
 // This number can be used to display in the app icon.
 // in the chat picker, we can display whether there are any unread messages
 export interface INotifications {
+  // this could also be a boolean instead
   [x: string]: number
 }
 
-// will also need to add a function to clear the messages of a specific chat when it becomes read
 export interface IContext {
   // manage number of notifications for each chat
   notifications: INotifications;
@@ -16,10 +16,6 @@ export interface IContext {
   clearNotificationCounter (chatID: string): void;
   setUser( user: IUser): void;
 }
-
-// const setNotifications = (chatID: string) => {
-//   notifications
-// }
 
 interface IAuthContextProps {
   login: any;
@@ -30,5 +26,3 @@ interface IAuthContextProps {
 export const AuthContext = React.createContext<IAuthContextProps>({} as any);
 
 export const GeneralContext = React.createContext<IContext>({} as any);
-
-// export default CreateUserFnContext;
