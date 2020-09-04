@@ -92,7 +92,7 @@ interface IChatDisplay {
   tutorInfo: ChatUserInfo;
   userInfo: ChatUserInfo[];
   displayNotificationBadge: boolean;
-  goToChat (sub: string, sec: string, tutorInfo: ChatUserInfo, userInfo: ChatUserInfo[]): () => void;
+  goToChat (sub: string, sec: string, tutorInfo: ChatUserInfo, userInfo: ChatUserInfo[]): void;
   getClasses (): void;
 }
 
@@ -154,7 +154,8 @@ const ChatDisplay: React.FC<IChatDisplay> = ({ mainText, secondaryText, caption,
     tutorInfo: ChatUserInfo,
     userInfo: ChatUserInfo[]
   ) => () => {
-    goToChat(chatID, className, tutorInfo, userInfo)()
+
+    goToChat(chatID, className, tutorInfo, userInfo)
   }
 
   return (
@@ -212,7 +213,7 @@ interface IIndividualChatProps {
   userType: Permission;
   classObject: Class;
   displayNotificationBadge: boolean;
-  goToChat (sub: string, sec: string, tutorInfo: ChatUserInfo, userInfo: ChatUserInfo[]): () => void;
+  goToChat (sub: string, sec: string, tutorInfo: ChatUserInfo, userInfo: ChatUserInfo[]): void;
   getClasses (): void;
 }
 
@@ -281,7 +282,8 @@ const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
       // this is flawed because we need to manually refresh the page to trigger the
       // topic subscription code. this user will not be sent push notifications until the
       // subscription code is run
-      console.log('getUser', getUser.classes)
+
+      // console.log('getUser', getUser.classes)
 
       getUser.classes.forEach(_class => {
         // subscribe to the class
@@ -301,7 +303,7 @@ const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
     getClasses();
   }, [])
 
-  const goToChat = (sub: string, className: string, tutorInfo: ChatUserInfo, userInfo: ChatUserInfo[]) => () => {
+  const goToChat = (sub: string, className: string, tutorInfo: ChatUserInfo, userInfo: ChatUserInfo[]) => {
     navigation.navigate(
       'Chat',
       {
