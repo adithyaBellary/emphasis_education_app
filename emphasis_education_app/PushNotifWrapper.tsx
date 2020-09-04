@@ -67,6 +67,7 @@ const Wrapper: React.FC = ({ children }) => {
     const unsub = messaging().onMessage(async payload => {
       console.log('in on Message', payload)
       console.log('Platform', Platform.OS)
+      incrementNotificationCounter(payload.data!.chatID)
     })
 
     return unsub

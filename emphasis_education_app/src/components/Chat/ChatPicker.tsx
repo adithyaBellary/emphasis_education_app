@@ -94,6 +94,7 @@ interface IChatDisplay {
   displayNotificationBadge: boolean;
   goToChat (sub: string, sec: string, tutorInfo: ChatUserInfo, userInfo: ChatUserInfo[]): void;
   getClasses (): void;
+  clearNotificationCounter (chatID: string): void;
 }
 
 const LoadingScreen: React.FC<{ loading: boolean }> = ({ loading }) => (
@@ -117,7 +118,19 @@ const NotificationBadge: React.FC = () => (
   <Badge />
 )
 
-const ChatDisplay: React.FC<IChatDisplay> = ({ mainText, secondaryText, caption, chatID, goToChat, className, getClasses, tutorInfo, userInfo, displayNotificationBadge }) => {
+const ChatDisplay: React.FC<IChatDisplay> = ({
+  mainText,
+  secondaryText,
+  caption,
+  chatID,
+  goToChat,
+  className,
+  getClasses,
+  tutorInfo,
+  userInfo,
+  displayNotificationBadge,
+  clearNotificationCounter
+ }) => {
 
   const [delChat, { data, loading, error }] = useMutation(DELETE_CHAT, {
     onCompleted: () => {
@@ -154,7 +167,7 @@ const ChatDisplay: React.FC<IChatDisplay> = ({ mainText, secondaryText, caption,
     tutorInfo: ChatUserInfo,
     userInfo: ChatUserInfo[]
   ) => () => {
-
+    clearNotificationCounter(chatID);
     goToChat(chatID, className, tutorInfo, userInfo)
   }
 
@@ -215,9 +228,18 @@ interface IIndividualChatProps {
   displayNotificationBadge: boolean;
   goToChat (sub: string, sec: string, tutorInfo: ChatUserInfo, userInfo: ChatUserInfo[]): void;
   getClasses (): void;
+  clearNotificationCounter (chatID: string): void;
 }
 
-const IndividualChat: React.FC<IIndividualChatProps> = ({ classObject, userType, chatID, goToChat, getClasses, displayNotificationBadge }) => {
+const IndividualChat: React.FC<IIndividualChatProps> = ({
+  classObject,
+  userType,
+  chatID,
+  goToChat,
+  getClasses,
+  displayNotificationBadge,
+  clearNotificationCounter
+}) => {
 
   let caption;
   let mainText: string = '';
@@ -263,6 +285,7 @@ const IndividualChat: React.FC<IIndividualChatProps> = ({ classObject, userType,
       tutorInfo={classObject.tutorInfo}
       userInfo={classObject.userInfo}
       displayNotificationBadge={displayNotificationBadge}
+      clearNotificationCounter={clearNotificationCounter}
     />
   )
 }
@@ -367,6 +390,7 @@ const ChatPicker: React.FC<IChatPickerProps> = ({ navigation }) => {
               key={_class.chatID}
               getClasses={getClasses}
               displayNotificationBadge={!!notifications[_class.chatID]}
+              clearNotificationCounter={clearNotificationCounter}
             />
           )) : <EmptyChatPicker />
         }
