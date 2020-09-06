@@ -34,7 +34,7 @@ export const ChatsContain: React.FC = ({ children }) => (
 
 const ChatPicker: React.FC<ChatPickerProps> = ({ navigation }) => {
   const { loggedUser, setUser, notifications, clearNotificationCounter } = React.useContext(GeneralContext);
-  console.log('notifications badge', notifications);
+  // console.log('notifications badge', notifications);
   // console.log('logged user in chat picker', loggedUser);
   const [runQ, { data, loading, error}] = useLazyQuery(GET_USER, {
     onCompleted: ({ getUser }) => {
