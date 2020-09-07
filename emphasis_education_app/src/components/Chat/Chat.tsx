@@ -6,7 +6,7 @@ import {
 import { useQuery, useSubscription } from '@apollo/react-hooks';
 
 import Chat from './GiftedChat';
-import Context from '../Context/Context';
+import { GeneralContext } from '../Context/Context';
 
 import { REFETCH_LIMIT } from '../../constant';
 import { IMessage, IMessageUserType, ChatUserInfo } from '../../types';
@@ -17,16 +17,16 @@ import {
   FONT_STYLES
 } from '../shared';
 
-interface IChatProps {
+interface ChatProps {
   navigation: any;
   route: any;
 }
 
-interface IState {
+interface State {
   messages: IMessage[];
 }
 
-interface IMessageReceivedProps {
+interface MessageReceivedProps {
   text: string;
   MessageId: number;
   createdAt: number;
@@ -34,22 +34,22 @@ interface IMessageReceivedProps {
   image?: string;
 }
 
-interface IMessageReceived {
-  messageReceived: IMessageReceivedProps
+interface MessageReceived {
+  messageReceived: MessageReceivedProps
 }
-interface IGetMessages {
+interface GetMessages {
   getMessages: IMessage[];
 }
 
-interface IGetMessagesInput {
+interface GetMessagesInput {
   chatID: string;
   init: number;
 }
 let initFetch: number = 0;
 
-const LiftedChat: React.FC<IChatProps> = ({ navigation, route }) => {
-  const { loggedUser } = React.useContext(Context);
-  const [curState, setState] = useState<IState>();
+const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
+  const { loggedUser } = React.useContext(GeneralContext);
+  const [curState, setState] = useState<State>();
   const chatID: string = route.params.chatID;
   const className: string = route.params.className;
   const tutorInfo: ChatUserInfo = route.params.tutorInfo;
@@ -58,8 +58,8 @@ const LiftedChat: React.FC<IChatProps> = ({ navigation, route }) => {
   // console.log('user', userInfo)
   // lets cache this data
   const { data: getMessages, loading: queryLoading, refetch, error: errorMessage } = useQuery<
-      IGetMessages,
-      IGetMessagesInput
+      GetMessages,
+      GetMessagesInput
     >(
     GET_MESSAGES,
     {
@@ -75,7 +75,7 @@ const LiftedChat: React.FC<IChatProps> = ({ navigation, route }) => {
 
   if (errorMessage) { console.log('error', errorMessage) }
 
-  const { data: subData } = useSubscription<IMessageReceived>(SUB)
+  const { data: subData } = useSubscription<MessageReceived>(SUB)
 
   useEffect(() => {
     if (!getMessages) { return }

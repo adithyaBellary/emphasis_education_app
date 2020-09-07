@@ -17,7 +17,6 @@ import { SEARCH_USERS } from '../../queries/SearchUsers';
 import { CREATE_CHAT } from '../../queries/CreateChat';
 import { ISearchInput, ISearchClassesPayload, ISearchUserPayload, ICreateChatInput, ICreateChatPayload, Permission } from '../../types';
 import { IndividualResultContainer } from '../AdminPage/IndividualResult';
-import Context from '../Context/Context';
 
 import { ChatUserInfo } from '../../types';
 
@@ -26,13 +25,13 @@ import {
   GeneralSpacing
 } from '../shared';
 
-interface ICreateChatProps {
+interface CreateChatProps {
   navigation: any;
   route: any;
 }
 
 // what if we just sent the email and name
-interface ISelectedUsersProps {
+interface SelectedUsersProps {
   _id: string;
   email: string;
   userType: string;
@@ -40,13 +39,13 @@ interface ISelectedUsersProps {
   lastName: string;
 }
 
-const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
+const CreateChat: React.FC<CreateChatProps> = ({ navigation }) => {
   const [classSearch, setClassSearch] = React.useState('')
   const [userSearch, setUserSearch] = React.useState('')
   const [runClassSearchQuery, {data: classData, loading: classLoading, error: classError}] = useLazyQuery<ISearchClassesPayload, ISearchInput>(SEARCH_CLASSES)
   const [runUserSearchQuery, {data: userData, loading: userLoading, error: userError}] = useLazyQuery<ISearchUserPayload, ISearchInput>(SEARCH_USERS)
   const [selectedClasses, setSelectedClasses] = React.useState<string>('')
-  const [selectedUsers, setSelectedUsers] = React.useState<ISelectedUsersProps[]>([])
+  const [selectedUsers, setSelectedUsers] = React.useState<SelectedUsersProps[]>([])
 
   const [createChatMutation, {data: dataCreateChat, loading: loadingCreateChat, error}] = useMutation<ICreateChatPayload, ICreateChatInput>(
     CREATE_CHAT,
@@ -140,14 +139,14 @@ const CreateChat: React.FC<ICreateChatProps> = ({ navigation }) => {
 
   const addSelectedUsers = (userID: string, userType: string, userEmail: string, firstName: string, lastName: string) => () =>  {
     let present = false;
-    let _newArray: ISelectedUsersProps[] = selectedUsers.reduce((acc, cur) => {
+    let _newArray: SelectedUsersProps[] = selectedUsers.reduce((acc, cur) => {
       if (cur._id === userID) {
         present = true;
         return acc
       } else {
         return [...acc, {_id: cur._id, userType: cur.userType, email: cur.email, firstName: cur.firstName, lastName: cur.lastName}]
       }
-    }, [] as ISelectedUsersProps[])
+    }, [] as SelectedUsersProps[])
     if (!present) { _newArray = [..._newArray, {_id: userID, userType, email: userEmail, firstName, lastName}] }
     console.log('_newArray', _newArray)
     setSelectedUsers([..._newArray])

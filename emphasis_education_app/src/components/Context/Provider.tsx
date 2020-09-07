@@ -1,14 +1,13 @@
 import * as React from 'react';
 
-import context, { DummyData } from './Context';
+import { GeneralContext, IContext } from './Context';
 
 const ContextProvider: React.FC = ({ children }) => (
-  <context.Provider
-    // pass it dummy data for rn
-    value={DummyData}
+  <GeneralContext.Provider
+    value={{} as IContext}
   >
     {children}
-  </context.Provider>
+  </GeneralContext.Provider>
 )
 
 export default ContextProvider;

@@ -13,7 +13,7 @@ import { Permission } from '../types';
 import { theme } from '../theme';
 import { MAX_WIDTH, MAX_HEIGHT } from '../constant';
 
-import Context from './Context/Context';
+import { GeneralContext } from './Context/Context';
 
 export const MytextInput = styled(TextInput)`
   padding: 10px 0;
@@ -34,13 +34,13 @@ export const InputContain = styled(View)`
   width: 90%;
 `;
 
-interface IThemedInputProps {
+interface ThemedInputProps {
   placeholder: string;
   value?: string;
   onChangeText(t: string): void;
 }
 
-export const ThemedTextInput: React.FC<IThemedInputProps> = props => (
+export const ThemedTextInput: React.FC<ThemedInputProps> = props => (
   <InputContain>
     <MytextInput
       {...props}
@@ -48,11 +48,11 @@ export const ThemedTextInput: React.FC<IThemedInputProps> = props => (
   </InputContain>
 )
 
-interface IThemedNumberInputProps extends IThemedInputProps {
+interface ThemedNumberInputProps extends ThemedInputProps {
   maxLength: number;
 }
 
-export const ThemedNumberInput: React.FC<IThemedNumberInputProps> = props => (
+export const ThemedNumberInput: React.FC<ThemedNumberInputProps> = props => (
   <InputContain>
     <MytextInput
       {...props}
@@ -90,14 +90,14 @@ export const MyButtonText = styled(Text)`
   position: relative;
 `;
 
-interface IButtonProps {
+interface ButtonProps {
   buttonText: string;
   loading: boolean;
   disabled?: boolean;
   onPress(): void;
 }
 
-export const ThemedButton: React.FC<IButtonProps> = ({ onPress, buttonText, loading, disabled }) => (
+export const ThemedButton: React.FC<ButtonProps> = ({ onPress, buttonText, loading, disabled }) => (
   <MyButton onPress={onPress} disabled={disabled} >
     <MyButtonText>
       {buttonText}
@@ -117,12 +117,12 @@ export const IconSection = styled(View)`
   margin-top: ${MAX_HEIGHT * 0.1}px;
 `;
 
-interface IPermissionProps {
+interface PermissionProps {
   allowedPermissions: Permission[];
 }
 
-export const PermissionedComponent: React.FC<IPermissionProps> = ({ allowedPermissions, children}) => {
-  const {loggedUser} = React.useContext(Context)
+export const PermissionedComponent: React.FC<PermissionProps> = ({ allowedPermissions, children}) => {
+  const {loggedUser} = React.useContext(GeneralContext)
 
   if(allowedPermissions.includes(loggedUser.userType)) {
     return <>{children}</>
@@ -149,13 +149,13 @@ const RadioButtonInner = styled(View)`
   border-radius: ${RADIO_BUTTON_INNER_DIAMETER/2}px;
   background-color: grey;
 `
-interface IRadioButtonSelectProps {
+interface RadioButtonSelectProps {
   title: string;
   selectedElement: string;
   setSelectedElement(t: string): void;
 }
 
-const RadioButtonSelect: React.FC<IRadioButtonSelectProps> = ({ title, selectedElement, setSelectedElement }) => (
+const RadioButtonSelect: React.FC<RadioButtonSelectProps> = ({ title, selectedElement, setSelectedElement }) => (
   <RadioButtonOuter
     onPress={() => setSelectedElement(title)}
   >
@@ -168,14 +168,14 @@ const RadioButtonContain = styled(View)<{num: number}>`
   align-items: center;
   justify-content: center;
 `
-interface IRadioButtonProps {
+interface RadioButtonProps {
   title: string;
   num: number;
   selectedElement: string;
   setSelectedElement(t: string): void;
 }
 
-const RadioButton: React.FC<IRadioButtonProps> = ({title, num, selectedElement, setSelectedElement}) => (
+const RadioButton: React.FC<RadioButtonProps> = ({title, num, selectedElement, setSelectedElement}) => (
   <RadioButtonContain
     num={num}
   >
@@ -195,12 +195,12 @@ const RadioButtonRow = styled(View)`
   justify-content: space-between;
   padding-top: 10%;
 `
-interface IRadioButtonGroupProps {
+interface RadioButtonGroupProps {
   titles: string[]
   onSelect(el: string): void;
 }
 
-export const RadioButtonGroup: React.FC<IRadioButtonGroupProps> = ({ titles, onSelect }) => {
+export const RadioButtonGroup: React.FC<RadioButtonGroupProps> = ({ titles, onSelect }) => {
   // this is the conponent that should hold state over the individual radio buttons
   const [selectedElement, setSelectedElement] = React.useState('');
   const selectElement = (el: string) => {
@@ -243,7 +243,7 @@ export const ThemedText = styled(Text)<{ size: number, type: FONT_STYLES, error?
   ${({ error }) => error && 'color: red'}
 `
 
-interface IIndividualFieldProps {
+interface IndividualFieldProps {
   value: string;
   label: string;
   valueSize: number;
@@ -257,7 +257,7 @@ export const GeneralSpacing = styled(View)<{r: number, l: number, u: number, d: 
   padding: ${({ u }) => u}px ${({ r }) => r}px ${({ d }) => d}px ${({ l }) => l}px
 `;
 
-export const IndividualField: React.FC<IIndividualFieldProps> = ({
+export const IndividualField: React.FC<IndividualFieldProps> = ({
   value,
   label,
   valueSize,

@@ -14,13 +14,13 @@ import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
 import { WebSocketLink } from 'apollo-link-ws';
 import { split } from 'apollo-link';
-import { ApolloProvider, useQuery, useMutation } from '@apollo/react-hooks';
+import { ApolloProvider } from '@apollo/react-hooks';
 import { getMainDefinition } from 'apollo-utilities';
 import { ThemeProvider } from 'styled-components';
 
 import { theme } from './src/theme';
-import context, {EmptyUser, AuthContext} from './src/components/Context/Context';
-import { IUser, ILoginPayload } from './src/types';
+import { GeneralContext, Context, NotificationsProps } from './src/components/Context/Context';
+import { IUser } from './src/types';
 import StackNavigation from './src/StackNavigation';
 import PushNotifWrapper from './PushNotifWrapper';
 
@@ -57,20 +57,40 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 const App = () => {
 
   const [user, setUser] = React.useState<IUser>({} as IUser);
+  const [notifications, incrementNotifications] = React.useState<NotificationsProps>({} as NotificationsProps);
   const updateUser = (newUser: IUser) => setUser(newUser)
-  const value = {
+  const incrementNotificationCounter = (chatID: string) => {
+    let oldVal: number = 1;
+    console.log('old notifs', notifications[chatID])
+    if (notifications[chatID]) {
+      console.log('we have an old one')
+      oldVal = notifications[chatID] + 1
+    }
+    console.log('notifications in the handleer', notifications)
+    console.log('new notifs', {...notifications, [chatID]: oldVal})
+    incrementNotifications({...notifications, [chatID]: oldVal})
+  }
+  const clearNotificationCounter = (chatID: string) => {
+    console.log('clearing', chatID)
+    incrementNotifications({ ...notifications, [chatID]: 0})
+  }
+
+  const value: Context = {
     loggedUser: user,
+    notifications,
+    incrementNotificationCounter,
+    clearNotificationCounter,
     setUser: updateUser
   }
 
   return (
     <ApolloProvider client={client}>
       <ThemeProvider theme={theme}>
-        <context.Provider value={value}>
+        <GeneralContext.Provider value={value}>
           <PushNotifWrapper>
             <StackNavigation />
           </PushNotifWrapper>
-        </context.Provider>
+        </GeneralContext.Provider>
       </ThemeProvider>
     </ApolloProvider>
   )

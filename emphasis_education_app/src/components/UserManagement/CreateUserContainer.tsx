@@ -12,19 +12,19 @@ import { CREATE_USER } from '../../queries/CreateUser';
 import  ConfirmationScreen  from './ConfirmationScreen';
 import { AuthContext } from '../Context/Context';
 
-interface ICreateUserContainProps {
+interface CreateUserContainProps {
   navigation: any;
   route: any;
 }
 const SuccessMessaging: string = 'Thanks for joining Emphasis Education';
 const ErrorMessaging: string = 'Something went wrong creating this user';
 
-export interface ICreateUserArr {
+export interface CreateUserArr {
   users: IUserInput[];
 }
 
-const CreateUserContain: React.FC<ICreateUserContainProps> = props => {
-  const [userInfo, setUserInfo] = React.useState<ICreateUserArr>();
+const CreateUserContain: React.FC<CreateUserContainProps> = props => {
+  const [userInfo, setUserInfo] = React.useState<CreateUserArr>();
   const [showConf, setShowConf] = React.useState(false);
   const [submitDisabled, setSubmitDisabled] = React.useState(false);
 

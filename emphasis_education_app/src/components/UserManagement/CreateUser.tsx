@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import {
-  View
-} from 'react-native'
+import { ScrollView } from 'react-native'
 
 import { IUserInput, Permission } from '../../types';
 import {
@@ -17,7 +15,7 @@ import {
   ThemedNumberInput
 } from '../shared';
 
-interface ICreateUser {
+interface CreateUser {
   navigation: any;
   route: any;
   GoToConfirmationScreen(): void;
@@ -36,7 +34,7 @@ const EmptyData: IUserInput = {
   dob: ''
 }
 
-const CreateUser: React.FC<ICreateUser> = props => {
+const CreateUser: React.FC<CreateUser> = props => {
   const [numUser, setNumUser] = React.useState<number>(1)
 
   const [curState, setState] = useState<IUserInput>({
@@ -90,9 +88,8 @@ const CreateUser: React.FC<ICreateUser> = props => {
   }
 
   const handlePhoneNumberInput = (number: string) => {
-    const justNumbers: string = number.replaceAll('-', '').replace('(', '').replace(')', '').replace(' ', '')
+    const justNumbers: string = number.replace(/[^0-9]/g, '')
     if (justNumbers.length > 3 && justNumbers.length <= 6) {
-      // add the first dash
       setState({ ...curState, 'phoneNumber': `${justNumbers.slice(0,3)}-${justNumbers.slice(3)}` })
     } else if (justNumbers.length > 6) {
       setState({ ...curState, 'phoneNumber': `${justNumbers.slice(0,3)}-${justNumbers.slice(3,6)}-${justNumbers.slice(6)}`})
@@ -102,7 +99,7 @@ const CreateUser: React.FC<ICreateUser> = props => {
   }
 
   const handleDOBInput = (DOB: string) => {
-    const justNumbers: string = DOB.replaceAll('/', '')
+    const justNumbers: string = DOB.replace(/[^0-9]/g, '');
     if (justNumbers.length > 2 && justNumbers.length <= 4) {
       setState({ ...curState, 'dob': `${justNumbers.slice(0,2)}/${justNumbers.slice(2)}`})
     } else if (justNumbers.length > 4) {
@@ -113,7 +110,7 @@ const CreateUser: React.FC<ICreateUser> = props => {
   }
 
   return (
-    <View>
+    <ScrollView>
       <CenteredDiv>
         <ThemedText size={14} type={FONT_STYLES.MAIN}>Family Member Number {numUser}</ThemedText>
         <ThemedTextInput
@@ -184,7 +181,7 @@ const CreateUser: React.FC<ICreateUser> = props => {
           </ButtonContainer>
         </IconRow>
       </GeneralSpacing>
-    </View>
+    </ScrollView>
   )
 }
 

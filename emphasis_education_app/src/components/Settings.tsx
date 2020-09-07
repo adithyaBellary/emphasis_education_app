@@ -7,12 +7,12 @@ import {
 import { ButtonContainer, MyButton, MyButtonText, ThemedButton } from './shared';
 import { AuthContext } from './Context/Context';
 
-interface ISettingsProps {
+interface SettingsProps {
   navigation: any;
   route: any;
 }
 
-const Settings: React.FC<ISettingsProps> = () => {
+const Settings: React.FC<SettingsProps> = () => {
 
   const { logout } = React.useContext(AuthContext);
 

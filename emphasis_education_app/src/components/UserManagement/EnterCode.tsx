@@ -16,7 +16,7 @@ import {
 } from '../shared';
 import { theme } from '../../theme';
 
-interface IEnterCodeProps {
+interface EnterCodeProps {
 navigation: any;
   route: any;
 }
@@ -27,7 +27,7 @@ const ErrorMessage: React.FC = () => (
   </ThemedText>
 )
 
-const EnterCode: React.FC<IEnterCodeProps> = ({ navigation }) => {
+const EnterCode: React.FC<EnterCodeProps> = ({ navigation }) => {
 
   const [code, setCode] = React.useState('')
   const [email, setEmail] = React.useState('')

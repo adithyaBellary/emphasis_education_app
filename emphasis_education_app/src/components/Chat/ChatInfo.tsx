@@ -17,12 +17,12 @@ import {
 import { IndividualResultContainer } from '../AdminPage/IndividualResult';
 import { ChatUserInfo } from 'src/types';
 
-interface ICancelProps {
+interface CancelProps {
   onPress (): void;
 }
 
 // convert to SecondaryLink
-const Cancel: React.FC<ICancelProps> = ({ onPress }) => (
+const Cancel: React.FC<CancelProps> = ({ onPress }) => (
   <TouchableOpacity onPress={onPress}>
     <GeneralSpacing u={10} r={10} d={10} l={10}>
       <ThemedText size={16} type={FONT_STYLES.MAIN}>
@@ -32,12 +32,12 @@ const Cancel: React.FC<ICancelProps> = ({ onPress }) => (
   </TouchableOpacity>
 )
 
-interface IDoneProps {
+interface DoneProps {
   loading: boolean;
   onPress (): void
 }
 
-const Done: React.FC<IDoneProps> = ({ onPress, loading }) => (
+const Done: React.FC<DoneProps> = ({ onPress, loading }) => (
   <TouchableOpacity onPress={onPress}>
     <GeneralSpacing u={10} r={10} d={10} l={10}>
       <IconRow>
@@ -52,12 +52,12 @@ const Done: React.FC<IDoneProps> = ({ onPress, loading }) => (
   </TouchableOpacity>
 )
 
-interface IChatInfoProps {
+interface ChatInfoProps {
   navigation: any;
   route: any;
 }
 
-const ChatInfo: React.FC<IChatInfoProps> = ({ navigation, route }) => {
+const ChatInfo: React.FC<ChatInfoProps> = ({ navigation, route }) => {
   const className: string = route.params.className;
   const tutorInfo: ChatUserInfo = route.params.tutorInfo;
   const userInfo: ChatUserInfo[] = route.params.userInfo;

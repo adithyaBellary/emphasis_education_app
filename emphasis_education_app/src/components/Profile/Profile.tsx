@@ -6,19 +6,21 @@ import {
 import styled from 'styled-components';
 import { Icon } from 'react-native-elements';
 
-import { IUser, Permission } from '../../types';
-import Context from '../Context/Context';
+import { IUser, Permission, Class } from '../../types';
+import { GeneralContext } from '../Context/Context';
 import {
   ContentContain,
   IndividualField,
   HorizontalDivider,
   IconRow,
   GeneralSpacing,
-  PermissionedComponent
+  PermissionedComponent,
+  ThemedText,
+  FONT_STYLES
 } from '../shared';
 import { theme } from '../../theme';
 
-interface IProfileProps {
+interface ProfileProps {
   editing: boolean;
   currentUserID: string;
   family: IUser[];
@@ -32,8 +34,27 @@ const Title = styled(Text)`
   padding: 10px 0;
 `;
 
-const Profile: React.FC<IProfileProps> = ({ family, editing, currentUserID, onPress }) => {
-  const {loggedUser} = React.useContext(Context);
+const ListClasses: React.FC<{ classes: Class[]}> = ({ classes }) => (
+  <>
+    {classes.map(_class => (
+      <ThemedText
+        size={16}
+        type={FONT_STYLES.MAIN}
+      >
+        {_class.className}
+      </ThemedText>
+    ))}
+    <ThemedText
+      size={14}
+      type={FONT_STYLES.LIGHT}
+    >
+      Classes
+    </ThemedText>
+  </>
+)
+
+const Profile: React.FC<ProfileProps> = ({ family, editing, currentUserID, onPress }) => {
+  const {loggedUser} = React.useContext(GeneralContext);
 
   let currentUser: IUser | undefined;
 
@@ -90,16 +111,8 @@ const Profile: React.FC<IProfileProps> = ({ family, editing, currentUserID, onPr
         onChangeText={onChangeText}
       />
 
-      {/* list the classes */}
-      {/* lets not have this be editable */}
-      {currentUser.classes && currentUser.classes.map(c => (
-        <IndividualField
-          value={c.className!}
-          valueSize={16}
-          label={'class'}
-          labelSize={14}
-        />
-      ))}
+      {currentUser.classes && <ListClasses classes={currentUser.classes}/>}
+
       <IconRow>
         <Title>Family Members</Title>
         <PermissionedComponent

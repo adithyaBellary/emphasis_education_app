@@ -15,12 +15,12 @@ import {
 
 import { CREATE_CODE } from '../../queries/CreateCode';
 
-interface ICreateCodeButtonProps {
+interface CreateCodeButtonProps {
   loading: boolean;
   runMutation(): void;
 }
 
-const CreateCodeButton: React.FC<ICreateCodeButtonProps> = ({ runMutation, loading }) => (
+const CreateCodeButton: React.FC<CreateCodeButtonProps> = ({ runMutation, loading }) => (
   <ThemedButton
     buttonText='Create Code'
     loading={loading}

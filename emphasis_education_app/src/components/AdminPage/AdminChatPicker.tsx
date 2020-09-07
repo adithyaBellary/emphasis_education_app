@@ -1,21 +1,21 @@
 import * as React from 'react';
 import { Icon } from 'react-native-elements'
 
-import Context from '../Context/Context';
+import { GeneralContext } from '../Context/Context';
 import IndividualResult from './IndividualResult';
 
 import { ThemedText, FONT_STYLES } from '../shared';
 import { SearchResultsContainer } from '../Search/SearchResults';
 
 
-interface IAdminChatPickerProps {
+interface AdminChatPickerProps {
   navigation: any;
   route: any;
 }
 
 // let us get the chats from the context
-const AdminChatPicker: React.FC<IAdminChatPickerProps> = ({ navigation }) => {
-  const { loggedUser } = React.useContext(Context);
+const AdminChatPicker: React.FC<AdminChatPickerProps> = ({ navigation }) => {
+  const { loggedUser } = React.useContext(GeneralContext);
 
   return (
     <SearchResultsContainer>
