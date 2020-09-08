@@ -38,13 +38,12 @@ const Wrapper: React.FC = ({ children }) => {
   //     console.log('on action, ', action)
   //   },
 
-  //   onRegistrationError: err => {
-  //     console.log('on reg error', err)
-  //   },
-
-  //   onRemoteFetch: remoteFetch => {
-  //     console.log('on remote fetch', remoteFetch)
-  //   },
+  //   // onRegistrationError: err => {
+  //   //   console.log('on reg error', err)
+  //   // },
+  //   // onRemoteFetch: remoteFetch => {
+  //   //   console.log('on remote fetch', remoteFetch)
+  //   // },
 
   //   permissions: {
   //     alert: true,
@@ -58,6 +57,7 @@ const Wrapper: React.FC = ({ children }) => {
   // });
 
   React.useEffect(() => {
+    // PushNotification.requestPermissions()
     requestUserPermission()
     console.log('permission is requested, ', Platform.OS)
   }, [])
