@@ -18,6 +18,13 @@ const requestUserPermission = async () => {
   }
 }
 
+const triggerNotif = () => {
+  PushNotification.localNotification({
+    message: 'hi',
+    title: 'title'
+  })
+}
+
 // this is going to serve as a wrapper to request permissiong for push notis and such
 const Wrapper: React.FC = ({ children }) => {
 
@@ -88,6 +95,7 @@ const Wrapper: React.FC = ({ children }) => {
       console.log('i am being handled by the background message handler. this is the payload', payload)
       console.log('Platform', Platform.OS)
       incrementNotificationCounter(payload.data!.chatID)
+      // triggerNotif();
     })
 
     return unsub
