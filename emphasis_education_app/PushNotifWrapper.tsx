@@ -6,6 +6,8 @@ import PushNotification from 'react-native-push-notification';
 
 import { GeneralContext } from './src/components/Context/Context';
 
+import NotificationHandler from './PushNotificationHander';
+
 const getFCMToken = async () => {
   const fcmToken = await messaging().getToken();
 }
@@ -18,50 +20,19 @@ const requestUserPermission = async () => {
   }
 }
 
-const triggerNotif = () => {
-  PushNotification.localNotification({
-    message: 'hi',
-    title: 'title'
-  })
-}
+// const triggerNotif = () => {
+//   PushNotification.localNotification({
+//     message: 'hi',
+//     title: 'title'
+//   })
+// }
+
+const handler = new NotificationHandler();
 
 // this is going to serve as a wrapper to request permissiong for push notis and such
 const Wrapper: React.FC = ({ children }) => {
 
   const { incrementNotificationCounter } = React.useContext(GeneralContext);
-
-  // PushNotification.configure({
-  //   onRegister: token => {
-  //     console.log('on register,', token)
-  //   },
-
-  //   onNotification: notification => {
-  //     console.log('on notification, ', notification)
-
-  //     notification.finish(PushNotificationIOS.FetchResult.NoData);
-  //   },
-
-  //   onAction: action => {
-  //     console.log('on action, ', action)
-  //   },
-
-  //   // onRegistrationError: err => {
-  //   //   console.log('on reg error', err)
-  //   // },
-  //   // onRemoteFetch: remoteFetch => {
-  //   //   console.log('on remote fetch', remoteFetch)
-  //   // },
-
-  //   permissions: {
-  //     alert: true,
-  //     badge: true,
-  //     sound: true,
-  //   },
-
-  //   popInitialNotification: true,
-
-  //   requestPermissions: true
-  // });
 
   React.useEffect(() => {
     // PushNotification.requestPermissions()
