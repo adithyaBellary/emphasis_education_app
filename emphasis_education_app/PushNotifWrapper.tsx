@@ -1,8 +1,12 @@
 import * as React from 'react';
 import messaging from '@react-native-firebase/messaging';
 import { Platform } from 'react-native'
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
+import PushNotification from 'react-native-push-notification';
 
 import { GeneralContext } from './src/components/Context/Context';
+
+import NotificationHandler from './PushNotificationHander';
 
 const getFCMToken = async () => {
   const fcmToken = await messaging().getToken();
@@ -16,12 +20,22 @@ const requestUserPermission = async () => {
   }
 }
 
+// const triggerNotif = () => {
+//   PushNotification.localNotification({
+//     message: 'hi',
+//     title: 'title'
+//   })
+// }
+
+const handler = new NotificationHandler();
+
 // this is going to serve as a wrapper to request permissiong for push notis and such
 const Wrapper: React.FC = ({ children }) => {
 
   const { incrementNotificationCounter } = React.useContext(GeneralContext);
 
   React.useEffect(() => {
+    // PushNotification.requestPermissions()
     requestUserPermission()
     console.log('permission is requested, ', Platform.OS)
   }, [])
@@ -52,6 +66,7 @@ const Wrapper: React.FC = ({ children }) => {
       console.log('i am being handled by the background message handler. this is the payload', payload)
       console.log('Platform', Platform.OS)
       incrementNotificationCounter(payload.data!.chatID)
+      // triggerNotif();
     })
 
     return unsub
