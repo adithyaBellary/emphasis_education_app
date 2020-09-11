@@ -40,7 +40,7 @@ class NotificationHandler {
 }
 
 
-class MyNotificationHandler {
+export class MyNotificationHandler {
 
   constructor() {
     console.log('constructing this bitch')

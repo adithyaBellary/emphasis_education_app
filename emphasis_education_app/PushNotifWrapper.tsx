@@ -6,7 +6,7 @@ import PushNotification from 'react-native-push-notification';
 
 import { GeneralContext } from './src/components/Context/Context';
 
-import NotificationHandler from './PushNotificationHander';
+import NotificationHandler, { MyNotificationHandler } from './PushNotificationHander';
 
 const getFCMToken = async () => {
   const fcmToken = await messaging().getToken();
@@ -20,14 +20,14 @@ const requestUserPermission = async () => {
   }
 }
 
-// const triggerNotif = () => {
-//   PushNotification.localNotification({
-//     message: 'hi',
-//     title: 'title'
-//   })
-// }
+const triggerNotif = () => {
+  PushNotification.localNotification({
+    message: 'hi',
+    title: 'title'
+  })
+}
 
-const handler = new NotificationHandler();
+const handler = new MyNotificationHandler();
 
 // this is going to serve as a wrapper to request permissiong for push notis and such
 const Wrapper: React.FC = ({ children }) => {
@@ -66,7 +66,7 @@ const Wrapper: React.FC = ({ children }) => {
       console.log('i am being handled by the background message handler. this is the payload', payload)
       console.log('Platform', Platform.OS)
       incrementNotificationCounter(payload.data!.chatID)
-      // triggerNotif();
+      triggerNotif();
     })
 
     return unsub
