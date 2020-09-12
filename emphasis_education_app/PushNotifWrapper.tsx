@@ -20,10 +20,10 @@ const requestUserPermission = async () => {
   }
 }
 
-const triggerNotif = () => {
+const triggerNotif = (title: string, message: string) => {
   PushNotification.localNotification({
-    message: 'hi',
-    title: 'title'
+    title,
+    message,
   })
 }
 
@@ -50,11 +50,14 @@ const Wrapper: React.FC = ({ children }) => {
     // return fcn;
   }, [])
 
+  // this does not seem to be triggered. The first message from the server wakes the
+  // app up and then the second one gets handled by the background handler
   React.useEffect(() => {
     messaging().getInitialNotification().then(message => {
       if (message) {
         console.log('we are coming from a quit state', message)
         console.log('Platform', Platform.OS)
+        triggerNotif();
       }
     })
     // return fcn;
@@ -65,8 +68,11 @@ const Wrapper: React.FC = ({ children }) => {
     const unsub = messaging().setBackgroundMessageHandler(async payload => {
       console.log('i am being handled by the background message handler. this is the payload', payload)
       console.log('Platform', Platform.OS)
-      incrementNotificationCounter(payload.data!.chatID)
-      triggerNotif();
+      if (payload.data) {
+        const { chatID, title, message } = payload.data;
+        incrementNotificationCounter(chatID)
+        triggerNotif(title, message );
+      }
     })
 
     return unsub
