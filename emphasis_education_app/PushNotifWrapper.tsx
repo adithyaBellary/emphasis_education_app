@@ -57,7 +57,7 @@ const Wrapper: React.FC = ({ children }) => {
       if (message) {
         console.log('we are coming from a quit state', message)
         console.log('Platform', Platform.OS)
-        triggerNotif();
+        triggerNotif('title', 'message');
       }
     })
     // return fcn;
