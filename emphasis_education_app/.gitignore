@@ -82,3 +82,5 @@ amplifyxc.config
 config/
 
 .env
+
+.jest/
