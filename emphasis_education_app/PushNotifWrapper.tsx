@@ -6,7 +6,7 @@ import PushNotification from 'react-native-push-notification';
 
 import { GeneralContext } from './src/components/Context/Context';
 
-import NotificationHandler from './PushNotificationHander';
+import NotificationHandler, { MyNotificationHandler } from './PushNotificationHander';
 
 const getFCMToken = async () => {
   const fcmToken = await messaging().getToken();
@@ -20,14 +20,14 @@ const requestUserPermission = async () => {
   }
 }
 
-// const triggerNotif = () => {
-//   PushNotification.localNotification({
-//     message: 'hi',
-//     title: 'title'
-//   })
-// }
+const triggerNotif = (title: string, message: string) => {
+  PushNotification.localNotification({
+    title,
+    message,
+  })
+}
 
-const handler = new NotificationHandler();
+const handler = new MyNotificationHandler();
 
 // this is going to serve as a wrapper to request permissiong for push notis and such
 const Wrapper: React.FC = ({ children }) => {
@@ -50,11 +50,14 @@ const Wrapper: React.FC = ({ children }) => {
     // return fcn;
   }, [])
 
+  // this does not seem to be triggered. The first message from the server wakes the
+  // app up and then the second one gets handled by the background handler
   React.useEffect(() => {
     messaging().getInitialNotification().then(message => {
       if (message) {
         console.log('we are coming from a quit state', message)
         console.log('Platform', Platform.OS)
+        triggerNotif('title', 'message');
       }
     })
     // return fcn;
@@ -65,8 +68,11 @@ const Wrapper: React.FC = ({ children }) => {
     const unsub = messaging().setBackgroundMessageHandler(async payload => {
       console.log('i am being handled by the background message handler. this is the payload', payload)
       console.log('Platform', Platform.OS)
-      incrementNotificationCounter(payload.data!.chatID)
-      // triggerNotif();
+      if (payload.data) {
+        const { chatID, title, message } = payload.data;
+        incrementNotificationCounter(chatID)
+        triggerNotif(title, message );
+      }
     })
 
     return unsub

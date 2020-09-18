@@ -1,68 +1,32 @@
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import PushNotification from 'react-native-push-notification';
 
-class NotificationHandler {
-  constructor() {
-    console.log('we constructing rn')
-    // PushNotification.configure({
-    //   onRegister: token => {
-    //     console.log('on register,', token)
-    //   },
-
-    //   onNotification: notification => {
-    //     console.log('on notification, ', notification)
-
-    //     notification.finish(PushNotificationIOS.FetchResult.NoData);
-    //   },
-
-    //   onAction: action => {
-    //     console.log('on action, ', action)
-    //   },
-
-    //   // onRegistrationError: err => {
-    //   //   console.log('on reg error', err)
-    //   // },
-    //   // onRemoteFetch: remoteFetch => {
-    //   //   console.log('on remote fetch', remoteFetch)
-    //   // },
-
-    //   permissions: {
-    //     alert: true,
-    //     badge: true,
-    //     sound: true,
-    //   },
-
-    //   popInitialNotification: true,
-
-    //   requestPermissions: true
-    // });
-  }
-}
-
-
-class MyNotificationHandler {
+export class MyNotificationHandler {
 
   constructor() {
     console.log('constructing this bitch')
   }
 
-  onNotification(notification) {
-    console.log('NotificationHandler:', notification);
+  // this handler gets called when we get a push notif from the background state
+  // AND
+  // when we click the notification to get here
+  onNotification(notification: any) {
+    console.log('onNotification:', notification);
 
     if (typeof this._onNotification === 'function') {
       this._onNotification(notification);
     }
   }
 
-  onRegister(token) {
-    console.log('NotificationHandler:', token);
+  onRegister(token: any) {
+    console.log('onRegsiter handler:', token);
 
     if (typeof this._onRegister === 'function') {
       this._onRegister(token);
     }
   }
 
-  onAction(notification) {
+  onAction(notification: any) {
     console.log ('Notification action received:');
     console.log(notification.action);
     console.log(notification);
@@ -73,15 +37,15 @@ class MyNotificationHandler {
   }
 
   // (optional) Called when the user fails to register for remote notifications. Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
-  onRegistrationError(err) {
+  onRegistrationError(err: any) {
     console.log(err);
   }
 
-  attachRegister(handler) {
+  attachRegister(handler: any) {
     this._onRegister = handler;
   }
 
-  attachNotification(handler) {
+  attachNotification(handler: any) {
     this._onNotification = handler;
   }
 }
@@ -121,5 +85,3 @@ PushNotification.configure({
 });
 
 export default handler;
-
-// export default NotificationHandler;
