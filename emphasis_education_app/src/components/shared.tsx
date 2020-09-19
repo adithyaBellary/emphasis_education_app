@@ -70,12 +70,12 @@ export const ButtonGroupContain = styled(View)`
   padding-top: 20%;
 `
 
-export const MyButton = styled(TouchableOpacity)`
+export const MyButton = styled(TouchableOpacity)<{ block? : boolean}>`
   background-color: ${({ disabled, theme}) => disabled ? 'grey' : theme.colors.purple} ;
   height: 40px;
   justify-content: center;
   border-radius: 10px;
-  width: 150px;
+  width: ${({ block }) => block ? '100%' : '150px'};
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -94,11 +94,18 @@ interface ButtonProps {
   buttonText: string;
   loading: boolean;
   disabled?: boolean;
+  block?: boolean;
   onPress(): void;
 }
 
-export const ThemedButton: React.FC<ButtonProps> = ({ onPress, buttonText, loading, disabled }) => (
-  <MyButton onPress={onPress} disabled={disabled} >
+export const ThemedButton: React.FC<ButtonProps> = ({
+  onPress,
+  buttonText,
+  loading,
+  disabled,
+  block
+}) => (
+  <MyButton onPress={onPress} disabled={disabled} block={block}>
     <MyButtonText>
       {buttonText}
     </MyButtonText>

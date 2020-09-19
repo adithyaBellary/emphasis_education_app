@@ -2,7 +2,8 @@ import * as React from 'react';
 import {
   View,
   Text,
-  TextInput
+  TextInput,
+  ScrollView
 } from 'react-native';
 import styled from 'styled-components';
 import { useMutation } from '@apollo/react-hooks';
@@ -41,26 +42,29 @@ const Settings: React.FC<SettingsProps> = () => {
   }
 
   return (
-    <Contain>
-      {/* <Text>
-        settings
-      </Text> */}
-      <StyledTextInput
-        multiline={true}
-        placeholder='Notice anything weird? Let us know here!'
-        onChangeText={text => setMessage(text)}
-      />
+    <View style={{flex: 1, padding: 20}}>
+      <ScrollView alwaysBounceVertical={false}>
+        <StyledTextInput
+          multiline={true}
+          placeholder='Notice anything weird? Let us know here!'
+          onChangeText={text => setMessage(text)}
+        />
         <ThemedButton
           buttonText='Submit'
-          loading={false}
+          loading={loading}
+          block={true}
           onPress={() => sendEmail()}
-        />
-        <ThemedButton
-          buttonText='Logout'
-          loading={false}
-          onPress={() => logout()}
-        />
-    </Contain>
+          />
+      </ScrollView>
+        <View style={{ marginBottom: 35}}>
+          <ThemedButton
+            block={true}
+            buttonText='Logout'
+            loading={false}
+            onPress={() => logout()}
+          />
+        </View>
+    </View>
   )
 }
 
