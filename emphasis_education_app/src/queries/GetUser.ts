@@ -9,7 +9,7 @@ export const GET_USER = gql`
       phoneNumber
       userType
       _id
-      chatIDs
+      # chatIDs
       classes {
         displayName
         className
