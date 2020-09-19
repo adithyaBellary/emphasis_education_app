@@ -223,7 +223,10 @@ const StackNavigation: React.FC = () => {
   const authContext = React.useMemo(
     () => ({
       login: (email: string, password: string) => {
-        _login({ variables: { email, password }})
+        _login({ variables: {
+          email: email.toLowerCase(),
+          password
+        }})
       },
       logout: async data => {
         await AsyncStorage.clear();
