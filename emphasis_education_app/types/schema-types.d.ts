@@ -319,7 +319,7 @@ export type UserInfoType = {
   classes: Array<Maybe<Chat>>;
   groupID: Scalars['String'];
   gender: Scalars['String'];
-  adminChat?: Maybe<Array<AdminChat>>;
+  adminChat: Array<AdminChat>;
   dob: Scalars['String'];
 };
 
