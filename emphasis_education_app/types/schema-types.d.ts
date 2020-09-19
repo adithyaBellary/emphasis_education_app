@@ -151,6 +151,7 @@ export type Mutation = {
   addFamilyMember: GenericResponse;
   deleteChat: GenericResponse;
   sendEmail: GenericResponse;
+  sendBugEmail: GenericResponse;
   forgotPassword: GenericResponse;
   addChatMember: GenericResponse;
   updateUser: GenericResponse;
@@ -209,6 +210,12 @@ export type MutationDeleteChatArgs = {
 
 export type MutationSendEmailArgs = {
   subject: Scalars['String'];
+  body: Scalars['String'];
+};
+
+
+export type MutationSendBugEmailArgs = {
+  user: Scalars['String'];
   body: Scalars['String'];
 };
 

@@ -60,6 +60,7 @@ const AdminIcon: React.FC<{ changeScreens (dest: string): () => void }> = ({ cha
 const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
   // console.log('route in home', route)
   const { loggedUser, setUser } = React.useContext(GeneralContext);
+  console.log('admin chat', loggedUser.adminChat)
   const changeScreens = (dest: string) => () =>  navigation.navigate(dest)
   const { data, loading, error } = useQuery<{ getUser: UserInfoType }, QueryGetUserArgs>(GET_USER, {
     variables: {
@@ -68,44 +69,41 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
     onCompleted: data => {
       setUser({...data.getUser})
       // data.getUser.classes.for
+      navigation.setOptions({
+        headerRight: () => (
+          <IconRow>
+            <PermissionedComponent allowedPermissions={[
+              Permission.Admin
+            ]}>
+              <AdminIcon changeScreens={changeScreens}/>
+            </PermissionedComponent>
+
+            <PermissionedComponent allowedPermissions={[
+              Permission.Student,
+              Permission.Parent,
+              Permission.Tutor
+            ]}>
+              <CenteredDiv>
+                <Icon
+                  name='user'
+                  type='antdesign'
+                  onPress={() => navigation.navigate('Chat', {
+                    chatID: data.getUser.adminChat[0].chatID,
+                    className: 'Admin'
+                  })}
+                />
+                <Text>Admin Chat</Text>
+              </CenteredDiv>
+            </PermissionedComponent>
+          </IconRow>
+        ),
+        headerRightContainerStyle: {
+          padding: 10
+        },
+        headerLeft: () => null
+      })
     }
   })
-
-  React.useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <IconRow>
-          <PermissionedComponent allowedPermissions={[
-            Permission.Admin
-          ]}>
-            <AdminIcon changeScreens={changeScreens}/>
-          </PermissionedComponent>
-
-          <PermissionedComponent allowedPermissions={[
-            Permission.Student,
-            Permission.Parent,
-            Permission.Tutor
-          ]}>
-            <CenteredDiv>
-              <Icon
-                name='user'
-                type='antdesign'
-                onPress={() => navigation.navigate('Chat', {
-                  chatID: loggedUser.adminChat[0].chatID,
-                  className: 'Admin'
-                })}
-              />
-              <Text>Admin Chat</Text>
-            </CenteredDiv>
-          </PermissionedComponent>
-        </IconRow>
-      ),
-      headerRightContainerStyle: {
-        padding: 10
-      },
-      headerLeft: () => null
-    })
-  }, [])
 
   if (loading) {
     return (
