@@ -66,8 +66,8 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
     variables: {
       userEmail: route.params.token
     },
-    onCompleted: data => {
-      setUser({...data.getUser})
+    onCompleted: ({ getUser }) => {
+      setUser({...getUser})
       // data.getUser.classes.for
       navigation.setOptions({
         headerRight: () => (
@@ -88,7 +88,7 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
                   name='user'
                   type='antdesign'
                   onPress={() => navigation.navigate('Chat', {
-                    chatID: data.getUser.adminChat[0].chatID,
+                    chatID: getUser.adminChat[0].chatID,
                     className: 'Admin'
                   })}
                 />
@@ -101,6 +101,16 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
           padding: 10
         },
         headerLeft: () => null
+      })
+      // subscribe to the messages
+      getUser.classes.forEach(_class => {
+        console.log('subbing to topics')
+        if (_class) {
+          messaging()
+            .subscribeToTopic(_class.chatID)
+            .then(() => console.log('successfully subbed to topic'))
+            .catch(e => console.log('there was an error in subbing to the topic, ', e))
+        }
       })
     }
   })

@@ -1,24 +1,21 @@
 import * as React from 'react';
 import {
   View,
-  Text,
   TextInput,
   ScrollView
 } from 'react-native';
 import styled from 'styled-components';
 import { useMutation } from '@apollo/react-hooks';
 
-import {
-  ThemedButton,
-  ContentContain as Contain
-} from './shared';
-import { AuthContext, GeneralContext } from './Context/Context';
 import { SEND_BUG_EMAIL } from '../queries/SendBugEmail';
+
+import { ThemedButton } from './shared';
+import { AuthContext, GeneralContext } from './Context/Context';
 
 const StyledTextInput = styled(TextInput)`
   height: 100px
   border: grey solid 1px;
-  padding: 20px;
+  padding: 15px;
   border-radius: 10px;
 `;
 
@@ -35,10 +32,15 @@ const Settings: React.FC<SettingsProps> = () => {
   const [runMutation, {data, loading}] = useMutation(SEND_BUG_EMAIL);
 
   const sendEmail = () => {
+    console.log(loggedUser.email, message)
     runMutation({ variables: {
       user: loggedUser.email,
       body: message
     }})
+    .then(res => {
+      console.log('res, ', res)
+    })
+    .catch (e => console.log('error sendng the bug email, ', e))
   }
 
   return (
@@ -49,14 +51,16 @@ const Settings: React.FC<SettingsProps> = () => {
           placeholder='Notice anything weird? Let us know here!'
           onChangeText={text => setMessage(text)}
         />
-        <ThemedButton
-          buttonText='Submit'
-          loading={loading}
-          block={true}
-          onPress={() => sendEmail()}
+        <View style={{ paddingVertical: 25}}>
+          <ThemedButton
+            buttonText='Submit feedback'
+            loading={loading}
+            block={true}
+            onPress={() => sendEmail()}
           />
+        </View>
       </ScrollView>
-        <View style={{ marginBottom: 35}}>
+        <View style={{ marginBottom: 50}}>
           <ThemedButton
             block={true}
             buttonText='Logout'
