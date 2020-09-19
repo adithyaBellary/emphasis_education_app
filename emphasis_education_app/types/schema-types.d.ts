@@ -308,8 +308,8 @@ export type UserInfoType = {
   phoneNumber: Scalars['String'];
   userType: Permission;
   _id: Scalars['String'];
-  chatIDs?: Maybe<Array<Maybe<Scalars['String']>>>;
-  classes?: Maybe<Array<Maybe<Chat>>>;
+  chatIDs: Array<Maybe<Scalars['String']>>;
+  classes: Array<Maybe<Chat>>;
   groupID: Scalars['String'];
   gender: Scalars['String'];
   adminChat?: Maybe<Array<AdminChat>>;

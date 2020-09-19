@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IUser } from '../../types';
+import { UserInfoType } from '../../../types/schema-types';
 
 // This number can be used to display in the app icon.
 // in the chat picker, we can display whether there are any unread messages
@@ -11,10 +11,12 @@ export interface NotificationsProps{
 export interface Context {
   // manage number of notifications for each chat
   notifications: NotificationsProps;
-  loggedUser: IUser;
+  // loggedUser: IUser;
+  loggedUser: UserInfoType;
   incrementNotificationCounter (chatID: string): void;
   clearNotificationCounter (chatID: string): void;
-  setUser( user: IUser): void;
+  // setUser( user: IUser): void;
+  setUser( user: UserInfoType): void;
 }
 
 interface AuthContextProps {

@@ -21,6 +21,9 @@ const Settings: React.FC<SettingsProps> = () => {
       <Text>
         settings
       </Text>
+      <Text>
+        add a section to get feedback / log a bug
+      </Text>
       <ButtonContainer>
         <ThemedButton
           buttonText='Logout'

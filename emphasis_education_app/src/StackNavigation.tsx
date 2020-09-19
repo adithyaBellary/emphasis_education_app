@@ -27,7 +27,7 @@ import { LOGIN_TOKEN } from './constant';
 import { LOGIN } from './queries/Login';
 
 import {AuthContext} from './components/Context/Context';
-import { IUser, ILoginPayload } from './types';
+import { ILoginPayload } from './types';
 import { TitleText } from './components/shared';
 import { theme } from './theme';
 

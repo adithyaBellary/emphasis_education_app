@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import styled from 'styled-components';
+import messaging from '@react-native-firebase/messaging';
 
 import { MissionStatement, HeaderTitle, LogiImage } from './logos';
 
@@ -20,6 +21,10 @@ import { GeneralContext } from '../Context/Context';
 import { Permission } from '../../types';
 import { GET_USER } from '../../queries/GetUser';
 import { theme } from '../../theme';
+import {
+  UserInfoType,
+  QueryGetUserArgs
+ } from '../../../types/schema-types';
 
 interface LiftedHomeProps {
   navigation: any;
@@ -56,13 +61,13 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
   // console.log('route in home', route)
   const { loggedUser, setUser } = React.useContext(GeneralContext);
   const changeScreens = (dest: string) => () =>  navigation.navigate(dest)
-  const { data, loading, error } = useQuery(GET_USER, {
+  const { data, loading, error } = useQuery<{ getUser: UserInfoType }, QueryGetUserArgs>(GET_USER, {
     variables: {
       userEmail: route.params.token
     },
     onCompleted: data => {
-      // console.log('data oncomplete', data)
       setUser({...data.getUser})
+      // data.getUser.classes.for
     }
   })
 

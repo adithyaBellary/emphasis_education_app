@@ -6,7 +6,7 @@ import {
 import styled from 'styled-components';
 import { Icon } from 'react-native-elements';
 
-import { IUser, Permission, Class } from '../../types';
+import { Permission } from '../../types';
 import { GeneralContext } from '../Context/Context';
 import {
   ContentContain,
@@ -19,11 +19,12 @@ import {
   FONT_STYLES
 } from '../shared';
 import { theme } from '../../theme';
+import { UserInfoType, Chat } from '../../../types/schema-types';
 
 interface ProfileProps {
   editing: boolean;
   currentUserID: string;
-  family: IUser[];
+  family: UserInfoType[];
   onPress (): void;
 }
 
@@ -34,7 +35,7 @@ const Title = styled(Text)`
   padding: 10px 0;
 `;
 
-const ListClasses: React.FC<{ classes: Class[]}> = ({ classes }) => (
+const ListClasses: React.FC<{ classes: Chat[]}> = ({ classes }) => (
   <>
     {classes.map(_class => (
       <ThemedText
@@ -56,7 +57,7 @@ const ListClasses: React.FC<{ classes: Class[]}> = ({ classes }) => (
 const Profile: React.FC<ProfileProps> = ({ family, editing, currentUserID, onPress }) => {
   const {loggedUser} = React.useContext(GeneralContext);
 
-  let currentUser: IUser | undefined;
+  let currentUser: UserInfoType | undefined;
 
   if ( currentUserID === loggedUser._id) {
     // we are not coming from the admin page
@@ -111,7 +112,7 @@ const Profile: React.FC<ProfileProps> = ({ family, editing, currentUserID, onPre
         onChangeText={onChangeText}
       />
 
-      {currentUser.classes && <ListClasses classes={currentUser.classes}/>}
+      {currentUser.classes && <ListClasses classes={currentUser.classes || []} />}
 
       <IconRow>
         <Title>Family Members</Title>
