@@ -49,7 +49,7 @@ const LiftedProfile: React.FC<LiftedProfileProps> = ({ route, navigation }) => {
   const { data, loading, error } = useQuery<IGetFamilyPayload, IGetFamilyInput>(GET_FAMILY, options)
   if ( error ) { console.log('error loading the profile', error)}
 
-  const toggleEdit = () => setEditing(_edit => !_edit)
+  // const toggleEdit = () => setEditing(_edit => !_edit)
   const goToAddMember = () => navigation.navigate('AddUserModal', { groupID })
 
   // let us not expose the profile editing yet

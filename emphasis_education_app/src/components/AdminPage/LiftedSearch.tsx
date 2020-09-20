@@ -10,6 +10,7 @@ import { ISearchUserPayload, ISearchInput } from '../../types';
 import { SEARCH_USERS } from '../../queries/SearchUsers';
 
 import { ContentContain } from './common';
+import { UserInfoType } from 'types/schema-types';
 
 interface LiftedSearchProps {
   navigation: any;
@@ -17,7 +18,7 @@ interface LiftedSearchProps {
 
 const LiftedSearch: React.FC<LiftedSearchProps> = ({ navigation }) => {
   const [searchTerm, setSearchTerm] = React.useState('');
-  const [runQuery, { data, loading, error }] = useLazyQuery<ISearchUserPayload, ISearchInput>(SEARCH_USERS)
+  const [runQuery, { data, loading, error }] = useLazyQuery<{ searchUsers: UserInfoType }, ISearchInput>(SEARCH_USERS)
   const handleTextChange = (text: string) => setSearchTerm(text)
   React.useEffect(() => {
     runQuery({variables: {searchTerm}})

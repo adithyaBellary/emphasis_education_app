@@ -81,7 +81,8 @@ const Profile: React.FC<ProfileProps> = ({ family, editing, currentUserID, onPre
 
     console.log('mainUserCopy', mainUserCopy)
   }
-
+  console.log('currentUser', currentUser)
+  console.log('family', family)
   return (
     <ContentContain>
       <Title>{currentUser.firstName} {currentUser.lastName}</Title>
