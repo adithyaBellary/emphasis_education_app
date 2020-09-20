@@ -1,7 +1,9 @@
 import * as React from 'react';
 import {
   View,
-  Text
+  Text,
+  ScrollView,
+  // ListView
 } from 'react-native';
 import styled from 'styled-components';
 import { Icon } from 'react-native-elements';
@@ -54,7 +56,10 @@ const ListClasses: React.FC<{ classes: Chat[]}> = ({ classes }) => (
   </>
 )
 
-
+const ContentScroll = styled(ScrollView)`
+  padding: 0 20px;
+  margin-bottom: 60px;
+`
 
 const Profile: React.FC<ProfileProps> = ({ family, editing, currentUserID, onPress }) => {
   const {loggedUser} = React.useContext(GeneralContext);
@@ -65,12 +70,15 @@ const Profile: React.FC<ProfileProps> = ({ family, editing, currentUserID, onPre
     // we are not coming from the admin page
     currentUser = loggedUser
   } else {
-    family.forEach(familyMember => {
-      if (familyMember._id === currentUserID) {
-        // we have found the selected user
-        currentUser = familyMember
-      }
-    })
+    if (family) {
+      family.forEach(familyMember => {
+        if (familyMember._id === currentUserID) {
+          // we have found the selected user
+          currentUser = familyMember
+        }
+      })
+    }
+
   }
 
   if (!currentUser) { return <View><Text>could not find the user.</Text></View>; }
@@ -83,7 +91,7 @@ const Profile: React.FC<ProfileProps> = ({ family, editing, currentUserID, onPre
 
     console.log('mainUserCopy', mainUserCopy)
   }
-  console.log('currentUser', currentUser)
+  // console.log('currentUser', currentUser)
   console.log('family', family)
 
   // const getRelationship = (gender: string, perm: Permission): string => {
@@ -93,8 +101,12 @@ const Profile: React.FC<ProfileProps> = ({ family, editing, currentUserID, onPre
   //   }
   // }
 
+  if (!family) {
+    return null
+  }
+
   return (
-    <ContentContain>
+    <ContentScroll>
       <Title>{currentUser.firstName} {currentUser.lastName}</Title>
       <IndividualField
         value={currentUser.email}
@@ -181,6 +193,9 @@ const Profile: React.FC<ProfileProps> = ({ family, editing, currentUserID, onPre
                   label={'User Type'}
                   labelSize={14}
                 />
+
+                {user.classes && <ListClasses classes={user.classes || []} />}
+
                 {/* relationship */}
                 {/* todo later. a bunch of mapping */}
                 {/* <IndividualField
@@ -193,7 +208,7 @@ const Profile: React.FC<ProfileProps> = ({ family, editing, currentUserID, onPre
             )}
           </>
         ))}
-    </ContentContain>
+    </ContentScroll>
   )
 }
 

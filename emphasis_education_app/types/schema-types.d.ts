@@ -17,6 +17,12 @@ export type AddClassPayload = {
   message: Scalars['String'];
 };
 
+export type AddFamilyMemberPayload = {
+  __typename?: 'AddFamilyMemberPayload';
+  res: Scalars['Boolean'];
+  family: Array<UserInfoType>;
+};
+
 export type AdminChat = {
   __typename?: 'AdminChat';
   chatID: Scalars['String'];
@@ -148,7 +154,7 @@ export type Mutation = {
   deleteClass: DeleteClassPayload;
   createChat: GenericResponse;
   createCode: CreateCodePayload;
-  addFamilyMember: GenericResponse;
+  addFamilyMember: AddFamilyMemberPayload;
   deleteChat: GenericResponse;
   sendEmail: GenericResponse;
   sendBugEmail: GenericResponse;

@@ -230,8 +230,9 @@ export const RadioButtonGroup: React.FC<RadioButtonGroupProps> = ({ titles, onSe
 }
 
 export const ContentContain = styled(View)`
-  padding: 20px;
-`
+  padding: 0 20px;
+`;
+
 export enum FONT_STYLES {
   MAIN = 'main',
   LIGHT = 'light',

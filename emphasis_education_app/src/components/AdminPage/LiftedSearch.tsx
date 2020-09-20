@@ -18,7 +18,7 @@ interface LiftedSearchProps {
 
 const LiftedSearch: React.FC<LiftedSearchProps> = ({ navigation }) => {
   const [searchTerm, setSearchTerm] = React.useState('');
-  const [runQuery, { data, loading, error }] = useLazyQuery<{ searchUsers: UserInfoType }, ISearchInput>(SEARCH_USERS)
+  const [runQuery, { data, loading, error }] = useLazyQuery<{ searchUsers: UserInfoType[] }, ISearchInput>(SEARCH_USERS)
   const handleTextChange = (text: string) => setSearchTerm(text)
   React.useEffect(() => {
     runQuery({variables: {searchTerm}})

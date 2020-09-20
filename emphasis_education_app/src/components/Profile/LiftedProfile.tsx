@@ -9,12 +9,13 @@ import { GeneralContext } from '../Context/Context';
 import Profile from './Profile';
 
 import { GET_FAMILY } from '../../queries/GetFamily';
-import { IGetFamilyInput, IGetFamilyPayload } from '../../types';
+import { IGetFamilyInput } from '../../types';
 import {
   GeneralSpacing,
   ThemedText,
   FONT_STYLES
 } from '../shared';
+import { UserInfoType } from '../../../types/schema-types';
 
 interface LiftedProfileProps {
   // TODO type the navagation props
@@ -38,17 +39,30 @@ const HeaderButtons: React.FC<HeaderButtonProps> = ({ text, onPress}) => (
 )
 
 const LiftedProfile: React.FC<LiftedProfileProps> = ({ route, navigation }) => {
-  console.log('route', route)
+  // console.log('route', route)
   const [editing, setEditing] = React.useState(false);
   const { loggedUser } = React.useContext(GeneralContext);
   // if we passed in routes then that means we have come from the admin page
   const groupID = route.params ? route.params.groupID : loggedUser.groupID
   const currentUserID = route.params ? route.params.currentUserID : loggedUser._id
-  console.log('groupID', groupID, currentUserID)
-  const options = { variables: { groupID }}
-  const { data, loading, error } = useQuery<IGetFamilyPayload, IGetFamilyInput>(GET_FAMILY, options)
+  // console.log('groupID', groupID, currentUserID)
+  // const options = {
+  //   variables: {
+  //     groupID
+  //   },
+  //   fetchPolicy: 'no-cache'
+  // }
+  const { data, loading, error } = useQuery<{ getFamily: UserInfoType[] }, IGetFamilyInput>(
+    GET_FAMILY,
+    {
+      variables: {
+        groupID
+      },
+      fetchPolicy: 'no-cache'
+    }
+  )
   if ( error ) { console.log('error loading the profile', error)}
-
+  // console.log('data in profile', data?.getFamily)
   // const toggleEdit = () => setEditing(_edit => !_edit)
   const goToAddMember = () => navigation.navigate('AddUserModal', { groupID })
 
