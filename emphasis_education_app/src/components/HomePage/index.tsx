@@ -103,15 +103,17 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
         headerLeft: () => null
       })
       // subscribe to the messages
-      getUser.classes.forEach(_class => {
-        console.log('subbing to topics')
-        if (_class) {
-          messaging()
-            .subscribeToTopic(_class.chatID)
-            .then(() => console.log('successfully subbed to topic'))
-            .catch(e => console.log('there was an error in subbing to the topic, ', e))
-        }
-      })
+      if (getUser.classes) {
+        getUser.classes.forEach(_class => {
+          console.log('subbing to topics')
+          if (_class) {
+            messaging()
+              .subscribeToTopic(_class.chatID)
+              .then(() => console.log('successfully subbed to topic'))
+              .catch(e => console.log('there was an error in subbing to the topic, ', e))
+          }
+        })
+      }
     }
   })
 

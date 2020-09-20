@@ -54,6 +54,8 @@ const ListClasses: React.FC<{ classes: Chat[]}> = ({ classes }) => (
   </>
 )
 
+
+
 const Profile: React.FC<ProfileProps> = ({ family, editing, currentUserID, onPress }) => {
   const {loggedUser} = React.useContext(GeneralContext);
 
@@ -83,6 +85,14 @@ const Profile: React.FC<ProfileProps> = ({ family, editing, currentUserID, onPre
   }
   console.log('currentUser', currentUser)
   console.log('family', family)
+
+  // const getRelationship = (gender: string, perm: Permission): string => {
+  //   if (loggedUser.userType === Permission.Parent) {
+  //     // if we are the parent
+  //     if (perm === )
+  //   }
+  // }
+
   return (
     <ContentContain>
       <Title>{currentUser.firstName} {currentUser.lastName}</Title>
@@ -149,7 +159,20 @@ const Profile: React.FC<ProfileProps> = ({ family, editing, currentUserID, onPre
                   labelSize={14}
                 />
                 {/* phone numer */}
+                <IndividualField
+                  value={user.phoneNumber}
+                  valueSize={16}
+                  label={'Phone Number'}
+                  labelSize={14}
+                />
                 {/* relationship */}
+                {/* todo later. a bunch of mapping */}
+                {/* <IndividualField
+                  value={user.phoneNumber}
+                  valueSize={16}
+                  label={'Relationship'}
+                  labelSize={14}
+                /> */}
               </>
             )}
           </>
