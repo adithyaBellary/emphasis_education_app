@@ -13,6 +13,7 @@ export const GET_FAMILY = gql`
       classes {
         className
       }
+      userType
     }
   }
 `

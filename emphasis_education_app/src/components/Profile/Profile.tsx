@@ -123,6 +123,15 @@ const Profile: React.FC<ProfileProps> = ({ family, editing, currentUserID, onPre
         onChangeText={onChangeText}
       />
 
+      <IndividualField
+        value={currentUser.userType}
+        valueSize={16}
+        label={'User Type'}
+        labelSize={14}
+        editing={editing}
+        onChangeText={onChangeText}
+      />
+
       {currentUser.classes && <ListClasses classes={currentUser.classes || []} />}
 
       <IconRow>
@@ -163,6 +172,13 @@ const Profile: React.FC<ProfileProps> = ({ family, editing, currentUserID, onPre
                   value={user.phoneNumber}
                   valueSize={16}
                   label={'Phone Number'}
+                  labelSize={14}
+                />
+
+                <IndividualField
+                  value={user.userType}
+                  valueSize={16}
+                  label={'User Type'}
                   labelSize={14}
                 />
                 {/* relationship */}
