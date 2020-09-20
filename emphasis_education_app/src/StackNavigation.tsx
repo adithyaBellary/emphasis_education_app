@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-community/async-storage';
-import { View, Text, ActivityIndicator, Platform } from 'react-native';
+import { ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { useMutation } from '@apollo/react-hooks';
 
@@ -20,8 +20,6 @@ import EnterCode from './components/UserManagement/EnterCode';
 import AddMember from './components/AdminPage/AddMemberModal';
 import ChatInfo from './components/Chat/ChatInfo';
 import ForgotPassword from './components/UserManagement/ForgotPassword';
-
-// import AdminChatPicker from './components/AdminPage/AdminChatPicker';
 
 import { LOGIN_TOKEN } from './constant';
 import { LOGIN } from './queries/Login';
