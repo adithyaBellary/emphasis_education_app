@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { useLazyQuery, useMutation } from '@apollo/react-hooks';
 import { Icon, Input } from 'react-native-elements';
-import { ChatUserInfo } from 'src/types';
+import { ChatUserInfo, Permission } from '../../types';
 import { SEARCH_USERS } from '../../queries/SearchUsers'
 import { UserInfoType } from '../../../types/schema-types';
 
@@ -18,7 +18,8 @@ import {
   ThemedText,
   IconRow,
   FONT_STYLES,
-  ContentContain
+  ContentContain,
+  PermissionedComponent
 } from '../shared';
 import { ADD_CHAT_MEMBER } from '../../queries/AddChatMember';
 
@@ -145,6 +146,7 @@ const ChatInfo: React.FC<ChatInfoProps> = ({ navigation, route }) => {
             {_user.firstName} {_user.lastName}
           </ThemedText>
         ))}
+        <PermissionedComponent allowedPermissions={[Permission.Admin]}>
 
         <IconRow>
           <Text>Add member</Text>
@@ -170,11 +172,12 @@ const ChatInfo: React.FC<ChatInfoProps> = ({ navigation, route }) => {
                   <SearchResults
                     results={data ? data.searchUsers : []}
                     addMember={addMember}
-                />
+                  />
               )}
             </>
           )
         }
+        </PermissionedComponent>
 
 
       </ContentContain>
