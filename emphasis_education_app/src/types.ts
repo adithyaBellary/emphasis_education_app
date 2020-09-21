@@ -47,7 +47,7 @@ export interface IUser {
   phoneNumber: string;
   userType: Permission;
   groupID: string;
-  chatIDs: string[];
+  chatIDs?: string[];
   classes?: Class[];
   _id: string;
   gender: string;

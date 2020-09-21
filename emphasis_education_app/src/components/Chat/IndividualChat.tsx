@@ -168,6 +168,7 @@ const IndividualChat: React.FC<ndividualChatProps> = ({
   displayNotificationBadge,
   clearNotificationCounter
 }) => {
+  console.log('classObject in ind chat', classObject.userInfo)
 
   let caption;
   let mainText: string = '';

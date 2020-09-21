@@ -1,15 +1,15 @@
 import * as React from 'react';
 import {
   View,
-  Text
+  Text,
+  ScrollView,
 } from 'react-native';
 import styled from 'styled-components';
 import { Icon } from 'react-native-elements';
 
-import { IUser, Permission, Class } from '../../types';
+import { Permission } from '../../types';
 import { GeneralContext } from '../Context/Context';
 import {
-  ContentContain,
   IndividualField,
   HorizontalDivider,
   IconRow,
@@ -19,11 +19,12 @@ import {
   FONT_STYLES
 } from '../shared';
 import { theme } from '../../theme';
+import { UserInfoType, Chat } from '../../../types/schema-types';
 
 interface ProfileProps {
   editing: boolean;
   currentUserID: string;
-  family: IUser[];
+  family: UserInfoType[];
   onPress (): void;
 }
 
@@ -34,7 +35,7 @@ const Title = styled(Text)`
   padding: 10px 0;
 `;
 
-const ListClasses: React.FC<{ classes: Class[]}> = ({ classes }) => (
+const ListClasses: React.FC<{ classes: Chat[]}> = ({ classes }) => (
   <>
     {classes.map(_class => (
       <ThemedText
@@ -53,21 +54,29 @@ const ListClasses: React.FC<{ classes: Class[]}> = ({ classes }) => (
   </>
 )
 
+const ContentScroll = styled(ScrollView)`
+  padding: 0 20px;
+  margin-bottom: 60px;
+`
+
 const Profile: React.FC<ProfileProps> = ({ family, editing, currentUserID, onPress }) => {
   const {loggedUser} = React.useContext(GeneralContext);
 
-  let currentUser: IUser | undefined;
+  let currentUser: UserInfoType | undefined;
 
   if ( currentUserID === loggedUser._id) {
     // we are not coming from the admin page
     currentUser = loggedUser
   } else {
-    family.forEach(familyMember => {
-      if (familyMember._id === currentUserID) {
-        // we have found the selected user
-        currentUser = familyMember
-      }
-    })
+    if (family) {
+      family.forEach(familyMember => {
+        if (familyMember._id === currentUserID) {
+          // we have found the selected user
+          currentUser = familyMember
+        }
+      })
+    }
+
   }
 
   if (!currentUser) { return <View><Text>could not find the user.</Text></View>; }
@@ -78,11 +87,24 @@ const Profile: React.FC<ProfileProps> = ({ family, editing, currentUserID, onPre
     if (label === 'Email') { mainUserCopy.email = text }
     if (label === 'Phone Number') { mainUserCopy.phoneNumber = text }
 
-    console.log('mainUserCopy', mainUserCopy)
+    // console.log('mainUserCopy', mainUserCopy)
   }
+  // console.log('currentUser', currentUser)
+  // console.log('family', family)
+
+  // const getRelationship = (gender: string, perm: Permission): string => {
+  //   if (loggedUser.userType === Permission.Parent) {
+  //     // if we are the parent
+  //     if (perm === )
+  //   }
+  // }
+
+  // if (!family) {
+  //   return null
+  // }
 
   return (
-    <ContentContain>
+    <ContentScroll>
       <Title>{currentUser.firstName} {currentUser.lastName}</Title>
       <IndividualField
         value={currentUser.email}
@@ -111,7 +133,16 @@ const Profile: React.FC<ProfileProps> = ({ family, editing, currentUserID, onPre
         onChangeText={onChangeText}
       />
 
-      {currentUser.classes && <ListClasses classes={currentUser.classes}/>}
+      <IndividualField
+        value={currentUser.userType}
+        valueSize={16}
+        label={'User Type'}
+        labelSize={14}
+        editing={editing}
+        onChangeText={onChangeText}
+      />
+
+      {currentUser.classes && <ListClasses classes={currentUser.classes || []} />}
 
       <IconRow>
         <Title>Family Members</Title>
@@ -147,12 +178,35 @@ const Profile: React.FC<ProfileProps> = ({ family, editing, currentUserID, onPre
                   labelSize={14}
                 />
                 {/* phone numer */}
+                <IndividualField
+                  value={user.phoneNumber}
+                  valueSize={16}
+                  label={'Phone Number'}
+                  labelSize={14}
+                />
+
+                <IndividualField
+                  value={user.userType}
+                  valueSize={16}
+                  label={'User Type'}
+                  labelSize={14}
+                />
+
+                {user.classes && <ListClasses classes={user.classes || []} />}
+
                 {/* relationship */}
+                {/* todo later. a bunch of mapping */}
+                {/* <IndividualField
+                  value={user.phoneNumber}
+                  valueSize={16}
+                  label={'Relationship'}
+                  labelSize={14}
+                /> */}
               </>
             )}
           </>
         ))}
-    </ContentContain>
+    </ContentScroll>
   )
 }
 

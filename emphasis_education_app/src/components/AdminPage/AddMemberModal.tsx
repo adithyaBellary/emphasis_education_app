@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-  View,
   Text,
   SafeAreaView,
   TouchableOpacity,
@@ -87,6 +86,7 @@ const AddMember: React.FC<AddMemberProps> = ({ navigation, route }) => {
 
   const addSelectedUser = (userID: string, userType: string, userEmail: string, firstName: string, lastName: string) => () => {
     let present = false;
+    let name = `${firstName} ${lastName}`;
     let _newArray = selectedUsers.reduce((acc, cur) => {
       if (cur._id === userID) {
         present = true;
@@ -94,7 +94,7 @@ const AddMember: React.FC<AddMemberProps> = ({ navigation, route }) => {
       } else {
         return [...acc, {_id: cur._id, userType: cur.userType, email: cur.email, name: cur.name}]
       }
-    }, [] as ISelectedUsersProps[])
+    }, [] as SelectedUsersProps[])
     if (!present) { _newArray = [..._newArray, {_id: userID, userType, email: userEmail, name}] }
     setSelectedUsers([..._newArray])
   }
@@ -107,6 +107,7 @@ const AddMember: React.FC<AddMemberProps> = ({ navigation, route }) => {
     runMut({ variables: options }).then(data => {
       console.log('data on done', data)
       Alert.alert('done adding this member')
+      navigation.goBack()
     })
   }
 

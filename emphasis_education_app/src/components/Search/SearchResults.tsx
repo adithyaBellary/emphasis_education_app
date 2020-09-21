@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Icon } from 'react-native-elements';
 
-import { IUser } from '../../types';
 import IndividualResult from '../AdminPage/IndividualResult';
 import {
   ThemedText,
@@ -9,8 +8,10 @@ import {
   FONT_STYLES
 } from '../shared';
 
+import { UserInfoType } from '../../../types/schema-types';
+
 interface SearchResultsProps {
-  searchResults: IUser[];
+  searchResults: UserInfoType[];
   navigation: any;
 }
 

@@ -8,10 +8,12 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "codegen": "apollo client:codegen --target typescript --watch"
+    "generate": "graphql-codegen"
   },
   "dependencies": {
     "@apollo/react-hooks": "^3.1.5",
+    "@graphql-codegen/cli": "^1.17.8",
+    "@graphql-codegen/typescript": "^1.17.9",
     "@material-ui/icons": "^4.9.1",
     "@react-native-community/async-storage": "^1.11.0",
     "@react-native-community/masked-view": "^0.1.7",

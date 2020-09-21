@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import styled from 'styled-components';
+import messaging from '@react-native-firebase/messaging';
 
 import { MissionStatement, HeaderTitle, LogiImage } from './logos';
 
@@ -20,6 +21,10 @@ import { GeneralContext } from '../Context/Context';
 import { Permission } from '../../types';
 import { GET_USER } from '../../queries/GetUser';
 import { theme } from '../../theme';
+import {
+  UserInfoType,
+  QueryGetUserArgs
+ } from '../../../types/schema-types';
 
 interface LiftedHomeProps {
   navigation: any;
@@ -55,52 +60,62 @@ const AdminIcon: React.FC<{ changeScreens (dest: string): () => void }> = ({ cha
 const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
   // console.log('route in home', route)
   const { loggedUser, setUser } = React.useContext(GeneralContext);
+  console.log('admin chat', loggedUser.adminChat)
   const changeScreens = (dest: string) => () =>  navigation.navigate(dest)
-  const { data, loading, error } = useQuery(GET_USER, {
+  const { data, loading, error } = useQuery<{ getUser: UserInfoType }, QueryGetUserArgs>(GET_USER, {
     variables: {
       userEmail: route.params.token
     },
-    onCompleted: data => {
-      // console.log('data oncomplete', data)
-      setUser({...data.getUser})
+    onCompleted: ({ getUser }) => {
+      setUser({...getUser})
+      // data.getUser.classes.for
+      navigation.setOptions({
+        headerRight: () => (
+          <IconRow>
+            <PermissionedComponent allowedPermissions={[
+              Permission.Admin
+            ]}>
+              <AdminIcon changeScreens={changeScreens}/>
+            </PermissionedComponent>
+
+            <PermissionedComponent allowedPermissions={[
+              Permission.Student,
+              Permission.Parent,
+              Permission.Tutor
+            ]}>
+              <CenteredDiv>
+                <Icon
+                  name='user'
+                  type='antdesign'
+                  onPress={() => navigation.navigate('Chat', {
+                    chatID: getUser.adminChat[0].chatID,
+                    className: 'Admin'
+                  })}
+                />
+                <Text>Admin Chat</Text>
+              </CenteredDiv>
+            </PermissionedComponent>
+          </IconRow>
+        ),
+        headerRightContainerStyle: {
+          padding: 10
+        },
+        headerLeft: () => null
+      })
+      // subscribe to the messages
+      if (getUser.classes) {
+        getUser.classes.forEach(_class => {
+          console.log('subbing to topics')
+          if (_class) {
+            messaging()
+              .subscribeToTopic(_class.chatID)
+              .then(() => console.log('successfully subbed to topic'))
+              .catch(e => console.log('there was an error in subbing to the topic, ', e))
+          }
+        })
+      }
     }
   })
-
-  React.useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <IconRow>
-          <PermissionedComponent allowedPermissions={[
-            Permission.Admin
-          ]}>
-            <AdminIcon changeScreens={changeScreens}/>
-          </PermissionedComponent>
-
-          <PermissionedComponent allowedPermissions={[
-            Permission.Student,
-            Permission.Parent,
-            Permission.Tutor
-          ]}>
-            <CenteredDiv>
-              <Icon
-                name='user'
-                type='antdesign'
-                onPress={() => navigation.navigate('Chat', {
-                  chatID: loggedUser.adminChat[0].chatID,
-                  className: 'Admin'
-                })}
-              />
-              <Text>Admin Chat</Text>
-            </CenteredDiv>
-          </PermissionedComponent>
-        </IconRow>
-      ),
-      headerRightContainerStyle: {
-        padding: 10
-      },
-      headerLeft: () => null
-    })
-  }, [])
 
   if (loading) {
     return (

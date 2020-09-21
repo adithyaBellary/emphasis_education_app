@@ -9,6 +9,11 @@ export const GET_FAMILY = gql`
       groupID
       phoneNumber
       _id
+      dob
+      classes {
+        className
+      }
+      userType
     }
   }
 `

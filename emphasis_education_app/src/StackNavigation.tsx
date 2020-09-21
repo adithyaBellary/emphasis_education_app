@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-community/async-storage';
-import { View, Text, ActivityIndicator, Platform } from 'react-native';
+import { ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { useMutation } from '@apollo/react-hooks';
 
@@ -21,13 +21,11 @@ import AddMember from './components/AdminPage/AddMemberModal';
 import ChatInfo from './components/Chat/ChatInfo';
 import ForgotPassword from './components/UserManagement/ForgotPassword';
 
-// import AdminChatPicker from './components/AdminPage/AdminChatPicker';
-
 import { LOGIN_TOKEN } from './constant';
 import { LOGIN } from './queries/Login';
 
 import {AuthContext} from './components/Context/Context';
-import { IUser, ILoginPayload } from './types';
+import { ILoginPayload } from './types';
 import { TitleText } from './components/shared';
 import { theme } from './theme';
 
@@ -124,7 +122,10 @@ const AppStack = ({ userToken }) => (
       name='Settings'
       component={Settings}
       options={{
-        headerTitle: () => <TitleText title='Settings' />
+        headerTitle: () => <TitleText title='Settings' />,
+        headerStyle: {
+          backgroundColor: theme.colors.yellow
+        }
       }}
     />
   </AppStackNav.Navigator>
@@ -223,7 +224,10 @@ const StackNavigation: React.FC = () => {
   const authContext = React.useMemo(
     () => ({
       login: (email: string, password: string) => {
-        _login({ variables: { email, password }})
+        _login({ variables: {
+          email: email.toLowerCase(),
+          password
+        }})
       },
       logout: async data => {
         await AsyncStorage.clear();

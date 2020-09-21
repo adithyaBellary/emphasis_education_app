@@ -10,14 +10,14 @@ import {
   IconRow,
   ThemedButton
 } from '../shared';
-import { ICreateUserArr } from './CreateUserContainer';
+import { CreateUserArr } from './CreateUserContainer';
 import IndividualItem from './DisplayIndividualMember';
 
 import { IUserInput } from '../../types';
 
 interface ConfirmationScreenProps {
   navigation: any;
-  createdUsers: ICreateUserArr | undefined;
+  createdUsers: CreateUserArr | undefined;
   loading: boolean;
   submitDisabled: boolean
   submit(): void;

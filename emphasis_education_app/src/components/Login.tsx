@@ -67,7 +67,8 @@ const LoginImage = () => (
       source={require('../images/LogoWithText.png')}
       style={{
         height: 300,
-        width: 400
+        width: 400,
+        // backgroundColor: 'grey'
       }}
     />
   </GeneralSpacing>
