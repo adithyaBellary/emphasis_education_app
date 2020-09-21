@@ -3,7 +3,6 @@ import {
   View,
   Text,
   ScrollView,
-  // ListView
 } from 'react-native';
 import styled from 'styled-components';
 import { Icon } from 'react-native-elements';
@@ -11,7 +10,6 @@ import { Icon } from 'react-native-elements';
 import { Permission } from '../../types';
 import { GeneralContext } from '../Context/Context';
 import {
-  ContentContain,
   IndividualField,
   HorizontalDivider,
   IconRow,
@@ -89,10 +87,10 @@ const Profile: React.FC<ProfileProps> = ({ family, editing, currentUserID, onPre
     if (label === 'Email') { mainUserCopy.email = text }
     if (label === 'Phone Number') { mainUserCopy.phoneNumber = text }
 
-    console.log('mainUserCopy', mainUserCopy)
+    // console.log('mainUserCopy', mainUserCopy)
   }
   // console.log('currentUser', currentUser)
-  console.log('family', family)
+  // console.log('family', family)
 
   // const getRelationship = (gender: string, perm: Permission): string => {
   //   if (loggedUser.userType === Permission.Parent) {
@@ -101,9 +99,9 @@ const Profile: React.FC<ProfileProps> = ({ family, editing, currentUserID, onPre
   //   }
   // }
 
-  if (!family) {
-    return null
-  }
+  // if (!family) {
+  //   return null
+  // }
 
   return (
     <ContentScroll>

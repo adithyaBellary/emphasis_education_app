@@ -6,7 +6,7 @@ import { useLazyQuery } from '@apollo/react-hooks';
 import { Input, Icon } from 'react-native-elements';
 
 import SearchResults from '../Search/SearchResults';
-import { ISearchUserPayload, ISearchInput } from '../../types';
+import { ISearchInput } from '../../types';
 import { SEARCH_USERS } from '../../queries/SearchUsers';
 
 import { ContentContain } from './common';
@@ -34,7 +34,6 @@ const LiftedSearch: React.FC<LiftedSearchProps> = ({ navigation }) => {
             name='search'
           />
         }
-        // textContentType='telephoneNumber'
       />
       {loading ? <ActivityIndicator animating={loading} /> : (
         <SearchResults

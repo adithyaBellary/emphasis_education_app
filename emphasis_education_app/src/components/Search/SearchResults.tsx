@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Icon } from 'react-native-elements';
 
-// import { IUser } from '../../types';
 import IndividualResult from '../AdminPage/IndividualResult';
 import {
   ThemedText,

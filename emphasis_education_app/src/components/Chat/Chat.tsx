@@ -125,7 +125,7 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
   useEffect(() => {
     navigation.setOptions({
       headerTitle: () => (
-        <TouchableOpacity onPress={() => navigation.navigate('ChatInfo', { className, tutorInfo, userInfo })}>
+        <TouchableOpacity onPress={() => navigation.navigate('ChatInfo', { className, tutorInfo, userInfo, chatID })}>
           <ThemedText size={20} type={FONT_STYLES.MAIN} >
             {className}
           </ThemedText>

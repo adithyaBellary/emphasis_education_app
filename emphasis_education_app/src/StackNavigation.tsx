@@ -122,7 +122,10 @@ const AppStack = ({ userToken }) => (
       name='Settings'
       component={Settings}
       options={{
-        headerTitle: () => <TitleText title='Settings' />
+        headerTitle: () => <TitleText title='Settings' />,
+        headerStyle: {
+          backgroundColor: theme.colors.yellow
+        }
       }}
     />
   </AppStackNav.Navigator>
