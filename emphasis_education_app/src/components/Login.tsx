@@ -4,9 +4,9 @@ import {
   Text,
   SafeAreaView,
   TouchableOpacity,
-  Image,
   ScrollView,
 } from 'react-native';
+import FastImage from 'react-native-fast-image'
 import styled from 'styled-components';
 
 import { theme } from '../theme';
@@ -63,13 +63,21 @@ const SecondaryLink: React.FC<SecondaryLinkProps> = ({ linkContent, onPress }) =
 
 const LoginImage = () => (
   <GeneralSpacing u={0} r={0} d={50} l={0} >
-    <Image
+    {/* <Image
       source={require('../images/LogoWithText.png')}
       style={{
-        height: 300,
-        width: 400,
+        height: '100%',
+        width: '100%',
         // backgroundColor: 'grey'
       }}
+      resizeMode={'cover'}
+    /> */}
+    <FastImage
+      style={{
+        height: 300,
+        width: 400
+      }}
+      source={require('../images/LogoWithText.png')}
     />
   </GeneralSpacing>
 )
