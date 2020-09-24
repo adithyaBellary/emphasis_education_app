@@ -12,7 +12,7 @@ import { SEND_BUG_EMAIL } from '../queries/SendBugEmail';
 import { ThemedButton } from './shared';
 import { AuthContext, GeneralContext } from './Context/Context';
 
-const StyledTextInput = styled(TextInput)`
+export const StyledTextInput = styled(TextInput)`
   height: 100px
   border: grey solid 1px;
   padding: 15px;

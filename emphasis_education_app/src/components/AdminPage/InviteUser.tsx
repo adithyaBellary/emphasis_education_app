@@ -22,6 +22,7 @@ interface CreateCodeButtonProps {
 
 const CreateCodeButton: React.FC<CreateCodeButtonProps> = ({ runMutation, loading }) => (
   <ThemedButton
+    block={true}
     buttonText='Create Code'
     loading={loading}
     onPress={runMutation}
@@ -53,7 +54,7 @@ const InviteUser: React.FC = () => {
   }
 
   return (
-    <ContentContain>
+    <GeneralSpacing u={20} r={15} d={20} l={15}>
       <Input
         onChangeText={handleTextChange}
         placeholder='Enter new user email here'
@@ -64,7 +65,7 @@ const InviteUser: React.FC = () => {
         </ThemedText>
       </GeneralSpacing>
       <CreateCodeButton runMutation={createCode} loading={loading} />
-    </ContentContain>
+    </GeneralSpacing>
   )
 }
 

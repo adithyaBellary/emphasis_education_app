@@ -1,12 +1,9 @@
 import * as React from 'react';
-import {
-  View,
-  Alert
-} from 'react-native'
+import { Alert } from 'react-native'
 import { Input } from 'react-native-elements';
 import { useMutation } from '@apollo/react-hooks'
 
-import { ThemedButton, ThemedText, FONT_STYLES } from '../shared'
+import { ThemedButton, ThemedText, FONT_STYLES, GeneralSpacing } from '../shared'
 import { theme } from '../../theme';
 import { FORGOT_PASSWORD } from '../../queries/ForgotPassword';
 
@@ -37,7 +34,7 @@ const ForgotPassword: React.FC = () => {
   if (error) { console.log('there was an error', error) }
 
   return (
-    <View>
+    <GeneralSpacing u={10} r={10} d={10} l={10}>
       <Input
         onChangeText={onChangeText}
         placeholder='Enter your email'
@@ -47,11 +44,12 @@ const ForgotPassword: React.FC = () => {
       />
       { error && <ErrorText />}
       <ThemedButton
+        block={true}
         buttonText='Send Email'
         loading={loading}
         onPress={_forgotPassword}
       />
-    </View>
+    </GeneralSpacing>
   )
 }
 

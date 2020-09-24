@@ -154,13 +154,6 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
             color= '#ffb6a8'
             onPress={changeScreens('ChatPicker')}
             reverse={true}
-            iconStyle={{
-              color: 'black',
-            }}
-            containerStyle={{
-              borderColor: 'grey',
-              borderWidth: 1
-            }}
           />
         </IconContain>
 

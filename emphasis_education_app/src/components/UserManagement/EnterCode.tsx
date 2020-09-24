@@ -69,6 +69,7 @@ const EnterCode: React.FC<EnterCodeProps> = ({ navigation }) => {
       />
       { error && <ErrorMessage /> }
       <ThemedButton
+        block={true}
         buttonText='Submit Code'
         loading={loading}
         onPress={_checkCode}

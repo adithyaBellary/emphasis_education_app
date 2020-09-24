@@ -9,8 +9,8 @@ import SearchResults from '../Search/SearchResults';
 import { ISearchInput } from '../../types';
 import { SEARCH_USERS } from '../../queries/SearchUsers';
 
-import { ContentContain } from './common';
 import { UserInfoType } from 'types/schema-types';
+import { GeneralSpacing } from '../shared';
 
 interface LiftedSearchProps {
   navigation: any;
@@ -25,7 +25,7 @@ const LiftedSearch: React.FC<LiftedSearchProps> = ({ navigation }) => {
   }, [searchTerm])
 
   return (
-    <ContentContain>
+    <GeneralSpacing u={20} r={15} d={20} l={15}>
       <Input
         placeholder='Search for users'
         onChangeText={handleTextChange}
@@ -42,7 +42,7 @@ const LiftedSearch: React.FC<LiftedSearchProps> = ({ navigation }) => {
         />
       )}
 
-    </ContentContain>
+    </GeneralSpacing>
   )
 }
 

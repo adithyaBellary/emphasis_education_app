@@ -1,15 +1,12 @@
 import * as React from 'react';
 import { useQuery, useMutation } from '@apollo/react-hooks'
-import {
-  TextInput,
-  ActivityIndicator
-} from 'react-native'
-import styled from 'styled-components';
+import { ActivityIndicator } from 'react-native'
 
 import { SEARCH_CLASSES } from '../queries/SearchClasses'
 import { SEND_EMAIL } from '../queries/SendEmail';
-import { GeneralContext } from './Context/Context';
+import { StyledTextInput } from './Settings';
 
+import { GeneralContext } from './Context/Context';
 import {
   ContentContain as Contain,
   ThemedText,
@@ -44,11 +41,6 @@ const ClassList: React.FC<{ classList: string[] }> = ({ classList }) => (
   </>
 );
 
-const StyledTextInput = styled(TextInput)`
-  height: 100px
-  border: black solid 1px;
-`;
-
 const AboutUs: React.FC = () => {
 
   const options = { variables: { searchTerm: '' }}
@@ -69,11 +61,12 @@ const AboutUs: React.FC = () => {
       <SectionTitle title='Send us a message!' />
       <StyledTextInput
         multiline
-        defaultValue={'fjdslafjd'}
+        // defaultValue={'fjdslafjd'}
         onChangeText={text => setMessage(text)}
-        value={message}
+        placeholder='Anything that you would like to see? Let us know!'
       />
       <ThemedButton
+        block={true}
         buttonText='Send email'
         loading={emailLoading}
         onPress={() => runMutation({ variables: { subject: `Message from ${loggedUser.firstName} ${loggedUser.lastName}`, body: message }})}

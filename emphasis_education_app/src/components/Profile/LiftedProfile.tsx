@@ -52,6 +52,7 @@ const LiftedProfile: React.FC<LiftedProfileProps> = ({ route, navigation }) => {
   //   },
   //   fetchPolicy: 'no-cache'
   // }
+  console.log('groupID', groupID)
   const { data, loading, error } = useQuery<{ getFamily: UserInfoType[] }, IGetFamilyInput>(
     GET_FAMILY,
     {

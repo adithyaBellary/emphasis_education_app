@@ -8,11 +8,9 @@ import { Input, Icon } from 'react-native-elements';
 
 import { SEARCH_CLASSES } from '../../queries/SearchClasses';
 import { ISearchInput, ISearchClassesPayload } from '../../types';
-
-import { ContentContain } from './common';
 import ClassSearchResults from '../Search/ClassSearchResults';
-
 import { ADD_CLASS } from '../../queries/AddClass';
+import { GeneralSpacing } from '../shared';
 
 const ClassSearch = () => {
   const [searchTerm, setSearchTerm] = React.useState('');
@@ -38,7 +36,7 @@ const ClassSearch = () => {
   }
 
   return (
-    <ContentContain>
+    <GeneralSpacing u={20} r={15} d={20} l={15}>
       <Input
         placeholder='Search Classes'
         onChangeText={handleTextChange}
@@ -60,7 +58,7 @@ const ClassSearch = () => {
           searchResults={data ? data.searchClasses.classes: []}
         />
       )}
-    </ContentContain>
+    </GeneralSpacing>
   )
 }
 
