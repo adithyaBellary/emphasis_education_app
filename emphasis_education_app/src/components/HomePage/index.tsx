@@ -16,6 +16,8 @@ import {
   IconSection,
   IconRow,
   PermissionedComponent,
+  ThemedText,
+  FONT_STYLES,
 } from '../shared';
 import { GeneralContext } from '../Context/Context';
 import { Permission } from '../../types';
@@ -53,14 +55,17 @@ const AdminIcon: React.FC<{ changeScreens (dest: string): () => void }> = ({ cha
       type='antdesign'
       onPress={changeScreens('AdminPage')}
       />
-    <Text>Admin</Text>
+    <ThemedText
+      size={14}
+      type={FONT_STYLES.MAIN}
+    >
+      Admin
+    </ThemedText>
   </CenteredDiv>
 );
 
 const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
-  // console.log('route in home', route)
   const { loggedUser, setUser } = React.useContext(GeneralContext);
-  console.log('admin chat', loggedUser.adminChat)
   const changeScreens = (dest: string) => () =>  navigation.navigate(dest)
   const { data, loading, error } = useQuery<{ getUser: UserInfoType }, QueryGetUserArgs>(GET_USER, {
     variables: {
@@ -92,7 +97,12 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
                     className: 'Admin'
                   })}
                 />
-                <Text>Admin Chat</Text>
+                <ThemedText
+                  size={14}
+                  type={FONT_STYLES.MAIN}
+                >
+                  Admin Chat
+                </ThemedText>
               </CenteredDiv>
             </PermissionedComponent>
           </IconRow>
@@ -121,7 +131,14 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
     return (
       <>
         <ActivityIndicator animating={loading} />
-        <View><Text>home page</Text></View>
+        <View>
+          <ThemedText
+            size={14}
+            type={FONT_STYLES.MAIN}
+          >
+            home page
+          </ThemedText>
+        </View>
       </>
     )
   }
@@ -129,7 +146,14 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
   if (error) {
     console.log(error)
     return (
-      <View><Text>there was an issue reloading the user</Text></View>
+      <View>
+        <ThemedText
+          size={14}
+          type={FONT_STYLES.MAIN}
+        >
+          there was an issue reloading the user
+        </ThemedText
+      ></View>
     )
   }
 

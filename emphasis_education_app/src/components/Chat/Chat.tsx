@@ -152,7 +152,13 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
   return (
     <>
       { queryLoading ?
-        <Text>loading Gifted Chat</Text> :
+        <ThemedText
+          size={14}
+          type={FONT_STYLES.MAIN}
+        >
+          loading Gifted Chat
+        </ThemedText>
+         :
         (
           <Chat
             queryLoading={queryLoading}

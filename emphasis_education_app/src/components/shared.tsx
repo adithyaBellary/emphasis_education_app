@@ -191,7 +191,12 @@ const RadioButton: React.FC<RadioButtonProps> = ({title, num, selectedElement, s
       selectedElement={selectedElement}
       setSelectedElement={setSelectedElement}
     />
-    <Text>{title}</Text>
+    <ThemedText
+      size={14}
+      type={FONT_STYLES.MAIN}
+    >
+      {title}
+    </ThemedText>
   </RadioButtonContain>
 )
 

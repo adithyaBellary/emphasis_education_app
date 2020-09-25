@@ -22,13 +22,24 @@ import { ChatUserInfo } from '../../types';
 
 import {
   IconRow,
-  GeneralSpacing
+  GeneralSpacing,
+  ThemedText,
+  FONT_STYLES
 } from '../shared';
 
 interface CreateChatProps {
   navigation: any;
   route: any;
 }
+
+const ChatText: React.FC = ({ children }) => (
+  <ThemedText
+    size={14}
+    type={FONT_STYLES.MAIN}
+  >
+    {children}
+  </ThemedText>
+)
 
 // what if we just sent the email and name
 interface SelectedUsersProps {
@@ -186,8 +197,8 @@ const CreateChat: React.FC<CreateChatProps> = ({ navigation }) => {
         }
       />
       <GeneralSpacing u={0} r={20} d={0} l={20}>
-        <Text>Selected Class: {selectedClasses}</Text>
-        <Text>Selected Users: {selectedUsers.map(u => `${u.firstName}, `)} </Text>
+        <ChatText>Selected Class: {selectedClasses}</ChatText>
+        <ChatText>Selected Users: {selectedUsers.map(u => `${u.firstName}, `)} </ChatText>
         {/* let us display the results here so that we can easily have state over them */}
         { userLoading ? <ActivityIndicator animating={userLoading} /> : (
           userData ? userData.searchUsers.map((u, index) => {
@@ -202,7 +213,7 @@ const CreateChat: React.FC<CreateChatProps> = ({ navigation }) => {
                 onPress={addSelectedUsers(u._id, u.userType, u.email, u.firstName, u.lastName)}
               >
                 <IndividualResultContainer>
-                  <Text>{u.firstName} {u.lastName}</Text>
+                  <ChatText>{u.firstName} {u.lastName}</ChatText>
                   <Icon
                     name={present ? 'checkcircle' : 'pluscircleo'}
                     type='antdesign'
@@ -218,7 +229,7 @@ const CreateChat: React.FC<CreateChatProps> = ({ navigation }) => {
               onPress={addSelectedClasses(c)}
             >
               <IndividualResultContainer>
-                <Text>{c}</Text>
+                <ChatText>{c}</ChatText>
                 <Icon
                   name={selectedClasses === c ? 'checkcircle' : 'pluscircleo'}
                   type='antdesign'

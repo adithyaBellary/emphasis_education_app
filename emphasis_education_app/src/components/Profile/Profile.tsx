@@ -79,7 +79,18 @@ const Profile: React.FC<ProfileProps> = ({ family, editing, currentUserID, onPre
 
   }
 
-  if (!currentUser) { return <View><Text>could not find the user.</Text></View>; }
+  if (!currentUser) {
+    return (
+      <View>
+        <ThemedText
+          size={14}
+          type={FONT_STYLES.MAIN}
+        >
+          could not find the user.
+        </ThemedText>
+      </View>
+    )
+  }
 
   let mainUserCopy = Object.assign({}, currentUser)
 

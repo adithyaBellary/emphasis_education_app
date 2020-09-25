@@ -70,9 +70,12 @@ const SearchResults: React.FC<{
       results.map(_result => (
         // <GeneralSpacing u={10} r={20} d={10} l={20}>
         <IndividualResultContainer>
-          <Text>
+          <ThemedText
+            size={14}
+            type={FONT_STYLES.MAIN}
+          >
             {_result.firstName} {_result.lastName}
-          </Text>
+          </ThemedText>
           <Icon
             name='pluscircleo'
             type='antdesign'
@@ -149,12 +152,17 @@ const ChatInfo: React.FC<ChatInfoProps> = ({ navigation, route }) => {
         <PermissionedComponent allowedPermissions={[Permission.Admin]}>
 
         <IconRow>
-          <Text>Add member</Text>
+          <ThemedText
+            size={14}
+            type={FONT_STYLES.MAIN}
+          >
+            Add member
+          </ThemedText>
             <Icon
               name='pluscircleo'
               type='antdesign'
               onPress={onPress}
-          />
+            />
         </IconRow>
         {
           click && (
