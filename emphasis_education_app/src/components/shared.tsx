@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   ActivityIndicator
 } from 'react-native';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Input } from 'react-native-elements';
 
 import { Permission } from '../types';
@@ -266,7 +266,8 @@ interface IndividualFieldProps {
   onChangeText?(text: string, label: string): void;
 };
 
-export const GeneralSpacing = styled(View)<{r: number, l: number, u: number, d: number}>`
+export const GeneralSpacing = styled(View)<{r: number, l: number, u: number, d: number, centered?: boolean }>`
+  ${({ centered }) => centered && css`align-items: center;`}
   padding: ${({ u }) => u}px ${({ r }) => r}px ${({ d }) => d}px ${({ l }) => l}px
 `;
 

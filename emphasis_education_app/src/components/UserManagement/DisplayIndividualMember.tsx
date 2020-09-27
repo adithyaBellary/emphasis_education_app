@@ -24,11 +24,11 @@ const IndividualItem: React.FC<IUserInput & {id: number}> = ({
 }) => (
   <View>
     <CenteredDiv>
-    <GeneralSpacing u={10} r={10} d={10} l={0}>
-    <ThemedText size={18} type={FONT_STYLES.MAIN}>
-      Family Member {id}
-    </ThemedText>
-    </GeneralSpacing>
+      <GeneralSpacing u={10} r={10} d={10} l={0}>
+        <ThemedText size={18} type={FONT_STYLES.MAIN}>
+          Family Member {id}
+        </ThemedText>
+      </GeneralSpacing>
     </CenteredDiv>
     <HorizontalDivider width={100} color='grey' />
     <IndividualField
