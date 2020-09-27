@@ -9,6 +9,7 @@ import {
 import styled from 'styled-components';
 import messaging from '@react-native-firebase/messaging';
 
+
 import { MissionStatement, HeaderTitle, LogiImage } from './logos';
 
 import {
@@ -18,8 +19,9 @@ import {
   PermissionedComponent,
   ThemedText,
   FONT_STYLES,
+  ThemedButton,
 } from '../shared';
-import { GeneralContext } from '../Context/Context';
+import { AuthContext, GeneralContext } from '../Context/Context';
 import { Permission } from '../../types';
 import { GET_USER } from '../../queries/GetUser';
 import { theme } from '../../theme';
@@ -66,7 +68,9 @@ const AdminIcon: React.FC<{ changeScreens (dest: string): () => void }> = ({ cha
 
 const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
   const { loggedUser, setUser } = React.useContext(GeneralContext);
+  const { logout } = React.useContext(AuthContext);
   const changeScreens = (dest: string) => () =>  navigation.navigate(dest)
+  console.log(route.params.token)
   const { data, loading, error } = useQuery<{ getUser: UserInfoType }, QueryGetUserArgs>(GET_USER, {
     variables: {
       userEmail: route.params.token
@@ -152,8 +156,13 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
           type={FONT_STYLES.MAIN}
         >
           there was an issue reloading the user
-        </ThemedText
-      ></View>
+        </ThemedText>
+        <ThemedButton
+          buttonText='Back to login'
+          onPress={logout}
+          loading={false}
+        />
+      </View>
     )
   }
 
