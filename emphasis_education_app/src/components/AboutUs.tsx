@@ -33,8 +33,10 @@ const ClassList: React.FC<{ classList: string[] }> = ({ classList }) => (
       classList.map( _class => (
         <>
           <ThemedText key={_class} size={14} type={FONT_STYLES.MAIN}>{_class}</ThemedText>
-          <HorizontalDivider width={100} color='black'/>
-          <ThemedText size={14} type={FONT_STYLES.LIGHT}>Test Description</ThemedText>
+          <GeneralSpacing u={10} r={0} d={10} l={0}>
+            <HorizontalDivider width={100} color='black'/>
+          </GeneralSpacing>
+          {/* <ThemedText size={14} type={FONT_STYLES.LIGHT}>Test Description</ThemedText> */}
         </>
       ))
     }
