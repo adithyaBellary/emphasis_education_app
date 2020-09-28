@@ -15,7 +15,8 @@ import {
   IconRow,
   GeneralSpacing,
   ThemedText,
-  FONT_STYLES
+  FONT_STYLES,
+  CenteredDiv
 } from '../shared';
 import { GET_USER } from '../../queries/GetUser';
 import { Permission, ChatUserInfo, } from '../../types';
@@ -114,19 +115,20 @@ const ChatPicker: React.FC<ChatPickerProps> = ({ navigation }) => {
       }
     })
   }, [])
+
   if (loading) {
     return (
-      <>
+      <CenteredDiv>
         <ActivityIndicator animating={loading} />
         <View>
           <ThemedText
             size={14}
             type={FONT_STYLES.MAIN}
           >
-            Please wait, getting classes
+            Please wait, getting classes...
           </ThemedText>
         </View>
-      </>
+      </CenteredDiv>
     )
   }
   return (

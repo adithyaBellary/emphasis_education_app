@@ -52,7 +52,17 @@ const AboutUs: React.FC = () => {
 
   if (error) { console.log('error', error) }
 
-  if (classLoading) { return <ActivityIndicator animating={classLoading} />}
+  if (classLoading) { return (
+    <CenteredDiv>
+      <ActivityIndicator animating={classLoading} />
+      <ThemedText
+        size={14}
+        type={FONT_STYLES.MAIN}
+      >
+        loading classes...
+      </ThemedText>
+    </CenteredDiv>
+  )}
 
   return (
     <Contain>
@@ -61,7 +71,6 @@ const AboutUs: React.FC = () => {
       <SectionTitle title='Send us a message!' />
       <StyledTextInput
         multiline
-        // defaultValue={'fjdslafjd'}
         onChangeText={text => setMessage(text)}
         placeholder='Anything that you would like to see? Let us know!'
       />

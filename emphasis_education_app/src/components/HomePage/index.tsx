@@ -149,19 +149,25 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
   if (error) {
     console.log(error)
     return (
-      <View>
+      <CenteredDiv>
         <ThemedText
           size={14}
           type={FONT_STYLES.MAIN}
         >
-          there was an issue reloading the user
+          There was an issue reloading the user...
+        </ThemedText>
+        <ThemedText
+          size={14}
+          type={FONT_STYLES.MAIN}
+        >
+          Try logging out / in again
         </ThemedText>
         <ThemedButton
           buttonText='Back to login'
           onPress={logout}
           loading={false}
         />
-      </View>
+      </CenteredDiv>
     )
   }
 

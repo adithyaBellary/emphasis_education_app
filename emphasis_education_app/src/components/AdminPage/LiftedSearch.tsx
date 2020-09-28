@@ -41,7 +41,6 @@ const LiftedSearch: React.FC<LiftedSearchProps> = ({ navigation }) => {
           navigation={navigation}
         />
       )}
-
     </GeneralSpacing>
   )
 }
