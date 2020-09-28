@@ -19,7 +19,6 @@ import { ISearchInput, ISearchClassesPayload, ISearchUserPayload, ICreateChatInp
 import { IndividualResultContainer } from '../AdminPage/IndividualResult';
 
 import { ChatUserInfo } from '../../types';
-
 import {
   IconRow,
   GeneralSpacing,
@@ -141,7 +140,7 @@ const CreateChat: React.FC<CreateChatProps> = ({ navigation }) => {
       })
     } catch(e) {
       console.log('error', e)
-      Alert.alert('there was an error making this chat. please make sure that you have selected at least 1 tutor, 1 student, and a class')
+      Alert.alert('Error creating this Chat. Please make sure that you have selected at least 1 tutor, 1 student, and a class')
     }
   }
 
