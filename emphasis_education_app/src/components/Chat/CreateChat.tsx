@@ -120,7 +120,7 @@ const CreateChat: React.FC<CreateChatProps> = ({ navigation }) => {
         }
       }, [] as ChatUserInfo[])
 
-      if (!tutorEmail) {throw Error}
+      if (!tutorEmail || !userInfo || !selectedClasses) {throw Error}
       const tutorInfo: ChatUserInfo = {
         firstName: tutorFirstName,
         lastName: tutorLastName,
@@ -134,7 +134,7 @@ const CreateChat: React.FC<CreateChatProps> = ({ navigation }) => {
         userInfo,
         tutorInfo
       }
-
+      console.log('variables: ', variables)
       createChatMutation({
         variables
       })
