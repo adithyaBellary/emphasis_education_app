@@ -1,8 +1,5 @@
 import * as React from 'react';
-import {
-  View,
-  Text
-} from 'react-native';
+import { View } from 'react-native';
 import styled from 'styled-components';
 
 export const IndividualResultContainer = styled(View)`
@@ -12,13 +9,10 @@ export const IndividualResultContainer = styled(View)`
   justifyContent: space-between;
 `;
 
-const IndividualResult: React.FC = ({ children }) => {
-
-  return (
-    <IndividualResultContainer>
-      {children}
-    </IndividualResultContainer>
-  )
-}
+const IndividualResult: React.FC = ({ children }) => (
+  <IndividualResultContainer>
+    {children}
+  </IndividualResultContainer>
+)
 
 export default IndividualResult;
