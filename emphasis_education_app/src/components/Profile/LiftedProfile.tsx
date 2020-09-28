@@ -13,7 +13,8 @@ import { IGetFamilyInput } from '../../types';
 import {
   GeneralSpacing,
   ThemedText,
-  FONT_STYLES
+  FONT_STYLES,
+  CenteredDiv
 } from '../shared';
 import { UserInfoType } from '../../../types/schema-types';
 
@@ -39,19 +40,11 @@ const HeaderButtons: React.FC<HeaderButtonProps> = ({ text, onPress}) => (
 )
 
 const LiftedProfile: React.FC<LiftedProfileProps> = ({ route, navigation }) => {
-  // console.log('route', route)
   const [editing, setEditing] = React.useState(false);
   const { loggedUser } = React.useContext(GeneralContext);
   // if we passed in routes then that means we have come from the admin page
   const groupID = route.params ? route.params.groupID : loggedUser.groupID
   const currentUserID = route.params ? route.params.currentUserID : loggedUser._id
-  // console.log('groupID', groupID, currentUserID)
-  // const options = {
-  //   variables: {
-  //     groupID
-  //   },
-  //   fetchPolicy: 'no-cache'
-  // }
   console.log('groupID', groupID)
   const { data, loading, error } = useQuery<{ getFamily: UserInfoType[] }, IGetFamilyInput>(
     GET_FAMILY,
@@ -63,35 +56,22 @@ const LiftedProfile: React.FC<LiftedProfileProps> = ({ route, navigation }) => {
     }
   )
   if ( error ) { console.log('error loading the profile', error)}
-  // console.log('data in profile', data?.getFamily)
-  // const toggleEdit = () => setEditing(_edit => !_edit)
   const goToAddMember = () => navigation.navigate('AddUserModal', { groupID })
-
-  // let us not expose the profile editing yet
-
-  // React.useEffect(() => {
-  //   navigation.setOptions({
-  //     headerRight: () => (
-  //       <>
-  //         {
-  //           !editing ? (
-  //             <HeaderButtons text='Edit' onPress={toggleEdit} />
-  //           ) : (
-  //             <IconRow>
-  //               <HeaderButtons text='Cancel' onPress={toggleEdit} />
-  //               <HeaderButtons text='Done' onPress={toggleEdit} />
-  //             </IconRow>
-  //           )
-  //         }
-  //       </>
-  //     )
-  //   })
-  // }, [editing])
 
   return (
     <>
     {
-      loading ? <ActivityIndicator animating={loading} /> : (
+      loading ? (
+        <CenteredDiv>
+          <ActivityIndicator animating={loading} />
+          <ThemedText
+            size={14}
+            type={FONT_STYLES.MAIN}
+          >
+            loading profile page...
+          </ThemedText>
+        </CenteredDiv>
+        ) : (
         <Profile
           currentUserID={currentUserID}
           family={data ? data.getFamily : []}

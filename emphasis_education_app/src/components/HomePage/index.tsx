@@ -67,7 +67,7 @@ const AdminIcon: React.FC<{ changeScreens (dest: string): () => void }> = ({ cha
 );
 
 const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
-  const { loggedUser, setUser } = React.useContext(GeneralContext);
+  const { setUser } = React.useContext(GeneralContext);
   const { logout } = React.useContext(AuthContext);
   const changeScreens = (dest: string) => () =>  navigation.navigate(dest)
   console.log(route.params.token)
@@ -77,7 +77,6 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
     },
     onCompleted: ({ getUser }) => {
       setUser({...getUser})
-      // data.getUser.classes.for
       navigation.setOptions({
         headerRight: () => (
           <IconRow>
@@ -133,17 +132,17 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
 
   if (loading) {
     return (
-      <>
+      <CenteredDiv>
         <ActivityIndicator animating={loading} />
         <View>
           <ThemedText
             size={14}
             type={FONT_STYLES.MAIN}
           >
-            home page
+            loading home page...
           </ThemedText>
         </View>
-      </>
+      </CenteredDiv>
     )
   }
 
