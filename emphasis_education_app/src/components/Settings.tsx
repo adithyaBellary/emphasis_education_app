@@ -29,7 +29,7 @@ const Settings: React.FC<SettingsProps> = () => {
   const { logout } = React.useContext(AuthContext);
   const { loggedUser } = React.useContext(GeneralContext);
 
-  const [runMutation, {data, loading}] = useMutation(SEND_BUG_EMAIL);
+  const [runMutation, {loading}] = useMutation(SEND_BUG_EMAIL);
 
   const sendEmail = () => {
     console.log(loggedUser.email, message)

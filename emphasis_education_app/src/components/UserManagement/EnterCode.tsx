@@ -1,13 +1,8 @@
 import * as React from 'react';
-import {
-  Input
-} from 'react-native-elements';
-import {
-  useLazyQuery
-} from '@apollo/react-hooks'
+import { Input } from 'react-native-elements';
+import { useLazyQuery } from '@apollo/react-hooks'
 
 import { CHECK_CODE } from '../../queries/CheckCode';
-
 import {
   GeneralSpacing,
    ThemedText,
@@ -17,12 +12,12 @@ import {
 import { theme } from '../../theme';
 
 interface EnterCodeProps {
-navigation: any;
+  navigation: any;
   route: any;
 }
 
 const ErrorMessage: React.FC = () => (
-  <ThemedText type={FONT_STYLES.MAIN} size={14} >
+  <ThemedText type={FONT_STYLES.MAIN} size={14}>
     You entered the wrong code
   </ThemedText>
 )
@@ -48,6 +43,7 @@ const EnterCode: React.FC<EnterCodeProps> = ({ navigation }) => {
     } else {
       console.log('entered the incorrect code')
     }
+    console.log('here')
     navigation.navigate('CreateUserContain')
   }
 
