@@ -112,6 +112,7 @@ const AddMember: React.FC<AddMemberProps> = ({ navigation, route }) => {
   }
 
   return (
+    <GeneralSpacing u={0} r={15} d={0} l={15}>
     <SafeAreaView>
       <IndividualResultContainer>
         <Cancel onPress={() => navigation.goBack()}/>
@@ -126,7 +127,12 @@ const AddMember: React.FC<AddMemberProps> = ({ navigation, route }) => {
           />
         }
       />
-      <Text>Selected Users: {selectedUsers.map(_u => _u.name)}, </Text>
+      <ThemedText
+        size={14}
+        type={FONT_STYLES.MAIN}
+      >
+        Selected Users: {selectedUsers.map(_u => _u.name)},
+      </ThemedText>
       <ContentContain>
         {userLoading ? <ActivityIndicator animating={userLoading} /> : (
           userData && userData.searchUsers.map(_user => {
@@ -142,7 +148,12 @@ const AddMember: React.FC<AddMemberProps> = ({ navigation, route }) => {
                 onPress={addSelectedUser(_user._id, _user.userType, _user.email, _user.firstName, _user.lastName)}
               >
                 <IndividualResultContainer>
-                  <Text>{_user.firstName} {_user.lastName}</Text>
+                  <ThemedText
+                    size={14}
+                    type={FONT_STYLES.MAIN}
+                  >
+                    {_user.firstName} {_user.lastName}
+                  </ThemedText>
                   <Icon
                     name={present ? 'checkcircle' : 'pluscircleo'}
                     type='antdesign'
@@ -154,6 +165,7 @@ const AddMember: React.FC<AddMemberProps> = ({ navigation, route }) => {
         ) }
       </ContentContain>
     </SafeAreaView>
+    </GeneralSpacing>
   )
 
 };

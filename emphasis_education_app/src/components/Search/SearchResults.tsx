@@ -7,7 +7,6 @@ import {
   GeneralSpacing,
   FONT_STYLES
 } from '../shared';
-
 import { UserInfoType } from '../../../types/schema-types';
 
 interface SearchResultsProps {

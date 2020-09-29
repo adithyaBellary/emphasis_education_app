@@ -25,7 +25,7 @@ interface ConfirmationScreenProps {
 
 // we need to be able to edit info from here
 const ConfirmationScreen: React.FC<ConfirmationScreenProps> = ({ createdUsers, loading, submit, submitDisabled, navigation }) => (
-  <ScrollView>
+  <ScrollView style={{ marginBottom: 30 }}>
     <ContentContain>
       {createdUsers && createdUsers.users.map((user: IUserInput, index: number) => (
         <IndividualItem

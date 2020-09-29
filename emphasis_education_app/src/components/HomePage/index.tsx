@@ -9,6 +9,7 @@ import {
 import styled from 'styled-components';
 import messaging from '@react-native-firebase/messaging';
 
+
 import { MissionStatement, HeaderTitle, LogiImage } from './logos';
 
 import {
@@ -16,8 +17,11 @@ import {
   IconSection,
   IconRow,
   PermissionedComponent,
+  ThemedText,
+  FONT_STYLES,
+  ThemedButton,
 } from '../shared';
-import { GeneralContext } from '../Context/Context';
+import { AuthContext, GeneralContext } from '../Context/Context';
 import { Permission } from '../../types';
 import { GET_USER } from '../../queries/GetUser';
 import { theme } from '../../theme';
@@ -53,22 +57,26 @@ const AdminIcon: React.FC<{ changeScreens (dest: string): () => void }> = ({ cha
       type='antdesign'
       onPress={changeScreens('AdminPage')}
       />
-    <Text>Admin</Text>
+    <ThemedText
+      size={14}
+      type={FONT_STYLES.MAIN}
+    >
+      Admin
+    </ThemedText>
   </CenteredDiv>
 );
 
 const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
-  // console.log('route in home', route)
-  const { loggedUser, setUser } = React.useContext(GeneralContext);
-  console.log('admin chat', loggedUser.adminChat)
+  const { setUser } = React.useContext(GeneralContext);
+  const { logout } = React.useContext(AuthContext);
   const changeScreens = (dest: string) => () =>  navigation.navigate(dest)
+  console.log(route.params.token)
   const { data, loading, error } = useQuery<{ getUser: UserInfoType }, QueryGetUserArgs>(GET_USER, {
     variables: {
       userEmail: route.params.token
     },
     onCompleted: ({ getUser }) => {
       setUser({...getUser})
-      // data.getUser.classes.for
       navigation.setOptions({
         headerRight: () => (
           <IconRow>
@@ -92,7 +100,12 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
                     className: 'Admin'
                   })}
                 />
-                <Text>Admin Chat</Text>
+                <ThemedText
+                  size={14}
+                  type={FONT_STYLES.MAIN}
+                >
+                  Admin Chat
+                </ThemedText>
               </CenteredDiv>
             </PermissionedComponent>
           </IconRow>
@@ -119,17 +132,42 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
 
   if (loading) {
     return (
-      <>
+      <CenteredDiv>
         <ActivityIndicator animating={loading} />
-        <View><Text>home page</Text></View>
-      </>
+        <View>
+          <ThemedText
+            size={14}
+            type={FONT_STYLES.MAIN}
+          >
+            loading home page...
+          </ThemedText>
+        </View>
+      </CenteredDiv>
     )
   }
 
   if (error) {
     console.log(error)
     return (
-      <View><Text>there was an issue reloading the user</Text></View>
+      <CenteredDiv>
+        <ThemedText
+          size={14}
+          type={FONT_STYLES.MAIN}
+        >
+          There was an issue reloading the user...
+        </ThemedText>
+        <ThemedText
+          size={14}
+          type={FONT_STYLES.MAIN}
+        >
+          Try logging out / in again
+        </ThemedText>
+        <ThemedButton
+          buttonText='Back to login'
+          onPress={logout}
+          loading={false}
+        />
+      </CenteredDiv>
     )
   }
 
@@ -154,13 +192,6 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
             color= '#ffb6a8'
             onPress={changeScreens('ChatPicker')}
             reverse={true}
-            iconStyle={{
-              color: 'black',
-            }}
-            containerStyle={{
-              borderColor: 'grey',
-              borderWidth: 1
-            }}
           />
         </IconContain>
 

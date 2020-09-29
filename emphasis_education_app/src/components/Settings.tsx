@@ -12,7 +12,7 @@ import { SEND_BUG_EMAIL } from '../queries/SendBugEmail';
 import { ThemedButton } from './shared';
 import { AuthContext, GeneralContext } from './Context/Context';
 
-const StyledTextInput = styled(TextInput)`
+export const StyledTextInput = styled(TextInput)`
   height: 100px
   border: grey solid 1px;
   padding: 15px;
@@ -29,7 +29,7 @@ const Settings: React.FC<SettingsProps> = () => {
   const { logout } = React.useContext(AuthContext);
   const { loggedUser } = React.useContext(GeneralContext);
 
-  const [runMutation, {data, loading}] = useMutation(SEND_BUG_EMAIL);
+  const [runMutation, {loading}] = useMutation(SEND_BUG_EMAIL);
 
   const sendEmail = () => {
     console.log(loggedUser.email, message)

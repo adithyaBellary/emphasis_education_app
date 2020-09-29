@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import {
   Text,
-  TouchableOpacity
+  TouchableOpacity,
+  ActivityIndicator
 } from 'react-native';
 import { useQuery, useSubscription } from '@apollo/react-hooks';
 
@@ -14,7 +15,8 @@ import { SUB } from '../../queries/MessageReceived';
 import { GET_MESSAGES } from '../../queries/GetMessages';
 import {
   ThemedText,
-  FONT_STYLES
+  FONT_STYLES,
+  CenteredDiv
 } from '../shared';
 
 interface ChatProps {
@@ -151,18 +153,25 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
 
   return (
     <>
-      { queryLoading ?
-        <Text>loading Gifted Chat</Text> :
-        (
-          <Chat
-            queryLoading={queryLoading}
-            refreshFn={refreshFn}
-            chatID={chatID}
-            curUser={curUser}
-            messages={curState ? curState.messages : undefined}
-          />
-        )
-      }
+      { queryLoading ? (
+        <CenteredDiv>
+          <ActivityIndicator animating={queryLoading} />
+          <ThemedText
+            size={14}
+            type={FONT_STYLES.MAIN}
+          >
+            loading chat messages...
+          </ThemedText>
+        </CenteredDiv>
+      ) : (
+        <Chat
+          queryLoading={queryLoading}
+          refreshFn={refreshFn}
+          chatID={chatID}
+          curUser={curUser}
+          messages={curState ? curState.messages : undefined}
+        />
+      )}
     </>
   )
 }

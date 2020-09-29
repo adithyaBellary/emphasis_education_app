@@ -225,7 +225,7 @@ const StackNavigation: React.FC = () => {
     () => ({
       login: (email: string, password: string) => {
         _login({ variables: {
-          email: email.toLowerCase(),
+          email,
           password
         }})
       },

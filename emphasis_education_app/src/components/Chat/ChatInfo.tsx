@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {
   SafeAreaView,
-  Text,
   TouchableOpacity,
   ActivityIndicator,
   View,
@@ -12,7 +11,6 @@ import { Icon, Input } from 'react-native-elements';
 import { ChatUserInfo, Permission } from '../../types';
 import { SEARCH_USERS } from '../../queries/SearchUsers'
 import { UserInfoType } from '../../../types/schema-types';
-
 import {
   GeneralSpacing,
   ThemedText,
@@ -22,7 +20,6 @@ import {
   PermissionedComponent
 } from '../shared';
 import { ADD_CHAT_MEMBER } from '../../queries/AddChatMember';
-
 import { IndividualResultContainer } from '../AdminPage/IndividualResult';
 
 
@@ -53,9 +50,7 @@ const Done: React.FC<DoneProps> = ({ onPress, loading }) => (
         <ThemedText size={16} type={FONT_STYLES.MAIN}>
           Done
         </ThemedText>
-        {
-          loading && <ActivityIndicator animating={loading} />
-        }
+        {loading && <ActivityIndicator animating={loading} />}
       </IconRow>
     </GeneralSpacing>
   </TouchableOpacity>
@@ -68,18 +63,19 @@ const SearchResults: React.FC<{
   <View>
     {
       results.map(_result => (
-        // <GeneralSpacing u={10} r={20} d={10} l={20}>
         <IndividualResultContainer>
-          <Text>
+          <ThemedText
+            size={14}
+            type={FONT_STYLES.MAIN}
+          >
             {_result.firstName} {_result.lastName}
-          </Text>
+          </ThemedText>
           <Icon
             name='pluscircleo'
             type='antdesign'
             onPress={addMember(_result.email)}
           />
-          </IndividualResultContainer>
-        // </GeneralSpacing>
+        </IndividualResultContainer>
       ))
     }
   </View>
@@ -94,7 +90,6 @@ const ChatInfo: React.FC<ChatInfoProps> = ({ navigation, route }) => {
   const tutorInfo: ChatUserInfo = route.params.tutorInfo;
   const userInfo: ChatUserInfo[] = route.params.userInfo;
   const chatID: string = route.params.chatID;
-  // console.log('chatID in chatINFO', chatID);
 
   const [click, setClick] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState('');
@@ -149,12 +144,17 @@ const ChatInfo: React.FC<ChatInfoProps> = ({ navigation, route }) => {
         <PermissionedComponent allowedPermissions={[Permission.Admin]}>
 
         <IconRow>
-          <Text>Add member</Text>
+          <ThemedText
+            size={14}
+            type={FONT_STYLES.MAIN}
+          >
+            Add member
+          </ThemedText>
             <Icon
               name='pluscircleo'
               type='antdesign'
               onPress={onPress}
-          />
+            />
         </IconRow>
         {
           click && (

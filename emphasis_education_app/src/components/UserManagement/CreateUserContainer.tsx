@@ -10,14 +10,13 @@ import CreateUser from './CreateUser';
 import { CREATE_USER } from '../../queries/CreateUser';
 
 import  ConfirmationScreen  from './ConfirmationScreen';
-import { AuthContext } from '../Context/Context';
 
 interface CreateUserContainProps {
   navigation: any;
   route: any;
 }
-const SuccessMessaging: string = 'Thanks for joining Emphasis Education';
-const ErrorMessaging: string = 'Something went wrong creating this user';
+const SuccessMessaging: string = 'Thank you for joining Emphasis Education!';
+const ErrorMessaging: string = 'There was an issue creating this user';
 
 export interface CreateUserArr {
   users: IUserInput[];
@@ -72,7 +71,6 @@ const CreateUserContain: React.FC<CreateUserContainProps> = props => {
 
 
   const runCreateUserMut = (): void => {
-    // console.log('userInfo before running mutaion', userInfo)
     const _users: IUsableUserInfo[] = userInfo.users.map(({confirmPassword, ...rest }) => {
       return rest;
     })

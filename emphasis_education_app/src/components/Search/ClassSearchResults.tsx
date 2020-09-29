@@ -4,6 +4,7 @@ import { ISearchClassesPayload } from '../../types';
 
 import { SearchResultsContainer } from './SearchResults';
 import IndividualResult from '../AdminPage/IndividualResult';
+import { ThemedText, FONT_STYLES } from '../shared';
 
 interface ClassSearchResultsProps {
   searchResults: string[];
@@ -16,7 +17,12 @@ const ClassSearchResults: React.FC<ClassSearchResultsProps> = ({ searchResults }
         <IndividualResult
           key={index}
         >
-          <Text>{result}</Text>
+          <ThemedText
+            size={14}
+            type={FONT_STYLES.MAIN}
+          >
+            {result}
+          </ThemedText>
         </IndividualResult>
       ))}
     </SearchResultsContainer>

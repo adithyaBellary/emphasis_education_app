@@ -34,9 +34,12 @@ export const EmptyChat: React.FC = () => (
 
 export const LoadingScreen: React.FC<{ loading: boolean }> = ({ loading }) => (
   <View>
-    <Text>
+    <ThemedText
+      size={14}
+      type={FONT_STYLES.MAIN}
+    >
       the chat is deleting
-    </Text>
+    </ThemedText>
     <ActivityIndicator animating={loading} />
   </View>
 )

@@ -28,12 +28,21 @@ interface ProfileProps {
   onPress (): void;
 }
 
-const Title = styled(Text)`
-  text-align: center;
-  fontFamily: ${({ theme }) => theme.font.bold};
-  font-size: 30px;
-  padding: 10px 0;
-`;
+const Title = ({ children }) =>
+  <GeneralSpacing
+    u={10}
+    r={0}
+    d={10}
+    l={0}
+    centered={true}
+  >
+    <ThemedText
+      size={30}
+      type={FONT_STYLES.BOLD}
+    >
+      {children}
+    </ThemedText>
+  </GeneralSpacing>
 
 const ListClasses: React.FC<{ classes: Chat[]}> = ({ classes }) => (
   <>
@@ -79,7 +88,18 @@ const Profile: React.FC<ProfileProps> = ({ family, editing, currentUserID, onPre
 
   }
 
-  if (!currentUser) { return <View><Text>could not find the user.</Text></View>; }
+  if (!currentUser) {
+    return (
+      <View>
+        <ThemedText
+          size={14}
+          type={FONT_STYLES.MAIN}
+        >
+          could not find the user.
+        </ThemedText>
+      </View>
+    )
+  }
 
   let mainUserCopy = Object.assign({}, currentUser)
 
@@ -89,15 +109,28 @@ const Profile: React.FC<ProfileProps> = ({ family, editing, currentUserID, onPre
 
     // console.log('mainUserCopy', mainUserCopy)
   }
-  // console.log('currentUser', currentUser)
-  // console.log('family', family)
 
-  // const getRelationship = (gender: string, perm: Permission): string => {
-  //   if (loggedUser.userType === Permission.Parent) {
-  //     // if we are the parent
-  //     if (perm === )
-  //   }
-  // }
+  const getRelationship = (userType: Permission) => {
+    if (currentUser?.userType === Permission.Student) {
+      if (userType === Permission.Student) {
+        return 'Sibling'
+      }
+      if (userType === Permission.Parent) {
+        return 'Guardian'
+      }
+    }
+    if (currentUser) {
+      if (currentUser.userType === Permission.Parent) {
+        if (userType === Permission.Student) {
+          return 'Child'
+        }
+        if (userType === Permission.Parent) {
+          return 'Significant Other'
+        }
+      }
+    }
+    return 'N/A'
+  }
 
   // if (!family) {
   //   return null
@@ -114,7 +147,7 @@ const Profile: React.FC<ProfileProps> = ({ family, editing, currentUserID, onPre
         editing={editing}
         onChangeText={onChangeText}
       />
-      {!editing && <HorizontalDivider width={80} color={theme.colors.lightPink}/>}
+      <HorizontalDivider width={100} color={theme.colors.lightPink}/>
       <IndividualField
         value={currentUser.phoneNumber}
         valueSize={16}
@@ -123,7 +156,7 @@ const Profile: React.FC<ProfileProps> = ({ family, editing, currentUserID, onPre
         editing={editing}
         onChangeText={onChangeText}
       />
-
+      <HorizontalDivider width={100} color={theme.colors.lightPink}/>
       <IndividualField
         value={currentUser.dob}
         valueSize={16}
@@ -132,7 +165,7 @@ const Profile: React.FC<ProfileProps> = ({ family, editing, currentUserID, onPre
         editing={editing}
         onChangeText={onChangeText}
       />
-
+      <HorizontalDivider width={100} color={theme.colors.lightPink}/>
       <IndividualField
         value={currentUser.userType}
         valueSize={16}
@@ -142,7 +175,12 @@ const Profile: React.FC<ProfileProps> = ({ family, editing, currentUserID, onPre
         onChangeText={onChangeText}
       />
 
-      {currentUser.classes && <ListClasses classes={currentUser.classes || []} />}
+      {currentUser.classes && (
+        <>
+          <HorizontalDivider width={100} color={theme.colors.lightPink} />
+          <ListClasses classes={currentUser.classes || []} />
+        </>
+      )}
 
       <IconRow>
         <Title>Family Members</Title>
@@ -170,6 +208,7 @@ const Profile: React.FC<ProfileProps> = ({ family, editing, currentUserID, onPre
                   label={'Name'}
                   labelSize={14}
                 />
+                <HorizontalDivider width={100} color={theme.colors.lightPink}/>
                 <IndividualField
                   // key={index}
                   value={user.email}
@@ -177,6 +216,7 @@ const Profile: React.FC<ProfileProps> = ({ family, editing, currentUserID, onPre
                   label={'Email'}
                   labelSize={14}
                 />
+                <HorizontalDivider width={100} color={theme.colors.lightPink}/>
                 {/* phone numer */}
                 <IndividualField
                   value={user.phoneNumber}
@@ -184,24 +224,28 @@ const Profile: React.FC<ProfileProps> = ({ family, editing, currentUserID, onPre
                   label={'Phone Number'}
                   labelSize={14}
                 />
-
+                <HorizontalDivider width={100} color={theme.colors.lightPink}/>
                 <IndividualField
                   value={user.userType}
                   valueSize={16}
                   label={'User Type'}
                   labelSize={14}
                 />
-
-                {user.classes && <ListClasses classes={user.classes || []} />}
-
-                {/* relationship */}
-                {/* todo later. a bunch of mapping */}
-                {/* <IndividualField
-                  value={user.phoneNumber}
+                <HorizontalDivider width={100} color={theme.colors.lightPink}/>
+                <IndividualField
+                  value={getRelationship(user.userType)}
                   valueSize={16}
-                  label={'Relationship'}
+                  label='Relationship'
                   labelSize={14}
-                /> */}
+                />
+
+                {user.classes && (
+                  <>
+                    <HorizontalDivider width={100} color={theme.colors.lightPink}/>
+                    <ListClasses classes={user.classes || []} />
+                  </>
+                )}
+
               </>
             )}
           </>

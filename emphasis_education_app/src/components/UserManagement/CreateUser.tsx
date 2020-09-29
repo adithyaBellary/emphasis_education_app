@@ -67,7 +67,7 @@ const CreateUser: React.FC<CreateUser> = props => {
       !!curState.confirmPassword &&
       !!curState.phoneNumber &&
       !!curState.userType &&
-      !!curState.gender &&
+      // !!curState.gender &&
       !!curState.dob &&
       checkPassword() &&
       checkPhoneNumber() &&
@@ -150,10 +150,10 @@ const CreateUser: React.FC<CreateUser> = props => {
           onChangeText={number => handleDOBInput(number)}
           maxLength={10}
         />
-        <RadioButtonGroup
+        {/* <RadioButtonGroup
           titles={['Male', 'Female']}
           onSelect={handleTextChange('gender')}
-        />
+        /> */}
         <RadioButtonGroup
           titles={[Permission.Parent, Permission.Student, Permission.Tutor]}
           onSelect={handleTextChange('userType')}

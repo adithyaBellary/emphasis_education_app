@@ -26,7 +26,7 @@ export const GET_USER = gql`
         chatID
       }
       groupID
-      gender
+      # gender
       adminChat {
         chatID
         user {
