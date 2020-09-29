@@ -83,13 +83,13 @@ const LoginImage = () => (
 )
 
 const ContentWrap: React.FC = ({ children }) => (
-  <ScrollView>
     <SafeAreaView>
+  <ScrollView>
       <CenteredDiv>
         {children}
       </CenteredDiv>
-    </SafeAreaView>
   </ScrollView>
+    </SafeAreaView>
 );
 
 const Login: React.FC<LoginProps> = props => {

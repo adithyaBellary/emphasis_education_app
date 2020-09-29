@@ -177,8 +177,8 @@ const Profile: React.FC<ProfileProps> = ({ family, editing, currentUserID, onPre
 
       {currentUser.classes && (
         <>
+          <HorizontalDivider width={100} color={theme.colors.lightPink} />
           <ListClasses classes={currentUser.classes || []} />
-          <HorizontalDivider width={100} color={theme.colors.lightPink}/>
         </>
       )}
 
