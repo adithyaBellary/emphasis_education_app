@@ -27,6 +27,7 @@
 		83DFC8995DC34541AA541D17 /* Nunito-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E2BBD2B4BBAA400D8047059D /* Nunito-LightItalic.ttf */; };
 		85C29B397617483E86E0691C /* Nunito-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0D86051E551C4BEEBC43C03A /* Nunito-Light.ttf */; };
 		89956A8024FF54F60028CFC5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 89956A7F24FF54F60028CFC5 /* GoogleService-Info.plist */; };
+		89CBF0362522FC7D000C25D8 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 008F07F21AC5B25A0029DE68 /* main.jsbundle */; };
 		8CE1FBE5095C24C13ED7F68E /* libPods-emphasis_education_appTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C99D34EF2BA3293CFA94AABA /* libPods-emphasis_education_appTests.a */; };
 		9E79699625574EDE9A50BCC5 /* Nunito-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7A21D585FFF04A69B97FA125 /* Nunito-SemiBoldItalic.ttf */; };
 		ABB9CBE350A74316BE62BEE4 /* Nunito-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 77D457C797D941519E9993AF /* Nunito-Italic.ttf */; };
@@ -436,6 +437,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89CBF0362522FC7D000C25D8 /* main.jsbundle in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				E6BCEC97D58D46D5971B5E0C /* Nunito-Black.ttf in Resources */,
@@ -806,7 +808,7 @@
 				INFOPLIST_FILE = emphasis_education_app/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 0.0.1;
+				MARKETING_VERSION = 0.0.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -830,7 +832,8 @@
 				INFOPLIST_FILE = emphasis_education_app/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 0.0.1;
+				MARKETING_VERSION = 0.0.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

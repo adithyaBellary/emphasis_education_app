@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Image } from 'react-native'
-import FastImage from 'react-native-fast-image'
+import { Image } from 'react-native';
+import FastImage from 'react-native-fast-image';
 
 export const MissionStatement = () => (
     // <Image
@@ -19,7 +19,6 @@ export const MissionStatement = () => (
       }}
       resizeMode='contain'
     />
-
 )
 
 export const HeaderTitle = () => (

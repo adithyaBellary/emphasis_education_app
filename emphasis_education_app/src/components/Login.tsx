@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   ScrollView,
+  Image
 } from 'react-native';
 import FastImage from 'react-native-fast-image'
 import styled from 'styled-components';
@@ -75,7 +76,8 @@ const LoginImage = () => (
     <FastImage
       style={{
         height: 300,
-        width: 400
+        width: 400,
+        // backgroundColor: 'grey'
       }}
       source={require('../images/LogoWithText.png')}
     />
@@ -83,13 +85,13 @@ const LoginImage = () => (
 )
 
 const ContentWrap: React.FC = ({ children }) => (
-    <SafeAreaView>
-  <ScrollView>
+  <SafeAreaView>
+    <ScrollView>
       <CenteredDiv>
         {children}
       </CenteredDiv>
-  </ScrollView>
-    </SafeAreaView>
+    </ScrollView>
+  </SafeAreaView>
 );
 
 const Login: React.FC<LoginProps> = props => {
@@ -98,9 +100,9 @@ const Login: React.FC<LoginProps> = props => {
 
   const [curState, setState] = useState({
     error: false,
-    userName: 'test01@gmail.com',
-    email: 'test01@gmail.com',
-    password: 'test01',
+    userName: '',
+    email: '',
+    password: '',
     name: 'Test User'
   })
 
@@ -122,8 +124,12 @@ const Login: React.FC<LoginProps> = props => {
       <InputContain>
         <LoginInput
           placeholder='Username'
+          placeholderTextColor={theme.colors.purple}
           value={curState.email}
           onChangeText={onChangeEmail}
+          style={{
+            color: theme.colors.purple
+          }}
         />
       </InputContain>
 
@@ -132,8 +138,12 @@ const Login: React.FC<LoginProps> = props => {
       <InputContain>
         <LoginInput
           placeholder='Password'
+          placeholderTextColor={theme.colors.purple}
           value={curState.password}
           onChangeText={onChangePassword}
+          style={{
+            color: theme.colors.purple
+          }}
         />
       </InputContain>
 
