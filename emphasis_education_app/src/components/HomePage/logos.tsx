@@ -3,22 +3,22 @@ import { Image } from 'react-native';
 import FastImage from 'react-native-fast-image';
 
 export const MissionStatement = () => (
-    // <Image
-    //   source={require('../../images/MissionStatement.png')}
-    //   style={{
-    //     height: 100,
-    //     width: 400,
-    //     resizeMode: 'contain'
-    //   }}
-    // />
-    <FastImage
+    <Image
       source={require('../../images/MissionStatement.png')}
       style={{
         height: 100,
         width: 400,
+        resizeMode: 'contain'
       }}
-      resizeMode='contain'
     />
+    // <FastImage
+    //   source={require('../../images/MissionStatement.png')}
+    //   style={{
+    //     height: 100,
+    //     width: 400,
+    //   }}
+    //   resizeMode='contain'
+    // />
 )
 
 export const HeaderTitle = () => (

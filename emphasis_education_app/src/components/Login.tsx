@@ -63,24 +63,24 @@ const SecondaryLink: React.FC<SecondaryLinkProps> = ({ linkContent, onPress }) =
 );
 
 const LoginImage = () => (
-  <GeneralSpacing u={0} r={0} d={50} l={0} >
-    {/* <Image
+  <GeneralSpacing u={0} r={0} d={50} l={0}>
+    <Image
       source={require('../images/LogoWithText.png')}
       style={{
-        height: '100%',
-        width: '100%',
-        // backgroundColor: 'grey'
+        height: 300,
+        width: 400,
+        // resizeMode: 'contain'
       }}
-      resizeMode={'cover'}
-    /> */}
-    <FastImage
+      // resizeMode={'cover'}
+    />
+    {/* <FastImage
       style={{
         height: 300,
         width: 400,
         // backgroundColor: 'grey'
       }}
       source={require('../images/LogoWithText.png')}
-    />
+    /> */}
   </GeneralSpacing>
 )
 
