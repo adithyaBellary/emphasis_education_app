@@ -69,18 +69,8 @@ const LoginImage = () => (
       style={{
         height: 300,
         width: 400,
-        // resizeMode: 'contain'
       }}
-      // resizeMode={'cover'}
     />
-    {/* <FastImage
-      style={{
-        height: 300,
-        width: 400,
-        // backgroundColor: 'grey'
-      }}
-      source={require('../images/LogoWithText.png')}
-    /> */}
   </GeneralSpacing>
 )
 
