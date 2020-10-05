@@ -214,8 +214,9 @@ const StackNavigation: React.FC = () => {
         } else {
           console.log('login failed')
           setLoginError(true);
-          Sentry.captureException('error')
-          // throw new Error("My first Sentry error!");
+          Sentry.captureException(new Error('Login Failed'), {
+
+          })
         }
       }
     }

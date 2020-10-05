@@ -19,6 +19,8 @@ import { getMainDefinition } from 'apollo-utilities';
 import { ThemeProvider } from 'styled-components';
 import * as Sentry from "@sentry/react-native";
 
+import { SENTRY_DSN } from './config/sentry';
+
 import { theme } from './src/theme';
 import { GeneralContext, Context, NotificationsProps } from './src/components/Context/Context';
 import StackNavigation from './src/StackNavigation';
@@ -56,14 +58,18 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 });
 
 Sentry.init({
-  dsn: "https://944bd71a510544be9c3392d62001dc5c@o456931.ingest.sentry.io/5450574",
+  dsn: SENTRY_DSN,
 });
 
 const App = () => {
+  console.log('sentr', SENTRY_DSN)
 
   const [user, setUser] = React.useState<UserInfoType>({} as UserInfoType);
   const [notifications, incrementNotifications] = React.useState<NotificationsProps>({} as NotificationsProps);
-  const updateUser = (newUser: UserInfoType) => setUser(newUser)
+  const updateUser = (newUser: UserInfoType) => {
+    // set Sentry user here as well
+    setUser(newUser)
+  }
   const incrementNotificationCounter = (chatID: string) => {
     let oldVal: number = 1;
     console.log('old notifs', notifications[chatID])
