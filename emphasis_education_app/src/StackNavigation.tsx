@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { useMutation } from '@apollo/react-hooks';
+import * as Sentry from "@sentry/react-native";
 
 import Login from './components/Login';
 import Chat from './components/Chat/Chat';
@@ -213,6 +214,8 @@ const StackNavigation: React.FC = () => {
         } else {
           console.log('login failed')
           setLoginError(true);
+          Sentry.captureException('error')
+          // throw new Error("My first Sentry error!");
         }
       }
     }

@@ -17,6 +17,7 @@ import { split } from 'apollo-link';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { getMainDefinition } from 'apollo-utilities';
 import { ThemeProvider } from 'styled-components';
+import * as Sentry from "@sentry/react-native";
 
 import { theme } from './src/theme';
 import { GeneralContext, Context, NotificationsProps } from './src/components/Context/Context';
@@ -52,6 +53,10 @@ httplink)
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache,
   link
+});
+
+Sentry.init({
+  dsn: "https://944bd71a510544be9c3392d62001dc5c@o456931.ingest.sentry.io/5450574",
 });
 
 const App = () => {
