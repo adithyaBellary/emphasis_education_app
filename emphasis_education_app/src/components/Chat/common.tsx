@@ -28,7 +28,7 @@ export const EmptyChatPicker: React.FC = () => (
 
 export const EmptyChat: React.FC = () => (
   <EmptyChatWrapper>
-    This is the beginning of your conversation. Let's talk!
+    is this upside down
   </EmptyChatWrapper>
 );
 

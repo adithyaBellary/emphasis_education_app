@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Text,
-  TouchableOpacity,
-  ActivityIndicator
-} from 'react-native';
+import { TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useQuery, useSubscription } from '@apollo/react-hooks';
+import * as Sentry from '@sentry/react-native';
 
 import Chat from './GiftedChat';
 import { GeneralContext } from '../Context/Context';
@@ -96,6 +93,14 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
   useEffect(() => {
     if (!subData) { return }
     const { MessageId: _id, text, createdAt, user, image } = subData.messageReceived;
+
+    Sentry.captureMessage('Received a message in chat', {
+      user: {
+        email: loggedUser.email,
+        username: `${loggedUser.firstName} ${loggedUser.lastName}`
+      }
+    })
+
     if (!curState ) {
       setState({
         messages: [
@@ -128,7 +133,7 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
     navigation.setOptions({
       headerTitle: () => (
         <TouchableOpacity onPress={() => navigation.navigate('ChatInfo', { className, tutorInfo, userInfo, chatID })}>
-          <ThemedText size={20} type={FONT_STYLES.MAIN} >
+          <ThemedText size={20} type={FONT_STYLES.MAIN}>
             {className}
           </ThemedText>
         </TouchableOpacity>
