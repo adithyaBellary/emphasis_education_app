@@ -1,14 +1,10 @@
 import * as React from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { Icon } from 'react-native-elements';
-import {
-  View,
-  Text,
-  ActivityIndicator,
-} from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import styled from 'styled-components';
 import messaging from '@react-native-firebase/messaging';
-
+import * as Sentry from '@sentry/react-native';
 
 import { MissionStatement, HeaderTitle, LogiImage } from './logos';
 
@@ -118,7 +114,6 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
       // subscribe to the messages
       if (getUser.classes) {
         getUser.classes.forEach(_class => {
-          console.log('subbing to topics')
           if (_class) {
             messaging()
               .subscribeToTopic(_class.chatID)
@@ -215,7 +210,6 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
       <MissionStatement />
     </CenteredDiv>
   )
-
 }
 
 export default Home;

@@ -64,23 +64,26 @@ Sentry.init({
 });
 
 const App = () => {
-  console.log('sentr', SENTRY_DSN)
-
   const [user, setUser] = React.useState<UserInfoType>({} as UserInfoType);
   const [notifications, incrementNotifications] = React.useState<NotificationsProps>({} as NotificationsProps);
   const updateUser = (newUser: UserInfoType) => {
     // set Sentry user here as well
+    Sentry.setUser({
+      email: newUser.email,
+      username: `${newUser.firstName} ${newUser.lastName}`,
+      'Permission': newUser.userType
+    })
     setUser(newUser)
   }
   const incrementNotificationCounter = (chatID: string) => {
     let oldVal: number = 1;
-    console.log('old notifs', notifications[chatID])
+    // console.log('old notifs', notifications[chatID])
     if (notifications[chatID]) {
-      console.log('we have an old one')
+      // console.log('we have an old one')
       oldVal = notifications[chatID] + 1
     }
-    console.log('notifications in the handleer', notifications)
-    console.log('new notifs', {...notifications, [chatID]: oldVal})
+    // console.log('notifications in the handleer', notifications)
+    // console.log('new notifs', {...notifications, [chatID]: oldVal})
     incrementNotifications({...notifications, [chatID]: oldVal})
   }
   const clearNotificationCounter = (chatID: string) => {
