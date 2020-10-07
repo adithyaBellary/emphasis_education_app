@@ -215,7 +215,7 @@ const MyGiftedChat: React.FC<GiftedChatProps> = ({ queryLoading, refreshFn, chat
         renderChatEmpty={() => <EmptyChat />}
         renderInputToolbar={renderInputToolbar}
         messages={messages}
-        inverted={false}
+        inverted={!!messages}
         renderBubble={renderBubble}
         onSend={onSend}
         onLongPress={(ctx, currentMessage) => console.log('delete this', ctx, currentMessage)}
