@@ -29,13 +29,13 @@ import { UserInfoType } from './types/schema-types';
 
 const cache = new InMemoryCache();
 const httplink = new HttpLink({
-  uri: 'https://emphasis-education-server.herokuapp.com/graphql'
-  // uri: 'http://localhost:4000/graphql'
+  // uri: 'https://emphasis-education-server.herokuapp.com/graphql'
+  uri: 'http://localhost:4000/graphql'
 });
 
 const wsLink = new WebSocketLink({
-  uri: `ws://emphasis-education-server.herokuapp.com/graphql`,
-  // uri: `ws://localhost:4000/graphql`,
+  // uri: `ws://emphasis-education-server.herokuapp.com/graphql`,
+  uri: `ws://localhost:4000/graphql`,
   options: {
     reconnect: true,
     timeout: 20000,
@@ -59,6 +59,8 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 
 Sentry.init({
   dsn: SENTRY_DSN,
+  // seems like this release isnt getting mapped
+  release: 'emphasis-education-app@' + process.env.npm_package_version
 });
 
 const App = () => {

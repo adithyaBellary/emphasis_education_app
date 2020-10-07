@@ -4,7 +4,6 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { useMutation } from '@apollo/react-hooks';
-import * as Sentry from "@sentry/react-native";
 
 import Login from './components/Login';
 import Chat from './components/Chat/Chat';
@@ -204,23 +203,8 @@ const StackNavigation: React.FC = () => {
 
   const [loginError, setLoginError] = React.useState(false);
 
-  const [_login, { data, error, loading}] = useMutation<ILoginPayload>(
-    LOGIN,
-    {
-      onCompleted: async ({ login }) => {
-        if (login.res) {
-          await AsyncStorage.setItem(LOGIN_TOKEN, login.user.email)
-          dispatch({ type: 'LOGIN', token: login.user.email})
-        } else {
-          console.log('login failed')
-          setLoginError(true);
-          Sentry.captureException(new Error('Login Failed'), {
+  const [_login, { error, loading}] = useMutation<ILoginPayload>(LOGIN)
 
-          })
-        }
-      }
-    }
-  )
   if (error) {
     console.log('error logging in. Could be the internet', error)
   }
@@ -232,6 +216,18 @@ const StackNavigation: React.FC = () => {
           email,
           password
         }})
+        .then(async ({ data }) => {
+          if (data?.login.res) {
+            await AsyncStorage.setItem(LOGIN_TOKEN, data.login.user.email)
+            setLoginError(false)
+            dispatch({ type: 'LOGIN', token: data.login.user.email})
+          } else {
+            setLoginError(true)
+          }
+        })
+        .catch(e => {
+          setLoginError(true)
+        })
       },
       logout: async data => {
         await AsyncStorage.clear();
