@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useMutation } from '@apollo/react-hooks';
 import {
   Actions,
   ActionsProps,
@@ -18,12 +19,9 @@ import {
 } from 'react-native';
 import { Icon } from 'react-native-elements';
 import ImagePicker from 'react-native-image-picker';
-import { useMutation } from '@apollo/react-hooks';
+
 import { SEND_MESSAGE } from '../../queries/SendMessage';
-import {
-  IMessageUserType,
-  IMessage
-} from '../../types';
+import { IMessageUserType, IMessage } from '../../types';
 import { theme } from '../../theme';
 import { EmptyChat } from './common';
 

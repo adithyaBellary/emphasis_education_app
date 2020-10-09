@@ -3,7 +3,6 @@ import { ActivityIndicator, View } from 'react-native'
 import styled from 'styled-components';
 
 import {
-  CenteredDiv,
   GeneralSpacing,
   ThemedText,
   IconRow,
@@ -11,7 +10,7 @@ import {
 } from '../shared';
 
 const EmptyChatWrapper: React.FC = ({ children }) => (
-  <View style={{ alignItems: 'center', transform: [{ scaleY: -1}]}}>
+  <View style={{ alignItems: 'center', transform: [{ scaleY: -1}] }}>
     <GeneralSpacing u={10} r={10} d={10} l={10}>
       <ThemedText size={16} type={FONT_STYLES.LIGHT}>
         {children}
