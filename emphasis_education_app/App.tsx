@@ -17,6 +17,9 @@ import { split } from 'apollo-link';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { getMainDefinition } from 'apollo-utilities';
 import { ThemeProvider } from 'styled-components';
+import * as Sentry from "@sentry/react-native";
+
+import { SENTRY_DSN } from './config/sentry';
 
 import { theme } from './src/theme';
 import { GeneralContext, Context, NotificationsProps } from './src/components/Context/Context';
@@ -26,13 +29,13 @@ import { UserInfoType } from './types/schema-types';
 
 const cache = new InMemoryCache();
 const httplink = new HttpLink({
-  uri: 'https://emphasis-education-server.herokuapp.com/graphql'
-  // uri: 'http://localhost:4000/graphql'
+  // uri: 'https://emphasis-education-server.herokuapp.com/graphql'
+  uri: 'http://localhost:4000/graphql'
 });
 
 const wsLink = new WebSocketLink({
-  uri: `ws://emphasis-education-server.herokuapp.com/graphql`,
-  // uri: `ws://localhost:4000/graphql`,
+  // uri: `ws://emphasis-education-server.herokuapp.com/graphql`,
+  uri: `ws://localhost:4000/graphql`,
   options: {
     reconnect: true,
     timeout: 20000,
@@ -54,24 +57,36 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   link
 });
 
-const App = () => {
+Sentry.init({
+  dsn: SENTRY_DSN,
+  // seems like this release isnt getting mapped
+  release: 'emphasis-education-app@' + process.env.npm_package_version
+});
 
+const App = () => {
   const [user, setUser] = React.useState<UserInfoType>({} as UserInfoType);
   const [notifications, incrementNotifications] = React.useState<NotificationsProps>({} as NotificationsProps);
-  const updateUser = (newUser: UserInfoType) => setUser(newUser)
+  const updateUser = (newUser: UserInfoType) => {
+    // set Sentry user here as well
+    Sentry.setUser({
+      email: newUser.email,
+      username: `${newUser.firstName} ${newUser.lastName}`,
+      'Permission': newUser.userType
+    })
+    setUser(newUser)
+  }
   const incrementNotificationCounter = (chatID: string) => {
     let oldVal: number = 1;
-    console.log('old notifs', notifications[chatID])
+    // console.log('old notifs', notifications[chatID])
     if (notifications[chatID]) {
-      console.log('we have an old one')
+      // console.log('we have an old one')
       oldVal = notifications[chatID] + 1
     }
-    console.log('notifications in the handleer', notifications)
-    console.log('new notifs', {...notifications, [chatID]: oldVal})
+    // console.log('notifications in the handleer', notifications)
+    // console.log('new notifs', {...notifications, [chatID]: oldVal})
     incrementNotifications({...notifications, [chatID]: oldVal})
   }
   const clearNotificationCounter = (chatID: string) => {
-    console.log('clearing', chatID)
     incrementNotifications({ ...notifications, [chatID]: 0})
   }
 
