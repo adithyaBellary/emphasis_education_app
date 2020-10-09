@@ -66,7 +66,7 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
         chatID: chatID,
         init: initFetch
       },
-      onCompleted: () => console.log('ran'),
+      // onCompleted: () => console.log('ran'),
       // need to look at this again
       fetchPolicy: 'no-cache',
     }
@@ -174,7 +174,8 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
           refreshFn={refreshFn}
           chatID={chatID}
           curUser={curUser}
-          messages={curState ? curState.messages : undefined}
+          messages={curState ? curState.messages : []}
+          // messages={[]}
         />
       )}
     </>

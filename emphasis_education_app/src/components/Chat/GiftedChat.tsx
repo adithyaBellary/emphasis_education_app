@@ -200,33 +200,24 @@ const MyGiftedChat: React.FC<GiftedChatProps> = ({ queryLoading, refreshFn, chat
   }
 
   return (
-    <>
-    {/* <View style={{flex: 1}}> */}
-    {/* <KeyboardAvoidingView behavior={'padding'} keyboardVerticalOffset={50}> */}
-      <GiftedChat
-        renderLoading={() => <ActivityIndicator animating={true} />}
-        listViewProps={
-          {
-            refreshing: queryLoading,
-            onRefresh: refreshFn,
-            // marginBottom: 50
-          }
+    <GiftedChat
+      renderLoading={() => <ActivityIndicator animating={true} />}
+      listViewProps={
+        {
+          refreshing: queryLoading,
+          onRefresh: refreshFn,
+          // marginBottom: 50
         }
-        renderChatEmpty={() => <EmptyChat />}
-        renderInputToolbar={renderInputToolbar}
-        messages={messages}
-        inverted={!!messages}
-        renderBubble={renderBubble}
-        onSend={onSend}
-        onLongPress={(ctx, currentMessage) => console.log('delete this', ctx, currentMessage)}
-        user={curUser}
-        // keyboardShouldPersistTaps={'always'}
-        // bottomOffset={60}
-      />
-      {/* </KeyboardAvoidingView> */}
-      {/* <KeyboardAvoidingView behavior={'padding'} keyboardVerticalOffset={0}/> */}
-    {/* </View> */}
-    </>
+      }
+      renderChatEmpty={() => <EmptyChat />}
+      renderInputToolbar={renderInputToolbar}
+      messages={messages}
+      inverted={false}
+      renderBubble={renderBubble}
+      onSend={onSend}
+      onLongPress={(ctx, currentMessage) => console.log('delete this', ctx, currentMessage)}
+      user={curUser}
+    />
   )
 }
 

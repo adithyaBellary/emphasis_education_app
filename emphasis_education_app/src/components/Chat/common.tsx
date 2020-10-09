@@ -1,5 +1,7 @@
 import * as React from 'react';
-import { View, Text, ActivityIndicator } from 'react-native'
+import { ActivityIndicator, View } from 'react-native'
+import styled from 'styled-components';
+
 import {
   CenteredDiv,
   GeneralSpacing,
@@ -7,16 +9,15 @@ import {
   IconRow,
   FONT_STYLES,
 } from '../shared';
-import styled from 'styled-components';
 
 const EmptyChatWrapper: React.FC = ({ children }) => (
-  <CenteredDiv>
+  <View style={{ alignItems: 'center', transform: [{ scaleY: -1}]}}>
     <GeneralSpacing u={10} r={10} d={10} l={10}>
       <ThemedText size={16} type={FONT_STYLES.LIGHT}>
         {children}
       </ThemedText>
     </GeneralSpacing>
-  </CenteredDiv>
+  </View>
 );
 
 export const EmptyChatPicker: React.FC = () => (

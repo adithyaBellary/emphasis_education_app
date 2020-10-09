@@ -87,7 +87,6 @@ const App = () => {
     incrementNotifications({...notifications, [chatID]: oldVal})
   }
   const clearNotificationCounter = (chatID: string) => {
-    console.log('clearing', chatID)
     incrementNotifications({ ...notifications, [chatID]: 0})
   }
 
