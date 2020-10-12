@@ -44,11 +44,14 @@ interface GetMessagesInput {
   chatID: string;
   init: number;
 }
-let initFetch: number = 0;
+
 
 const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
+  // now this is going to reset every time that we leave the chat and then come back in
+  let initFetch: number = 0;
   const { loggedUser } = React.useContext(GeneralContext);
   const [curState, setState] = useState<State>();
+  const [messageFetchPointer, setMessageFetchPointer] = React.useState<number>(0);
   const chatID: string = route.params.chatID;
   const className: string = route.params.className;
   const tutorInfo: ChatUserInfo = route.params.tutorInfo;
@@ -64,7 +67,7 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
     {
       variables: {
         chatID: chatID,
-        init: initFetch
+        init: messageFetchPointer
       },
       // onCompleted: () => console.log('ran'),
       // need to look at this again
@@ -79,11 +82,13 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
   useEffect(() => {
     if (!getMessages) { return }
     if (!curState) {
+      console.log('no cur state')
       setState({
         messages: getMessages.getMessages
       })
       return;
     }
+    console.log('curstate')
     setState({messages: [
       ...getMessages.getMessages,
       ...curState.messages
@@ -150,6 +155,9 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
   const refreshFn = () => {
     console.log('refreshing')
     initFetch = initFetch + REFETCH_LIMIT;
+    // setMessageFetchPointer(messageFetchPointer + REFETCH_LIMIT)
+    console.log('refetch', initFetch)
+    // console.log('refetch limit', messageFetchPointer + REFETCH_LIMIT)
     const variables = { chatID, init: initFetch}
     // check whether there are even messages for us to refresh w
 

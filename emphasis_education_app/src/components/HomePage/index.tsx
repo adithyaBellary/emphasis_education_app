@@ -66,7 +66,7 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
   const { setUser } = React.useContext(GeneralContext);
   const { logout } = React.useContext(AuthContext);
   const changeScreens = (dest: string) => () =>  navigation.navigate(dest)
-  console.log(route.params.token)
+  // console.log(route.params.token)
   const { data, loading, error } = useQuery<{ getUser: UserInfoType }, QueryGetUserArgs>(GET_USER, {
     variables: {
       userEmail: route.params.token

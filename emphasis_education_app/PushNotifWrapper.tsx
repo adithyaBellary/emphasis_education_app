@@ -53,7 +53,7 @@ const Wrapper: React.FC = ({ children }) => {
   // this does not seem to be triggered. The first message from the server wakes the
   // app up and then the second one gets handled by the background handler
   React.useEffect(() => {
-    messaging().getInitialNotification().then(message => {
+    messaging().getInitialNotification().then(async message => {
       if (message) {
         console.log('we are coming from a quit state', message)
         console.log('Platform', Platform.OS)
@@ -61,6 +61,7 @@ const Wrapper: React.FC = ({ children }) => {
       }
     })
     // return fcn;
+
   }, [])
 
   React.useEffect(() => {
