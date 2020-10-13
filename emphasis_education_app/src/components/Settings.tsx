@@ -5,7 +5,7 @@ import {
   ScrollView
 } from 'react-native';
 import styled from 'styled-components';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 
 import { SEND_BUG_EMAIL } from '../queries/SendBugEmail';
 

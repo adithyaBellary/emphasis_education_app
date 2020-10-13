@@ -3,7 +3,7 @@ import {
   ActivityIndicator,
   TouchableOpacity
 } from 'react-native';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 
 import { GeneralContext } from '../Context/Context';
 import Profile from './Profile';

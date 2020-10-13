@@ -2,7 +2,7 @@ import * as React from 'react';
 import {
   ActivityIndicator,
 } from 'react-native';
-import { useLazyQuery } from '@apollo/react-hooks';
+import { useLazyQuery } from '@apollo/client';
 import { Input, Icon } from 'react-native-elements';
 
 import SearchResults from '../Search/SearchResults';

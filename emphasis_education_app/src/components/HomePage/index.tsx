@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useQuery } from '@apollo/react-hooks';
 import { Icon } from 'react-native-elements';
 import { ActivityIndicator, View } from 'react-native';
 import styled from 'styled-components';
@@ -25,7 +24,7 @@ import {
   UserInfoType,
   QueryGetUserArgs
  } from '../../../types/schema-types';
- import { gql, useApolloClient } from '@apollo/client';
+ import { gql, useApolloClient, useQuery } from '@apollo/client';
 
 interface LiftedHomeProps {
   navigation: any;
@@ -68,7 +67,7 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
   const { logout } = React.useContext(AuthContext);
   const changeScreens = (dest: string) => () =>  navigation.navigate(dest)
   // console.log(route.params.token)
-  const client = useApolloClient();
+  // const client = useApolloClient();
   const { data, loading, error } = useQuery<{ getUser: UserInfoType }, QueryGetUserArgs>(GET_USER, {
     variables: {
       userEmail: route.params.token

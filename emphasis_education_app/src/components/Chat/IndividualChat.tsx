@@ -3,7 +3,7 @@ import {
   Alert,
   TouchableOpacity,
 } from 'react-native';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 import { Icon } from 'react-native-elements';
 
 import {

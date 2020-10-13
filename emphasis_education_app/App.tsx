@@ -14,7 +14,6 @@ import * as React from 'react';
 import { HttpLink } from 'apollo-link-http';
 import { WebSocketLink } from 'apollo-link-ws';
 import { split } from 'apollo-link';
-import { ApolloProvider as ApolloHooksProvider } from '@apollo/react-hooks';
 import { getMainDefinition } from 'apollo-utilities';
 import { ThemeProvider } from 'styled-components';
 import * as Sentry from "@sentry/react-native";
@@ -60,7 +59,8 @@ httplink)
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache,
-  link
+  // link
+  uri: 'http://localhost:4000/graphql'
 });
 
 Sentry.init({
@@ -105,7 +105,7 @@ const App = () => {
   }
 
   return (
-    <ApolloHooksProvider client={client}>
+
     <ApolloProvider client={client}>
       <ThemeProvider theme={theme}>
         <GeneralContext.Provider value={value}>
@@ -114,8 +114,7 @@ const App = () => {
           </PushNotifWrapper>
         </GeneralContext.Provider>
       </ThemeProvider>
-      </ApolloProvider>
-    </ApolloHooksProvider>
+    </ApolloProvider>
   )
 };
 

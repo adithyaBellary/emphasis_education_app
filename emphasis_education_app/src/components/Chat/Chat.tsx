@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { TouchableOpacity, ActivityIndicator } from 'react-native';
-import { useQuery, useSubscription } from '@apollo/react-hooks';
+import { useQuery, useSubscription } from '@apollo/client';
 import { gql, useApolloClient } from '@apollo/client';
 import * as Sentry from '@sentry/react-native';
 

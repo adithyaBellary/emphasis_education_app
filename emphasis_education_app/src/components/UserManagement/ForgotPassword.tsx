@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Alert } from 'react-native'
 import { Input } from 'react-native-elements';
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 
 import { ThemedButton, ThemedText, FONT_STYLES, GeneralSpacing } from '../shared'
 import { theme } from '../../theme';

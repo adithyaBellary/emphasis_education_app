@@ -3,7 +3,7 @@ import {
   ActivityIndicator,
   Alert
 } from 'react-native'
-import { useLazyQuery, useMutation } from '@apollo/react-hooks';
+import { useLazyQuery, useMutation } from '@apollo/client';
 import { Input, Icon } from 'react-native-elements';
 
 import { SEARCH_CLASSES } from '../../queries/SearchClasses';

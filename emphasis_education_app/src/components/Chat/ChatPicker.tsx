@@ -6,7 +6,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { Icon } from 'react-native-elements';
-import { useLazyQuery } from '@apollo/react-hooks';
+import { useLazyQuery } from '@apollo/client';
 import messaging from '@react-native-firebase/messaging';
 
 import { GeneralContext } from '../Context/Context';
