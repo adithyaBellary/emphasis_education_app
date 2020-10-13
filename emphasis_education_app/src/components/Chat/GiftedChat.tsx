@@ -46,7 +46,7 @@ const MyGiftedChat: React.FC<GiftedChatProps> = ({ queryLoading, refreshFn, chat
   const [image, setImage] = React.useState('')
   const [imageSelected, setImageSelected] = React.useState(false);
 
-  const [sendMessage, { error }] = useMutation<MessagePayload>(
+  const [sendMessage, { data, error }] = useMutation<MessagePayload>(
     SEND_MESSAGE,
     {
       onCompleted: data => {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useQuery, useSubscription } from '@apollo/react-hooks';
+import { gql, useApolloClient } from '@apollo/client';
 import * as Sentry from '@sentry/react-native';
 
 import Chat from './GiftedChat';
@@ -45,10 +46,25 @@ interface GetMessagesInput {
   init: number;
 }
 
+const query = gql`
+  query GetMessages($chatID: String!, $init: Int!) {
+    getMessages(chatID: "7423579", init: 0){
+      _id
+      text
+      createdAt
+      user {
+        _id
+        name
+      }
+      image
+    }
+  }
+`
 
+let initFetch: number = 0;
 const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
   // now this is going to reset every time that we leave the chat and then come back in
-  let initFetch: number = 0;
+
   const { loggedUser } = React.useContext(GeneralContext);
   const [curState, setState] = useState<State>();
   const [messageFetchPointer, setMessageFetchPointer] = React.useState<number>(0);
@@ -56,6 +72,8 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
   const className: string = route.params.className;
   const tutorInfo: ChatUserInfo = route.params.tutorInfo;
   const userInfo: ChatUserInfo[] = route.params.userInfo;
+
+  const client = useApolloClient();
   // console.log('tutor', tutorInfo)
   // console.log('user', userInfo)
   // lets cache this data
@@ -71,13 +89,21 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
       },
       // onCompleted: () => console.log('ran'),
       // need to look at this again
-      fetchPolicy: 'no-cache',
+      // fetchPolicy: 'no-cache',
     }
   )
 
   if (errorMessage) { console.log('error', errorMessage) }
 
   const { data: subData } = useSubscription<MessageReceived>(SUB)
+
+  const data = client.readQuery({ query });
+
+  // console.log('the cached query', data)
+  // useEffect(() => {
+  //   initFetch = 0;
+  //   console.log('hi')
+  // }, [])
 
   useEffect(() => {
     if (!getMessages) { return }
@@ -98,7 +124,10 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
   useEffect(() => {
     if (!subData) { return }
     const { MessageId: _id, text, createdAt, user, image } = subData.messageReceived;
+    // let us try to update the local cache here, so that when we leave the chat and then come back,
+    // we can read from the cache instead of querying for the messages over and over again
 
+    // it is mentioned in the documentation that changes to the cache will not be reflected in the server, but that is fine
     Sentry.captureMessage('Received a message in chat', {
       user: {
         email: loggedUser.email,
