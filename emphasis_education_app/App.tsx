@@ -9,8 +9,8 @@
  */
 
 import * as React from 'react';
-import { ApolloClient } from 'apollo-client';
-import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
+// import {  } from 'apollo-client';
+// import { ,  } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
 import { WebSocketLink } from 'apollo-link-ws';
 import { split } from 'apollo-link';
@@ -18,7 +18,12 @@ import { ApolloProvider as ApolloHooksProvider } from '@apollo/react-hooks';
 import { getMainDefinition } from 'apollo-utilities';
 import { ThemeProvider } from 'styled-components';
 import * as Sentry from "@sentry/react-native";
-import { ApolloProvider } from '@apollo/client';
+import {
+  ApolloProvider,
+  ApolloClient,
+  InMemoryCache,
+  NormalizedCacheObject
+ } from '@apollo/client';
 
 import { SENTRY_DSN } from './config/sentry';
 
