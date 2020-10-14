@@ -13,7 +13,7 @@ import * as React from 'react';
 // import { ,  } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
 import { WebSocketLink } from 'apollo-link-ws';
-import { split } from 'apollo-link';
+import { split, ApolloLink } from 'apollo-link';
 import { getMainDefinition } from 'apollo-utilities';
 import { ThemeProvider } from 'styled-components';
 import * as Sentry from "@sentry/react-native";
@@ -56,11 +56,19 @@ const link = split(({ query }) => {
   )
 },wsLink,
 httplink)
+// const link = new ApolloLink().split(({ query }) => {
+//   const definition = getMainDefinition(query);
+//   return (
+//     definition.kind === 'OperationDefinition' &&
+//       definition.operation === 'subscription'
+//   )
+// },wsLink,
+// httplink)
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache,
-  // link
-  uri: 'http://localhost:4000/graphql'
+  link
+  // uri: 'http://localhost:4000/graphql'
 });
 
 Sentry.init({

@@ -48,7 +48,7 @@ interface GetMessagesInput {
 
 const query = gql`
   query GetMessages($chatID: String!, $init: Int!) {
-    getMessages(chatID: "7423579", init: 0){
+    getMessages(chatID: $chatID, init: $init){
       _id
       text
       createdAt
@@ -89,21 +89,13 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
       },
       // onCompleted: () => console.log('ran'),
       // need to look at this again
-      // fetchPolicy: 'no-cache',
+      fetchPolicy: 'no-cache',
     }
   )
 
   if (errorMessage) { console.log('error', errorMessage) }
 
   const { data: subData } = useSubscription<MessageReceived>(SUB)
-
-  const data = client.readQuery({ query });
-
-  // console.log('the cached query', data)
-  // useEffect(() => {
-  //   initFetch = 0;
-  //   console.log('hi')
-  // }, [])
 
   useEffect(() => {
     if (!getMessages) { return }
@@ -161,6 +153,23 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
         }
       ]
     })
+
+    client.writeQuery({
+      query,
+      data: {
+        getMessages: [
+          ...curState.messages,
+          {
+            _id,
+            text,
+            createdAt,
+            user,
+            image
+          }
+        ]
+      }
+    })
+
   }, [subData])
 
   useEffect(() => {
