@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { TouchableOpacity, ActivityIndicator } from 'react-native';
-import { useQuery, useSubscription } from '@apollo/client';
-import { gql, useApolloClient } from '@apollo/client';
+import {
+  gql,
+  useApolloClient,
+  useQuery,
+  useSubscription
+} from '@apollo/client';
 import * as Sentry from '@sentry/react-native';
 
 import Chat from './GiftedChat';
@@ -87,7 +91,7 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
         chatID: chatID,
         init: messageFetchPointer
       },
-      // onCompleted: () => console.log('ran'),
+      onCompleted: () => console.log('ran the getmessages query'),
       // need to look at this again
       fetchPolicy: 'no-cache',
     }
@@ -115,11 +119,17 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
 
   useEffect(() => {
     if (!subData) { return }
-    const { MessageId: _id, text, createdAt, user, image } = subData.messageReceived;
-    // let us try to update the local cache here, so that when we leave the chat and then come back,
-    // we can read from the cache instead of querying for the messages over and over again
 
-    // it is mentioned in the documentation that changes to the cache will not be reflected in the server, but that is fine
+    const { MessageId: _id, text, createdAt, user, image } = subData.messageReceived;
+    let messages: IMessage[];
+    let receivedMessage: IMessage = {
+      _id,
+      text,
+      createdAt,
+      user,
+      image
+    }
+
     Sentry.captureMessage('Received a message in chat', {
       user: {
         email: loggedUser.email,
@@ -128,47 +138,41 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
     })
 
     if (!curState ) {
-      setState({
-        messages: [
-          {
-            _id,
-            text,
-            createdAt,
-            user,
-            image
-          }
-        ]
-      })
-      return
-    }
-    setState({
-      messages: [
+      messages = [receivedMessage]
+    } else {
+      messages = [
         ...curState.messages,
-        {
-          _id,
-          text,
-          createdAt,
-          user,
-          image
-        }
+        receivedMessage
       ]
-    })
+    }
 
-    client.writeQuery({
-      query,
-      data: {
-        getMessages: [
-          ...curState.messages,
-          {
-            _id,
-            text,
-            createdAt,
-            user,
-            image
-          }
-        ]
-      }
-    })
+
+
+    // console.log('messages being written', messages)
+
+    // it is mentioned in the documentation that changes to the cache will not be reflected in the server, but that is fine
+    // const d = client.readQuery({
+    //   query,
+    //   variables: {
+    //     chatID,
+    //     init: 0
+    //   }
+    // })
+    // client.writeQuery({
+    //   query,
+    //   data: {
+    //     getMessages: [...d.getMessages, receivedMessage]
+    //     // getMessages: [...messages, receivedMessage]
+    //   },
+    //   variables: {
+    //     chatID,
+    //     init: 0
+    //   }
+    // })
+
+    setState({ messages })
+
+    // console.log('d', d)
 
   }, [subData])
 
@@ -221,6 +225,7 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
           chatID={chatID}
           curUser={curUser}
           messages={curState ? curState.messages : []}
+          // messages={getMessages ? getMessages.getMessages : []}
           // messages={[]}
         />
       )}
