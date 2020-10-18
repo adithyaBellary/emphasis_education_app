@@ -13,6 +13,7 @@ import { GeneralContext } from '../Context/Context';
 
 import { REFETCH_LIMIT } from '../../constant';
 import { IMessage, IMessageUserType, ChatUserInfo } from '../../types';
+import { QueryGetMessagesArgs } from '../../../types/schema-types';
 import { SUB } from '../../queries/MessageReceived';
 import { GET_MESSAGES } from '../../queries/GetMessages';
 import {
@@ -43,11 +44,6 @@ interface MessageReceived {
 }
 interface GetMessages {
   getMessages: IMessage[];
-}
-
-interface GetMessagesInput {
-  chatID: string;
-  init: number;
 }
 
 const query = gql`
@@ -81,15 +77,17 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
   // console.log('tutor', tutorInfo)
   // console.log('user', userInfo)
   // lets cache this data
-  const { data: getMessages, loading: queryLoading, refetch, error: errorMessage } = useQuery<
+  const { data: getMessages, loading: queryLoading, refetch, error: errorMessage, updateQuery } = useQuery<
       GetMessages,
-      GetMessagesInput
+      QueryGetMessagesArgs
     >(
     GET_MESSAGES,
     {
       variables: {
         chatID: chatID,
-        init: messageFetchPointer
+        userID: loggedUser._id,
+        refresh: false
+
       },
       onCompleted: () => console.log('ran the getmessages query'),
       // need to look at this again
@@ -198,9 +196,13 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
     console.log('refreshing')
     initFetch = initFetch + REFETCH_LIMIT;
     // setMessageFetchPointer(messageFetchPointer + REFETCH_LIMIT)
-    console.log('refetch', initFetch)
+    // console.log('refetch', initFetch)
     // console.log('refetch limit', messageFetchPointer + REFETCH_LIMIT)
-    const variables = { chatID, init: initFetch}
+    const variables = {
+      chatID,
+      userID: loggedUser._id,
+      refresh: true
+    }
     // check whether there are even messages for us to refresh w
 
     refetch(variables);

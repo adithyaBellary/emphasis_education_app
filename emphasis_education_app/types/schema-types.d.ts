@@ -232,8 +232,8 @@ export type MutationForgotPasswordArgs = {
 
 
 export type MutationAddChatMemberArgs = {
-  email?: Maybe<Scalars['String']>;
-  chatID?: Maybe<Scalars['String']>;
+  email: Scalars['String'];
+  chatID: Scalars['String'];
 };
 
 
@@ -260,8 +260,9 @@ export type Query = {
 
 
 export type QueryGetMessagesArgs = {
-  chatID?: Maybe<Scalars['String']>;
-  init: Scalars['Int'];
+  chatID: Scalars['String'];
+  userID: Scalars['String'];
+  refresh?: Maybe<Scalars['Boolean']>;
 };
 
 
