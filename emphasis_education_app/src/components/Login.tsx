@@ -129,10 +129,12 @@ const Login: React.FC<LoginProps> = props => {
         <LoginInput
           placeholder='Password'
           placeholderTextColor={theme.colors.purple}
-          value={`${'*'.repeat(curState.password.length)}`}
+          value={curState.password}
+          secureTextEntry={true}
           onChangeText={onChangePassword}
           style={{
-            color: theme.colors.purple
+            color: theme.colors.purple,
+            fontFamily: theme.font.main
           }}
         />
       </InputContain>
