@@ -83,12 +83,13 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
 
       },
       onCompleted: () => console.log('ran the getmessages query'),
+      onError: (e) => console.log('there was an error running the getMessages query', e),
       // need to look at this again
       fetchPolicy: 'no-cache',
     }
   )
 
-  if (errorMessage) { console.log('error', errorMessage) }
+  if (errorMessage) { console.log('errorrrrrrrrr', errorMessage) }
 
   const { data: subData } = useSubscription<MessageReceived>(SUB)
 

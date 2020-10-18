@@ -27,7 +27,6 @@ import { EmptyChat } from './common';
 
 interface GiftedChatProps {
   queryLoading: boolean;
-  // networkStatus: number;
   chatID: string;
   curUser: IMessageUserType;
   messages: IMessage[] | undefined;
@@ -50,15 +49,13 @@ const MyGiftedChat: React.FC<GiftedChatProps> = ({ queryLoading, refreshFn, chat
     SEND_MESSAGE,
     {
       onCompleted: data => {
-        console.log('data after sending message', data)
+        // console.log('data after sending message', data)
         setImageSelected(false)
       }
     }
   );
 
   const onSend = (props: IMessage[]) => {
-    // console.log('curUser', curUser)
-    // console.log('chatID', chatID)
     sendMessage({
       variables: {
         messages: [
