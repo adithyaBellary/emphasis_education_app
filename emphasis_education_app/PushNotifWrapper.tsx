@@ -45,23 +45,10 @@ const Wrapper: React.FC = ({ children }) => {
     messaging().onNotificationOpenedApp(message => {
       console.log('we are coming from a background state', message)
       console.log('Platform', Platform.OS)
+      triggerNotif('title', 'onnotif opened app');
     })
 
     // return fcn;
-  }, [])
-
-  // this does not seem to be triggered. The first message from the server wakes the
-  // app up and then the second one gets handled by the background handler
-  React.useEffect(() => {
-    messaging().getInitialNotification().then(async message => {
-      if (message) {
-        console.log('we are coming from a quit state', message)
-        console.log('Platform', Platform.OS)
-        triggerNotif('title', 'message');
-      }
-    })
-    // return fcn;
-
   }, [])
 
   React.useEffect(() => {
@@ -77,6 +64,20 @@ const Wrapper: React.FC = ({ children }) => {
     })
 
     return unsub
+  }, [])
+
+  // this does not seem to be triggered. The first message from the server wakes the
+  // app up and then the second one gets handled by the background handler
+  React.useEffect(() => {
+    messaging().getInitialNotification().then(message => {
+      if (message) {
+        console.log('we are coming from a quit state', message)
+        console.log('Platform', Platform.OS)
+        triggerNotif('title', 'message');
+      }
+    })
+    // return unsub;
+
   }, [])
 
   React.useEffect(() => {

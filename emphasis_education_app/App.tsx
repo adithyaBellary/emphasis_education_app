@@ -9,8 +9,6 @@
  */
 
 import * as React from 'react';
-// import {  } from 'apollo-client';
-// import { ,  } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
 import { WebSocketLink } from 'apollo-link-ws';
 import { split, ApolloLink } from 'apollo-link';
@@ -34,13 +32,13 @@ import { UserInfoType } from './types/schema-types';
 
 const cache = new InMemoryCache();
 const httplink = new HttpLink({
-  // uri: 'https://emphasis-education-server.herokuapp.com/graphql'
-  uri: 'http://localhost:4000/graphql'
+  uri: 'https://emphasis-education-server.herokuapp.com/graphql'
+  // uri: 'http://localhost:4000/graphql'
 });
 
 const wsLink = new WebSocketLink({
-  // uri: `ws://emphasis-education-server.herokuapp.com/graphql`,
-  uri: `ws://localhost:4000/graphql`,
+  uri: `ws://emphasis-education-server.herokuapp.com/graphql`,
+  // uri: `ws://localhost:4000/graphql`,
   options: {
     reconnect: true,
     timeout: 20000,
@@ -91,13 +89,9 @@ const App = () => {
   }
   const incrementNotificationCounter = (chatID: string) => {
     let oldVal: number = 1;
-    // console.log('old notifs', notifications[chatID])
     if (notifications[chatID]) {
-      // console.log('we have an old one')
       oldVal = notifications[chatID] + 1
     }
-    // console.log('notifications in the handleer', notifications)
-    // console.log('new notifs', {...notifications, [chatID]: oldVal})
     incrementNotifications({...notifications, [chatID]: oldVal})
   }
   const clearNotificationCounter = (chatID: string) => {

@@ -129,7 +129,7 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
   if (loading) {
     return (
       <CenteredDiv>
-        <ActivityIndicator animating={loading} />
+        <ActivityIndicator animating={loading} color="#0000ff" />
         <View>
           <ThemedText
             size={14}
