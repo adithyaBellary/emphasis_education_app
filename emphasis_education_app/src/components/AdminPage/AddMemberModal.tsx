@@ -7,7 +7,7 @@ import {
   Alert
 } from 'react-native';
 import { Input, Icon } from 'react-native-elements';
-import { useLazyQuery, useMutation } from '@apollo/react-hooks';
+import { useLazyQuery, useMutation } from '@apollo/client';
 
 import { GeneralSpacing, ThemedText, IconRow, FONT_STYLES } from '../shared';
 import { ISearchUserPayload, ISearchInput } from '../../types';

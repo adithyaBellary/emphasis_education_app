@@ -1,13 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { TouchableOpacity, ActivityIndicator } from 'react-native';
-import { useQuery, useSubscription } from '@apollo/react-hooks';
+import {
+  gql,
+  useApolloClient,
+  useQuery,
+  useSubscription
+} from '@apollo/client';
 import * as Sentry from '@sentry/react-native';
+import { IMessage } from 'react-native-gifted-chat';
 
 import Chat from './GiftedChat';
 import { GeneralContext } from '../Context/Context';
 
-import { REFETCH_LIMIT } from '../../constant';
-import { IMessage, IMessageUserType, ChatUserInfo } from '../../types';
+import { ChatUserInfo } from '../../types';
+import {
+  MessageType,
+  MessageUser,
+  QueryGetMessagesArgs,
+} from '../../../types/schema-types';
 import { SUB } from '../../queries/MessageReceived';
 import { GET_MESSAGES } from '../../queries/GetMessages';
 import {
@@ -25,26 +35,35 @@ interface State {
   messages: IMessage[];
 }
 
-interface MessageReceivedProps {
-  text: string;
-  MessageId: number;
-  createdAt: number;
-  user: IMessageUserType;
-  image?: string;
-}
+// interface MessageReceivedProps {
+//   text: string;
+//   MessageId: number;
+//   createdAt: number;
+//   user: IMessageUserType;
+//   image?: string;
+// }
 
 interface MessageReceived {
-  messageReceived: MessageReceivedProps
+  messageReceived: MessageType
 }
 interface GetMessages {
-  getMessages: IMessage[];
+  getMessages: MessageType[];
 }
 
-interface GetMessagesInput {
-  chatID: string;
-  init: number;
-}
-let initFetch: number = 0;
+// const query = gql`
+//   query GetMessages($chatID: String!, $init: Int!) {
+//     getMessages(chatID: $chatID, init: $init){
+//       _id
+//       text
+//       createdAt
+//       user {
+//         _id
+//         name
+//       }
+//       image
+//     }
+//   }
+// `
 
 const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
   const { loggedUser } = React.useContext(GeneralContext);
@@ -53,46 +72,67 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
   const className: string = route.params.className;
   const tutorInfo: ChatUserInfo = route.params.tutorInfo;
   const userInfo: ChatUserInfo[] = route.params.userInfo;
-  // console.log('tutor', tutorInfo)
-  // console.log('user', userInfo)
+
+  // const client = useApolloClient();
   // lets cache this data
-  const { data: getMessages, loading: queryLoading, refetch, error: errorMessage } = useQuery<
+  const { data: getMessages, loading: queryLoading, refetch, error: errorMessage, updateQuery } = useQuery<
       GetMessages,
-      GetMessagesInput
+      QueryGetMessagesArgs
     >(
     GET_MESSAGES,
     {
       variables: {
         chatID: chatID,
-        init: initFetch
+        userID: loggedUser._id,
+        refresh: false
+
       },
-      // onCompleted: () => console.log('ran'),
+      onCompleted: () => console.log('ran the getmessages query'),
+      onError: (e) => console.log('there was an error running the getMessages query', e),
       // need to look at this again
       fetchPolicy: 'no-cache',
     }
   )
 
-  if (errorMessage) { console.log('error', errorMessage) }
+  if (errorMessage) { console.log('errorrrrrrrrr', errorMessage) }
 
-  const { data: subData } = useSubscription<MessageReceived>(SUB)
+  const { data: subData } = useSubscription<MessageReceived>(SUB, {
+    onSubscriptionData: (data) => {
+      console.log('got data', data)
+    },
+    // onSubscriptionComplete: () => {
+    //   console.log('sub is complete')
+    // }
+  })
 
   useEffect(() => {
     if (!getMessages) { return }
+    const messages: IMessage[] = getMessages.getMessages.map(_message => {
+      return {
+        ..._message,
+        createdAt: new Date(_message.createdAt)
+      }
+    })
     if (!curState) {
       setState({
-        messages: getMessages.getMessages
+        messages
       })
       return;
     }
     setState({messages: [
-      ...getMessages.getMessages,
+      ...messages,
       ...curState.messages
     ]})
   }, [getMessages])
 
   useEffect(() => {
     if (!subData) { return }
-    const { MessageId: _id, text, createdAt, user, image } = subData.messageReceived;
+
+    let messages: IMessage[];
+    let receivedMessage: IMessage = {
+      ...subData.messageReceived,
+      createdAt: new Date(subData.messageReceived.createdAt)
+    }
 
     Sentry.captureMessage('Received a message in chat', {
       user: {
@@ -102,31 +142,36 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
     })
 
     if (!curState ) {
-      setState({
-        messages: [
-          {
-            _id,
-            text,
-            createdAt,
-            user,
-            image
-          }
-        ]
-      })
-      return
-    }
-    setState({
-      messages: [
+      messages = [receivedMessage]
+    } else {
+      messages = [
         ...curState.messages,
-        {
-          _id,
-          text,
-          createdAt,
-          user,
-          image
-        }
+        receivedMessage
       ]
-    })
+    }
+
+    // it is mentioned in the documentation that changes to the cache will not be reflected in the server, but that is fine
+    // const d = client.readQuery({
+    //   query,
+    //   variables: {
+    //     chatID,
+    //     init: 0
+    //   }
+    // })
+    // client.writeQuery({
+    //   query,
+    //   data: {
+    //     getMessages: [...d.getMessages, receivedMessage]
+    //     // getMessages: [...messages, receivedMessage]
+    //   },
+    //   variables: {
+    //     chatID,
+    //     init: 0
+    //   }
+    // })
+
+    setState({ messages })
+
   }, [subData])
 
   useEffect(() => {
@@ -141,17 +186,18 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
     })
   }, [])
 
-  const curUser: IMessageUserType = {
+  const curUser: MessageUser = {
     _id: loggedUser._id,
     name: `${loggedUser.firstName} ${loggedUser.lastName}`,
     email: loggedUser.email,
   }
 
   const refreshFn = () => {
-    console.log('refreshing')
-    initFetch = initFetch + REFETCH_LIMIT;
-    const variables = { chatID, init: initFetch}
-    // check whether there are even messages for us to refresh w
+    const variables = {
+      chatID,
+      userID: loggedUser._id,
+      refresh: true
+    }
 
     refetch(variables);
   }
@@ -175,7 +221,6 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
           chatID={chatID}
           curUser={curUser}
           messages={curState ? curState.messages : []}
-          // messages={[]}
         />
       )}
     </>

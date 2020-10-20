@@ -3,7 +3,7 @@ import { Alert } from 'react-native';
 import {
   Input,
 } from 'react-native-elements'
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 
 import { ContentContain } from './common'
 import {

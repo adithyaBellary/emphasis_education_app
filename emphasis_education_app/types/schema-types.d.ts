@@ -129,7 +129,8 @@ export type MessageType = {
   text: Scalars['String'];
   createdAt: Scalars['String'];
   user: MessageUser;
-  image?: Maybe<Scalars['String']>;
+  image: Scalars['String'];
+  chatID: Scalars['String'];
 };
 
 export type MessageUser = {
@@ -232,8 +233,8 @@ export type MutationForgotPasswordArgs = {
 
 
 export type MutationAddChatMemberArgs = {
-  email?: Maybe<Scalars['String']>;
-  chatID?: Maybe<Scalars['String']>;
+  email: Scalars['String'];
+  chatID: Scalars['String'];
 };
 
 
@@ -260,8 +261,9 @@ export type Query = {
 
 
 export type QueryGetMessagesArgs = {
-  chatID?: Maybe<Scalars['String']>;
-  init: Scalars['Int'];
+  chatID: Scalars['String'];
+  userID: Scalars['String'];
+  refresh?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -302,7 +304,7 @@ export type SendMessagePayload = {
 
 export type Subscription = {
   __typename?: 'Subscription';
-  messageReceived: MessagePayload;
+  messageReceived: MessageType;
 };
 
 

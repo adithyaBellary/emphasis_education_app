@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Input } from 'react-native-elements';
-import { useLazyQuery } from '@apollo/react-hooks'
+import { useLazyQuery } from '@apollo/client'
 
 import { CHECK_CODE } from '../../queries/CheckCode';
 import {

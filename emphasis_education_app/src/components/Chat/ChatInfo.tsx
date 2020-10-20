@@ -6,7 +6,7 @@ import {
   View,
   Alert
 } from 'react-native';
-import { useLazyQuery, useMutation } from '@apollo/react-hooks';
+import { useLazyQuery, useMutation } from '@apollo/client';
 import { Icon, Input } from 'react-native-elements';
 import { ChatUserInfo, Permission } from '../../types';
 import { SEARCH_USERS } from '../../queries/SearchUsers'

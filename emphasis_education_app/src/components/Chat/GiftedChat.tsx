@@ -1,12 +1,16 @@
 import * as React from 'react';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 import {
   Actions,
   ActionsProps,
   GiftedChat,
   Bubble,
+  BubbleProps,
   InputToolbar,
+  InputToolbarProps,
   Composer,
+  IMessage,
+  ComposerProps
 } from 'react-native-gifted-chat';
 import {
   ActivityIndicator,
@@ -21,15 +25,14 @@ import { Icon } from 'react-native-elements';
 import ImagePicker from 'react-native-image-picker';
 
 import { SEND_MESSAGE } from '../../queries/SendMessage';
-import { IMessageUserType, IMessage } from '../../types';
+import { MessageType, MessageUser } from '../../../types/schema-types';
 import { theme } from '../../theme';
 import { EmptyChat } from './common';
 
 interface GiftedChatProps {
   queryLoading: boolean;
-  // networkStatus: number;
   chatID: string;
-  curUser: IMessageUserType;
+  curUser: MessageUser;
   messages: IMessage[] | undefined;
   refreshFn(): void;
 }
@@ -42,27 +45,33 @@ interface MessagePayload {
   sendMessage: MessageReceivedProps;
 }
 
-const MyGiftedChat: React.FC<GiftedChatProps> = ({ queryLoading, refreshFn, chatID, curUser, messages }) => {
+const MyGiftedChat: React.FC<GiftedChatProps> = ({
+  queryLoading,
+  refreshFn,
+  chatID,
+  curUser,
+  messages
+}) => {
   const [image, setImage] = React.useState('')
   const [imageSelected, setImageSelected] = React.useState(false);
 
-  const [sendMessage, { error }] = useMutation<MessagePayload>(
+  const [sendMessage, { data, error }] = useMutation<MessagePayload>(
     SEND_MESSAGE,
     {
       onCompleted: data => {
-        console.log('data after sending message', data)
+        // console.log('data after sending message', data)
         setImageSelected(false)
       }
     }
   );
 
   const onSend = (props: IMessage[]) => {
-    console.log('curUser', curUser)
-    console.log('chatID', chatID)
+    console.log('sending')
     sendMessage({
       variables: {
         messages: [
           {
+            // delete the id param here
             id: 'messageID',
             text: props[0].text,
             user: curUser,
@@ -74,7 +83,11 @@ const MyGiftedChat: React.FC<GiftedChatProps> = ({ queryLoading, refreshFn, chat
     })
   }
 
-  const renderBubble = (props) => (
+
+  const renderBubble = (props: BubbleProps<IMessage>) => {
+
+    return (
+
     <Bubble
       {...props}
       textStyle={{
@@ -95,9 +108,10 @@ const MyGiftedChat: React.FC<GiftedChatProps> = ({ queryLoading, refreshFn, chat
         }
       }}
     />
-  );
+    )
+    };
 
-  const renderComposer = props => (
+  const renderComposer = (props: ComposerProps) => (
     <>
       {imageSelected && (
         <View style={{padding: 10}}>
@@ -130,7 +144,7 @@ const MyGiftedChat: React.FC<GiftedChatProps> = ({ queryLoading, refreshFn, chat
 
   if (error) { console.log('there was an issue sending the message') }
 
-  const renderActions = props => (
+  const renderActions = (props: ActionsProps) => (
     <Actions
       {...props}
       containerStyle={{
@@ -149,7 +163,7 @@ const MyGiftedChat: React.FC<GiftedChatProps> = ({ queryLoading, refreshFn, chat
     />
   )
 
-  const renderInputToolbar = props => (
+  const renderInputToolbar = (props: InputToolbarProps) => (
     <InputToolbar
       {...props}
       renderComposer={renderComposer}

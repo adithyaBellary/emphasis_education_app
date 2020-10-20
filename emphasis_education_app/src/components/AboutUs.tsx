@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useQuery, useMutation } from '@apollo/react-hooks'
+import { useQuery, useMutation } from '@apollo/client'
 import { ActivityIndicator } from 'react-native'
 
 import { SEARCH_CLASSES } from '../queries/SearchClasses'

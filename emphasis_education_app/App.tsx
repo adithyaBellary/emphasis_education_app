@@ -9,15 +9,18 @@
  */
 
 import * as React from 'react';
-import { ApolloClient } from 'apollo-client';
-import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
 import { WebSocketLink } from 'apollo-link-ws';
-import { split } from 'apollo-link';
-import { ApolloProvider } from '@apollo/react-hooks';
+import { split, ApolloLink } from 'apollo-link';
 import { getMainDefinition } from 'apollo-utilities';
 import { ThemeProvider } from 'styled-components';
 import * as Sentry from "@sentry/react-native";
+import {
+  ApolloProvider,
+  ApolloClient,
+  InMemoryCache,
+  NormalizedCacheObject
+ } from '@apollo/client';
 
 import { SENTRY_DSN } from './config/sentry';
 
@@ -29,13 +32,13 @@ import { UserInfoType } from './types/schema-types';
 
 const cache = new InMemoryCache();
 const httplink = new HttpLink({
-  // uri: 'https://emphasis-education-server.herokuapp.com/graphql'
-  uri: 'http://localhost:4000/graphql'
+  uri: 'https://emphasis-education-server.herokuapp.com/graphql'
+  // uri: 'http://localhost:4000/graphql'
 });
 
 const wsLink = new WebSocketLink({
-  // uri: `ws://emphasis-education-server.herokuapp.com/graphql`,
-  uri: `ws://localhost:4000/graphql`,
+  uri: `ws://emphasis-education-server.herokuapp.com/graphql`,
+  // uri: `ws://localhost:4000/graphql`,
   options: {
     reconnect: true,
     timeout: 20000,
@@ -51,10 +54,19 @@ const link = split(({ query }) => {
   )
 },wsLink,
 httplink)
+// const link = new ApolloLink().split(({ query }) => {
+//   const definition = getMainDefinition(query);
+//   return (
+//     definition.kind === 'OperationDefinition' &&
+//       definition.operation === 'subscription'
+//   )
+// },wsLink,
+// httplink)
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache,
   link
+  // uri: 'http://localhost:4000/graphql'
 });
 
 Sentry.init({
@@ -77,13 +89,9 @@ const App = () => {
   }
   const incrementNotificationCounter = (chatID: string) => {
     let oldVal: number = 1;
-    // console.log('old notifs', notifications[chatID])
     if (notifications[chatID]) {
-      // console.log('we have an old one')
       oldVal = notifications[chatID] + 1
     }
-    // console.log('notifications in the handleer', notifications)
-    // console.log('new notifs', {...notifications, [chatID]: oldVal})
     incrementNotifications({...notifications, [chatID]: oldVal})
   }
   const clearNotificationCounter = (chatID: string) => {
@@ -99,6 +107,7 @@ const App = () => {
   }
 
   return (
+
     <ApolloProvider client={client}>
       <ThemeProvider theme={theme}>
         <GeneralContext.Provider value={value}>

@@ -10,7 +10,7 @@ import {
 import {
   Input, Icon
 } from 'react-native-elements';
-import { useLazyQuery, useMutation } from '@apollo/react-hooks';
+import { useLazyQuery, useMutation } from '@apollo/client';
 
 import { SEARCH_CLASSES } from '../../queries/SearchClasses';
 import { SEARCH_USERS } from '../../queries/SearchUsers';

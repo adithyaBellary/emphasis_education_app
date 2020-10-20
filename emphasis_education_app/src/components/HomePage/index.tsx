@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useQuery } from '@apollo/react-hooks';
 import { Icon } from 'react-native-elements';
 import { ActivityIndicator, View } from 'react-native';
 import styled from 'styled-components';
@@ -25,6 +24,7 @@ import {
   UserInfoType,
   QueryGetUserArgs
  } from '../../../types/schema-types';
+ import { gql, useApolloClient, useQuery } from '@apollo/client';
 
 interface LiftedHomeProps {
   navigation: any;
@@ -52,7 +52,7 @@ const AdminIcon: React.FC<{ changeScreens (dest: string): () => void }> = ({ cha
       name='user'
       type='antdesign'
       onPress={changeScreens('AdminPage')}
-      />
+    />
     <ThemedText
       size={14}
       type={FONT_STYLES.MAIN}
@@ -66,7 +66,8 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
   const { setUser } = React.useContext(GeneralContext);
   const { logout } = React.useContext(AuthContext);
   const changeScreens = (dest: string) => () =>  navigation.navigate(dest)
-  console.log(route.params.token)
+  // console.log(route.params.token)
+  // const client = useApolloClient();
   const { data, loading, error } = useQuery<{ getUser: UserInfoType }, QueryGetUserArgs>(GET_USER, {
     variables: {
       userEmail: route.params.token
@@ -128,7 +129,7 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
   if (loading) {
     return (
       <CenteredDiv>
-        <ActivityIndicator animating={loading} />
+        <ActivityIndicator animating={loading} color="#0000ff" />
         <View>
           <ThemedText
             size={14}

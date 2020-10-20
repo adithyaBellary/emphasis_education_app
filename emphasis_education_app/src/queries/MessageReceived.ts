@@ -4,13 +4,14 @@ export const SUB = gql`
 subscription {
   messageReceived {
     text
-    MessageId
+    _id
     createdAt
     user {
       name
       _id
     }
     image
+    chatID
   }
 }
 `
