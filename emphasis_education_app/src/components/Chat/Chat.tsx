@@ -7,12 +7,17 @@ import {
   useSubscription
 } from '@apollo/client';
 import * as Sentry from '@sentry/react-native';
+import { IMessage } from 'react-native-gifted-chat';
 
 import Chat from './GiftedChat';
 import { GeneralContext } from '../Context/Context';
 
-import { IMessage, IMessageUserType, ChatUserInfo } from '../../types';
-import { QueryGetMessagesArgs } from '../../../types/schema-types';
+import { ChatUserInfo } from '../../types';
+import {
+  MessageType,
+  MessageUser,
+  QueryGetMessagesArgs,
+} from '../../../types/schema-types';
 import { SUB } from '../../queries/MessageReceived';
 import { GET_MESSAGES } from '../../queries/GetMessages';
 import {
@@ -30,19 +35,19 @@ interface State {
   messages: IMessage[];
 }
 
-interface MessageReceivedProps {
-  text: string;
-  MessageId: number;
-  createdAt: number;
-  user: IMessageUserType;
-  image?: string;
-}
+// interface MessageReceivedProps {
+//   text: string;
+//   MessageId: number;
+//   createdAt: number;
+//   user: IMessageUserType;
+//   image?: string;
+// }
 
 interface MessageReceived {
-  messageReceived: MessageReceivedProps
+  messageReceived: MessageType
 }
 interface GetMessages {
-  getMessages: IMessage[];
+  getMessages: MessageType[];
 }
 
 // const query = gql`
@@ -91,18 +96,31 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
 
   if (errorMessage) { console.log('errorrrrrrrrr', errorMessage) }
 
-  const { data: subData } = useSubscription<MessageReceived>(SUB)
+  const { data: subData } = useSubscription<MessageReceived>(SUB, {
+    onSubscriptionData: (data) => {
+      console.log('got data', data)
+    },
+    // onSubscriptionComplete: () => {
+    //   console.log('sub is complete')
+    // }
+  })
 
   useEffect(() => {
     if (!getMessages) { return }
+    const messages: IMessage[] = getMessages.getMessages.map(_message => {
+      return {
+        ..._message,
+        createdAt: new Date(_message.createdAt)
+      }
+    })
     if (!curState) {
       setState({
-        messages: getMessages.getMessages
+        messages
       })
       return;
     }
     setState({messages: [
-      ...getMessages.getMessages,
+      ...messages,
       ...curState.messages
     ]})
   }, [getMessages])
@@ -110,14 +128,10 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
   useEffect(() => {
     if (!subData) { return }
 
-    const { MessageId: _id, text, createdAt, user, image } = subData.messageReceived;
     let messages: IMessage[];
     let receivedMessage: IMessage = {
-      _id,
-      text,
-      createdAt,
-      user,
-      image
+      ...subData.messageReceived,
+      createdAt: new Date(subData.messageReceived.createdAt)
     }
 
     Sentry.captureMessage('Received a message in chat', {
@@ -172,7 +186,7 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
     })
   }, [])
 
-  const curUser: IMessageUserType = {
+  const curUser: MessageUser = {
     _id: loggedUser._id,
     name: `${loggedUser.firstName} ${loggedUser.lastName}`,
     email: loggedUser.email,

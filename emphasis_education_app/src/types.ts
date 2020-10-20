@@ -125,6 +125,7 @@ export interface IMessage {
   createdAt: number;
   user: IMessageUserType;
   image?: string;
+  chatID: string;
 }
 
 export interface IGetFamilyInput {

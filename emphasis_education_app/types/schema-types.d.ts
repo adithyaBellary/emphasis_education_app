@@ -129,7 +129,8 @@ export type MessageType = {
   text: Scalars['String'];
   createdAt: Scalars['String'];
   user: MessageUser;
-  image?: Maybe<Scalars['String']>;
+  image: Scalars['String'];
+  chatID: Scalars['String'];
 };
 
 export type MessageUser = {
@@ -303,7 +304,7 @@ export type SendMessagePayload = {
 
 export type Subscription = {
   __typename?: 'Subscription';
-  messageReceived: MessagePayload;
+  messageReceived: MessageType;
 };
 
 
