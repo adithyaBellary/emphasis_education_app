@@ -42,7 +42,7 @@ const Wrapper: React.FC = ({ children }) => {
 
   // when we open the app from a notification while the app is in the ebackground
   React.useEffect(() => {
-    messaging().onNotificationOpenedApp(message => {
+    messaging().onNotificationOpenedApp(async message => {
       console.log('we are coming from a background state', message)
       console.log('Platform', Platform.OS)
       triggerNotif('title', 'onnotif opened app');
@@ -69,7 +69,7 @@ const Wrapper: React.FC = ({ children }) => {
   // this does not seem to be triggered. The first message from the server wakes the
   // app up and then the second one gets handled by the background handler
   React.useEffect(() => {
-    messaging().getInitialNotification().then(message => {
+    messaging().getInitialNotification().then(async message => {
       if (message) {
         console.log('we are coming from a quit state', message)
         console.log('Platform', Platform.OS)
