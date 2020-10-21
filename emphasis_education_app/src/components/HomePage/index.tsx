@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Icon } from 'react-native-elements';
+import { Icon, Badge } from 'react-native-elements';
 import { ActivityIndicator, View } from 'react-native';
 import styled from 'styled-components';
 import messaging from '@react-native-firebase/messaging';
@@ -63,11 +63,9 @@ const AdminIcon: React.FC<{ changeScreens (dest: string): () => void }> = ({ cha
 );
 
 const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
-  const { setUser } = React.useContext(GeneralContext);
+  const { setUser, notificationBadge } = React.useContext(GeneralContext);
   const { logout } = React.useContext(AuthContext);
   const changeScreens = (dest: string) => () =>  navigation.navigate(dest)
-  // console.log(route.params.token)
-  // const client = useApolloClient();
   const { data, loading, error } = useQuery<{ getUser: UserInfoType }, QueryGetUserArgs>(GET_USER, {
     variables: {
       userEmail: route.params.token
@@ -182,13 +180,31 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
 
             color={theme.colors.lightPink}
           />
-          <Icon
-            raised
-            name='message'
-            color= '#ffb6a8'
-            onPress={changeScreens('ChatPicker')}
-            reverse={true}
-          />
+          <View>
+            <Icon
+              raised
+              name='message'
+              color= '#ffb6a8'
+              onPress={changeScreens('ChatPicker')}
+              reverse={true}
+            />
+            {notificationBadge && (
+              <Badge
+                containerStyle={{
+                  position: 'absolute',
+                  top: 10,
+                  right: 10
+                }}
+                badgeStyle={{
+                  height: 10,
+                  width: 10,
+                  borderRadius: 5,
+                  backgroundColor: 'green'
+                }}
+              />
+            )}
+
+          </View>
         </IconContain>
 
         <LogiImage />

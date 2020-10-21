@@ -11,12 +11,12 @@ export interface NotificationsProps{
 export interface Context {
   // manage number of notifications for each chat
   notifications: NotificationsProps;
-  // loggedUser: IUser;
   loggedUser: UserInfoType;
   incrementNotificationCounter (chatID: string): void;
   clearNotificationCounter (chatID: string): void;
-  // setUser( user: IUser): void;
-  setUser( user: UserInfoType): void;
+  setUser (user: UserInfoType): void;
+  notificationBadge: boolean;
+  setNotificationBadge (status: boolean): void;
 }
 
 interface AuthContextProps {

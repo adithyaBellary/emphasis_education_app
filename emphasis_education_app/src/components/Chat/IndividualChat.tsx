@@ -122,13 +122,11 @@ const ChatDisplay: React.FC<ChatDisplayProps> = ({
                     )
                   }
                 </IconRowLeft>
-                {
-                  caption && (
-                    <ThemedText size={14} type={FONT_STYLES.LIGHT}>
-                      {caption}
-                    </ThemedText>
-                  )
-                }
+                {caption && (
+                  <ThemedText size={14} type={FONT_STYLES.LIGHT}>
+                    {caption}
+                  </ThemedText>
+                )}
               </TouchableOpacity>
             </IconRow>
 

@@ -32,7 +32,7 @@ const handler = new MyNotificationHandler();
 // this is going to serve as a wrapper to request permissiong for push notis and such
 const Wrapper: React.FC = ({ children }) => {
 
-  const { incrementNotificationCounter } = React.useContext(GeneralContext);
+  const { incrementNotificationCounter, setNotificationBadge } = React.useContext(GeneralContext);
 
   React.useEffect(() => {
     // PushNotification.requestPermissions()
@@ -85,6 +85,7 @@ const Wrapper: React.FC = ({ children }) => {
       console.log('in on Message', payload)
       console.log('Platform', Platform.OS)
       incrementNotificationCounter(payload.data!.chatID)
+      setNotificationBadge(true)
     })
 
     return unsub

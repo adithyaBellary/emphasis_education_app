@@ -78,6 +78,7 @@ Sentry.init({
 const App = () => {
   const [user, setUser] = React.useState<UserInfoType>({} as UserInfoType);
   const [notifications, incrementNotifications] = React.useState<NotificationsProps>({} as NotificationsProps);
+  const [notificationBadge, setBadge] = React.useState<boolean>(false);
   const updateUser = (newUser: UserInfoType) => {
     // set Sentry user here as well
     Sentry.setUser({
@@ -94,8 +95,14 @@ const App = () => {
     }
     incrementNotifications({...notifications, [chatID]: oldVal})
   }
+
   const clearNotificationCounter = (chatID: string) => {
     incrementNotifications({ ...notifications, [chatID]: 0})
+    setBadge(false)
+  }
+
+  const setNotificationBadge = (status: boolean) => {
+    setBadge(status)
   }
 
   const value: Context = {
@@ -103,7 +110,9 @@ const App = () => {
     notifications,
     incrementNotificationCounter,
     clearNotificationCounter,
-    setUser: updateUser
+    setUser: updateUser,
+    notificationBadge,
+    setNotificationBadge
   }
 
   return (
