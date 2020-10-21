@@ -2,7 +2,8 @@ import * as React from 'react';
 import {
   View,
   TextInput,
-  ScrollView
+  ScrollView,
+  Alert
 } from 'react-native';
 import styled from 'styled-components';
 import { useMutation } from '@apollo/client';
@@ -39,6 +40,7 @@ const Settings: React.FC<SettingsProps> = () => {
     }})
     .then(res => {
       console.log('res, ', res)
+      Alert.alert('Success', 'Email is sent!')
     })
     .catch (e => console.log('error sendng the bug email, ', e))
   }

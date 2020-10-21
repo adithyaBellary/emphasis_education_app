@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useQuery, useMutation } from '@apollo/client'
-import { ActivityIndicator } from 'react-native'
+import { ActivityIndicator, Alert } from 'react-native'
 
 import { SEARCH_CLASSES } from '../queries/SearchClasses'
 import { SEND_EMAIL } from '../queries/SendEmail';
@@ -52,6 +52,24 @@ const AboutUs: React.FC = () => {
 
   const [runMutation, { data: emailData, loading: emailLoading }] = useMutation(SEND_EMAIL);
 
+  const sendEmail = () => {
+    runMutation({
+      variables: {
+        subject: `Message from ${loggedUser.firstName} ${loggedUser.lastName}`,
+        body: message
+      }
+    }).then((res) => {
+      if (res) {
+        Alert.alert('Success', 'Email was successfully sent!')
+      } else {
+        Alert.alert('Error', 'Email could not be sent. Please contact either Shweta or Sakthi')
+      }
+    })
+    .catch(() => {
+      Alert.alert('Error', 'Email could not be sent. Please contact either Shweta or Sakthi')
+    })
+  }
+
   if (error) { console.log('error', error) }
 
   if (classLoading) { return (
@@ -80,7 +98,7 @@ const AboutUs: React.FC = () => {
         block={true}
         buttonText='Send email'
         loading={emailLoading}
-        onPress={() => runMutation({ variables: { subject: `Message from ${loggedUser.firstName} ${loggedUser.lastName}`, body: message }})}
+        onPress={() => sendEmail()}
         disabled={message.length === 0}
       />
     </Contain>
