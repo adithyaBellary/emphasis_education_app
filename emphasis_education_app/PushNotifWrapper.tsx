@@ -60,6 +60,7 @@ const Wrapper: React.FC = ({ children }) => {
         const { chatID, title, message } = payload.data;
         incrementNotificationCounter(chatID)
         triggerNotif(title, message );
+        setNotificationBadge(true)
       }
     })
 
