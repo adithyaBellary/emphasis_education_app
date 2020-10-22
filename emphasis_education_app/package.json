@@ -5,7 +5,8 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
-    "build:ios": "react-native bundle --entry-file='index.tsx' --bundle-output='./ios/main.jsbundle' --dev=false --platform='ios'",
+    "build:ios": "react-native bundle --entry-file='index.tsx' --bundle-output='./ios/main.jsbundle' --dev=false --platform='ios' --assets-dest='./ios'",
+    "build:android": "react-native bundle --entry-file='index.tsx' --bundle-output='./android/main.jsbundle' --dev=false --platform='android' --assets-dest='./android'",
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
