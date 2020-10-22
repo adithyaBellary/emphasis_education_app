@@ -231,6 +231,11 @@ const StackNavigation: React.FC = () => {
             })
           } else {
             setLoginError(true)
+            Sentry.captureMessage('Unsuccessful Login', {
+              user: {
+                email
+              }
+            })
           }
         })
         .catch(e => {
