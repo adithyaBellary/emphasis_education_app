@@ -9,8 +9,9 @@ import styled from 'styled-components';
 import { useMutation } from '@apollo/client';
 
 import { SEND_BUG_EMAIL } from '../queries/SendBugEmail';
+import { VERSION } from '../constant'
 
-import { ThemedButton } from './shared';
+import { ThemedButton, ThemedText, FONT_STYLES, CenteredDiv } from './shared';
 import { AuthContext, GeneralContext } from './Context/Context';
 
 export const StyledTextInput = styled(TextInput)`
@@ -62,14 +63,21 @@ const Settings: React.FC<SettingsProps> = () => {
           />
         </View>
       </ScrollView>
-        <View style={{ marginBottom: 50}}>
-          <ThemedButton
-            block={true}
-            buttonText='Logout'
-            loading={false}
-            onPress={() => logout()}
-          />
-        </View>
+      <View style={{ marginBottom: 50, position: 'relative', alignItems: 'center' }}>
+        <ThemedButton
+          block={true}
+          buttonText='Logout'
+          loading={false}
+          onPress={() => logout()}
+        />
+        <ThemedText
+          size={12}
+          type={FONT_STYLES.LIGHT}
+        >
+          version v{VERSION}
+        </ThemedText>
+      </View>
+
     </View>
   )
 }
