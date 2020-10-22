@@ -23,7 +23,7 @@ import {
  } from '@apollo/client';
 
 import { SENTRY_DSN } from './config/sentry';
-
+import { VERSION } from './src/constant'
 import { theme } from './src/theme';
 import { GeneralContext, Context, NotificationsProps } from './src/components/Context/Context';
 import StackNavigation from './src/StackNavigation';
@@ -72,7 +72,7 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 Sentry.init({
   dsn: SENTRY_DSN,
   // seems like this release isnt getting mapped
-  release: 'emphasis-education-app@' + process.env.npm_package_version
+  release: 'emphasis-education-app@' + VERSION
 });
 
 const App = () => {

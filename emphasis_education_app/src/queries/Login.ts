@@ -6,6 +6,8 @@ mutation login($email: String!, $password: String!) {
     res
     user {
       email
+      firstName
+      lastName
     }
   }
 }

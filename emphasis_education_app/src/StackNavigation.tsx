@@ -222,6 +222,13 @@ const StackNavigation: React.FC = () => {
             await AsyncStorage.setItem(LOGIN_TOKEN, data.login.user.email)
             setLoginError(false)
             dispatch({ type: 'LOGIN', token: data.login.user.email})
+            console.log(data.login.user.firstName, data.login.user.lastName)
+            Sentry.captureMessage('Successful Login', {
+              user: {
+                email,
+                name: `${data.login.user.firstName} ${data.login.user.lastName}`
+              }
+            })
           } else {
             setLoginError(true)
           }
