@@ -11,6 +11,9 @@ import FastImage from 'react-native-fast-image'
 import styled from 'styled-components';
 
 import { theme } from '../theme';
+import {
+  LogoWithTextEncoded
+} from '../images/base64'
 
 import {
   ButtonContainer,
@@ -65,7 +68,9 @@ const SecondaryLink: React.FC<SecondaryLinkProps> = ({ linkContent, onPress }) =
 const LoginImage = () => (
   <GeneralSpacing u={0} r={0} d={50} l={0}>
     <Image
-      source={require('../images/LogoWithText.png')}
+      source={{
+        uri: LogoWithTextEncoded
+      }}
       style={{
         height: 300,
         width: 400,
