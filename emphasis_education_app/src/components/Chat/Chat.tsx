@@ -96,7 +96,7 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
 
   if (errorMessage) { console.log('errorrrrrrrrr', errorMessage) }
 
-  const { data: subData } = useSubscription<MessageReceived>(SUB, {
+  const { data: subData, error: subError } = useSubscription<MessageReceived>(SUB, {
     onSubscriptionData: (data) => {
       console.log('got data', data)
 
@@ -107,7 +107,17 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
         }
       })
     },
+
   })
+
+  if(subError) {
+    console.log('there was an error with the subscription', subError)
+    Sentry.captureException(subError, {
+      user: {
+        email: loggedUser.email,
+      }
+    })
+  }
 
   useEffect(() => {
     if (!getMessages) { return }
