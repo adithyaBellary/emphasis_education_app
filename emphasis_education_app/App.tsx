@@ -32,13 +32,13 @@ import { UserInfoType } from './types/schema-types';
 
 const cache = new InMemoryCache();
 const httplink = new HttpLink({
-  // uri: 'https://emphasis-education-server.herokuapp.com/graphql'
-  uri: 'http://localhost:4000/graphql'
+  uri: 'https://emphasis-education-server.herokuapp.com/graphql'
+  // uri: 'http://localhost:4000/graphql'
 });
 
 const wsLink = new WebSocketLink({
-  // uri: `ws://emphasis-education-server.herokuapp.com/graphql`,
-  uri: `ws://localhost:4000/graphql`,
+  uri: `ws://emphasis-education-server.herokuapp.com/graphql`,
+  // uri: `ws://localhost:4000/graphql`,
   options: {
     reconnect: true,
     timeout: 20000,
