@@ -87,7 +87,7 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
         refresh: false
 
       },
-      onCompleted: () => console.log('ran the getmessages query'),
+      // onCompleted: () => console.log('ran the getmessages query'),
       onError: (e) => console.log('there was an error running the getMessages query', e),
       // need to look at this again
       fetchPolicy: 'no-cache',
@@ -99,10 +99,14 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
   const { data: subData } = useSubscription<MessageReceived>(SUB, {
     onSubscriptionData: (data) => {
       console.log('got data', data)
+
+      Sentry.captureMessage('Message received sub got data', {
+        user: {
+          email: loggedUser.email,
+          username: `${loggedUser.firstName} ${loggedUser.lastName}`
+        }
+      })
     },
-    // onSubscriptionComplete: () => {
-    //   console.log('sub is complete')
-    // }
   })
 
   useEffect(() => {

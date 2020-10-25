@@ -55,10 +55,10 @@ const ChatPicker: React.FC<ChatPickerProps> = ({ navigation }) => {
       if (getUser.classes) {
         getUser.classes.forEach(_class => {
           // subscribe to the class
-          console.log('subscribing to the chat', _class.chatID)
+          // console.log('subscribing to the chat', _class.chatID)
           messaging()
             .subscribeToTopic(_class.chatID)
-            .then(() => console.log('successfully subscribed to the topic'))
+            // .then(() => console.log('successfully subscribed to the topic'))
             .catch(e => console.log('was not able to subscribe to the topic', e))
         })
       }

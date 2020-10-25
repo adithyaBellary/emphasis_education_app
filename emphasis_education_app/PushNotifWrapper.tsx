@@ -37,7 +37,7 @@ const Wrapper: React.FC = ({ children }) => {
   React.useEffect(() => {
     // PushNotification.requestPermissions()
     requestUserPermission()
-    console.log('permission is requested, ', Platform.OS)
+    // console.log('permission is requested, ', Platform.OS)
   }, [])
 
   // when we open the app from a notification while the app is in the ebackground

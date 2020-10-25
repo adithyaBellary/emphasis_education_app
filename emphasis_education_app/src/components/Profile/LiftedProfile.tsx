@@ -45,7 +45,7 @@ const LiftedProfile: React.FC<LiftedProfileProps> = ({ route, navigation }) => {
   // if we passed in routes then that means we have come from the admin page
   const groupID = route.params ? route.params.groupID : loggedUser.groupID
   const currentUserID = route.params ? route.params.currentUserID : loggedUser._id
-  console.log('groupID', groupID)
+  // console.log('groupID', groupID)
   const { data, loading, error } = useQuery<{ getFamily: UserInfoType[] }, IGetFamilyInput>(
     GET_FAMILY,
     {
