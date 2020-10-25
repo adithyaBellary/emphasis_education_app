@@ -7,7 +7,8 @@ import {
   GeneralSpacing,
    ThemedText,
    ThemedButton,
-   FONT_STYLES
+   FONT_STYLES,
+   CenteredDiv
 } from '../shared';
 import { theme } from '../../theme';
 
@@ -17,9 +18,11 @@ interface EnterCodeProps {
 }
 
 const ErrorMessage: React.FC = () => (
-  <ThemedText type={FONT_STYLES.MAIN} size={14}>
-    You entered the wrong code
-  </ThemedText>
+  <CenteredDiv>
+    <ThemedText type={FONT_STYLES.MAIN} size={14} error={true}>
+      You entered the wrong code
+    </ThemedText>
+  </CenteredDiv>
 )
 
 const EnterCode: React.FC<EnterCodeProps> = ({ navigation }) => {
@@ -28,23 +31,23 @@ const EnterCode: React.FC<EnterCodeProps> = ({ navigation }) => {
   const [email, setEmail] = React.useState('')
   const [error, setError] = React.useState(false)
 
-  const [runQuery, {data, loading}] = useLazyQuery(CHECK_CODE)
+  const [runQuery, {data, loading}] = useLazyQuery(CHECK_CODE, {
+    onCompleted: ({ checkCode }) => {
+      if (checkCode.res) {
+        navigation.navigate('CreateUserContain')
+      } else {
+        setError(true)
+      }
+    },
+    onError: () => {
+
+    }
+  })
 
   const onChangeTextCode = (val: string) => setCode(val)
   const onChangeTextEmail = (val: string) => setEmail(val);
 
   const _checkCode = () => runQuery({ variables: { email, code }})
-
-  if (data) {
-    console.log(data)
-    if (data.checkCode.res) {
-      console.log('entered the correct code')
-      navigation.navigate('CreateUserContain')
-    } else {
-      console.log('entered the incorrect code')
-    }
-    // navigation.navigate('CreateUserContain')
-  }
 
   return (
     <GeneralSpacing u={10} r={10} d={10} l={10}>

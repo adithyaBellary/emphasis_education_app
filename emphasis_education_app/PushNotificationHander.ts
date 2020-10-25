@@ -4,7 +4,7 @@ import PushNotification from 'react-native-push-notification';
 export class MyNotificationHandler {
 
   constructor() {
-    console.log('constructing this bitch')
+    // console.log('constructing this bitch')
   }
 
   // this handler gets called when we get a push notif from the background state

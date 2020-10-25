@@ -87,11 +87,6 @@ const CreateUserContain: React.FC<CreateUserContainProps> = props => {
     setShowConf(true);
   }
 
-  // if (error) {
-  //   console.log('there was something wrong with creating the user');
-  //   console.log(error);
-  // }
-
   return (
     <View>
       {!showConf && (
