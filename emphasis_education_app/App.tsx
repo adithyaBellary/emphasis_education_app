@@ -37,7 +37,7 @@ const httplink = new HttpLink({
 });
 
 const wsLink = new WebSocketLink({
-  uri: `ws://emphasis-education-server.herokuapp.com/graphql`,
+  uri: 'ws://emphasis-education-server.herokuapp.com/graphql',
   // uri: `ws://localhost:4000/graphql`,
   options: {
     reconnect: true,
@@ -71,7 +71,6 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 
 Sentry.init({
   dsn: SENTRY_DSN,
-  // seems like this release isnt getting mapped
   release: 'emphasis-education-app@' + VERSION
 });
 

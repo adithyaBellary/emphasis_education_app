@@ -141,6 +141,15 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
     })
   }
 
+  if (!subLoading) {
+    console.log('subscription is done loading')
+    Sentry.captureMessage('Subscription is loading', {
+      user: {
+        email: loggedUser.email
+      }
+    })
+  }
+
   useEffect(() => {
     if (!getMessages) { return }
     const messages: IMessage[] = getMessages.getMessages.map(_message => {
