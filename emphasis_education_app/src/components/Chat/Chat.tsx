@@ -75,7 +75,14 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
 
   // const client = useApolloClient();
   // lets cache this data
-  const { data: getMessages, loading: queryLoading, refetch, error: errorMessage, updateQuery } = useQuery<
+  const {
+    data: getMessages,
+    loading: queryLoading,
+    refetch,
+    error: errorMessage,
+    updateQuery,
+    subscribeToMore
+  } = useQuery<
       GetMessages,
       QueryGetMessagesArgs
     >(
@@ -96,7 +103,7 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
 
   if (errorMessage) { console.log('errorrrrrrrrr', errorMessage) }
 
-  const { data: subData } = useSubscription<MessageReceived>(SUB, {
+  const { data: subData, error: subError, loading: subLoading } = useSubscription<MessageReceived>(SUB, {
     onSubscriptionData: (data) => {
       console.log('got data', data)
 
@@ -108,6 +115,26 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
       })
     },
   })
+
+  if (subError) {
+    console.log('error in subscription', subError)
+    Sentry.captureException(subError, {
+      user: {
+        email: loggedUser.email,
+        error: subError
+      }
+    })
+    Sentry.captureMessage(subError.toString(), {
+      user: {
+        email: loggedUser.email,
+        error: subError
+      }
+    })
+  }
+
+  if (subLoading) {
+    console.log('subscription is loading')
+  }
 
   useEffect(() => {
     if (!getMessages) { return }
