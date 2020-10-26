@@ -45,6 +45,31 @@ interface MessagePayload {
   sendMessage: MessageReceivedProps;
 }
 
+const renderBubble = (props: BubbleProps<IMessage>) => (
+
+  <Bubble
+    {...props}
+    textStyle={{
+      right: {
+        color: 'yellow',
+        fontFamily: 'Nunito'
+      },
+      left: {
+        fontFamily: 'Nunito'
+      }
+    }}
+    wrapperStyle={{
+      left: {
+        backgroundColor: 'pink',
+      },
+      right: {
+        // backgroundColor: 'yellow'
+      }
+    }}
+  />
+  )
+
+
 const MyGiftedChat: React.FC<GiftedChatProps> = ({
   queryLoading,
   refreshFn,
@@ -83,34 +108,6 @@ const MyGiftedChat: React.FC<GiftedChatProps> = ({
     })
   }
 
-
-  const renderBubble = (props: BubbleProps<IMessage>) => {
-
-    return (
-
-    <Bubble
-      {...props}
-      textStyle={{
-        right: {
-          color: 'yellow',
-          fontFamily: 'Nunito'
-        },
-        left: {
-          fontFamily: 'Nunito'
-        }
-      }}
-      wrapperStyle={{
-        left: {
-          backgroundColor: 'pink',
-        },
-        right: {
-          // backgroundColor: 'yellow'
-        }
-      }}
-    />
-    )
-    };
-
   const renderComposer = (props: ComposerProps) => (
     <>
       {imageSelected && (
@@ -141,6 +138,7 @@ const MyGiftedChat: React.FC<GiftedChatProps> = ({
       />
     </>
   )
+
 
   if (error) { console.log('there was an issue sending the message') }
 
