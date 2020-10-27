@@ -30,19 +30,32 @@ import StackNavigation from './src/StackNavigation';
 import PushNotifWrapper from './PushNotifWrapper';
 import { UserInfoType } from './types/schema-types';
 
+Sentry.init({
+  dsn: SENTRY_DSN,
+  release: 'emphasis-education-app@' + VERSION
+});
+
 const cache = new InMemoryCache();
 const httplink = new HttpLink({
-  uri: 'https://emphasis-education-server.herokuapp.com/graphql'
-  // uri: 'http://localhost:4000/graphql'
+  uri: 'https://emphasis-education-server.herokuapp.com/'
+  // uri: 'http://localhost:4000/'
 });
 
 const wsLink = new WebSocketLink({
   uri: 'ws://emphasis-education-server.herokuapp.com/graphql',
-  // uri: `ws://localhost:4000/graphql`,
+  // uri: 'ws://localhost:4000/graphql',
   options: {
     reconnect: true,
-    timeout: 20000,
-    lazy: true
+    timeout: 10000,
+    lazy: true,
+    connectionCallback: (error, result) => {
+      console.log('connectionCallback error', error)
+      console.log('connectionCallback result', result)
+      Sentry.captureMessage(`Subscription callback ${!!error} ${!!result}`)
+    },
+    connectionParams: {
+      authToken: '123'
+    }
   }
 });
 
@@ -69,10 +82,7 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   // uri: 'http://localhost:4000/graphql'
 });
 
-Sentry.init({
-  dsn: SENTRY_DSN,
-  release: 'emphasis-education-app@' + VERSION
-});
+
 
 const App = () => {
   const [user, setUser] = React.useState<UserInfoType>({} as UserInfoType);

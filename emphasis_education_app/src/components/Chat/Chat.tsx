@@ -143,7 +143,7 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
 
   if (!subLoading) {
     console.log('subscription is done loading')
-    Sentry.captureMessage('Subscription is loading', {
+    Sentry.captureMessage('Subscription is done loading', {
       user: {
         email: loggedUser.email
       }
