@@ -59,22 +59,23 @@ const wsLink = new WebSocketLink({
   }
 });
 
+console.log('the ws link is created', wsLink)
+Sentry.captureMessage(`The ws link is created i think? ${!!wsLink}`)
+// Sentry.captureMessage(`The ws link is created: ${wsLink}`)
+
 const link = split(({ query }) => {
   const definition = getMainDefinition(query);
-  return (
-    definition.kind === 'OperationDefinition' &&
-      definition.operation === 'subscription'
-  )
+  const isSub = (definition.kind === 'OperationDefinition') && (definition.operation === 'subscription')
+  console.log('isSub?', isSub)
+  Sentry.captureMessage(`isSub? ${isSub}`)
+  return isSub
 },wsLink,
-httplink)
-// const link = new ApolloLink().split(({ query }) => {
-//   const definition = getMainDefinition(query);
-//   return (
-//     definition.kind === 'OperationDefinition' &&
-//       definition.operation === 'subscription'
-//   )
-// },wsLink,
-// httplink)
+  httplink
+)
+
+console.log('link', link)
+Sentry.captureMessage(`the link is created i think? ${!!link}`)
+// console.log('link', !!link)
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache,
@@ -82,6 +83,9 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   // uri: 'http://localhost:4000/graphql'
 });
 
+console.log('the client', client)
+Sentry.captureMessage(`the client is created i think? ${!!client}`)
+// console.log('the client', !!client)
 
 
 const App = () => {
