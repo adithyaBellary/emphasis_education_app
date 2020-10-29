@@ -9,18 +9,22 @@
  */
 
 import * as React from 'react';
-import { HttpLink } from 'apollo-link-http';
-import { WebSocketLink } from 'apollo-link-ws';
-import { split, ApolloLink } from 'apollo-link';
-import { getMainDefinition } from 'apollo-utilities';
+// import { HttpLink } from 'apollo-link-http';
+// import { WebSocketLink } from 'apollo-link-ws';
+// import { split, ApolloLink } from 'apollo-link';
+// import { getMainDefinition } from 'apollo-utilities';
+import { getMainDefinition } from '@apollo/client/utilities'
 import { ThemeProvider } from 'styled-components';
 import * as Sentry from "@sentry/react-native";
 import {
+  HttpLink,
+  split,
   ApolloProvider,
   ApolloClient,
   InMemoryCache,
   NormalizedCacheObject
  } from '@apollo/client';
+ import { WebSocketLink } from '@apollo/client/link/ws';
 
 import { SENTRY_DSN } from './config/sentry';
 import { VERSION } from './src/constant'

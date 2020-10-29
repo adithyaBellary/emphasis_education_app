@@ -91,7 +91,6 @@ const MyGiftedChat: React.FC<GiftedChatProps> = ({
   );
 
   const onSend = (props: IMessage[]) => {
-    console.log('sending')
     sendMessage({
       variables: {
         messages: [

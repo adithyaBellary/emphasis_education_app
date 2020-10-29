@@ -105,7 +105,8 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
 
   const { data: subData, error: subError, loading: subLoading } = useSubscription<MessageReceived>(SUB, {
     onSubscriptionData: (data) => {
-      console.log('got data', data)
+      // console.log('got data', data)
+      console.log('got data in the sub!')
 
       Sentry.captureMessage('Message received sub got data', {
         user: {
@@ -149,6 +150,8 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
       }
     })
   }
+
+  const isLoading = queryLoading;
 
   useEffect(() => {
     if (!getMessages) { return }
@@ -249,9 +252,9 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
 
   return (
     <>
-      { queryLoading ? (
+      { isLoading ? (
         <CenteredDiv>
-          <ActivityIndicator animating={queryLoading} />
+          <ActivityIndicator animating={isLoading} color="#0000ff"/>
           <ThemedText
             size={14}
             type={FONT_STYLES.MAIN}
