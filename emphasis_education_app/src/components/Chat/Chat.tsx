@@ -269,6 +269,30 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
           chatID={chatID}
           curUser={curUser}
           messages={curState ? curState.messages : []}
+          triggerSubToMore={() => {
+            console.log('subbing to more')
+            Sentry.captureMessage('triggered the subscribe to more stuff. should happen on mount', {
+              user: {
+                email: loggedUser.email,
+                name: `${loggedUser.firstName} ${loggedUser.lastName}`
+              }
+            })
+            subscribeToMore({
+              document: SUB,
+              updateQuery: (prev, data) => {
+                console.log('prev in sub more', prev)
+                console.log('data in sub more', data)
+
+                Sentry.captureMessage('data received in the subscribe to more part.', {
+                  user: {
+                    email: loggedUser.email,
+                    name: `${loggedUser.firstName} ${loggedUser.lastName}`
+                  }
+                })
+                return prev;
+              }
+            })
+          }}
         />
       )}
     </>

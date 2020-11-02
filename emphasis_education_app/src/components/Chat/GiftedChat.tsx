@@ -35,6 +35,7 @@ interface GiftedChatProps {
   curUser: MessageUser;
   messages: IMessage[] | undefined;
   refreshFn(): void;
+  triggerSubToMore (): void;
 }
 
 interface MessageReceivedProps {
@@ -75,10 +76,15 @@ const MyGiftedChat: React.FC<GiftedChatProps> = ({
   refreshFn,
   chatID,
   curUser,
-  messages
+  messages,
+  triggerSubToMore
 }) => {
   const [image, setImage] = React.useState('')
   const [imageSelected, setImageSelected] = React.useState(false);
+
+  React.useEffect(() => {
+    triggerSubToMore();
+  }, [])
 
   const [sendMessage, { data, error }] = useMutation<MessagePayload>(
     SEND_MESSAGE,
