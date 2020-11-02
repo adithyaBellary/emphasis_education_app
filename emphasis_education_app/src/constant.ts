@@ -1,6 +1,6 @@
 import { Dimensions } from 'react-native';
 
-export const VERSION = '0.0.9'
+export const VERSION = '0.0.10'
 export const LOGIN_TOKEN: string = 'LOGIN';
 
 export const MAX_WIDTH = Dimensions.get('window').width;

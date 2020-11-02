@@ -41,13 +41,13 @@ Sentry.init({
 
 const cache = new InMemoryCache();
 const httplink = new HttpLink({
-  // uri: 'https://emphasis-education-server.herokuapp.com/'
-  uri: 'http://localhost:4000/'
+  uri: 'https://emphasis-education-server.herokuapp.com/'
+  // uri: 'http://localhost:4000/'
 });
 
 const wsLink = new WebSocketLink({
-  // uri: 'ws://emphasis-education-server.herokuapp.com/graphql',
-  uri: 'ws://localhost:4000/graphql',
+  uri: 'ws://emphasis-education-server.herokuapp.com/graphql',
+  // uri: 'ws://localhost:4000/graphql',
   options: {
     reconnect: true,
     timeout: 10000,
