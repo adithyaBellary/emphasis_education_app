@@ -50,7 +50,7 @@ const wsLink = new WebSocketLink({
   // uri: 'ws://localhost:4000/graphql',
   options: {
     reconnect: true,
-    timeout: 10000,
+    // timeout: 10000,
     lazy: true,
     connectionCallback: (error, result) => {
       console.log('connectionCallback error', error)
