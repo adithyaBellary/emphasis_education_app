@@ -25,6 +25,7 @@ import {
   split,
  } from '@apollo/client';
  import { WebSocketLink } from '@apollo/client/link/ws';
+ import { SubscriptionClient } from 'subscriptions-transport-ws';
 
 import { SENTRY_DSN } from './config/sentry';
 import { VERSION } from './src/constant'
@@ -45,12 +46,11 @@ const httplink = new HttpLink({
   // uri: 'http://localhost:4000/'
 });
 
-const wsLink = new WebSocketLink({
-  uri: 'ws://emphasis-education-server.herokuapp.com/graphql',
-  // uri: 'ws://localhost:4000/graphql',
-  options: {
+const wsClient = new SubscriptionClient(
+  'ws://emphasis-education-server.herokuapp.com/graphql',
+  // 'ws://localhost:4000/graphql',
+  {
     reconnect: true,
-    // timeout: 10000,
     lazy: true,
     connectionCallback: (error, result) => {
       console.log('connectionCallback error', error)
@@ -61,7 +61,27 @@ const wsLink = new WebSocketLink({
       authToken: '123'
     }
   }
-});
+)
+
+const wsLink = new WebSocketLink(wsClient)
+
+// const wsLink = new WebSocketLink({
+//   uri: 'ws://emphasis-education-server.herokuapp.com/graphql',
+//   // uri: 'ws://localhost:4000/graphql',
+//   options: {
+//     reconnect: true,
+//     // timeout: 10000,
+//     lazy: true,
+//     connectionCallback: (error, result) => {
+//       console.log('connectionCallback error', error)
+//       console.log('connectionCallback result', result)
+//       Sentry.captureMessage(`Subscription callback ${!!error} ${!!result}`)
+//     },
+//     connectionParams: {
+//       authToken: '123'
+//     }
+//   }
+// });
 
 console.log('the ws link is created', wsLink)
 Sentry.captureMessage(`The ws link is created i think? ${!!wsLink}`)
