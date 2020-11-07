@@ -23,8 +23,10 @@ import {
   InMemoryCache,
   NormalizedCacheObject,
   split,
+  ApolloLink,
  } from '@apollo/client';
- import { WebSocketLink } from '@apollo/client/link/ws';
+import { WebSocketLink } from '@apollo/client/link/ws';
+import { onError } from '@apollo/client/link/error';
  import { SubscriptionClient } from 'subscriptions-transport-ws';
 
 import { SENTRY_DSN } from './config/sentry';
@@ -40,15 +42,37 @@ Sentry.init({
   release: 'emphasis-education-app@' + VERSION
 });
 
+const debug = false;
+
 const cache = new InMemoryCache();
 const httplink = new HttpLink({
-  uri: 'https://emphasis-education-server.herokuapp.com/'
-  // uri: 'http://localhost:4000/'
+  uri: debug ? 'http://localhost:4000/' : 'https://emphasis-education-server.herokuapp.com/'
 });
 
+const errLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors) {
+    graphQLErrors.map(({ message, locations, path}) => {
+      console.log(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`)
+
+      // Sentry.captureMessage(
+      //   `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+      // )
+    })
+  }
+  if (networkError) {
+    console.log(`[Network error!]: ${networkError}`)
+    // Sentry.captureMessage(`[Network error]: ${networkError}`)
+  }
+})
+
+const fullLink = ApolloLink.from([
+  errLink,
+  httplink,
+])
+
+const wsUrl = debug ? 'ws://localhost:4000/graphql' :  'ws://emphasis-education-server.herokuapp.com/graphql';
 const wsClient = new SubscriptionClient(
-  'ws://emphasis-education-server.herokuapp.com/graphql',
-  // 'ws://localhost:4000/graphql',
+  wsUrl,
   {
     reconnect: true,
     lazy: true,
@@ -94,7 +118,7 @@ const link = split(({ query }) => {
   Sentry.captureMessage(`isSub? ${isSub}`)
   return isSub
 },wsLink,
-  httplink
+  fullLink
 )
 
 console.log('link', link)
