@@ -42,7 +42,7 @@ Sentry.init({
   release: 'emphasis-education-app@' + VERSION
 });
 
-const debug = false;
+const debug = true;
 
 const cache = new InMemoryCache();
 const httplink = new HttpLink({
@@ -54,28 +54,23 @@ const errLink = onError(({ operation, graphQLErrors, networkError }) => {
     graphQLErrors.map(({ message, locations, path}) => {
       console.log(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`)
 
-      // Sentry.captureMessage(
-      //   `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
-      // )
+      Sentry.captureMessage(
+        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+      )
     })
   }
   if (networkError) {
     console.log(`[Network error!]: ${networkError}`)
-    // Sentry.captureMessage(`[Network error]: ${networkError}`)
+    Sentry.captureMessage(`[Network error!]: ${networkError}`)
   }
 
   if (operation) {
     console.log(`operationName: ${operation.operationName}`)
-    // Sentry.captureMessage(`[Operation name]: ${operation.operationName}`)
+    Sentry.captureMessage(`[Operation name]: ${operation.operationName}`)
   }
 })
 
-const fullLink = ApolloLink.from([
-  errLink,
-  httplink,
-])
-
-const wsUrl = debug ? 'ws://localhost:4000/graphql' :  'ws://emphasis-education-server.herokuapp.com/graphql';
+const wsUrl = debug ? 'ws://localhost:4000/graphql' : 'ws://emphasis-education-server.herokuapp.com/graphql';
 const wsClient = new SubscriptionClient(
   wsUrl,
   {
@@ -123,8 +118,13 @@ const link = split(({ query }) => {
   Sentry.captureMessage(`isSub? ${isSub}`)
   return isSub
 },wsLink,
-  fullLink
+  httplink
 )
+
+const theLink = ApolloLink.from([
+  errLink,
+  link
+])
 
 console.log('link', link)
 Sentry.captureMessage(`the link is created i think? ${!!link}`)
@@ -132,14 +132,12 @@ Sentry.captureMessage(`the link is created i think? ${!!link}`)
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache,
-  link
-  // uri: 'http://localhost:4000/graphql'
+  link: theLink
 });
 
 console.log('the client', client)
 Sentry.captureMessage(`the client is created i think? ${!!client}`)
 // console.log('the client', !!client)
-
 
 const App = () => {
   const [user, setUser] = React.useState<UserInfoType>({} as UserInfoType);
@@ -182,7 +180,6 @@ const App = () => {
   }
 
   return (
-
     <ApolloProvider client={client}>
       <ThemeProvider theme={theme}>
         <GeneralContext.Provider value={value}>
