@@ -49,7 +49,7 @@ const httplink = new HttpLink({
   uri: debug ? 'http://localhost:4000/' : 'https://emphasis-education-server.herokuapp.com/'
 });
 
-const errLink = onError(({ graphQLErrors, networkError }) => {
+const errLink = onError(({ operation, graphQLErrors, networkError }) => {
   if (graphQLErrors) {
     graphQLErrors.map(({ message, locations, path}) => {
       console.log(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`)
@@ -62,6 +62,11 @@ const errLink = onError(({ graphQLErrors, networkError }) => {
   if (networkError) {
     console.log(`[Network error!]: ${networkError}`)
     // Sentry.captureMessage(`[Network error]: ${networkError}`)
+  }
+
+  if (operation) {
+    console.log(`operationName: ${operation.operationName}`)
+    // Sentry.captureMessage(`[Operation name]: ${operation.operationName}`)
   }
 })
 
