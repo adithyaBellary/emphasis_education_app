@@ -13,7 +13,6 @@ import {
   ComposerProps
 } from 'react-native-gifted-chat';
 import {
-  ActivityIndicator,
   Text,
   View,
   Image,
@@ -27,6 +26,8 @@ import ImagePicker from 'react-native-image-picker';
 import { SEND_MESSAGE } from '../../queries/SendMessage';
 import { MessageType, MessageUser } from '../../../types/schema-types';
 import { theme } from '../../theme';
+import { LoadingComponent } from '../shared'
+
 import { EmptyChat } from './common';
 
 interface GiftedChatProps {
@@ -216,7 +217,7 @@ const MyGiftedChat: React.FC<GiftedChatProps> = ({
 
   return (
     <GiftedChat
-      renderLoading={() => <ActivityIndicator animating={true} />}
+      renderLoading={() => <LoadingComponent loading={true} />}
       listViewProps={
         {
           refreshing: queryLoading,

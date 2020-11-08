@@ -1,8 +1,5 @@
 import * as React from 'react';
-import {
-  ActivityIndicator,
-  Alert
-} from 'react-native'
+import { Alert } from 'react-native'
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { Input, Icon } from 'react-native-elements';
 
@@ -10,7 +7,7 @@ import { SEARCH_CLASSES } from '../../queries/SearchClasses';
 import { ISearchInput, ISearchClassesPayload } from '../../types';
 import ClassSearchResults from '../Search/ClassSearchResults';
 import { ADD_CLASS } from '../../queries/AddClass';
-import { GeneralSpacing } from '../shared';
+import { GeneralSpacing, LoadingComponent } from '../shared';
 
 const ClassSearch = () => {
   const [searchTerm, setSearchTerm] = React.useState('');
@@ -53,7 +50,7 @@ const ClassSearch = () => {
           />
         }
       />
-      {loading ? <ActivityIndicator animating={loading} /> : (
+      {loading ? <LoadingComponent loading={loading} /> : (
         <ClassSearchResults
           searchResults={data ? data.searchClasses.classes: []}
         />

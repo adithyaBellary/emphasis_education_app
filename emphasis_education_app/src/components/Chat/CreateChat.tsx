@@ -1,7 +1,5 @@
 import * as React from 'react';
 import {
-  ActivityIndicator,
-  Text,
   Button,
   Alert,
   TouchableOpacity,
@@ -20,10 +18,11 @@ import { IndividualResultContainer } from '../AdminPage/IndividualResult';
 
 import { ChatUserInfo } from '../../types';
 import {
-  IconRow,
+  FONT_STYLES,
   GeneralSpacing,
+  IconRow,
+  LoadingComponent,
   ThemedText,
-  FONT_STYLES
 } from '../shared';
 
 interface CreateChatProps {
@@ -88,7 +87,7 @@ const CreateChat: React.FC<CreateChatProps> = ({ navigation }) => {
             // TODO add disabled functionality
             disabled={loadingCreateChat}
           />
-          {loadingCreateChat && <ActivityIndicator animating={loadingCreateChat} />}
+          {loadingCreateChat && <LoadingComponent loading={loadingCreateChat} />}
         </IconRow>
       </GeneralSpacing>
     )
@@ -199,7 +198,7 @@ const CreateChat: React.FC<CreateChatProps> = ({ navigation }) => {
         <ChatText>Selected Class: {selectedClasses}</ChatText>
         <ChatText>Selected Users: {selectedUsers.map(u => `${u.firstName}, `)} </ChatText>
         {/* let us display the results here so that we can easily have state over them */}
-        { userLoading ? <ActivityIndicator animating={userLoading} /> : (
+        { userLoading ? <LoadingComponent loading={userLoading} /> : (
           userData ? userData.searchUsers.map((u, index) => {
             let present = false;
             selectedUsers.forEach(_user => {
@@ -222,7 +221,7 @@ const CreateChat: React.FC<CreateChatProps> = ({ navigation }) => {
             )
           }) : null
         )}
-        { classLoading ? <ActivityIndicator animating={classLoading} /> : (
+        { classLoading ? <LoadingComponent loading={classLoading} /> : (
           classData ? classData.searchClasses.classes.map(c => (
             <TouchableOpacity
               onPress={addSelectedClasses(c)}

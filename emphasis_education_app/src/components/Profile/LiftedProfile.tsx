@@ -1,8 +1,5 @@
 import * as React from 'react';
-import {
-  ActivityIndicator,
-  TouchableOpacity
-} from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { useQuery } from '@apollo/client';
 
 import { GeneralContext } from '../Context/Context';
@@ -11,10 +8,11 @@ import Profile from './Profile';
 import { GET_FAMILY } from '../../queries/GetFamily';
 import { IGetFamilyInput } from '../../types';
 import {
-  GeneralSpacing,
-  ThemedText,
+  CenteredDiv,
   FONT_STYLES,
-  CenteredDiv
+  GeneralSpacing,
+  LoadingComponent,
+  ThemedText,
 } from '../shared';
 import { UserInfoType } from '../../../types/schema-types';
 
@@ -63,7 +61,7 @@ const LiftedProfile: React.FC<LiftedProfileProps> = ({ route, navigation }) => {
     {
       loading ? (
         <CenteredDiv>
-          <ActivityIndicator animating={loading} />
+          <LoadingComponent loading={loading} />
           <ThemedText
             size={14}
             type={FONT_STYLES.MAIN}

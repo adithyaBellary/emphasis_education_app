@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-community/async-storage';
-import { ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { useMutation } from '@apollo/client';
 import * as Sentry from '@sentry/react-native';
@@ -21,13 +20,13 @@ import EnterCode from './components/UserManagement/EnterCode';
 import AddMember from './components/AdminPage/AddMemberModal';
 import ChatInfo from './components/Chat/ChatInfo';
 import ForgotPassword from './components/UserManagement/ForgotPassword';
+import { AuthContext } from './components/Context/Context';
+import { TitleText, LoadingComponent } from './components/shared';
 
 import { LOGIN_TOKEN } from './constant';
 import { LOGIN } from './queries/Login';
 
-import {AuthContext} from './components/Context/Context';
 import { ILoginPayload } from './types';
-import { TitleText } from './components/shared';
 import { theme } from './theme';
 
 const AuthStackNav = createStackNavigator();
@@ -257,7 +256,7 @@ const StackNavigation: React.FC = () => {
 
   if (authLoading) {
     return (
-      <ActivityIndicator animating={authLoading} />
+      <LoadingComponent loading={authLoading} />
     )
   }
 

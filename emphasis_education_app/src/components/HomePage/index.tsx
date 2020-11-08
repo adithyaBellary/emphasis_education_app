@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Icon, Badge } from 'react-native-elements';
-import { ActivityIndicator, View } from 'react-native';
+import { View } from 'react-native';
 import styled from 'styled-components';
 import messaging from '@react-native-firebase/messaging';
 import * as Sentry from '@sentry/react-native';
@@ -9,11 +9,12 @@ import { MissionStatement, HeaderTitle, LogiImage } from './logos';
 
 import {
   CenteredDiv,
+  FONT_STYLES,
+  LoadingComponent,
   IconSection,
   IconRow,
   PermissionedComponent,
   ThemedText,
-  FONT_STYLES,
   ThemedButton,
 } from '../shared';
 import { AuthContext, GeneralContext } from '../Context/Context';
@@ -127,7 +128,7 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
   if (loading) {
     return (
       <CenteredDiv>
-        <ActivityIndicator animating={loading} color="#0000ff" />
+        <LoadingComponent loading={loading}/>
         <View>
           <ThemedText
             size={14}

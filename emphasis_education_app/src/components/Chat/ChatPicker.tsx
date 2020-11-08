@@ -1,9 +1,7 @@
 import * as React from 'react';
 import {
-  Text,
   View,
   SafeAreaView,
-  ActivityIndicator,
 } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { useLazyQuery } from '@apollo/client';
@@ -11,12 +9,13 @@ import messaging from '@react-native-firebase/messaging';
 
 import { GeneralContext } from '../Context/Context';
 import {
-  PermissionedComponent,
-  IconRow,
-  GeneralSpacing,
-  ThemedText,
+  CenteredDiv,
   FONT_STYLES,
-  CenteredDiv
+  GeneralSpacing,
+  IconRow,
+  LoadingComponent,
+  PermissionedComponent,
+  ThemedText,
 } from '../shared';
 import { GET_USER } from '../../queries/GetUser';
 import { Permission, ChatUserInfo, } from '../../types';
@@ -119,7 +118,7 @@ const ChatPicker: React.FC<ChatPickerProps> = ({ navigation }) => {
   if (loading) {
     return (
       <CenteredDiv>
-        <ActivityIndicator animating={loading} />
+        <LoadingComponent loading={loading} />
         <View>
           <ThemedText
             size={14}

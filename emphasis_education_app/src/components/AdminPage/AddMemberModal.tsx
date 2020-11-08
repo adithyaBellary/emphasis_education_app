@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-  Text,
   SafeAreaView,
   TouchableOpacity,
   ActivityIndicator,
@@ -9,7 +8,13 @@ import {
 import { Input, Icon } from 'react-native-elements';
 import { useLazyQuery, useMutation } from '@apollo/client';
 
-import { GeneralSpacing, ThemedText, IconRow, FONT_STYLES } from '../shared';
+import {
+  FONT_STYLES,
+  GeneralSpacing,
+  IconRow,
+  LoadingComponent,
+  ThemedText,
+} from '../shared';
 import { ISearchUserPayload, ISearchInput } from '../../types';
 import { SEARCH_USERS } from '../../queries/SearchUsers';
 import { ADD_FAMILY_MEMBER } from '../../queries/AddFamilyMember';
@@ -43,9 +48,7 @@ const Done: React.FC<DoneProps> = ({ onPress, loading }) => (
         <ThemedText size={16} type={FONT_STYLES.MAIN}>
           Done
         </ThemedText>
-        {
-          loading && <ActivityIndicator animating={loading} />
-        }
+        {loading && <LoadingComponent loading={loading} />}
       </IconRow>
     </GeneralSpacing>
   </TouchableOpacity>
@@ -134,7 +137,7 @@ const AddMember: React.FC<AddMemberProps> = ({ navigation, route }) => {
         Selected Users: {selectedUsers.map(_u => _u.name)},
       </ThemedText>
       <ContentContain>
-        {userLoading ? <ActivityIndicator animating={userLoading} /> : (
+        {userLoading ? <LoadingComponent loading={userLoading} /> : (
           userData && userData.searchUsers.map(_user => {
             let present = false;
             selectedUsers.forEach(_u => {
