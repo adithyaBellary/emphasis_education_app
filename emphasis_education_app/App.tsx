@@ -42,11 +42,11 @@ Sentry.init({
   release: 'emphasis-education-app@' + VERSION
 });
 
-const debug = true;
+const DEBUG = false;
 
 const cache = new InMemoryCache();
 const httplink = new HttpLink({
-  uri: debug ? 'http://localhost:4000/' : 'https://emphasis-education-server.herokuapp.com/'
+  uri: DEBUG ? 'http://localhost:4000/' : 'https://emphasis-education-server.herokuapp.com/'
 });
 
 const errLink = onError(({ operation, graphQLErrors, networkError }) => {
@@ -70,7 +70,7 @@ const errLink = onError(({ operation, graphQLErrors, networkError }) => {
   }
 })
 
-const wsUrl = debug ? 'ws://localhost:4000/graphql' : 'ws://emphasis-education-server.herokuapp.com/graphql';
+const wsUrl = DEBUG ? 'ws://localhost:4000/graphql' : 'ws://emphasis-education-server.herokuapp.com/graphql';
 const wsClient = new SubscriptionClient(
   wsUrl,
   {
