@@ -30,7 +30,7 @@ import { ILoginPayload } from './types';
 import { theme } from './theme';
 
 const AuthStackNav = createStackNavigator();
-const AuthStack = ({ error, loading }) => (
+const AuthStack: ({ error, loading}: { error: boolean, loading: boolean}) => JSX.Element = ({ error, loading }) => (
   <AuthStackNav.Navigator initialRouteName={'Login'}>
     <AuthStackNav.Screen name='Login' options={{ headerShown: false}}>
       {_props => <Login {..._props} error={error} loading={loading}/>}
@@ -60,7 +60,7 @@ const AuthStack = ({ error, loading }) => (
 
 const AppStackNav = createStackNavigator();
 
-const AppStack = ({ userToken }) => (
+const AppStack: ({ userToken}: { userToken: string}) => JSX.Element = ({ userToken }) => (
   <AppStackNav.Navigator initialRouteName={'Home'}>
     <AppStackNav.Screen
       name="Home"
@@ -143,7 +143,7 @@ const AppRootStack = ({ userToken, ...props }) => (
 )
 
 const RootStackNav = createStackNavigator();
-const RootStack = ({ userToken, error, loading }) => (
+const RootStack: ({ userToken, error, loading}: { userToken: string, error: boolean, loading: boolean }) => JSX.Element = ({ userToken, error, loading }) => (
   <RootStackNav.Navigator headerMode="none">
     { !!userToken ? (
       <RootStackNav.Screen name='AppRoot'>
@@ -158,8 +158,8 @@ const RootStack = ({ userToken, error, loading }) => (
 )
 
 const StackNavigation: React.FC = () => {
-  const [{authLoading, userToken, signingOut}, dispatch] = React.useReducer(
-    ( prevState, action) => {
+  const [{authLoading, userToken}, dispatch] = React.useReducer(
+    (prevState, action) => {
       switch (action.type) {
         case 'CHECK_LOGIN':
           return {
@@ -241,13 +241,13 @@ const StackNavigation: React.FC = () => {
           setLoginError(true)
         })
       },
-      logout: async data => {
+      logout: async () => {
         await AsyncStorage.clear();
         // unset the user on logout
         Sentry.configureScope(scope => scope.setUser(null));
         dispatch({ type: 'LOGOUT'})
       },
-      createUser: data => {
+      createUser: () => {
         dispatch({ type: 'LOGOUT', token: LOGIN_TOKEN})
       },
     }),
