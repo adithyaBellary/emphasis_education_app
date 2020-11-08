@@ -1,9 +1,8 @@
 import * as React from 'react';
 import {
+  Alert,
   SafeAreaView,
   TouchableOpacity,
-  ActivityIndicator,
-  Alert
 } from 'react-native';
 import { Input, Icon } from 'react-native-elements';
 import { useLazyQuery, useMutation } from '@apollo/client';
