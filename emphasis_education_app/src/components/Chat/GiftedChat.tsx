@@ -3,22 +3,20 @@ import { useMutation } from '@apollo/client';
 import {
   Actions,
   ActionsProps,
-  GiftedChat,
   Bubble,
   BubbleProps,
+  Composer,
+  ComposerProps,
+  GiftedChat,
   InputToolbar,
   InputToolbarProps,
-  Composer,
   IMessage,
-  ComposerProps
 } from 'react-native-gifted-chat';
 import {
-  Text,
-  View,
+  Alert,
   Image,
   TouchableHighlight,
-  Alert,
-  KeyboardAvoidingView
+  View,
 } from 'react-native';
 import { Icon } from 'react-native-elements';
 import ImagePicker from 'react-native-image-picker';

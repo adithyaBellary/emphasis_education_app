@@ -40,13 +40,13 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>To use camera to take pics</string>
+	<string>To take pictures of assignments and other content to group chats</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>To use microphone to record audio</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>To use photos from library</string>
+	<string>To send pictures of assignments and other content to group chats</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
