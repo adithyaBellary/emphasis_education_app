@@ -35,6 +35,7 @@ interface GiftedChatProps {
   curUser: MessageUser;
   messages: IMessage[] | undefined;
   refreshFn(): void;
+  triggerSubToMore (): void;
 }
 
 interface MessageReceivedProps {
@@ -45,15 +46,45 @@ interface MessagePayload {
   sendMessage: MessageReceivedProps;
 }
 
+const renderBubble = (props: BubbleProps<IMessage>) => (
+
+  <Bubble
+    {...props}
+    textStyle={{
+      right: {
+        color: 'yellow',
+        fontFamily: 'Nunito'
+      },
+      left: {
+        fontFamily: 'Nunito'
+      }
+    }}
+    wrapperStyle={{
+      left: {
+        backgroundColor: 'pink',
+      },
+      right: {
+        // backgroundColor: 'yellow'
+      }
+    }}
+  />
+  )
+
+
 const MyGiftedChat: React.FC<GiftedChatProps> = ({
   queryLoading,
   refreshFn,
   chatID,
   curUser,
-  messages
+  messages,
+  triggerSubToMore
 }) => {
   const [image, setImage] = React.useState('')
   const [imageSelected, setImageSelected] = React.useState(false);
+
+  React.useEffect(() => {
+    triggerSubToMore();
+  }, [])
 
   const [sendMessage, { data, error }] = useMutation<MessagePayload>(
     SEND_MESSAGE,
@@ -66,7 +97,6 @@ const MyGiftedChat: React.FC<GiftedChatProps> = ({
   );
 
   const onSend = (props: IMessage[]) => {
-    console.log('sending')
     sendMessage({
       variables: {
         messages: [
@@ -82,34 +112,6 @@ const MyGiftedChat: React.FC<GiftedChatProps> = ({
       }
     })
   }
-
-
-  const renderBubble = (props: BubbleProps<IMessage>) => {
-
-    return (
-
-    <Bubble
-      {...props}
-      textStyle={{
-        right: {
-          color: 'yellow',
-          fontFamily: 'Nunito'
-        },
-        left: {
-          fontFamily: 'Nunito'
-        }
-      }}
-      wrapperStyle={{
-        left: {
-          backgroundColor: 'pink',
-        },
-        right: {
-          // backgroundColor: 'yellow'
-        }
-      }}
-    />
-    )
-    };
 
   const renderComposer = (props: ComposerProps) => (
     <>
@@ -141,6 +143,7 @@ const MyGiftedChat: React.FC<GiftedChatProps> = ({
       />
     </>
   )
+
 
   if (error) { console.log('there was an issue sending the message') }
 

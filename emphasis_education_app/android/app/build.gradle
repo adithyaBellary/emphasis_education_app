@@ -123,6 +123,7 @@ def enableHermes = project.ext.react.get("enableHermes", false);
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
+    ndkVersion '21.3.6528147'
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -133,8 +134,8 @@ android {
         applicationId "com.emphasis_education_app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 5
-        versionName '0.0.4'
+        versionCode 14
+        versionName '0.0.13'
         vectorDrawables.useSupportLibrary = true
     }
     splits {
@@ -185,9 +186,9 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
-    implementation 'com.google.firebase:firebase-analytics:17.2.2'
+    implementation 'com.google.firebase:firebase-analytics:18.0.0'
 
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
       exclude group:'com.facebook.fbjni'

@@ -75,7 +75,14 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
 
   // const client = useApolloClient();
   // lets cache this data
-  const { data: getMessages, loading: queryLoading, refetch, error: errorMessage, updateQuery } = useQuery<
+  const {
+    data: getMessages,
+    loading: queryLoading,
+    refetch,
+    error: errorMessage,
+    updateQuery,
+    subscribeToMore
+  } = useQuery<
       GetMessages,
       QueryGetMessagesArgs
     >(
@@ -96,9 +103,10 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
 
   if (errorMessage) { console.log('errorrrrrrrrr', errorMessage) }
 
-  const { data: subData } = useSubscription<MessageReceived>(SUB, {
+  const { data: subData, error: subError, loading: subLoading } = useSubscription<MessageReceived>(SUB, {
     onSubscriptionData: (data) => {
-      console.log('got data', data)
+      // console.log('got data', data)
+      console.log('got data in the sub!')
 
       Sentry.captureMessage('Message received sub got data', {
         user: {
@@ -108,6 +116,42 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
       })
     },
   })
+
+  if (subError) {
+    console.log('error in subscription', subError)
+    Sentry.captureException(subError, {
+      user: {
+        email: loggedUser.email,
+        error: subError
+      }
+    })
+    Sentry.captureMessage(subError.toString(), {
+      user: {
+        email: loggedUser.email,
+        error: subError
+      }
+    })
+  }
+
+  if (subLoading) {
+    console.log('subscription is loading')
+    Sentry.captureMessage('Subscription is loading', {
+      user: {
+        email: loggedUser.email
+      }
+    })
+  }
+
+  if (!subLoading) {
+    console.log('subscription is done loading')
+    Sentry.captureMessage('Subscription is done loading', {
+      user: {
+        email: loggedUser.email
+      }
+    })
+  }
+
+  const isLoading = queryLoading;
 
   useEffect(() => {
     if (!getMessages) { return }
@@ -208,9 +252,9 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
 
   return (
     <>
-      { queryLoading ? (
+      { isLoading ? (
         <CenteredDiv>
-          <ActivityIndicator animating={queryLoading} />
+          <ActivityIndicator animating={isLoading} color="#0000ff"/>
           <ThemedText
             size={14}
             type={FONT_STYLES.MAIN}
@@ -225,6 +269,30 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
           chatID={chatID}
           curUser={curUser}
           messages={curState ? curState.messages : []}
+          triggerSubToMore={() => {
+            console.log('subbing to more')
+            Sentry.captureMessage('triggered the subscribe to more stuff. should happen on mount', {
+              user: {
+                email: loggedUser.email,
+                name: `${loggedUser.firstName} ${loggedUser.lastName}`
+              }
+            })
+            subscribeToMore({
+              document: SUB,
+              updateQuery: (prev, data) => {
+                console.log('prev in sub more', prev)
+                console.log('data in sub more', data)
+
+                Sentry.captureMessage('data received in the subscribe to more part.', {
+                  user: {
+                    email: loggedUser.email,
+                    name: `${loggedUser.firstName} ${loggedUser.lastName}`
+                  }
+                })
+                return prev;
+              }
+            })
+          }}
         />
       )}
     </>

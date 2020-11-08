@@ -50,6 +50,7 @@ const ListClasses: React.FC<{ classes: Chat[]}> = ({ classes }) => (
       <ThemedText
         size={16}
         type={FONT_STYLES.MAIN}
+        key={_class.chatID}
       >
         {_class.className}
       </ThemedText>
