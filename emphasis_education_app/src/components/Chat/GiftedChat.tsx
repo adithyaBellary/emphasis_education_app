@@ -47,18 +47,22 @@ interface MessagePayload {
   sendMessage: MessageReceivedProps;
 }
 
+const right = {
+  color: 'yellow',
+  fontFamily: 'Nunito'
+}
+
+const left = {
+  fontFamily: 'Nunito'
+}
+
 const renderBubble = (props: BubbleProps<IMessage>) => (
 
   <Bubble
     {...props}
     textStyle={{
-      right: {
-        color: 'yellow',
-        fontFamily: 'Nunito'
-      },
-      left: {
-        fontFamily: 'Nunito'
-      }
+      right,
+      left
     }}
     wrapperStyle={{
       left: {
