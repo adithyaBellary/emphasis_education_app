@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useQuery, useMutation } from '@apollo/client'
-import { ActivityIndicator, Alert } from 'react-native'
 
 import { SEARCH_CLASSES } from '../queries/SearchClasses'
 import { SEND_EMAIL } from '../queries/SendEmail';
@@ -8,13 +7,14 @@ import { StyledTextInput } from './Settings';
 
 import { GeneralContext } from './Context/Context';
 import {
-  ContentContain as Contain,
-  ThemedText,
-  FONT_STYLES,
   CenteredDiv,
+  ContentContain as Contain,
+  FONT_STYLES,
   GeneralSpacing,
   HorizontalDivider,
-  ThemedButton
+  LoadingComponent,
+  ThemedText,
+  ThemedButton,
 } from './shared';
 
 const SectionTitle: React.FC<{ title: string }> = ({ title }) => (
@@ -74,7 +74,7 @@ const AboutUs: React.FC = () => {
 
   if (classLoading) { return (
     <CenteredDiv>
-      <ActivityIndicator animating={classLoading} />
+      <LoadingComponent loading={classLoading} />
       <ThemedText
         size={14}
         type={FONT_STYLES.MAIN}

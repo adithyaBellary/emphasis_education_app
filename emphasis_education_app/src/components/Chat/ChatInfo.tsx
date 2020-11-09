@@ -2,26 +2,26 @@ import * as React from 'react';
 import {
   SafeAreaView,
   TouchableOpacity,
-  ActivityIndicator,
   View,
   Alert
 } from 'react-native';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { Icon, Input } from 'react-native-elements';
+
 import { ChatUserInfo, Permission } from '../../types';
 import { SEARCH_USERS } from '../../queries/SearchUsers'
 import { UserInfoType } from '../../../types/schema-types';
 import {
-  GeneralSpacing,
-  ThemedText,
-  IconRow,
-  FONT_STYLES,
   ContentContain,
-  PermissionedComponent
+  FONT_STYLES,
+  GeneralSpacing,
+  IconRow,
+  LoadingComponent,
+  PermissionedComponent,
+  ThemedText,
 } from '../shared';
 import { ADD_CHAT_MEMBER } from '../../queries/AddChatMember';
 import { IndividualResultContainer } from '../AdminPage/IndividualResult';
-
 
 interface CancelProps {
   onPress (): void;
@@ -50,7 +50,7 @@ const Done: React.FC<DoneProps> = ({ onPress, loading }) => (
         <ThemedText size={16} type={FONT_STYLES.MAIN}>
           Done
         </ThemedText>
-        {loading && <ActivityIndicator animating={loading} />}
+        {loading && <LoadingComponent loading={loading} />}
       </IconRow>
     </GeneralSpacing>
   </TouchableOpacity>
@@ -168,7 +168,7 @@ const ChatInfo: React.FC<ChatInfoProps> = ({ navigation, route }) => {
                   />
                 }
               />
-              { loading ? <ActivityIndicator animating={loading} /> : (
+              { loading ? <LoadingComponent loading={loading} /> : (
                   <SearchResults
                     results={data ? data.searchUsers : []}
                     addMember={addMember}

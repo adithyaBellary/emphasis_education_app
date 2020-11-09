@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-community/async-storage';
-import { ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { useMutation } from '@apollo/client';
 import * as Sentry from '@sentry/react-native';
@@ -21,17 +20,17 @@ import EnterCode from './components/UserManagement/EnterCode';
 import AddMember from './components/AdminPage/AddMemberModal';
 import ChatInfo from './components/Chat/ChatInfo';
 import ForgotPassword from './components/UserManagement/ForgotPassword';
+import { AuthContext } from './components/Context/Context';
+import { TitleText, LoadingComponent } from './components/shared';
 
 import { LOGIN_TOKEN } from './constant';
 import { LOGIN } from './queries/Login';
 
-import {AuthContext} from './components/Context/Context';
 import { ILoginPayload } from './types';
-import { TitleText } from './components/shared';
 import { theme } from './theme';
 
 const AuthStackNav = createStackNavigator();
-const AuthStack = ({ error, loading }) => (
+const AuthStack: ({ error, loading}: { error: boolean, loading: boolean}) => JSX.Element = ({ error, loading }) => (
   <AuthStackNav.Navigator initialRouteName={'Login'}>
     <AuthStackNav.Screen name='Login' options={{ headerShown: false}}>
       {_props => <Login {..._props} error={error} loading={loading}/>}
@@ -61,7 +60,7 @@ const AuthStack = ({ error, loading }) => (
 
 const AppStackNav = createStackNavigator();
 
-const AppStack = ({ userToken }) => (
+const AppStack: ({ userToken}: { userToken: string}) => JSX.Element = ({ userToken }) => (
   <AppStackNav.Navigator initialRouteName={'Home'}>
     <AppStackNav.Screen
       name="Home"
@@ -144,7 +143,7 @@ const AppRootStack = ({ userToken, ...props }) => (
 )
 
 const RootStackNav = createStackNavigator();
-const RootStack = ({ userToken, error, loading }) => (
+const RootStack: ({ userToken, error, loading}: { userToken: string, error: boolean, loading: boolean }) => JSX.Element = ({ userToken, error, loading }) => (
   <RootStackNav.Navigator headerMode="none">
     { !!userToken ? (
       <RootStackNav.Screen name='AppRoot'>
@@ -159,8 +158,8 @@ const RootStack = ({ userToken, error, loading }) => (
 )
 
 const StackNavigation: React.FC = () => {
-  const [{authLoading, userToken, signingOut}, dispatch] = React.useReducer(
-    ( prevState, action) => {
+  const [{authLoading, userToken}, dispatch] = React.useReducer(
+    (prevState, action) => {
       switch (action.type) {
         case 'CHECK_LOGIN':
           return {
@@ -242,13 +241,13 @@ const StackNavigation: React.FC = () => {
           setLoginError(true)
         })
       },
-      logout: async data => {
+      logout: async () => {
         await AsyncStorage.clear();
         // unset the user on logout
         Sentry.configureScope(scope => scope.setUser(null));
         dispatch({ type: 'LOGOUT'})
       },
-      createUser: data => {
+      createUser: () => {
         dispatch({ type: 'LOGOUT', token: LOGIN_TOKEN})
       },
     }),
@@ -257,7 +256,7 @@ const StackNavigation: React.FC = () => {
 
   if (authLoading) {
     return (
-      <ActivityIndicator animating={authLoading} />
+      <LoadingComponent loading={authLoading} />
     )
   }
 

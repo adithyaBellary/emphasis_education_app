@@ -14,12 +14,12 @@ import { ThemeProvider } from 'styled-components';
 import * as Sentry from "@sentry/react-native";
 import {
   ApolloClient,
+  ApolloLink,
   ApolloProvider,
   HttpLink,
   InMemoryCache,
   NormalizedCacheObject,
   split,
-  ApolloLink,
  } from '@apollo/client';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { onError } from '@apollo/client/link/error';
@@ -28,7 +28,7 @@ import { onError } from '@apollo/client/link/error';
 import { SENTRY_DSN } from './config/sentry';
 import { VERSION } from './src/constant'
 import { theme } from './src/theme';
-import { GeneralContext, Context, NotificationsProps } from './src/components/Context/Context';
+import { Context, GeneralContext, NotificationsProps } from './src/components/Context/Context';
 import StackNavigation from './src/StackNavigation';
 import PushNotifWrapper from './PushNotifWrapper';
 import { UserInfoType } from './types/schema-types';

@@ -1,16 +1,13 @@
 import * as React from 'react';
-import {
-  ActivityIndicator,
-} from 'react-native';
 import { useLazyQuery } from '@apollo/client';
 import { Input, Icon } from 'react-native-elements';
 
 import SearchResults from '../Search/SearchResults';
 import { ISearchInput } from '../../types';
 import { SEARCH_USERS } from '../../queries/SearchUsers';
+import { GeneralSpacing, LoadingComponent } from '../shared';
 
 import { UserInfoType } from 'types/schema-types';
-import { GeneralSpacing } from '../shared';
 
 interface LiftedSearchProps {
   navigation: any;
@@ -35,7 +32,7 @@ const LiftedSearch: React.FC<LiftedSearchProps> = ({ navigation }) => {
           />
         }
       />
-      {loading ? <ActivityIndicator animating={loading} /> : (
+      {loading ? <LoadingComponent loading={loading} /> : (
         <SearchResults
           searchResults={data ? data.searchUsers : []}
           navigation={navigation}

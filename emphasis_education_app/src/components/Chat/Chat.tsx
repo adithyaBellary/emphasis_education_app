@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TouchableOpacity, ActivityIndicator } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import {
   gql,
   useApolloClient,
@@ -21,9 +21,10 @@ import {
 import { SUB } from '../../queries/MessageReceived';
 import { GET_MESSAGES } from '../../queries/GetMessages';
 import {
-  ThemedText,
+  CenteredDiv,
   FONT_STYLES,
-  CenteredDiv
+  LoadingComponent,
+  ThemedText,
 } from '../shared';
 
 interface ChatProps {
@@ -254,7 +255,7 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
     <>
       { isLoading ? (
         <CenteredDiv>
-          <ActivityIndicator animating={isLoading} color="#0000ff"/>
+          <LoadingComponent loading={isLoading} />
           <ThemedText
             size={14}
             type={FONT_STYLES.MAIN}

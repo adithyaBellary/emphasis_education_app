@@ -24,5 +24,8 @@ export const theme = {
     spacing: {
       side: 20
     }
+  },
+  activityIndicator: {
+    color: 'grey'
   }
 }

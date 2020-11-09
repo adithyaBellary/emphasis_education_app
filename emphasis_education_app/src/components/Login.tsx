@@ -31,13 +31,6 @@ import {
   FONT_STYLES
 } from './shared';
 
-interface LoginProps {
-  navigation: any;
-  route: any;
-  error: boolean;
-  loading: boolean;
-}
-
 const ErrorText = styled(Text)`
   color: red;
   font-size: 16px;
@@ -89,7 +82,14 @@ const ContentWrap: React.FC = ({ children }) => (
   </SafeAreaView>
 );
 
-const Login: React.FC<LoginProps> = props => {
+interface LoginProps {
+  error: boolean;
+  loading: boolean;
+  navigation: any;
+  route: any;
+}
+
+const Login: React.FC<LoginProps> = ({ error, loading, navigation }) => {
 
   const { login } = useContext(AuthContext);
 
@@ -110,7 +110,7 @@ const Login: React.FC<LoginProps> = props => {
     password
   });
 
-  const changeScreens = (loc: string) => () => props.navigation.navigate(loc)
+  const changeScreens = (loc: string) => () => navigation.navigate(loc)
 
   return (
     <ContentWrap>
@@ -144,12 +144,12 @@ const Login: React.FC<LoginProps> = props => {
         />
       </InputContain>
 
-      {props.error && <Errorlogin /> }
+      {error && <Errorlogin /> }
 
       <ButtonContainer>
         <ThemedButton
           buttonText='Login'
-          loading={props.loading}
+          loading={loading}
           onPress={() => login(curState.email, curState.password)}
         />
       </ButtonContainer>

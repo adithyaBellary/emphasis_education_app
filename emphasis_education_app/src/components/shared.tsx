@@ -98,6 +98,13 @@ interface ButtonProps {
   onPress(): void;
 }
 
+export const LoadingComponent: React.FC<{ loading: boolean }> = ({ loading }) => (
+  <ActivityIndicator
+    animating={loading}
+    color={theme.activityIndicator.color}
+  />
+)
+
 export const ThemedButton: React.FC<ButtonProps> = ({
   onPress,
   buttonText,
@@ -109,7 +116,7 @@ export const ThemedButton: React.FC<ButtonProps> = ({
     <MyButtonText>
       {buttonText}
     </MyButtonText>
-    {loading && <ActivityIndicator animating={loading} />}
+    {loading && <LoadingComponent loading={loading} />}
   </MyButton>
 );
 

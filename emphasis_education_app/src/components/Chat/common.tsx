@@ -1,12 +1,13 @@
 import * as React from 'react';
-import { ActivityIndicator, View } from 'react-native'
+import { View } from 'react-native'
 import styled from 'styled-components';
 
 import {
-  GeneralSpacing,
-  ThemedText,
-  IconRow,
   FONT_STYLES,
+  GeneralSpacing,
+  IconRow,
+  LoadingComponent,
+  ThemedText,
 } from '../shared';
 
 const EmptyChatWrapper: React.FC = ({ children }) => (
@@ -40,7 +41,7 @@ export const LoadingScreen: React.FC<{ loading: boolean }> = ({ loading }) => (
     >
       the chat is deleting
     </ThemedText>
-    <ActivityIndicator animating={loading} />
+    <LoadingComponent loading={loading} />
   </View>
 )
 

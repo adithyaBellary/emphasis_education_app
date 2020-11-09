@@ -3,23 +3,20 @@ import { useMutation } from '@apollo/client';
 import {
   Actions,
   ActionsProps,
-  GiftedChat,
   Bubble,
   BubbleProps,
+  Composer,
+  ComposerProps,
+  GiftedChat,
   InputToolbar,
   InputToolbarProps,
-  Composer,
   IMessage,
-  ComposerProps
 } from 'react-native-gifted-chat';
 import {
-  ActivityIndicator,
-  Text,
-  View,
+  Alert,
   Image,
   TouchableHighlight,
-  Alert,
-  KeyboardAvoidingView
+  View,
 } from 'react-native';
 import { Icon } from 'react-native-elements';
 import ImagePicker from 'react-native-image-picker';
@@ -27,6 +24,8 @@ import ImagePicker from 'react-native-image-picker';
 import { SEND_MESSAGE } from '../../queries/SendMessage';
 import { MessageType, MessageUser } from '../../../types/schema-types';
 import { theme } from '../../theme';
+import { LoadingComponent } from '../shared'
+
 import { EmptyChat } from './common';
 
 interface GiftedChatProps {
@@ -46,18 +45,22 @@ interface MessagePayload {
   sendMessage: MessageReceivedProps;
 }
 
+const right = {
+  color: 'yellow',
+  fontFamily: 'Nunito'
+}
+
+const left = {
+  fontFamily: 'Nunito'
+}
+
 const renderBubble = (props: BubbleProps<IMessage>) => (
 
   <Bubble
     {...props}
     textStyle={{
-      right: {
-        color: 'yellow',
-        fontFamily: 'Nunito'
-      },
-      left: {
-        fontFamily: 'Nunito'
-      }
+      right,
+      left
     }}
     wrapperStyle={{
       left: {
@@ -216,7 +219,7 @@ const MyGiftedChat: React.FC<GiftedChatProps> = ({
 
   return (
     <GiftedChat
-      renderLoading={() => <ActivityIndicator animating={true} />}
+      renderLoading={() => <LoadingComponent loading={true} />}
       listViewProps={
         {
           refreshing: queryLoading,
