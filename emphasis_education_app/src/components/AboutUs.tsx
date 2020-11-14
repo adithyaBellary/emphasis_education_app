@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Alert } from 'react-native';
 import { useQuery, useMutation } from '@apollo/client'
 
 import { SEARCH_CLASSES } from '../queries/SearchClasses'
@@ -94,13 +95,15 @@ const AboutUs: React.FC = () => {
         onChangeText={text => setMessage(text)}
         placeholder='Anything that you would like to see? Let us know!'
       />
-      <ThemedButton
-        block={true}
-        buttonText='Send email'
-        loading={emailLoading}
-        onPress={() => sendEmail()}
-        disabled={message.length === 0}
-      />
+      <GeneralSpacing u={10} r={0} l={0} d={10}>
+        <ThemedButton
+          block={true}
+          buttonText='Send email'
+          loading={emailLoading}
+          onPress={() => sendEmail()}
+          disabled={message.length === 0}
+        />
+      </GeneralSpacing>
     </Contain>
   )
 };

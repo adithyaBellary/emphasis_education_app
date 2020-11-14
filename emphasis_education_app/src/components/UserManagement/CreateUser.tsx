@@ -38,15 +38,15 @@ const CreateUser: React.FC<CreateUser> = props => {
   const [numUser, setNumUser] = React.useState<number>(1)
 
   const [curState, setState] = useState<IUserInput>({
-    firstName: 'test',
-    lastName: 'name',
-    email: 'test01@gmail.com',
-    password: 'test01',
-    confirmPassword: 'test01',
-    phoneNumber: '222-222-2222',
-    userType: Permission.Student,
-    gender: 'Male',
-    dob: '22/22/2222'
+    // firstName: 'test',
+    // lastName: 'name',
+    // email: 'test01@gmail.com',
+    // password: 'test01',
+    // confirmPassword: 'test01',
+    // phoneNumber: '222-222-2222',
+    // userType: Permission.Student,
+    // gender: 'Male',
+    // dob: '22/22/2222'
   } as IUserInput);
 
   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
