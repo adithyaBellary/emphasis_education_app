@@ -29,8 +29,8 @@ const EmptyData: IUserInput = {
   password: '',
   confirmPassword: '',
   phoneNumber: '',
-  userType: Permission.Student,
-  gender: '',
+  userType: undefined,
+  // gender: '',
   dob: ''
 }
 
@@ -131,11 +131,13 @@ const CreateUser: React.FC<CreateUser> = props => {
         <ThemedTextInput
           placeholder='Password'
           value={curState.password}
+          secure={true}
           onChangeText={handleTextChange('password')}
         />
         <ThemedTextInput
           placeholder='Confirm Password'
           value={curState.confirmPassword}
+          secure={true}
           onChangeText={handleTextChange('confirmPassword')}
         />
         <ThemedNumberInput

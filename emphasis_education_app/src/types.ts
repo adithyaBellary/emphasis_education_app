@@ -12,8 +12,8 @@ export interface IUserInput {
   password: string;
   confirmPassword: string;
   phoneNumber: string;
-  userType: Permission;
-  gender: string;
+  userType?: Permission;
+  // gender: string;
   dob: string;
 }
 
@@ -24,7 +24,7 @@ export interface IUsableUserInfo {
   password: string;
   phoneNumber: string;
   userType: Permission;
-  gender: string;
+  // gender: string;
   dob: string;
 }
 
@@ -50,7 +50,7 @@ export interface IUser {
   chatIDs?: string[];
   classes?: Class[];
   _id: string;
-  gender: string;
+  // gender: string;
   adminChat: AdminChat[]
   dob: string;
 }

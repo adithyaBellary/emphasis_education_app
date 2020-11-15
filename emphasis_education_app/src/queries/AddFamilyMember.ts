@@ -10,7 +10,7 @@ export const ADD_FAMILY_MEMBER = gql`
         lastName
         email
         phoneNumber
-        gender
+        # gender
         userType
         classes {
           className

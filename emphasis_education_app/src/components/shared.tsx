@@ -37,6 +37,7 @@ export const InputContain = styled(View)`
 interface ThemedInputProps {
   placeholder: string;
   value?: string;
+  secure?: boolean;
   onChangeText(t: string): void;
 }
 
@@ -44,6 +45,7 @@ export const ThemedTextInput: React.FC<ThemedInputProps> = props => (
   <InputContain>
     <MytextInput
       {...props}
+      secureTextEntry={props.secure}
     />
   </InputContain>
 )
@@ -173,7 +175,7 @@ const RadioButtonSelect: React.FC<RadioButtonSelectProps> = ({ title, selectedEl
   <RadioButtonOuter
     onPress={() => setSelectedElement(title)}
   >
-    {title === selectedElement && <RadioButtonInner />}
+    {(title === selectedElement) && <RadioButtonInner />}
   </RadioButtonOuter>
 )
 
