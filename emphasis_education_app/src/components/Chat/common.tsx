@@ -11,27 +11,28 @@ import {
 } from '../shared';
 
 const EmptyChatWrapper: React.FC = ({ children }) => (
-  // <View style={{ alignItems: 'center', transform: [{ scaleY: -1}] }}>
-  <View style={{ alignItems: 'center' }}>
     <GeneralSpacing u={10} r={10} d={10} l={10}>
       <ThemedText size={16} type={FONT_STYLES.LIGHT}>
         {children}
       </ThemedText>
     </GeneralSpacing>
-  </View>
 );
 
 export const EmptyChatPicker: React.FC = () => (
+  <View style={{ alignItems: 'center' }}>
   <EmptyChatWrapper>
     You are currently not added to any Chats.
     Please reach out to either Shweta or Sakthi to be added to one.
   </EmptyChatWrapper>
+  </View>
 );
 
 export const EmptyChat: React.FC = () => (
-  <EmptyChatWrapper>
-    This is the beginning of your conversation. Let's talk!
-  </EmptyChatWrapper>
+  <View style={{ alignItems: 'center', transform: [{ scaleY: -1}] }}>
+    <EmptyChatWrapper>
+      This is the beginning of your conversation. Let's talk!
+    </EmptyChatWrapper>
+  </View>
 );
 
 export const LoadingScreen: React.FC<{ loading: boolean }> = ({ loading }) => (
