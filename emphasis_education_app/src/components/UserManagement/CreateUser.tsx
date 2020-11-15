@@ -152,12 +152,8 @@ const CreateUser: React.FC<CreateUser> = props => {
           onChangeText={number => handleDOBInput(number)}
           maxLength={10}
         />
-        {/* <RadioButtonGroup
-          titles={['Male', 'Female']}
-          onSelect={handleTextChange('gender')}
-        /> */}
         <RadioButtonGroup
-          titles={[Permission.Parent, Permission.Student, Permission.Tutor]}
+          titles={[Permission.Guardian, Permission.Student, Permission.Tutor]}
           onSelect={handleTextChange('userType')}
         />
       </CenteredDiv>

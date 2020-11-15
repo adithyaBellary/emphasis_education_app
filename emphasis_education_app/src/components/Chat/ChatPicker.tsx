@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {
   View,
+  Text,
   SafeAreaView,
 } from 'react-native';
 import { Icon } from 'react-native-elements';
@@ -130,11 +131,14 @@ const ChatPicker: React.FC<ChatPickerProps> = ({ navigation }) => {
       </CenteredDiv>
     )
   }
+  if (!loggedUser.classes) {
+    return  <EmptyChatPicker />
+  }
   return (
     <SafeAreaView>
       <ChatsContain>
         {
-          loggedUser.classes ? loggedUser.classes.map(_class => (
+          loggedUser.classes && loggedUser.classes.map(_class => (
             <IndividualChat
               chatID={_class.chatID}
               userType={loggedUser.userType}
@@ -145,7 +149,7 @@ const ChatPicker: React.FC<ChatPickerProps> = ({ navigation }) => {
               displayNotificationBadge={!!notifications[_class.chatID]}
               clearNotificationCounter={clearNotificationCounter}
             />
-          )) : <EmptyChatPicker />
+          ))
         }
       </ChatsContain>
     </SafeAreaView>

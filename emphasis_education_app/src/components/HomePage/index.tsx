@@ -84,7 +84,7 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
 
             <PermissionedComponent allowedPermissions={[
               Permission.Student,
-              Permission.Parent,
+              Permission.Guardian,
               Permission.Tutor
             ]}>
               <CenteredDiv>

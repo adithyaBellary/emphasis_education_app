@@ -11,7 +11,8 @@ import {
 } from '../shared';
 
 const EmptyChatWrapper: React.FC = ({ children }) => (
-  <View style={{ alignItems: 'center', transform: [{ scaleY: -1}] }}>
+  // <View style={{ alignItems: 'center', transform: [{ scaleY: -1}] }}>
+  <View style={{ alignItems: 'center' }}>
     <GeneralSpacing u={10} r={10} d={10} l={10}>
       <ThemedText size={16} type={FONT_STYLES.LIGHT}>
         {children}

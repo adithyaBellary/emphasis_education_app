@@ -99,7 +99,7 @@ export interface ICreateChatPayload {
 export enum Permission {
   Student = 'Student',
   // need to distinguish the parents
-  Parent = 'Guardian',
+  Guardian = 'Guardian',
   Tutor = 'Tutor',
   Admin = 'Admin'
 }
