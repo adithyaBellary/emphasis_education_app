@@ -10,7 +10,7 @@ import { Icon, Input } from 'react-native-elements';
 
 import { ChatUserInfo, Permission } from '../../types';
 import { SEARCH_USERS } from '../../queries/SearchUsers'
-import { UserInfoType } from '../../../types/schema-types';
+import { UserInfoType, Chat } from '../../../types/schema-types';
 import {
   ContentContain,
   FONT_STYLES,
@@ -22,6 +22,7 @@ import {
 } from '../shared';
 import { ADD_CHAT_MEMBER } from '../../queries/AddChatMember';
 import { IndividualResultContainer } from '../AdminPage/IndividualResult';
+import { GeneralContext } from '../Context/Context';
 
 interface CancelProps {
   onPress (): void;
@@ -57,9 +58,10 @@ const Done: React.FC<DoneProps> = ({ onPress, loading }) => (
 )
 
 const SearchResults: React.FC<{
+  email: string,
   results: UserInfoType[],
   addMember(email: string): () => void
-}> = ({ results, addMember }) => (
+}> = ({ email, results, addMember }) => (
   <View>
     {
       results.map(_result => (
@@ -71,7 +73,7 @@ const SearchResults: React.FC<{
             {_result.firstName} {_result.lastName}
           </ThemedText>
           <Icon
-            name='pluscircleo'
+            name={_result.email === email ? 'checkcircle' : 'pluscircleo'}
             type='antdesign'
             onPress={addMember(_result.email)}
           />
@@ -85,6 +87,32 @@ interface ChatInfoProps {
   route: any;
 }
 
+const checkEmail = (classes: Chat[] | undefined | null, email: string, chatID: string ): boolean => {
+  if (!classes) {
+    return false;
+  }
+
+  const curChat = classes.find(c => c.chatID === chatID);
+  if (!curChat) {
+    return false;
+  }
+  // check tutorInfo
+  if (curChat.tutorInfo.email === email) {
+    return false;
+  }
+
+  let present = true
+  curChat.userInfo.forEach(_userInfo => {
+    if(_userInfo.email === email) {
+      present = false;
+    }
+  })
+  // check userInfo
+
+  return present
+
+}
+
 const ChatInfo: React.FC<ChatInfoProps> = ({ navigation, route }) => {
   const className: string = route.params.className;
   const tutorInfo: ChatUserInfo = route.params.tutorInfo;
@@ -93,7 +121,8 @@ const ChatInfo: React.FC<ChatInfoProps> = ({ navigation, route }) => {
 
   const [click, setClick] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState('');
-
+  const [stateEmail, setStateEmail] = React.useState<string | null>(null);
+  const { loggedUser } = React.useContext(GeneralContext);
 
   const [runQuery, { data, loading, error }] = useLazyQuery<{ searchUsers: UserInfoType[] }>(SEARCH_USERS)
   const [runMutation, {data: dataMutation, loading: loadingMutation}] = useMutation(ADD_CHAT_MEMBER);
@@ -105,27 +134,41 @@ const ChatInfo: React.FC<ChatInfoProps> = ({ navigation, route }) => {
     runQuery({ variables: {searchTerm}})
   }, [searchTerm])
 
-  const addMember = (email: string) => () => {
-    console.log('params', email, chatID)
+  const selectMember = (email: string) => () => {
+    // let us check to make sure that the same user cannot be added 2x
+    // get the chat object from the tutor
+    console.log(loggedUser.classes)
+    if (!checkEmail(loggedUser.classes, email, chatID)) {
+      Alert.alert('you cannot select a user that is already added to this chat')
+      // console.log('check failed')
+      return
+    }
+    if (stateEmail === email) {
+      setStateEmail(null)
+    }
+    setStateEmail(email)
+  }
+
+  const addMember = () => {
     runMutation({ variables: {
-      email,
-      chatID
-    }})
-    .then(res => {
-      console.log('res after adding member, ', res)
-      Alert.alert('Successfully added the user to the chat')
-      navigation.goBack();
-    })
-    .catch(e => {
-      console.log('there was an error running the mutation', e)
-    })
+        email: stateEmail,
+        chatID
+      }})
+      .then(res => {
+        console.log('res after adding member, ', res)
+        Alert.alert('Successfully added the user to the chat')
+        navigation.goBack();
+      })
+      .catch(e => {
+        console.log('there was an error running the mutation', e)
+      })
   }
 
   return (
     <SafeAreaView>
       <IndividualResultContainer>
         <Cancel onPress={() => navigation.goBack()} />
-        <Done onPress={() => console.log('clicked')} loading={loadingMutation} />
+        <Done onPress={() => addMember()} loading={loadingMutation} />
 
       </IndividualResultContainer>
       <ContentContain>
@@ -170,8 +213,9 @@ const ChatInfo: React.FC<ChatInfoProps> = ({ navigation, route }) => {
               />
               { loading ? <LoadingComponent loading={loading} /> : (
                   <SearchResults
+                    email={stateEmail!}
                     results={data ? data.searchUsers : []}
-                    addMember={addMember}
+                    addMember={selectMember}
                   />
               )}
             </>

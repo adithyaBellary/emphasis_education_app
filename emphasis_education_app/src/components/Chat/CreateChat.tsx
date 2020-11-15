@@ -23,6 +23,7 @@ import {
   IconRow,
   LoadingComponent,
   ThemedText,
+  HorizontalDivider,
 } from '../shared';
 
 interface CreateChatProps {
@@ -221,6 +222,7 @@ const CreateChat: React.FC<CreateChatProps> = ({ navigation }) => {
             )
           }) : null
         )}
+        <HorizontalDivider width={100} color={'grey'}/>
         { classLoading ? <LoadingComponent loading={classLoading} /> : (
           classData ? classData.searchClasses.classes.map(c => (
             <TouchableOpacity
