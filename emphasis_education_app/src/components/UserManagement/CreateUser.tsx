@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { ScrollView } from 'react-native'
+import { ScrollView, View } from 'react-native'
+import { Input } from 'react-native-elements';
 
 import { IUserInput, Permission } from '../../types';
 import {
@@ -36,9 +37,7 @@ const EmptyData: IUserInput = {
 
 const CreateUser: React.FC<CreateUser> = props => {
   const [numUser, setNumUser] = React.useState<number>(1)
-
-  const [curState, setState] = useState<IUserInput>({
-    // firstName: 'test',
+  // firstName: 'test',
     // lastName: 'name',
     // email: 'test01@gmail.com',
     // password: 'test01',
@@ -47,7 +46,8 @@ const CreateUser: React.FC<CreateUser> = props => {
     // userType: Permission.Student,
     // gender: 'Male',
     // dob: '22/22/2222'
-  } as IUserInput);
+
+  const [curState, setState] = useState<IUserInput>({} as IUserInput);
 
   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -113,43 +113,103 @@ const CreateUser: React.FC<CreateUser> = props => {
     <ScrollView>
       <CenteredDiv>
         <ThemedText size={14} type={FONT_STYLES.MAIN}>Family Member Number {numUser}</ThemedText>
-        <ThemedTextInput
+        {/* <ThemedTextInput
           placeholder='First Name'
           value={curState.firstName}
           onChangeText={handleTextChange('firstName')}
+        /> */}
+        <Input
+          placeholder='First Name'
+          onChangeText={handleTextChange('firstName')}
+          containerStyle={{
+            width: '95%'
+          }}
+          value={curState.firstName}
         />
-        <ThemedTextInput
+        <Input
           placeholder='Last Name'
+          containerStyle={{
+            width: '95%',
+          }}
           value={curState.lastName}
           onChangeText={handleTextChange('lastName')}
         />
-        <ThemedTextInput
+        {/* <ThemedTextInput
+          placeholder='Last Name'
+          value={curState.lastName}
+          onChangeText={handleTextChange('lastName')}
+        /> */}
+        {/* <ThemedTextInput
           placeholder='Email'
+          value={curState.email}
+          onChangeText={handleTextChange('lastName')}
+        /> */}
+        <Input
+          placeholder='Email'
+          containerStyle={{
+            width: '95%',
+          }}
           value={curState.email}
           onChangeText={handleTextChange('email')}
         />
-        <ThemedTextInput
+        {/* <ThemedTextInput
           placeholder='Password'
           value={curState.password}
           secure={true}
           onChangeText={handleTextChange('password')}
+        /> */}
+        <Input
+          placeholder='Password'
+          containerStyle={{
+            width: '95%',
+          }}
+          secureTextEntry={true}
+          value={curState.password}
+          onChangeText={handleTextChange('password')}
         />
-        <ThemedTextInput
+        {/* <ThemedTextInput
           placeholder='Confirm Password'
           value={curState.confirmPassword}
           secure={true}
           onChangeText={handleTextChange('confirmPassword')}
+        /> */}
+        <Input
+          placeholder='Confirm Password'
+          containerStyle={{
+            width: '95%',
+          }}
+          secureTextEntry={true}
+          value={curState.confirmPassword}
+          onChangeText={handleTextChange('confirmPassword')}
         />
-        <ThemedNumberInput
+        {/* <ThemedNumberInput
           placeholder='Enter Phone Number (###) ###-####'
           value={curState.phoneNumber}
           onChangeText={number => handlePhoneNumberInput(number)}
           maxLength={12}
+        /> */}
+        <Input
+          placeholder='Enter Phone Number (###) ###-####'
+          containerStyle={{
+            width: '95%',
+          }}
+          onChangeText={number => handlePhoneNumberInput(number)}
+          value={curState.phoneNumber}
+          maxLength={12}
         />
-        <ThemedNumberInput
+        {/* <ThemedNumberInput
           placeholder='Enter DOB MM/DD/YYYY'
           value={curState.dob}
           onChangeText={number => handleDOBInput(number)}
+          maxLength={10}
+        /> */}
+        <Input
+          placeholder='Enter DOB MM/DD/YYYY'
+          containerStyle={{
+            width: '95%',
+          }}
+          onChangeText={number => handleDOBInput(number)}
+          value={curState.dob}
           maxLength={10}
         />
         <RadioButtonGroup

@@ -16,9 +16,9 @@ import { MAX_WIDTH, MAX_HEIGHT } from '../constant';
 import { GeneralContext } from './Context/Context';
 
 export const MytextInput = styled(TextInput)`
-  padding: 10px 0;
   fontFamily: ${({ theme }) => theme.font.main};
   fontSize: 18px;
+  padding: 10px 0;
 `;
 
 export const LoginInput = styled(TextInput)`
