@@ -19,7 +19,7 @@ const IndividualItem: React.FC<IUserInput & {id: number}> = ({
   phoneNumber,
   userType,
   id,
-  gender,
+  // gender,
   dob
 }) => (
   <View>

@@ -116,16 +116,16 @@ const Profile: React.FC<ProfileProps> = ({ family, editing, currentUserID, onPre
       if (userType === Permission.Student) {
         return 'Sibling'
       }
-      if (userType === Permission.Parent) {
+      if (userType === Permission.Guardian) {
         return 'Guardian'
       }
     }
     if (currentUser) {
-      if (currentUser.userType === Permission.Parent) {
+      if (currentUser.userType === Permission.Guardian) {
         if (userType === Permission.Student) {
           return 'Child'
         }
-        if (userType === Permission.Parent) {
+        if (userType === Permission.Guardian) {
           return 'Significant Other'
         }
       }
@@ -239,7 +239,6 @@ const Profile: React.FC<ProfileProps> = ({ family, editing, currentUserID, onPre
                   label='Relationship'
                   labelSize={14}
                 />
-
                 {user.classes && (
                   <>
                     <HorizontalDivider width={100} color={theme.colors.lightPink}/>

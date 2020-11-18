@@ -16,9 +16,9 @@ import { MAX_WIDTH, MAX_HEIGHT } from '../constant';
 import { GeneralContext } from './Context/Context';
 
 export const MytextInput = styled(TextInput)`
-  padding: 10px 0;
   fontFamily: ${({ theme }) => theme.font.main};
   fontSize: 18px;
+  padding: 10px 0;
 `;
 
 export const LoginInput = styled(TextInput)`
@@ -37,6 +37,7 @@ export const InputContain = styled(View)`
 interface ThemedInputProps {
   placeholder: string;
   value?: string;
+  secure?: boolean;
   onChangeText(t: string): void;
 }
 
@@ -44,6 +45,7 @@ export const ThemedTextInput: React.FC<ThemedInputProps> = props => (
   <InputContain>
     <MytextInput
       {...props}
+      secureTextEntry={props.secure}
     />
   </InputContain>
 )
@@ -173,7 +175,7 @@ const RadioButtonSelect: React.FC<RadioButtonSelectProps> = ({ title, selectedEl
   <RadioButtonOuter
     onPress={() => setSelectedElement(title)}
   >
-    {title === selectedElement && <RadioButtonInner />}
+    {(title === selectedElement) && <RadioButtonInner />}
   </RadioButtonOuter>
 )
 
@@ -221,6 +223,8 @@ interface RadioButtonGroupProps {
 
 export const RadioButtonGroup: React.FC<RadioButtonGroupProps> = ({ titles, onSelect }) => {
   // this is the conponent that should hold state over the individual radio buttons
+
+  console.log('radio button titles', titles);
   const [selectedElement, setSelectedElement] = React.useState('');
   const selectElement = (el: string) => {
     setSelectedElement(el);

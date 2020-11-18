@@ -11,43 +11,73 @@ export type Scalars = {
   Upload: any;
 };
 
-export type AddClassPayload = {
-  __typename?: 'addClassPayload';
-  res: Scalars['Boolean'];
-  message: Scalars['String'];
-};
-
-export type AddFamilyMemberPayload = {
-  __typename?: 'AddFamilyMemberPayload';
-  res: Scalars['Boolean'];
-  family: Array<UserInfoType>;
-};
-
-export type AdminChat = {
-  __typename?: 'AdminChat';
+export type MessageInput = {
+  id: Scalars['String'];
+  text: Scalars['String'];
+  user: MessageUserInput;
   chatID: Scalars['String'];
-  user: AdminChatUser;
+  image?: Maybe<Scalars['String']>;
 };
 
-export type AdminChatUser = {
-  __typename?: 'AdminChatUser';
-  firstName: Scalars['String'];
-  lastName: Scalars['String'];
+export type MessageUserInput = {
+  name: Scalars['String'];
+  email: Scalars['String'];
+  _id: Scalars['String'];
+};
+
+export type MessagePayload = {
+  __typename?: 'MessagePayload';
+  text: Scalars['String'];
+  MessageId: Scalars['Int'];
+  createdAt: Scalars['String'];
+  user: MessageUser;
+  image?: Maybe<Scalars['String']>;
+};
+
+export type MessageUser = {
+  __typename?: 'MessageUser';
+  _id: Scalars['String'];
+  name: Scalars['String'];
   email: Scalars['String'];
 };
 
-export enum CacheControlScope {
-  Public = 'PUBLIC',
-  Private = 'PRIVATE'
+export type MessageType = {
+  __typename?: 'MessageType';
+  _id: Scalars['String'];
+  text: Scalars['String'];
+  createdAt: Scalars['String'];
+  user: MessageUser;
+  image: Scalars['String'];
+  chatID: Scalars['String'];
+};
+
+export enum Permission {
+  Student = 'Student',
+  Guardian = 'Guardian',
+  Tutor = 'Tutor',
+  Admin = 'Admin'
 }
 
-export type Chat = {
-  __typename?: 'Chat';
-  displayName: Scalars['String'];
-  className: Scalars['String'];
-  userInfo: Array<ChatUserInfo>;
-  tutorInfo: ChatUserInfo;
-  chatID: Scalars['String'];
+export enum Classes {
+  Math = 'Math',
+  Science = 'Science',
+  History = 'History'
+}
+
+export type LoginPayload = {
+  __typename?: 'LoginPayload';
+  res: Scalars['Boolean'];
+  user?: Maybe<UserInfoType>;
+};
+
+export type UserInputType = {
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  email: Scalars['String'];
+  password: Scalars['String'];
+  userType: Permission;
+  phoneNumber: Scalars['String'];
+  dob: Scalars['String'];
 };
 
 export type ChatInput = {
@@ -56,6 +86,39 @@ export type ChatInput = {
   userEmails?: Maybe<Array<Maybe<Scalars['String']>>>;
   tutorEmail?: Maybe<Scalars['String']>;
   chatID?: Maybe<Scalars['String']>;
+};
+
+export type UserInfoTypeInput = {
+  name: Scalars['String'];
+  email: Scalars['String'];
+  phoneNumber: Scalars['String'];
+  userType: Permission;
+  _id: Scalars['String'];
+  chatIDs?: Maybe<Array<Maybe<Scalars['String']>>>;
+  classes?: Maybe<Array<Maybe<ChatInput>>>;
+  groupID: Scalars['String'];
+};
+
+export type UserAdditionalInfo = {
+  __typename?: 'UserAdditionalInfo';
+  dob?: Maybe<Scalars['String']>;
+  year?: Maybe<Scalars['Int']>;
+  schoolName?: Maybe<Scalars['String']>;
+};
+
+export type UserInfoType = {
+  __typename?: 'UserInfoType';
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  email: Scalars['String'];
+  phoneNumber: Scalars['String'];
+  userType: Permission;
+  _id: Scalars['String'];
+  chatIDs: Array<Maybe<Scalars['String']>>;
+  classes?: Maybe<Array<Chat>>;
+  groupID: Scalars['String'];
+  adminChat?: Maybe<Array<AdminChat>>;
+  dob: Scalars['String'];
 };
 
 export type ChatUserInfo = {
@@ -71,21 +134,42 @@ export type ChatUserInfoInput = {
   email: Scalars['String'];
 };
 
-export enum Classes {
-  Math = 'Math',
-  Science = 'Science',
-  History = 'History'
-}
+export type Chat = {
+  __typename?: 'Chat';
+  displayName: Scalars['String'];
+  className: Scalars['String'];
+  userInfo: Array<ChatUserInfo>;
+  tutorInfo: ChatUserInfo;
+  chatID: Scalars['String'];
+};
+
+export type AdminChatUser = {
+  __typename?: 'AdminChatUser';
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  email: Scalars['String'];
+};
+
+export type AdminChat = {
+  __typename?: 'AdminChat';
+  chatID: Scalars['String'];
+  user: AdminChatUser;
+};
 
 export type ClassName = {
   __typename?: 'ClassName';
   name: Scalars['String'];
 };
 
-export type CreateCodePayload = {
-  __typename?: 'createCodePayload';
+export type AddClassPayload = {
+  __typename?: 'addClassPayload';
   res: Scalars['Boolean'];
-  code: Scalars['String'];
+  message: Scalars['String'];
+};
+
+export type SearchClassesPayload = {
+  __typename?: 'searchClassesPayload';
+  classes: Array<Maybe<Scalars['String']>>;
 };
 
 export type DeleteClassPayload = {
@@ -94,56 +178,70 @@ export type DeleteClassPayload = {
   message: Scalars['String'];
 };
 
+export type SendMessagePayload = {
+  __typename?: 'SendMessagePayload';
+  res: Scalars['Boolean'];
+};
+
+export type CreateCodePayload = {
+  __typename?: 'createCodePayload';
+  res: Scalars['Boolean'];
+  code: Scalars['String'];
+};
+
 export type GenericResponse = {
   __typename?: 'genericResponse';
   res: Scalars['Boolean'];
   message?: Maybe<Scalars['String']>;
 };
 
-export type LoginPayload = {
-  __typename?: 'LoginPayload';
+export type AddFamilyMemberPayload = {
+  __typename?: 'AddFamilyMemberPayload';
   res: Scalars['Boolean'];
-  user?: Maybe<UserInfoType>;
+  family: Array<UserInfoType>;
 };
 
-export type MessageInput = {
-  id: Scalars['String'];
-  text: Scalars['String'];
-  user: MessageUserInput;
+export type Query = {
+  __typename?: 'Query';
+  getMessages?: Maybe<Array<Maybe<MessageType>>>;
+  getFamily?: Maybe<Array<Maybe<UserInfoType>>>;
+  searchUsers: Array<Maybe<UserInfoType>>;
+  searchClasses: SearchClassesPayload;
+  getUser: UserInfoType;
+  checkCode: GenericResponse;
+};
+
+
+export type QueryGetMessagesArgs = {
   chatID: Scalars['String'];
-  image?: Maybe<Scalars['String']>;
+  userID: Scalars['String'];
+  refresh?: Maybe<Scalars['Boolean']>;
 };
 
-export type MessagePayload = {
-  __typename?: 'MessagePayload';
-  text: Scalars['String'];
-  MessageId: Scalars['Int'];
-  createdAt: Scalars['String'];
-  user: MessageUser;
-  image?: Maybe<Scalars['String']>;
+
+export type QueryGetFamilyArgs = {
+  groupID: Scalars['String'];
 };
 
-export type MessageType = {
-  __typename?: 'MessageType';
-  _id: Scalars['String'];
-  text: Scalars['String'];
-  createdAt: Scalars['String'];
-  user: MessageUser;
-  image: Scalars['String'];
-  chatID: Scalars['String'];
+
+export type QuerySearchUsersArgs = {
+  searchTerm: Scalars['String'];
 };
 
-export type MessageUser = {
-  __typename?: 'MessageUser';
-  _id: Scalars['String'];
-  name: Scalars['String'];
+
+export type QuerySearchClassesArgs = {
+  searchTerm: Scalars['String'];
+};
+
+
+export type QueryGetUserArgs = {
+  userEmail: Scalars['String'];
+};
+
+
+export type QueryCheckCodeArgs = {
   email: Scalars['String'];
-};
-
-export type MessageUserInput = {
-  name: Scalars['String'];
-  email: Scalars['String'];
-  _id: Scalars['String'];
+  code: Scalars['String'];
 };
 
 export type Mutation = {
@@ -242,114 +340,13 @@ export type MutationUpdateUserArgs = {
   user: UserInfoTypeInput;
 };
 
-export enum Permission {
-  Student = 'Student',
-  Parent = 'Parent',
-  Tutor = 'Tutor',
-  Admin = 'Admin'
-}
-
-export type Query = {
-  __typename?: 'Query';
-  getMessages?: Maybe<Array<Maybe<MessageType>>>;
-  getFamily?: Maybe<Array<Maybe<UserInfoType>>>;
-  searchUsers: Array<Maybe<UserInfoType>>;
-  searchClasses: SearchClassesPayload;
-  getUser: UserInfoType;
-  checkCode: GenericResponse;
-};
-
-
-export type QueryGetMessagesArgs = {
-  chatID: Scalars['String'];
-  userID: Scalars['String'];
-  refresh?: Maybe<Scalars['Boolean']>;
-};
-
-
-export type QueryGetFamilyArgs = {
-  groupID: Scalars['String'];
-};
-
-
-export type QuerySearchUsersArgs = {
-  searchTerm: Scalars['String'];
-};
-
-
-export type QuerySearchClassesArgs = {
-  searchTerm: Scalars['String'];
-};
-
-
-export type QueryGetUserArgs = {
-  userEmail: Scalars['String'];
-};
-
-
-export type QueryCheckCodeArgs = {
-  email: Scalars['String'];
-  code: Scalars['String'];
-};
-
-export type SearchClassesPayload = {
-  __typename?: 'searchClassesPayload';
-  classes: Array<Maybe<Scalars['String']>>;
-};
-
-export type SendMessagePayload = {
-  __typename?: 'SendMessagePayload';
-  res: Scalars['Boolean'];
-};
-
 export type Subscription = {
   __typename?: 'Subscription';
   messageReceived: MessageType;
 };
 
+export enum CacheControlScope {
+  Public = 'PUBLIC',
+  Private = 'PRIVATE'
+}
 
-export type UserAdditionalInfo = {
-  __typename?: 'UserAdditionalInfo';
-  dob?: Maybe<Scalars['String']>;
-  year?: Maybe<Scalars['Int']>;
-  schoolName?: Maybe<Scalars['String']>;
-};
-
-export type UserInfoType = {
-  __typename?: 'UserInfoType';
-  firstName: Scalars['String'];
-  lastName: Scalars['String'];
-  email: Scalars['String'];
-  phoneNumber: Scalars['String'];
-  userType: Permission;
-  _id: Scalars['String'];
-  chatIDs: Array<Maybe<Scalars['String']>>;
-  classes?: Maybe<Array<Chat>>;
-  groupID: Scalars['String'];
-  gender: Scalars['String'];
-  adminChat?: Maybe<Array<AdminChat>>;
-  dob: Scalars['String'];
-};
-
-export type UserInfoTypeInput = {
-  name: Scalars['String'];
-  email: Scalars['String'];
-  phoneNumber: Scalars['String'];
-  userType: Permission;
-  _id: Scalars['String'];
-  chatIDs?: Maybe<Array<Maybe<Scalars['String']>>>;
-  classes?: Maybe<Array<Maybe<ChatInput>>>;
-  groupID: Scalars['String'];
-  gender: Scalars['String'];
-};
-
-export type UserInputType = {
-  firstName: Scalars['String'];
-  lastName: Scalars['String'];
-  email: Scalars['String'];
-  password: Scalars['String'];
-  userType: Permission;
-  phoneNumber: Scalars['String'];
-  gender?: Maybe<Scalars['String']>;
-  dob: Scalars['String'];
-};

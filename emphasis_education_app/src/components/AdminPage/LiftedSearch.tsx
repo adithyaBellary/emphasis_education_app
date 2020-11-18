@@ -21,6 +21,9 @@ const LiftedSearch: React.FC<LiftedSearchProps> = ({ navigation }) => {
     runQuery({variables: {searchTerm}})
   }, [searchTerm])
 
+  if (data) {
+    console.log('data', data.searchUsers)
+  }
   return (
     <GeneralSpacing u={20} r={15} d={20} l={15}>
       <Input
