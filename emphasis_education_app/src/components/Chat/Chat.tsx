@@ -174,8 +174,13 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
     ]})
   }, [getMessages])
 
+  // here i need to check the chatID of the message received to make sure that I am
+  // updating the correct chat UI.
   useEffect(() => {
-    if (!subData) { return }
+    if (
+      !subData ||
+      subData.messageReceived.chatID !== chatID
+    ) { return }
 
     let messages: IMessage[];
     let receivedMessage: IMessage = {

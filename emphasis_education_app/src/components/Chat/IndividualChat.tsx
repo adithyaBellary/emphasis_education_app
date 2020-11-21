@@ -187,11 +187,11 @@ const IndividualChat: React.FC<ndividualChatProps> = ({
       caption = classObject.className
       break
     case 'Admin':
-      // mainText = `${userFirstName.join(', ')}`
-      mainText = 'John, Samantha'
+      mainText = `${userFirstName.join(', ')}`
+      // mainText = 'John, Samantha'
       secondaryText = classObject.className
-      // caption = `${classObject.tutorInfo.firstName} ${classObject.tutorInfo.lastName}`
-      caption = 'Taught by Peter'
+      caption = `${classObject.tutorInfo.firstName} ${classObject.tutorInfo.lastName}`
+      // caption = 'Taught by Peter'
       break;
     default:
       break;

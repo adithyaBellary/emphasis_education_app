@@ -1,9 +1,11 @@
 import * as React from 'react';
+import styled from 'styled-components';
 import {
   Button,
   Alert,
   TouchableOpacity,
-  View
+  View,
+  ScrollView
 } from 'react-native';
 import {
   Input, Icon
@@ -13,7 +15,14 @@ import { useLazyQuery, useMutation } from '@apollo/client';
 import { SEARCH_CLASSES } from '../../queries/SearchClasses';
 import { SEARCH_USERS } from '../../queries/SearchUsers';
 import { CREATE_CHAT } from '../../queries/CreateChat';
-import { ISearchInput, ISearchClassesPayload, ISearchUserPayload, ICreateChatInput, ICreateChatPayload, Permission } from '../../types';
+import {
+  ISearchInput,
+  ISearchClassesPayload,
+  ISearchUserPayload,
+  ICreateChatInput,
+  ICreateChatPayload,
+  Permission
+} from '../../types';
 import { IndividualResultContainer } from '../AdminPage/IndividualResult';
 
 import { ChatUserInfo } from '../../types';
@@ -39,6 +48,11 @@ const ChatText: React.FC = ({ children }) => (
     {children}
   </ThemedText>
 )
+
+const SearchResultsContain = styled(ScrollView)`
+  padding: 0 20px;
+  margin-bottom: 50px;
+`
 
 // what if we just sent the email and name
 interface SelectedUsersProps {
@@ -91,7 +105,8 @@ const CreateChat: React.FC<CreateChatProps> = ({ navigation }) => {
           {loadingCreateChat && <LoadingComponent loading={loadingCreateChat} />}
         </IconRow>
       </GeneralSpacing>
-    )
+    ),
+    headerBackTitle: 'Chats'
   })
 
 
@@ -195,9 +210,11 @@ const CreateChat: React.FC<CreateChatProps> = ({ navigation }) => {
           />
         }
       />
-      <GeneralSpacing u={0} r={20} d={0} l={20}>
+      <GeneralSpacing u={0} r={20} d={10} l={20}>
         <ChatText>Selected Class: {selectedClasses}</ChatText>
         <ChatText>Selected Users: {selectedUsers.map(u => `${u.firstName}, `)} </ChatText>
+      </GeneralSpacing>
+      <SearchResultsContain>
         {/* let us display the results here so that we can easily have state over them */}
         { userLoading ? <LoadingComponent loading={userLoading} /> : (
           userData ? userData.searchUsers.map((u, index) => {
@@ -238,7 +255,7 @@ const CreateChat: React.FC<CreateChatProps> = ({ navigation }) => {
             </TouchableOpacity>
           )) : null
         )}
-      </GeneralSpacing>
+      </SearchResultsContain>
     </>
   )
 }
