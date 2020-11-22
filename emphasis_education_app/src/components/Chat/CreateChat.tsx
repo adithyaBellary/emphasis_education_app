@@ -50,8 +50,10 @@ const ChatText: React.FC = ({ children }) => (
 )
 
 const SearchResultsContain = styled(ScrollView)`
-  padding: 0 20px;
-  margin-bottom: 50px;
+  margin: 0 20px 50px 20px;
+  border: solid grey 1px;
+  padding-left: 10px;
+  padding-right: 10px;
 `
 
 // what if we just sent the email and name

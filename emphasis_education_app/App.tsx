@@ -72,11 +72,11 @@ const wsClient = new SubscriptionClient(
   {
     reconnect: true,
     lazy: true,
-    connectionCallback: (error, result) => {
-      console.log('connectionCallback error', error)
-      console.log('connectionCallback result', result)
-      Sentry.captureMessage(`Subscription callback ${!!error} ${!!result}`)
-    },
+    // connectionCallback: (error, result) => {
+    //   console.log('connectionCallback error', error)
+    //   console.log('connectionCallback result', result)
+    //   Sentry.captureMessage(`Subscription callback ${!!error} ${!!result}`)
+    // },
     connectionParams: {
       authToken: '123'
     }
