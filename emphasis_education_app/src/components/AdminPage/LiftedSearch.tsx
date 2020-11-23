@@ -3,11 +3,11 @@ import { useLazyQuery } from '@apollo/client';
 import { Input, Icon } from 'react-native-elements';
 
 import SearchResults from './Presentational/SearchResults';
-import { ISearchInput } from '../../types';
 import { SEARCH_USERS } from '../../queries/SearchUsers';
 import { GeneralSpacing, LoadingComponent } from '../shared';
 
 import { UserInfoType } from 'types/schema-types';
+import { QuerySearchUsersArgs } from '../../../types/schema-types'
 
 interface LiftedSearchProps {
   navigation: any;
@@ -15,10 +15,10 @@ interface LiftedSearchProps {
 
 const LiftedSearch: React.FC<LiftedSearchProps> = ({ navigation }) => {
   const [searchTerm, setSearchTerm] = React.useState('');
-  const [runQuery, { data, loading }] = useLazyQuery<{ searchUsers: UserInfoType[] }, ISearchInput>(SEARCH_USERS)
+  const [runQuery, { data, loading }] = useLazyQuery<{ searchUsers: UserInfoType[] }, QuerySearchUsersArgs>(SEARCH_USERS)
   const handleTextChange = (text: string) => setSearchTerm(text)
   React.useEffect(() => {
-    runQuery({variables: {searchTerm}})
+    runQuery({variables: {searchTerm, includeAdmin: false}})
   }, [searchTerm])
 
   return (

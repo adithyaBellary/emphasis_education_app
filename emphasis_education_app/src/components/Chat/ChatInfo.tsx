@@ -23,6 +23,7 @@ import {
 import { ADD_CHAT_MEMBER } from '../../queries/AddChatMember';
 import { IndividualResultContainer } from '../AdminPage/common';
 import { GeneralContext } from '../Context/Context';
+import { QuerySearchUsersArgs } from '../../../types/schema-types'
 
 interface CancelProps {
   onPress (): void;
@@ -124,14 +125,14 @@ const ChatInfo: React.FC<ChatInfoProps> = ({ navigation, route }) => {
   const [stateEmail, setStateEmail] = React.useState<string | null>(null);
   const { loggedUser } = React.useContext(GeneralContext);
 
-  const [runQuery, { data, loading, error }] = useLazyQuery<{ searchUsers: UserInfoType[] }>(SEARCH_USERS)
+  const [runQuery, { data, loading, error }] = useLazyQuery<{ searchUsers: UserInfoType[] }, QuerySearchUsersArgs>(SEARCH_USERS)
   const [runMutation, {data: dataMutation, loading: loadingMutation}] = useMutation(ADD_CHAT_MEMBER);
   const onPress = () => setClick(click => !click)
 
   const searchChange = (term: string) => setSearchTerm(term)
 
   React.useEffect(() => {
-    runQuery({ variables: {searchTerm}})
+    runQuery({ variables: {searchTerm, includeAdmin: false}})
   }, [searchTerm])
 
   const selectMember = (email: string) => () => {

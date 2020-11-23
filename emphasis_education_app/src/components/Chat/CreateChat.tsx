@@ -34,6 +34,8 @@ import {
   ThemedText,
   HorizontalDivider,
 } from '../shared';
+import { SearchResultsContain } from '../Search/common';
+import { QuerySearchUsersArgs } from '../../../types/schema-types'
 
 interface CreateChatProps {
   navigation: any;
@@ -49,14 +51,6 @@ const ChatText: React.FC = ({ children }) => (
   </ThemedText>
 )
 
-const SearchResultsContain = styled(ScrollView)`
-  margin: 0 20px 50px 20px;
-  border: solid grey 1px;
-  padding-left: 10px;
-  padding-right: 10px;
-`
-
-// what if we just sent the email and name
 interface SelectedUsersProps {
   _id: string;
   email: string;
@@ -69,7 +63,7 @@ const CreateChat: React.FC<CreateChatProps> = ({ navigation }) => {
   const [classSearch, setClassSearch] = React.useState('')
   const [userSearch, setUserSearch] = React.useState('')
   const [runClassSearchQuery, {data: classData, loading: classLoading, error: classError}] = useLazyQuery<ISearchClassesPayload, ISearchInput>(SEARCH_CLASSES)
-  const [runUserSearchQuery, {data: userData, loading: userLoading, error: userError}] = useLazyQuery<ISearchUserPayload, ISearchInput>(SEARCH_USERS)
+  const [runUserSearchQuery, {data: userData, loading: userLoading, error: userError}] = useLazyQuery<ISearchUserPayload, QuerySearchUsersArgs>(SEARCH_USERS)
   const [selectedClasses, setSelectedClasses] = React.useState<string>('')
   const [selectedUsers, setSelectedUsers] = React.useState<SelectedUsersProps[]>([])
 
@@ -91,7 +85,12 @@ const CreateChat: React.FC<CreateChatProps> = ({ navigation }) => {
     runClassSearchQuery({variables: { searchTerm: classSearch }})
   }, [classSearch])
   React.useEffect(() => {
-    runUserSearchQuery({variables: { searchTerm: userSearch}})
+    runUserSearchQuery({
+      variables: {
+        searchTerm: userSearch,
+        includeAdmin: true
+      }
+    })
   }, [userSearch])
 
   navigation.setOptions({
@@ -112,18 +111,19 @@ const CreateChat: React.FC<CreateChatProps> = ({ navigation }) => {
 
 
   const createChat = () => {
-    console.log('creating a new chat with', selectedClasses, selectedUsers)
+    // console.log('creating a new chat with', selectedClasses, selectedUsers)
     try {
       let tutorEmail: string = '';
       let tutorFirstName: string = '';
       let tutorLastName: string = '';
-      const userInfo = selectedUsers.reduce<ChatUserInfo[]>((acc, cur) => {
-        if (cur.userType === Permission.Tutor) {
+
+      const userInfo: ChatUserInfo[] = selectedUsers.reduce<ChatUserInfo[]>((acc, cur) => {
+        if (cur.userType === Permission.Tutor || cur.userType === Permission.Admin) {
           if (!tutorEmail) {
             tutorEmail = cur.email
             tutorFirstName = cur.firstName
             tutorLastName = cur.lastName
-            console.log('setting', tutorEmail)
+            // console.log('setting', tutorEmail)
           }
           return acc
         } else {
@@ -142,8 +142,8 @@ const CreateChat: React.FC<CreateChatProps> = ({ navigation }) => {
         lastName: tutorLastName,
         email: tutorEmail
       }
-      console.log('tutor stuff', tutorInfo)
-      console.log('user stuff', userInfo)
+      // console.log('tutor stuff', tutorInfo)
+      // console.log('user stuff', userInfo)
       const variables: ICreateChatInput = {
         displayName: 'Test Display Name',
         className: selectedClasses,
@@ -155,7 +155,7 @@ const CreateChat: React.FC<CreateChatProps> = ({ navigation }) => {
         variables
       })
     } catch(e) {
-      console.log('error', e)
+      // console.log('error', e)
       Alert.alert('Error creating this Chat. Please make sure that you have selected at least 1 tutor, 1 student, and a class')
     }
   }
@@ -174,7 +174,6 @@ const CreateChat: React.FC<CreateChatProps> = ({ navigation }) => {
       }
     }, [] as SelectedUsersProps[])
     if (!present) { _newArray = [..._newArray, {_id: userID, userType, email: userEmail, firstName, lastName}] }
-    console.log('_newArray', _newArray)
     setSelectedUsers([..._newArray])
   }
 
@@ -192,7 +191,6 @@ const CreateChat: React.FC<CreateChatProps> = ({ navigation }) => {
 
   return (
     <>
-      {/* we will leave it two individual input components for now */}
       <Input
         placeholder='Select Class'
         onChangeText={onClassTextChange}

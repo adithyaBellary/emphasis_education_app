@@ -20,6 +20,7 @@ import {
 } from '../shared';
 import { GET_USER } from '../../queries/GetUser';
 import { Permission, ChatUserInfo, } from '../../types';
+import { UserInfoTypeInput } from '../../../types/schema-types';
 
 import { EmptyChatPicker } from './common';
 import IndividualChat from './IndividualChat';
@@ -39,7 +40,7 @@ const ChatPicker: React.FC<ChatPickerProps> = ({ navigation }) => {
   const { loggedUser, setUser, notifications, clearNotificationCounter } = React.useContext(GeneralContext);
   // console.log('notifications badge', notifications);
   // console.log('logged user in chat picker', loggedUser);
-  const [runQ, { data, loading, error}] = useLazyQuery(GET_USER, {
+  const [getUser, { data, loading, error}] = useLazyQuery(GET_USER, {
     onCompleted: ({ getUser }) => {
       // subscribe to the topics for each of the new classes
       // easiest way could just be subscribing to all classes and not
@@ -85,7 +86,7 @@ const ChatPicker: React.FC<ChatPickerProps> = ({ navigation }) => {
   }
   const goToCreateChat = () => navigation.navigate('CreateChat');
   const getClasses = () => {
-    runQ({ variables: { userEmail: loggedUser.email}})
+    getUser({ variables: { userEmail: loggedUser.email}})
   }
 
   React.useEffect(() => {

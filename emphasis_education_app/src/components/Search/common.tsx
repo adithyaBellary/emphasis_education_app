@@ -8,4 +8,4 @@ export const SearchResultsContain = styled(ScrollView)`
   border: solid grey 1px;
   padding-left: 10px;
   padding-right: 10px;
-`
+`;

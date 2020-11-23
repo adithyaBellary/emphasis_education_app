@@ -174,13 +174,11 @@ const IndividualChat: React.FC<ndividualChatProps> = ({
   switch(userType) {
     case 'Student':
       mainText = classObject.className;
-      secondaryText = classObject.tutorInfo.firstName
-      caption = 'test caption'
+      caption = `Taught by ${classObject.tutorInfo.firstName} ${classObject.tutorInfo.lastName}`
       break;
     case 'Guardian':
-      mainText = `${userFirstName.join(', ')}`
-      secondaryText = classObject.className
-      caption = `${classObject.tutorInfo.firstName} ${classObject.tutorInfo.lastName}`
+      mainText = classObject.className
+      caption = `Taught by ${classObject.tutorInfo.firstName} ${classObject.tutorInfo.lastName}`
       break;
     case 'Tutor':
       mainText = `${userFirstName.join(', ')}`
@@ -188,10 +186,8 @@ const IndividualChat: React.FC<ndividualChatProps> = ({
       break
     case 'Admin':
       mainText = `${userFirstName.join(', ')}`
-      // mainText = 'John, Samantha'
       secondaryText = classObject.className
-      caption = `${classObject.tutorInfo.firstName} ${classObject.tutorInfo.lastName}`
-      // caption = 'Taught by Peter'
+      caption = `Taught by ${classObject.tutorInfo.firstName} ${classObject.tutorInfo.lastName}`
       break;
     default:
       break;
