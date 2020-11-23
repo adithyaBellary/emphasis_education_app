@@ -34,29 +34,31 @@ const ClassSearch = () => {
   }
 
   return (
-    <GeneralSpacing u={20} r={15} d={20} l={15}>
-      <Input
-        placeholder='Search classes'
-        onChangeText={handleTextChange}
-        leftIcon={
-          <Icon
-            name='search'
-          />
-        }
-        rightIcon={
-          <Icon
-            name='pluscircleo'
-            type='antdesign'
-            onPress={addClass}
-          />
-        }
-      />
+    <>
+      <GeneralSpacing u={20} r={15} d={10} l={15}>
+        <Input
+          placeholder='Search classes'
+          onChangeText={handleTextChange}
+          leftIcon={
+            <Icon
+              name='search'
+            />
+          }
+          rightIcon={
+            <Icon
+              name='pluscircleo'
+              type='antdesign'
+              onPress={addClass}
+            />
+          }
+        />
+      </GeneralSpacing>
       {loading ? <LoadingComponent loading={loading} /> : (
         <ClassSearchResults
           searchResults={data ? data.searchClasses.classes: []}
         />
       )}
-    </GeneralSpacing>
+    </>
   )
 }
 

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { View } from 'react-native';
 import { Icon } from 'react-native-elements';
 
 import IndividualResult from '../common';
@@ -17,6 +18,7 @@ interface SearchResultsProps {
 }
 
 const SearchResults: React.FC<SearchResultsProps> = ({ searchResults, navigation }) => (
+  <View>
   <SearchResultsContain>
     {searchResults.map((results, index) => (
       <IndividualResult
@@ -40,6 +42,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ searchResults, navigation
       )
     )}
   </SearchResultsContain>
+  </View>
 )
 
 export default SearchResults;

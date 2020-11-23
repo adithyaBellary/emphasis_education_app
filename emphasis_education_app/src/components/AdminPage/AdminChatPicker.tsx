@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { SafeAreaView, View } from 'react-native';
 import { Icon } from 'react-native-elements'
 
 import { GeneralContext } from '../Context/Context';
@@ -22,25 +23,27 @@ const AdminChatPicker: React.FC<AdminChatPickerProps> = ({ navigation }) => {
   }
 
   return (
-    <SearchResultsContain>
-      {
-        loggedUser.adminChat.map(_adminChat => (
-          <IndividualResult>
-            <ThemedText size={14} type={FONT_STYLES.MAIN}>{_adminChat.user.firstName} {_adminChat.user.lastName}</ThemedText>
-            <Icon
-              name='message'
-              onPress={() => navigation.navigate(
-                'Chat',
-                {
-                  chatID: _adminChat.chatID,
-                  className: 'Admin Chat'
-                }
-              )}
-            />
-          </IndividualResult>
-        ))
-      }
-    </SearchResultsContain>
+    <View>
+      <SearchResultsContain>
+        {
+          loggedUser.adminChat.map(_adminChat => (
+            <IndividualResult>
+              <ThemedText size={14} type={FONT_STYLES.MAIN}>{_adminChat.user.firstName} {_adminChat.user.lastName}</ThemedText>
+              <Icon
+                name='message'
+                onPress={() => navigation.navigate(
+                  'Chat',
+                  {
+                    chatID: _adminChat.chatID,
+                    className: 'Admin Chat'
+                  }
+                )}
+              />
+            </IndividualResult>
+          ))
+        }
+      </SearchResultsContain>
+    </View>
   )
 }
 
