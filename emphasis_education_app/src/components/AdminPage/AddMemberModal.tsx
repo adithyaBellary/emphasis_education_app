@@ -18,7 +18,7 @@ import { ISearchUserPayload, ISearchInput } from '../../types';
 import { SEARCH_USERS } from '../../queries/SearchUsers';
 import { ADD_FAMILY_MEMBER } from '../../queries/AddFamilyMember';
 
-import { IndividualResultContainer } from './IndividualResult';
+import { IndividualResultContainer } from './common';
 
 interface CancelProps {
   onPress (): void;

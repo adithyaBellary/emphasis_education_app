@@ -21,7 +21,7 @@ import {
   ThemedText,
 } from '../shared';
 import { ADD_CHAT_MEMBER } from '../../queries/AddChatMember';
-import { IndividualResultContainer } from '../AdminPage/IndividualResult';
+import { IndividualResultContainer } from '../AdminPage/common';
 import { GeneralContext } from '../Context/Context';
 
 interface CancelProps {

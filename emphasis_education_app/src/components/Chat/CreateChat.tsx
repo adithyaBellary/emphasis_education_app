@@ -23,7 +23,7 @@ import {
   ICreateChatPayload,
   Permission
 } from '../../types';
-import { IndividualResultContainer } from '../AdminPage/IndividualResult';
+import { IndividualResultContainer } from '../AdminPage/common';
 
 import { ChatUserInfo } from '../../types';
 import {
@@ -101,7 +101,6 @@ const CreateChat: React.FC<CreateChatProps> = ({ navigation }) => {
           <Button
             title='Done'
             onPress={createChat}
-            // TODO add disabled functionality
             disabled={loadingCreateChat}
           />
           {loadingCreateChat && <LoadingComponent loading={loadingCreateChat} />}

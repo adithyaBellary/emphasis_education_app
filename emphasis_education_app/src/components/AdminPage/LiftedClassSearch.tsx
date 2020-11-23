@@ -3,16 +3,16 @@ import { Alert } from 'react-native'
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { Input, Icon } from 'react-native-elements';
 
-import { SEARCH_CLASSES } from '../../queries/SearchClasses';
-import { ISearchInput, ISearchClassesPayload } from '../../types';
-import ClassSearchResults from '../Search/ClassSearchResults';
-import { ADD_CLASS } from '../../queries/AddClass';
 import { GeneralSpacing, LoadingComponent } from '../shared';
+import { ISearchInput, ISearchClassesPayload } from '../../types';
+import { SEARCH_CLASSES } from '../../queries/SearchClasses';
+import { ADD_CLASS } from '../../queries/AddClass';
+import ClassSearchResults from './Presentational/ClassSearchResults';
 
 const ClassSearch = () => {
   const [searchTerm, setSearchTerm] = React.useState('');
-  const [runQuery, { data, loading, error }] = useLazyQuery<ISearchClassesPayload, ISearchInput>(SEARCH_CLASSES)
-  const [runMut, { data: mutationData, loading: mutationLoading, error: mutationError }] = useMutation(ADD_CLASS);
+  const [runQuery, { data, loading }] = useLazyQuery<ISearchClassesPayload, ISearchInput>(SEARCH_CLASSES)
+  const [runMut, { }] = useMutation(ADD_CLASS);
 
   React.useEffect(() => {
     runQuery({variables: {searchTerm}})
@@ -22,8 +22,9 @@ const ClassSearch = () => {
   const addClass = () => {
     if (!searchTerm) {
       Alert.alert('please enter a valid class name')
-      return ;
+      return;
     }
+
     runMut({ variables: {
       className: searchTerm
     }}).then(data => {
@@ -35,7 +36,7 @@ const ClassSearch = () => {
   return (
     <GeneralSpacing u={20} r={15} d={20} l={15}>
       <Input
-        placeholder='Search Classes'
+        placeholder='Search classes'
         onChangeText={handleTextChange}
         leftIcon={
           <Icon

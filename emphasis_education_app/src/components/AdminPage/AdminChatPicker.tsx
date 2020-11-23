@@ -2,10 +2,10 @@ import * as React from 'react';
 import { Icon } from 'react-native-elements'
 
 import { GeneralContext } from '../Context/Context';
-import IndividualResult from './IndividualResult';
+import IndividualResult from './common';
 
 import { ThemedText, FONT_STYLES } from '../shared';
-import { SearchResultsContainer } from '../Search/SearchResults';
+import { SearchResultsContain }  from '../Search/common';
 
 
 interface AdminChatPickerProps {
@@ -22,7 +22,7 @@ const AdminChatPicker: React.FC<AdminChatPickerProps> = ({ navigation }) => {
   }
 
   return (
-    <SearchResultsContainer>
+    <SearchResultsContain>
       {
         loggedUser.adminChat.map(_adminChat => (
           <IndividualResult>
@@ -40,7 +40,7 @@ const AdminChatPicker: React.FC<AdminChatPickerProps> = ({ navigation }) => {
           </IndividualResult>
         ))
       }
-    </SearchResultsContainer>
+    </SearchResultsContain>
   )
 }
 

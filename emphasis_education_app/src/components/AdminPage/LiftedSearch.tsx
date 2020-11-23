@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useLazyQuery } from '@apollo/client';
 import { Input, Icon } from 'react-native-elements';
 
-import SearchResults from '../Search/SearchResults';
+import SearchResults from './Presentational/SearchResults';
 import { ISearchInput } from '../../types';
 import { SEARCH_USERS } from '../../queries/SearchUsers';
 import { GeneralSpacing, LoadingComponent } from '../shared';
@@ -21,13 +21,10 @@ const LiftedSearch: React.FC<LiftedSearchProps> = ({ navigation }) => {
     runQuery({variables: {searchTerm}})
   }, [searchTerm])
 
-  if (data) {
-    console.log('data', data.searchUsers)
-  }
   return (
     <GeneralSpacing u={20} r={15} d={20} l={15}>
       <Input
-        placeholder='Search for users'
+        placeholder='Search users'
         onChangeText={handleTextChange}
         leftIcon={
           <Icon

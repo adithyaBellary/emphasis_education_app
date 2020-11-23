@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Text } from 'react-native';
-import { ISearchClassesPayload } from '../../types';
+import { ISearchClassesPayload } from '../../../types';
 
-import { SearchResultsContainer } from './SearchResults';
-import IndividualResult from '../AdminPage/IndividualResult';
-import { ThemedText, FONT_STYLES } from '../shared';
+import { SearchResultsContain } from '../../Search/common';
+import IndividualResult from '../common';
+import { ThemedText, FONT_STYLES } from '../../shared';
 
 interface ClassSearchResultsProps {
   searchResults: string[];
@@ -12,7 +12,7 @@ interface ClassSearchResultsProps {
 const ClassSearchResults: React.FC<ClassSearchResultsProps> = ({ searchResults }) => {
 
   return (
-    <SearchResultsContainer>
+    <SearchResultsContain>
       {searchResults.map((result, index) => (
         <IndividualResult
           key={index}
@@ -25,7 +25,7 @@ const ClassSearchResults: React.FC<ClassSearchResultsProps> = ({ searchResults }
           </ThemedText>
         </IndividualResult>
       ))}
-    </SearchResultsContainer>
+    </SearchResultsContain>
   )
 }
 
