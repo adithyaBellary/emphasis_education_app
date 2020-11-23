@@ -194,17 +194,17 @@ const ChatInfo: React.FC<ChatInfoProps> = ({ navigation, route }) => {
           >
             Add member
           </ThemedText>
-            <Icon
-              name='pluscircleo'
-              type='antdesign'
-              onPress={onPress}
-            />
+          <Icon
+            name='pluscircleo'
+            type='antdesign'
+            onPress={onPress}
+          />
         </IconRow>
         {
           click && (
             <>
               <Input
-                placeholder='placeholding'
+                placeholder='Search users'
                 onChangeText={searchChange}
                 leftIcon={
                   <Icon

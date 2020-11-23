@@ -152,6 +152,7 @@ interface ndividualChatProps {
   userType: Permission;
   classObject: Class;
   displayNotificationBadge: boolean;
+  userEmail: string;
   goToChat (sub: string, sec: string, tutorInfo: ChatUserInfo, userInfo: ChatUserInfo[]): void;
   getClasses (): void;
   clearNotificationCounter (chatID: string): void;
@@ -164,12 +165,20 @@ const IndividualChat: React.FC<ndividualChatProps> = ({
   goToChat,
   getClasses,
   displayNotificationBadge,
-  clearNotificationCounter
+  clearNotificationCounter,
+  userEmail
 }) => {
   let caption;
   let mainText: string = '';
   let secondaryText: string = '';
   const userFirstName: string[] = classObject.userInfo.map(_user => _user.firstName);
+  const otherUsers: string[] = classObject.userInfo.reduce<string[]>((acc, cur) => {
+    if (cur.email !== userEmail) {
+      return [...acc, cur.firstName];
+    }
+
+    return acc
+  }, [])
 
   switch(userType) {
     case 'Student':
@@ -178,6 +187,7 @@ const IndividualChat: React.FC<ndividualChatProps> = ({
       break;
     case 'Guardian':
       mainText = classObject.className
+      secondaryText = `${otherUsers.join(', ')}`
       caption = `Taught by ${classObject.tutorInfo.firstName} ${classObject.tutorInfo.lastName}`
       break;
     case 'Tutor':

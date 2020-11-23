@@ -149,6 +149,7 @@ const ChatPicker: React.FC<ChatPickerProps> = ({ navigation }) => {
               getClasses={getClasses}
               displayNotificationBadge={!!notifications[_class.chatID]}
               clearNotificationCounter={clearNotificationCounter}
+              userEmail={loggedUser.email}
             />
           ))
         }
