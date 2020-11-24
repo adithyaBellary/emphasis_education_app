@@ -23,7 +23,6 @@ const AdminPage: React.FC<AdminPageProps> = () => {
           paddingVertical: 20,
           fontFamily: 'Nunito',
           fontSize: 12,
-          // backgroundColor: 'grey'
         }
       }}
     >

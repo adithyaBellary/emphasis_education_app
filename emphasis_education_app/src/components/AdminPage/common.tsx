@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import styled from 'styled-components';
 
 export const IndividualResultContainer = styled(View)`
@@ -9,10 +9,17 @@ export const IndividualResultContainer = styled(View)`
   justifyContent: space-between;
 `;
 
-const IndividualResult: React.FC = ({ children }) => (
-  <IndividualResultContainer>
-    {children}
-  </IndividualResultContainer>
-)
+export const IndividualResultButton = styled(TouchableOpacity)`
+  padding: 10px 0;
+  display: flex;
+  flexDirection: row;
+  justifyContent: space-between;
+`;
 
-export default IndividualResult;
+// const IndividualResult: React.FC = ({ children }) => (
+//   <IndividualResultContainer>
+//     {children}
+//   </IndividualResultContainer>
+// )
+
+// export default IndividualResult;

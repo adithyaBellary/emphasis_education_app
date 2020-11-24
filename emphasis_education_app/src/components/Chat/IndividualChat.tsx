@@ -106,7 +106,13 @@ const ChatDisplay: React.FC<ChatDisplayProps> = ({
           <SpacedItemRow>
             <IconRow>
               {displayNotificationBadge && <NotificationBadge />}
-              <TouchableOpacity onPress={onPress(chatID, className, tutorInfo, userInfo)} onLongPress={() => console.log('long press')}>
+              <TouchableOpacity
+                onPress={onPress(chatID, className, tutorInfo, userInfo)}
+                onLongPress={() => console.log('long press')}
+                style={{
+                  paddingRight: 30
+                }}
+              >
                 <IconRowLeft>
                   <LeftText size={18} type={FONT_STYLES.MAIN}>
                     {mainText}
@@ -140,7 +146,7 @@ const ChatDisplay: React.FC<ChatDisplayProps> = ({
               />
             </PermissionedComponent>
           </SpacedItemRow>
-          <HorizontalDivider width={100} color={theme.colors.lightOrange}/>
+          <HorizontalDivider width={100} color={theme.colors.lightOrange} />
         </ChatContain>
       )}
     </>

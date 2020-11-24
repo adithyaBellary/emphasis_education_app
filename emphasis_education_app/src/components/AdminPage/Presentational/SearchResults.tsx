@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { View } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import { Icon } from 'react-native-elements';
 
-import IndividualResult from '../common';
+import {IndividualResultButton } from '../common';
 import {
   ThemedText,
   GeneralSpacing,
@@ -19,17 +19,10 @@ interface SearchResultsProps {
 
 const SearchResults: React.FC<SearchResultsProps> = ({ searchResults, navigation }) => (
   <View>
-  <SearchResultsContain>
-    {searchResults.map((results, index) => (
-      <IndividualResult
-        key={index}
-      >
-        <ThemedText size={14} type={FONT_STYLES.MAIN}>
-          {results.firstName} { results.lastName}
-        </ThemedText>
-        <Icon
-          name='user'
-          type='antdesign'
+    <SearchResultsContain>
+      {searchResults.map((results, index) => (
+        <IndividualResultButton
+          key={index}
           onPress={() => navigation.navigate(
             'MyProfile',
             {
@@ -37,11 +30,17 @@ const SearchResults: React.FC<SearchResultsProps> = ({ searchResults, navigation
               currentUserID: results._id
             }
           )}
-        />
-      </IndividualResult>
-      )
-    )}
-  </SearchResultsContain>
+        >
+          <ThemedText size={14} type={FONT_STYLES.MAIN}>
+            {results.firstName} { results.lastName}
+          </ThemedText>
+          <Icon
+            name='user'
+            type='antdesign'
+          />
+        </IndividualResultButton>
+      ))}
+    </SearchResultsContain>
   </View>
 )
 

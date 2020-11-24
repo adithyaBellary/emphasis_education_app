@@ -2,7 +2,7 @@ import * as React from 'react';
 import { View } from 'react-native';
 
 import { SearchResultsContain } from '../../Search/common';
-import IndividualResult from '../common';
+import { IndividualResultContainer } from '../common';
 import { ThemedText, FONT_STYLES } from '../../shared';
 
 interface ClassSearchResultsProps {
@@ -12,7 +12,7 @@ const ClassSearchResults: React.FC<ClassSearchResultsProps> = ({ searchResults }
   <View>
     <SearchResultsContain>
       {searchResults.map((result, index) => (
-        <IndividualResult
+        <IndividualResultContainer
           key={index}
         >
           <ThemedText
@@ -21,7 +21,7 @@ const ClassSearchResults: React.FC<ClassSearchResultsProps> = ({ searchResults }
           >
             {result}
           </ThemedText>
-        </IndividualResult>
+        </IndividualResultContainer>
       ))}
     </SearchResultsContain>
   </View>
