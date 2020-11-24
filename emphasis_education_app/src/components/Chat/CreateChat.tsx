@@ -93,22 +93,23 @@ const CreateChat: React.FC<CreateChatProps> = ({ navigation }) => {
     })
   }, [userSearch])
 
-  navigation.setOptions({
-    headerRight: () => (
-      <GeneralSpacing u={0} r={10} d={0} l={10}>
-        <IconRow>
-          <Button
-            title='Done'
-            onPress={createChat}
-            disabled={loadingCreateChat}
-          />
-          {loadingCreateChat && <LoadingComponent loading={loadingCreateChat} />}
-        </IconRow>
-      </GeneralSpacing>
-    ),
-    headerBackTitle: 'Chats'
-  })
-
+  React.useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <GeneralSpacing u={0} r={10} d={0} l={10}>
+          <IconRow>
+            <Button
+              title='Done'
+              onPress={createChat}
+              disabled={loadingCreateChat}
+            />
+            {loadingCreateChat && <LoadingComponent loading={loadingCreateChat} />}
+          </IconRow>
+        </GeneralSpacing>
+      ),
+      headerBackTitle: 'Chats'
+    })
+  }, [])
 
   const createChat = () => {
     // console.log('creating a new chat with', selectedClasses, selectedUsers)
@@ -226,6 +227,7 @@ const CreateChat: React.FC<CreateChatProps> = ({ navigation }) => {
             return (
               <TouchableOpacity
                 onPress={addSelectedUsers(u._id, u.userType, u.email, u.firstName, u.lastName)}
+                key={u._id}
               >
                 <IndividualResultContainer>
                   <ChatText>{u.firstName} {u.lastName}</ChatText>

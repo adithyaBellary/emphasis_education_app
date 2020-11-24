@@ -27,7 +27,9 @@ const AdminChatPicker: React.FC<AdminChatPickerProps> = ({ navigation }) => {
       <SearchResultsContain>
         {
           loggedUser.adminChat.map(_adminChat => (
-            <IndividualResult>
+            <IndividualResult
+              key={_adminChat.chatID}
+            >
               <ThemedText size={14} type={FONT_STYLES.MAIN}>{_adminChat.user.firstName} {_adminChat.user.lastName}</ThemedText>
               <Icon
                 name='message'
