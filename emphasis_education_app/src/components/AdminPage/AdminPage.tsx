@@ -16,7 +16,17 @@ const Tab = createBottomTabNavigator();
 const AdminPage: React.FC<AdminPageProps> = () => {
 
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      tabBarOptions={{
+        labelStyle: {
+          padding: 10,
+          paddingVertical: 20,
+          fontFamily: 'Nunito',
+          fontSize: 12,
+          // backgroundColor: 'grey'
+        }
+      }}
+    >
       <Tab.Screen name="Users" component={Search} />
       <Tab.Screen name="Classes" component={ClassSearch} />
       <Tab.Screen name="Invite User" component={InviteUser} />

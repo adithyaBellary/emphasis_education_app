@@ -199,7 +199,9 @@ const Profile: React.FC<ProfileProps> = ({ family, editing, currentUserID, onPre
       </IconRow>
       {
         family.map((user, index) => (
-          <>
+          <View
+            key={user._id}
+          >
             {(user._id !== currentUser._id) && (
               <>
                 <IndividualField
@@ -245,10 +247,9 @@ const Profile: React.FC<ProfileProps> = ({ family, editing, currentUserID, onPre
                     <ListClasses classes={user.classes || []} />
                   </>
                 )}
-
               </>
             )}
-          </>
+          </View>
         ))}
     </ContentScroll>
   )
