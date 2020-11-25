@@ -106,7 +106,13 @@ const ChatDisplay: React.FC<ChatDisplayProps> = ({
           <SpacedItemRow>
             <IconRow>
               {displayNotificationBadge && <NotificationBadge />}
-              <TouchableOpacity onPress={onPress(chatID, className, tutorInfo, userInfo)} onLongPress={() => console.log('long press')}>
+              <TouchableOpacity
+                onPress={onPress(chatID, className, tutorInfo, userInfo)}
+                onLongPress={() => console.log('long press')}
+                style={{
+                  paddingRight: 30
+                }}
+              >
                 <IconRowLeft>
                   <LeftText size={18} type={FONT_STYLES.MAIN}>
                     {mainText}
@@ -140,7 +146,7 @@ const ChatDisplay: React.FC<ChatDisplayProps> = ({
               />
             </PermissionedComponent>
           </SpacedItemRow>
-          <HorizontalDivider width={100} color={theme.colors.lightOrange}/>
+          <HorizontalDivider width={100} color={theme.colors.lightOrange} />
         </ChatContain>
       )}
     </>
@@ -152,6 +158,7 @@ interface ndividualChatProps {
   userType: Permission;
   classObject: Class;
   displayNotificationBadge: boolean;
+  userEmail: string;
   goToChat (sub: string, sec: string, tutorInfo: ChatUserInfo, userInfo: ChatUserInfo[]): void;
   getClasses (): void;
   clearNotificationCounter (chatID: string): void;
@@ -164,34 +171,39 @@ const IndividualChat: React.FC<ndividualChatProps> = ({
   goToChat,
   getClasses,
   displayNotificationBadge,
-  clearNotificationCounter
+  clearNotificationCounter,
+  userEmail
 }) => {
   let caption;
   let mainText: string = '';
   let secondaryText: string = '';
   const userFirstName: string[] = classObject.userInfo.map(_user => _user.firstName);
+  const otherUsers: string[] = classObject.userInfo.reduce<string[]>((acc, cur) => {
+    if (cur.email !== userEmail) {
+      return [...acc, cur.firstName];
+    }
+
+    return acc
+  }, [])
 
   switch(userType) {
     case 'Student':
       mainText = classObject.className;
-      secondaryText = classObject.tutorInfo.firstName
-      caption = 'test caption'
+      caption = `Taught by ${classObject.tutorInfo.firstName} ${classObject.tutorInfo.lastName}`
       break;
     case 'Guardian':
-      mainText = `${userFirstName.join(', ')}`
-      secondaryText = classObject.className
-      caption = `${classObject.tutorInfo.firstName} ${classObject.tutorInfo.lastName}`
+      mainText = classObject.className
+      secondaryText = `${otherUsers.join(', ')}`
+      caption = `Taught by ${classObject.tutorInfo.firstName} ${classObject.tutorInfo.lastName}`
       break;
     case 'Tutor':
       mainText = `${userFirstName.join(', ')}`
       caption = classObject.className
       break
     case 'Admin':
-      // mainText = `${userFirstName.join(', ')}`
-      mainText = 'John, Samantha'
+      mainText = `${userFirstName.join(', ')}`
       secondaryText = classObject.className
-      // caption = `${classObject.tutorInfo.firstName} ${classObject.tutorInfo.lastName}`
-      caption = 'Taught by Peter'
+      caption = `Taught by ${classObject.tutorInfo.firstName} ${classObject.tutorInfo.lastName}`
       break;
     default:
       break;

@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export const SEARCH_USERS = gql`
-  query SearchUsers($searchTerm: String!) {
-    searchUsers(searchTerm: $searchTerm) {
+  query SearchUsers($searchTerm: String!, $includeAdmin: Boolean) {
+    searchUsers(searchTerm: $searchTerm, includeAdmin: $includeAdmin) {
       firstName
       lastName
       userType

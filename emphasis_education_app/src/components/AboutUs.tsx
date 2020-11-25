@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Alert } from 'react-native';
+import { Alert, View, ScrollView } from 'react-native';
 import { useQuery, useMutation } from '@apollo/client'
 
 import { SEARCH_CLASSES } from '../queries/SearchClasses'
@@ -29,19 +29,20 @@ const SectionTitle: React.FC<{ title: string }> = ({ title }) => (
 );
 
 const ClassList: React.FC<{ classList: string[] }> = ({ classList }) => (
-  <>
-    {
-      classList.map( _class => (
-        <>
-          <ThemedText key={_class} size={14} type={FONT_STYLES.MAIN}>{_class}</ThemedText>
+  <View>
+    <ScrollView>
+      {classList.map(_class => (
+        <View
+          key={_class}
+        >
+          <ThemedText size={14} type={FONT_STYLES.MAIN}>{_class}</ThemedText>
           <GeneralSpacing u={10} r={0} d={10} l={0}>
             <HorizontalDivider width={100} color='black'/>
           </GeneralSpacing>
-          {/* <ThemedText size={14} type={FONT_STYLES.LIGHT}>Test Description</ThemedText> */}
-        </>
-      ))
-    }
-  </>
+        </View>
+      ))}
+    </ScrollView>
+  </View>
 );
 
 const AboutUs: React.FC = () => {

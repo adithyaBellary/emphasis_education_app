@@ -2,12 +2,12 @@ import * as React from 'react';
 import { useLazyQuery } from '@apollo/client';
 import { Input, Icon } from 'react-native-elements';
 
-import SearchResults from '../Search/SearchResults';
-import { ISearchInput } from '../../types';
+import SearchResults from './Presentational/SearchResults';
 import { SEARCH_USERS } from '../../queries/SearchUsers';
 import { GeneralSpacing, LoadingComponent } from '../shared';
 
 import { UserInfoType } from 'types/schema-types';
+import { QuerySearchUsersArgs } from '../../../types/schema-types'
 
 interface LiftedSearchProps {
   navigation: any;
@@ -15,33 +15,32 @@ interface LiftedSearchProps {
 
 const LiftedSearch: React.FC<LiftedSearchProps> = ({ navigation }) => {
   const [searchTerm, setSearchTerm] = React.useState('');
-  const [runQuery, { data, loading, error }] = useLazyQuery<{ searchUsers: UserInfoType[] }, ISearchInput>(SEARCH_USERS)
+  const [runQuery, { data, loading }] = useLazyQuery<{ searchUsers: UserInfoType[] }, QuerySearchUsersArgs>(SEARCH_USERS)
   const handleTextChange = (text: string) => setSearchTerm(text)
   React.useEffect(() => {
-    runQuery({variables: {searchTerm}})
+    runQuery({variables: {searchTerm, includeAdmin: false}})
   }, [searchTerm])
 
-  if (data) {
-    console.log('data', data.searchUsers)
-  }
   return (
-    <GeneralSpacing u={20} r={15} d={20} l={15}>
-      <Input
-        placeholder='Search for users'
-        onChangeText={handleTextChange}
-        leftIcon={
-          <Icon
-            name='search'
-          />
-        }
-      />
+    <>
+      <GeneralSpacing u={20} r={15} d={10} l={15}>
+        <Input
+          placeholder='Search users'
+          onChangeText={handleTextChange}
+          leftIcon={
+            <Icon
+              name='search'
+            />
+          }
+        />
+      </GeneralSpacing>
       {loading ? <LoadingComponent loading={loading} /> : (
         <SearchResults
           searchResults={data ? data.searchUsers : []}
           navigation={navigation}
         />
       )}
-    </GeneralSpacing>
+    </>
   )
 }
 

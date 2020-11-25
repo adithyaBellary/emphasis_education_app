@@ -72,11 +72,11 @@ const wsClient = new SubscriptionClient(
   {
     reconnect: true,
     lazy: true,
-    connectionCallback: (error, result) => {
-      console.log('connectionCallback error', error)
-      console.log('connectionCallback result', result)
-      Sentry.captureMessage(`Subscription callback ${!!error} ${!!result}`)
-    },
+    // connectionCallback: (error, result) => {
+    //   console.log('connectionCallback error', error)
+    //   console.log('connectionCallback result', result)
+    //   Sentry.captureMessage(`Subscription callback ${!!error} ${!!result}`)
+    // },
     connectionParams: {
       authToken: '123'
     }
@@ -104,14 +104,14 @@ const wsLink = new WebSocketLink(wsClient)
 // });
 
 console.log('the ws link is created', wsLink)
-Sentry.captureMessage(`The ws link is created i think? ${!!wsLink}`)
+// Sentry.captureMessage(`The ws link is created i think? ${!!wsLink}`)
 // Sentry.captureMessage(`The ws link is created: ${wsLink}`)
 
 const link = split(({ query }) => {
   const definition = getMainDefinition(query);
   const isSub = (definition.kind === 'OperationDefinition') && (definition.operation === 'subscription')
   console.log('isSub?', isSub)
-  Sentry.captureMessage(`isSub? ${isSub}`)
+  // Sentry.captureMessage(`isSub? ${isSub}`)
   return isSub
 },wsLink,
   httplink
@@ -123,7 +123,7 @@ const theLink = ApolloLink.from([
 ])
 
 console.log('link', link)
-Sentry.captureMessage(`the link is created i think? ${!!link}`)
+// Sentry.captureMessage(`the link is created i think? ${!!link}`)
 // console.log('link', !!link)
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
@@ -132,7 +132,7 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 });
 
 console.log('the client', client)
-Sentry.captureMessage(`the client is created i think? ${!!client}`)
+// Sentry.captureMessage(`the client is created i think? ${!!client}`)
 // console.log('the client', !!client)
 
 const App = () => {

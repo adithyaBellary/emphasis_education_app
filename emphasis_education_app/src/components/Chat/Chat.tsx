@@ -95,9 +95,7 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
         refresh: false
 
       },
-      // onCompleted: () => console.log('ran the getmessages query'),
       onError: (e) => console.log('there was an error running the getMessages query', e),
-      // need to look at this again
       fetchPolicy: 'no-cache',
     }
   )
@@ -108,49 +106,8 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
     onSubscriptionData: (data) => {
       // console.log('got data', data)
       console.log('got data in the sub!')
-
-      Sentry.captureMessage('Message received sub got data', {
-        user: {
-          email: loggedUser.email,
-          username: `${loggedUser.firstName} ${loggedUser.lastName}`
-        }
-      })
     },
   })
-
-  if (subError) {
-    console.log('error in subscription', subError)
-    Sentry.captureException(subError, {
-      user: {
-        email: loggedUser.email,
-        error: subError
-      }
-    })
-    Sentry.captureMessage(subError.toString(), {
-      user: {
-        email: loggedUser.email,
-        error: subError
-      }
-    })
-  }
-
-  if (subLoading) {
-    console.log('subscription is loading')
-    Sentry.captureMessage('Subscription is loading', {
-      user: {
-        email: loggedUser.email
-      }
-    })
-  }
-
-  if (!subLoading) {
-    console.log('subscription is done loading')
-    Sentry.captureMessage('Subscription is done loading', {
-      user: {
-        email: loggedUser.email
-      }
-    })
-  }
 
   const isLoading = queryLoading;
 
@@ -174,21 +131,19 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
     ]})
   }, [getMessages])
 
+  // here i need to check the chatID of the message received to make sure that I am
+  // updating the correct chat UI.
   useEffect(() => {
-    if (!subData) { return }
+    if (
+      !subData ||
+      subData.messageReceived.chatID !== chatID
+    ) { return }
 
     let messages: IMessage[];
     let receivedMessage: IMessage = {
       ...subData.messageReceived,
       createdAt: new Date(subData.messageReceived.createdAt)
     }
-
-    Sentry.captureMessage('Received a message in chat', {
-      user: {
-        email: loggedUser.email,
-        username: `${loggedUser.firstName} ${loggedUser.lastName}`
-      }
-    })
 
     if (!curState ) {
       messages = [receivedMessage]
@@ -224,15 +179,30 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
   }, [subData])
 
   useEffect(() => {
-    navigation.setOptions({
-      headerTitle: () => (
-        <TouchableOpacity onPress={() => navigation.navigate('ChatInfo', { className, tutorInfo, userInfo, chatID })}>
-          <ThemedText size={20} type={FONT_STYLES.MAIN}>
-            {className}
-          </ThemedText>
-        </TouchableOpacity>
-      )
-    })
+      navigation.setOptions({
+        headerTitle: () => (
+          <TouchableOpacity
+            onPress={() => {
+              if (className !== 'Admin Chat') {
+                navigation.navigate(
+                  'ChatInfo',
+                  {
+                    className,
+                    tutorInfo,
+                    userInfo,
+                    chatID
+                  }
+                )
+              }
+            }}
+          >
+            <ThemedText size={20} type={FONT_STYLES.MAIN}>
+              {className}
+            </ThemedText>
+          </TouchableOpacity>
+        ),
+        // headerBackTitle: className === 'Admin Chat' ? 'Admin Page' : 'Home'
+      })
   }, [])
 
   const curUser: MessageUser = {
@@ -253,7 +223,7 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
 
   return (
     <>
-      { isLoading ? (
+      {isLoading ? (
         <CenteredDiv>
           <LoadingComponent loading={isLoading} />
           <ThemedText
@@ -272,24 +242,24 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
           messages={curState ? curState.messages : []}
           triggerSubToMore={() => {
             console.log('subbing to more')
-            Sentry.captureMessage('triggered the subscribe to more stuff. should happen on mount', {
-              user: {
-                email: loggedUser.email,
-                name: `${loggedUser.firstName} ${loggedUser.lastName}`
-              }
-            })
+            // Sentry.captureMessage('triggered the subscribe to more stuff. should happen on mount', {
+            //   user: {
+            //     email: loggedUser.email,
+            //     name: `${loggedUser.firstName} ${loggedUser.lastName}`
+            //   }
+            // })
             subscribeToMore({
               document: SUB,
               updateQuery: (prev, data) => {
-                console.log('prev in sub more', prev)
-                console.log('data in sub more', data)
+                // console.log('prev in sub more', prev)
+                // console.log('data in sub more', data)
 
-                Sentry.captureMessage('data received in the subscribe to more part.', {
-                  user: {
-                    email: loggedUser.email,
-                    name: `${loggedUser.firstName} ${loggedUser.lastName}`
-                  }
-                })
+                // Sentry.captureMessage('data received in the subscribe to more part.', {
+                //   user: {
+                //     email: loggedUser.email,
+                //     name: `${loggedUser.firstName} ${loggedUser.lastName}`
+                //   }
+                // })
                 return prev;
               }
             })

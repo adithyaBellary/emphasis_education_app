@@ -39,9 +39,7 @@ const EnterCode: React.FC<EnterCodeProps> = ({ navigation }) => {
         setError(true)
       }
     },
-    onError: () => {
-
-    }
+    fetchPolicy: 'no-cache'
   })
 
   const onChangeTextCode = (val: string) => setCode(val)

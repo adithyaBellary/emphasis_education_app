@@ -1,11 +1,12 @@
 import * as React from 'react';
+import { SafeAreaView, View } from 'react-native';
 import { Icon } from 'react-native-elements'
 
 import { GeneralContext } from '../Context/Context';
-import IndividualResult from './IndividualResult';
+import IndividualResult, { IndividualResultButton } from './common';
 
 import { ThemedText, FONT_STYLES } from '../shared';
-import { SearchResultsContainer } from '../Search/SearchResults';
+import { SearchResultsContain }  from '../Search/common';
 
 
 interface AdminChatPickerProps {
@@ -22,25 +23,27 @@ const AdminChatPicker: React.FC<AdminChatPickerProps> = ({ navigation }) => {
   }
 
   return (
-    <SearchResultsContainer>
-      {
-        loggedUser.adminChat.map(_adminChat => (
-          <IndividualResult>
+    <View>
+      <SearchResultsContain>
+        {loggedUser.adminChat.map(_adminChat => (
+          <IndividualResultButton
+            key={_adminChat.chatID}
+            onPress={() => navigation.navigate(
+              'Chat',
+              {
+                chatID: _adminChat.chatID,
+                className: 'Admin Chat'
+              }
+            )}
+          >
             <ThemedText size={14} type={FONT_STYLES.MAIN}>{_adminChat.user.firstName} {_adminChat.user.lastName}</ThemedText>
             <Icon
               name='message'
-              onPress={() => navigation.navigate(
-                'Chat',
-                {
-                  chatID: _adminChat.chatID,
-                  className: 'Admin Chat'
-                }
-              )}
             />
-          </IndividualResult>
-        ))
-      }
-    </SearchResultsContainer>
+          </IndividualResultButton>
+        ))}
+      </SearchResultsContain>
+    </View>
   )
 }
 

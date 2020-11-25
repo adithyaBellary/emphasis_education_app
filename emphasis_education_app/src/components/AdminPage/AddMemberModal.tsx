@@ -17,8 +17,9 @@ import {
 import { ISearchUserPayload, ISearchInput } from '../../types';
 import { SEARCH_USERS } from '../../queries/SearchUsers';
 import { ADD_FAMILY_MEMBER } from '../../queries/AddFamilyMember';
+import { QuerySearchUsersArgs } from '../../../types/schema-types'
 
-import { IndividualResultContainer } from './IndividualResult';
+import { IndividualResultContainer } from './common';
 
 interface CancelProps {
   onPress (): void;
@@ -75,13 +76,13 @@ interface SelectedUsersProps {
 const AddMember: React.FC<AddMemberProps> = ({ navigation, route }) => {
   console.log('route', route)
   const [searchString, setSearchString] = React.useState('');
-  const [runUserSearchQuery, {data: userData, loading: userLoading, error: userError}] = useLazyQuery<ISearchUserPayload, ISearchInput>(SEARCH_USERS)
+  const [runUserSearchQuery, {data: userData, loading: userLoading, error: userError}] = useLazyQuery<ISearchUserPayload, QuerySearchUsersArgs>(SEARCH_USERS)
   const [selectedUsers, setSelectedUsers] = React.useState<SelectedUsersProps[]>([])
 
   const [runMut, {data: mutationData, loading: mutationLoading, error: mutationError}] = useMutation(ADD_FAMILY_MEMBER)
 
   React.useEffect(() => {
-    runUserSearchQuery({ variables: { searchTerm: searchString}})
+    runUserSearchQuery({ variables: { searchTerm: searchString, includeAdmin: false}})
   }, [searchString])
 
   const onChangeText = (text: string) => setSearchString(text);

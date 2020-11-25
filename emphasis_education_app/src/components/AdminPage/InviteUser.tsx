@@ -5,7 +5,7 @@ import {
 } from 'react-native-elements'
 import { useMutation } from '@apollo/client';
 
-import { ContentContain } from './common'
+// import { ContentContain } from './common'
 import {
   ThemedButton,
   ThemedText,

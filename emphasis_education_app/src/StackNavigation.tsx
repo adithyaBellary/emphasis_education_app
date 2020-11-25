@@ -222,19 +222,19 @@ const StackNavigation: React.FC = () => {
             setLoginError(false)
             dispatch({ type: 'LOGIN', token: data.login.user.email})
             console.log(data.login.user.firstName, data.login.user.lastName)
-            Sentry.captureMessage('Successful Login', {
-              user: {
-                email,
-                name: `${data.login.user.firstName} ${data.login.user.lastName}`
-              }
-            })
+            // Sentry.captureMessage('Successful Login', {
+            //   user: {
+            //     email,
+            //     name: `${data.login.user.firstName} ${data.login.user.lastName}`
+            //   }
+            // })
           } else {
             setLoginError(true)
-            Sentry.captureMessage('Unsuccessful Login', {
-              user: {
-                email
-              }
-            })
+            // Sentry.captureMessage('Unsuccessful Login', {
+            //   user: {
+            //     email
+            //   }
+            // })
           }
         })
         .catch(e => {
