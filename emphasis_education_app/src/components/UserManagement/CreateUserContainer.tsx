@@ -32,6 +32,10 @@ const CreateUserContain: React.FC<CreateUserContainProps> = props => {
       props.navigation.setOptions({
         title: 'Create User Confirmation'
       })
+    } else {
+      props.navigation.setOptions({
+        title: 'Create User'
+      })
     }
   }, [showConf])
 
@@ -82,10 +86,8 @@ const CreateUserContain: React.FC<CreateUserContainProps> = props => {
     })
   }
 
-  const GoToConfirmation = () => {
-    console.log('going to conf screen', userInfo)
-    setShowConf(true);
-  }
+  const GoToConfirmation = () => setShowConf(true)
+  const BackToUserCreate = () => setShowConf(false)
 
   return (
     <View>
@@ -103,6 +105,7 @@ const CreateUserContain: React.FC<CreateUserContainProps> = props => {
           loading={loading}
           navigation={props.navigation}
           submitDisabled={submitDisabled}
+          BackToUserCreate={BackToUserCreate}
         />
       )}
     </View>

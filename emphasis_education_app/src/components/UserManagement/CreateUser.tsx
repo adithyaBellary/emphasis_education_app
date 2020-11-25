@@ -31,22 +31,11 @@ const EmptyData: IUserInput = {
   confirmPassword: '',
   phoneNumber: '',
   userType: undefined,
-  // gender: '',
   dob: ''
 }
 
 const CreateUser: React.FC<CreateUser> = props => {
   const [numUser, setNumUser] = React.useState<number>(1)
-  // firstName: 'test',
-    // lastName: 'name',
-    // email: 'test01@gmail.com',
-    // password: 'test01',
-    // confirmPassword: 'test01',
-    // phoneNumber: '222-222-2222',
-    // userType: Permission.Student,
-    // gender: 'Male',
-    // dob: '22/22/2222'
-
   const [curState, setState] = useState<IUserInput>({} as IUserInput);
 
   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -67,7 +56,6 @@ const CreateUser: React.FC<CreateUser> = props => {
       !!curState.confirmPassword &&
       !!curState.phoneNumber &&
       !!curState.userType &&
-      // !!curState.gender &&
       !!curState.dob &&
       checkPassword() &&
       checkPhoneNumber() &&
@@ -113,11 +101,6 @@ const CreateUser: React.FC<CreateUser> = props => {
     <ScrollView>
       <CenteredDiv>
         <ThemedText size={14} type={FONT_STYLES.MAIN}>Family Member Number {numUser}</ThemedText>
-        {/* <ThemedTextInput
-          placeholder='First Name'
-          value={curState.firstName}
-          onChangeText={handleTextChange('firstName')}
-        /> */}
         <Input
           placeholder='First Name'
           onChangeText={handleTextChange('firstName')}
@@ -134,16 +117,6 @@ const CreateUser: React.FC<CreateUser> = props => {
           value={curState.lastName}
           onChangeText={handleTextChange('lastName')}
         />
-        {/* <ThemedTextInput
-          placeholder='Last Name'
-          value={curState.lastName}
-          onChangeText={handleTextChange('lastName')}
-        /> */}
-        {/* <ThemedTextInput
-          placeholder='Email'
-          value={curState.email}
-          onChangeText={handleTextChange('lastName')}
-        /> */}
         <Input
           placeholder='Email'
           containerStyle={{
@@ -152,12 +125,6 @@ const CreateUser: React.FC<CreateUser> = props => {
           value={curState.email}
           onChangeText={handleTextChange('email')}
         />
-        {/* <ThemedTextInput
-          placeholder='Password'
-          value={curState.password}
-          secure={true}
-          onChangeText={handleTextChange('password')}
-        /> */}
         <Input
           placeholder='Password'
           containerStyle={{
@@ -167,12 +134,6 @@ const CreateUser: React.FC<CreateUser> = props => {
           value={curState.password}
           onChangeText={handleTextChange('password')}
         />
-        {/* <ThemedTextInput
-          placeholder='Confirm Password'
-          value={curState.confirmPassword}
-          secure={true}
-          onChangeText={handleTextChange('confirmPassword')}
-        /> */}
         <Input
           placeholder='Confirm Password'
           containerStyle={{
@@ -182,12 +143,6 @@ const CreateUser: React.FC<CreateUser> = props => {
           value={curState.confirmPassword}
           onChangeText={handleTextChange('confirmPassword')}
         />
-        {/* <ThemedNumberInput
-          placeholder='Enter Phone Number (###) ###-####'
-          value={curState.phoneNumber}
-          onChangeText={number => handlePhoneNumberInput(number)}
-          maxLength={12}
-        /> */}
         <Input
           placeholder='Enter Phone Number (###) ###-####'
           containerStyle={{
@@ -197,12 +152,6 @@ const CreateUser: React.FC<CreateUser> = props => {
           value={curState.phoneNumber}
           maxLength={12}
         />
-        {/* <ThemedNumberInput
-          placeholder='Enter DOB MM/DD/YYYY'
-          value={curState.dob}
-          onChangeText={number => handleDOBInput(number)}
-          maxLength={10}
-        /> */}
         <Input
           placeholder='Enter DOB MM/DD/YYYY'
           containerStyle={{

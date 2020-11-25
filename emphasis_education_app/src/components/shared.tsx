@@ -224,7 +224,6 @@ interface RadioButtonGroupProps {
 export const RadioButtonGroup: React.FC<RadioButtonGroupProps> = ({ titles, onSelect }) => {
   // this is the conponent that should hold state over the individual radio buttons
 
-  console.log('radio button titles', titles);
   const [selectedElement, setSelectedElement] = React.useState('');
   const selectElement = (el: string) => {
     setSelectedElement(el);

@@ -212,7 +212,7 @@ const CreateChat: React.FC<CreateChatProps> = ({ navigation }) => {
       />
       <GeneralSpacing u={0} r={20} d={10} l={20}>
         <ChatText>Selected Class: {selectedClasses}</ChatText>
-        <ChatText>Selected Users: {selectedUsers.map(u => `${u.firstName}, `)} </ChatText>
+        <ChatText>Selected Users: {selectedUsers.map(u => `${u.firstName}, `)}</ChatText>
       </GeneralSpacing>
       <SearchResultsContain>
         {/* let us display the results here so that we can easily have state over them */}
