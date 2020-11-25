@@ -200,33 +200,28 @@ const ChatInfo: React.FC<ChatInfoProps> = ({ navigation, route }) => {
             onPress={onPress}
           />
         </IconRow>
-        {
-          click && (
-            <>
-              <Input
-                placeholder='Search users'
-                onChangeText={searchChange}
-                leftIcon={
-                  <Icon
-                    name='search'
-                  />
-                }
+        {click && (
+          <>
+            <Input
+              placeholder='Search users'
+              onChangeText={searchChange}
+              leftIcon={
+                <Icon
+                  name='search'
+                />
+              }
+            />
+            {loading ? <LoadingComponent loading={loading} /> : (
+              <SearchResults
+                email={stateEmail!}
+                results={data ? data.searchUsers : []}
+                addMember={selectMember}
               />
-              { loading ? <LoadingComponent loading={loading} /> : (
-                  <SearchResults
-                    email={stateEmail!}
-                    results={data ? data.searchUsers : []}
-                    addMember={selectMember}
-                  />
-              )}
-            </>
-          )
-        }
+            )}
+          </>
+        )}
         </PermissionedComponent>
-
-
       </ContentContain>
-
     </SafeAreaView>
   )
 }

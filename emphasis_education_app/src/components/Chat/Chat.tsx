@@ -106,49 +106,8 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
     onSubscriptionData: (data) => {
       // console.log('got data', data)
       console.log('got data in the sub!')
-
-      // Sentry.captureMessage('Message received sub got data', {
-      //   user: {
-      //     email: loggedUser.email,
-      //     username: `${loggedUser.firstName} ${loggedUser.lastName}`
-      //   }
-      // })
     },
   })
-
-  if (subError) {
-    // console.log('error in subscription', subError)
-    // Sentry.captureException(subError, {
-    //   user: {
-    //     email: loggedUser.email,
-    //     error: subError
-    //   }
-    // })
-    // Sentry.captureMessage(subError.toString(), {
-    //   user: {
-    //     email: loggedUser.email,
-    //     error: subError
-    //   }
-    // })
-  }
-
-  if (subLoading) {
-    console.log('subscription is loading')
-    // Sentry.captureMessage('Subscription is loading', {
-    //   user: {
-    //     email: loggedUser.email
-    //   }
-    // })
-  }
-
-  if (!subLoading) {
-    console.log('subscription is done loading')
-    // Sentry.captureMessage('Subscription is done loading', {
-    //   user: {
-    //     email: loggedUser.email
-    //   }
-    // })
-  }
 
   const isLoading = queryLoading;
 
@@ -186,13 +145,6 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
       createdAt: new Date(subData.messageReceived.createdAt)
     }
 
-    // Sentry.captureMessage('Received a message in chat', {
-    //   user: {
-    //     email: loggedUser.email,
-    //     username: `${loggedUser.firstName} ${loggedUser.lastName}`
-    //   }
-    // })
-
     if (!curState ) {
       messages = [receivedMessage]
     } else {
@@ -227,15 +179,30 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
   }, [subData])
 
   useEffect(() => {
-    navigation.setOptions({
-      headerTitle: () => (
-        <TouchableOpacity onPress={() => navigation.navigate('ChatInfo', { className, tutorInfo, userInfo, chatID })}>
-          <ThemedText size={20} type={FONT_STYLES.MAIN}>
-            {className}
-          </ThemedText>
-        </TouchableOpacity>
-      )
-    })
+      navigation.setOptions({
+        headerTitle: () => (
+          <TouchableOpacity
+            onPress={() => {
+              if (className !== 'Admin Chat') {
+                navigation.navigate(
+                  'ChatInfo',
+                  {
+                    className,
+                    tutorInfo,
+                    userInfo,
+                    chatID
+                  }
+                )
+              }
+            }}
+          >
+            <ThemedText size={20} type={FONT_STYLES.MAIN}>
+              {className}
+            </ThemedText>
+          </TouchableOpacity>
+        ),
+        // headerBackTitle: className === 'Admin Chat' ? 'Admin Page' : 'Home'
+      })
   }, [])
 
   const curUser: MessageUser = {
@@ -256,7 +223,7 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
 
   return (
     <>
-      { isLoading ? (
+      {isLoading ? (
         <CenteredDiv>
           <LoadingComponent loading={isLoading} />
           <ThemedText

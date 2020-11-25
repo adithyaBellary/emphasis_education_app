@@ -93,7 +93,7 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
                   type='antdesign'
                   onPress={() => navigation.navigate('Chat', {
                     chatID: getUser.adminChat[0].chatID,
-                    className: 'Admin'
+                    className: 'Admin Chat'
                   })}
                 />
                 <ThemedText
