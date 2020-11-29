@@ -136,12 +136,7 @@ const MyGiftedChat: React.FC<GiftedChatProps> = ({
         multiline={true}
         placeholder='Start typing your message here'
         textInputStyle={{
-          fontFamily: theme.font.main,
-          // display: 'flex',
-          // justifyContent: 'center',
-          // alignItems: 'center',
-          // backgroundColor: 'grey',
-          // width: 10
+          fontFamily: theme.font.main
         }}
       />
     </>
