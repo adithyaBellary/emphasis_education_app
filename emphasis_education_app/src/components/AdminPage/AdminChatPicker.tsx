@@ -3,11 +3,10 @@ import { SafeAreaView, View } from 'react-native';
 import { Icon } from 'react-native-elements'
 
 import { GeneralContext } from '../Context/Context';
-import IndividualResult, { IndividualResultButton } from './common';
+import { IndividualResultButton } from './common';
 
 import { ThemedText, FONT_STYLES } from '../shared';
 import { SearchResultsContain }  from '../Search/common';
-
 
 interface AdminChatPickerProps {
   navigation: any;
@@ -23,7 +22,7 @@ const AdminChatPicker: React.FC<AdminChatPickerProps> = ({ navigation }) => {
   }
 
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <SearchResultsContain>
         {loggedUser.adminChat.map(_adminChat => (
           <IndividualResultButton

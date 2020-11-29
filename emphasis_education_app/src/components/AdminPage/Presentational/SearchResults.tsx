@@ -18,7 +18,7 @@ interface SearchResultsProps {
 }
 
 const SearchResults: React.FC<SearchResultsProps> = ({ searchResults, navigation }) => (
-  <View>
+  <View style={{ flex: 1}}>
     <SearchResultsContain>
       {searchResults.map((results, index) => (
         <IndividualResultButton

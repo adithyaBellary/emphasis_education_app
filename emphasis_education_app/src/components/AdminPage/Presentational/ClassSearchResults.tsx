@@ -9,7 +9,7 @@ interface ClassSearchResultsProps {
   searchResults: string[];
 }
 const ClassSearchResults: React.FC<ClassSearchResultsProps> = ({ searchResults }) => (
-  <View>
+  <View style={{ flex: 1}}>
     <SearchResultsContain>
       {searchResults.map((result, index) => (
         <IndividualResultContainer
