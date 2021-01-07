@@ -1,11 +1,8 @@
 import * as React from 'react';
-import styled from 'styled-components';
 import {
   Button,
   Alert,
   TouchableOpacity,
-  View,
-  ScrollView
 } from 'react-native';
 import {
   Input, Icon
@@ -109,7 +106,7 @@ const CreateChat: React.FC<CreateChatProps> = ({ navigation }) => {
       ),
       headerBackTitle: 'Chats'
     })
-  }, [])
+  })
 
   const createChat = () => {
     // console.log('creating a new chat with', selectedClasses, selectedUsers)
@@ -124,7 +121,6 @@ const CreateChat: React.FC<CreateChatProps> = ({ navigation }) => {
             tutorEmail = cur.email
             tutorFirstName = cur.firstName
             tutorLastName = cur.lastName
-            // console.log('setting', tutorEmail)
           }
           return acc
         } else {
@@ -156,7 +152,6 @@ const CreateChat: React.FC<CreateChatProps> = ({ navigation }) => {
         variables
       })
     } catch(e) {
-      // console.log('error', e)
       Alert.alert('Error creating this Chat. Please make sure that you have selected at least 1 tutor, 1 student, and a class')
     }
   }
