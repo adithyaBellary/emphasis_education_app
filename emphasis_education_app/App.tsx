@@ -110,8 +110,6 @@ console.log('the ws link is created', wsLink)
 const link = split(({ query }) => {
   const definition = getMainDefinition(query);
   const isSub = (definition.kind === 'OperationDefinition') && (definition.operation === 'subscription')
-  console.log('isSub?', isSub)
-  // Sentry.captureMessage(`isSub? ${isSub}`)
   return isSub
 },wsLink,
   httplink
