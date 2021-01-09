@@ -134,7 +134,7 @@ android {
         applicationId "com.emphasis_education_app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 21
+        versionCode 22
         versionName '0.0.20'
         vectorDrawables.useSupportLibrary = true
     }
