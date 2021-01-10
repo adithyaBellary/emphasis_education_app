@@ -86,6 +86,7 @@ const Wrapper: React.FC = ({ children }) => {
 
   React.useEffect(() => {
     const unsub = messaging().onMessage(async payload => {
+      Sentry.captureMessage(`in onMessage ${JSON.stringify(payload)}`)
       console.log('in on Message', payload)
       console.log('Platform', Platform.OS)
       incrementNotificationCounter(payload.data!.chatID)
