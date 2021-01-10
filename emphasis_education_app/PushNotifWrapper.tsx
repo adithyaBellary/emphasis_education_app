@@ -3,6 +3,7 @@ import messaging from '@react-native-firebase/messaging';
 import { Platform } from 'react-native'
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import PushNotification from 'react-native-push-notification';
+import * as Sentry from '@sentry/react-native';
 
 import { GeneralContext } from './src/components/Context/Context';
 
@@ -56,8 +57,10 @@ const Wrapper: React.FC = ({ children }) => {
     const unsub = messaging().setBackgroundMessageHandler(async payload => {
       console.log('i am being handled by the background message handler. this is the payload', payload)
       console.log('Platform', Platform.OS)
+      Sentry.captureMessage('in the background message handler')
       if (payload.data) {
         const { chatID, title, message } = payload.data;
+        Sentry.captureMessage(`triggered the background message handler. triggering notif for chat: ${chatID}`)
         incrementNotificationCounter(chatID)
         triggerNotif(title, message );
         setNotificationBadge(true)
