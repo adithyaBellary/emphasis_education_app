@@ -111,7 +111,7 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
         },
         headerLeft: () => null
       })
-      // subscribe to the messages
+      // subscribe to the messages (chats as well as admin chats)
       if (getUser.classes) {
         getUser.classes.forEach(_class => {
           if (_class) {
@@ -119,6 +119,17 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
               .subscribeToTopic(_class.chatID)
               .then(() => console.log('successfully subbed to topic'))
               .catch(e => console.log('there was an error in subbing to the topic, ', e))
+          }
+        })
+      }
+      if (getUser.adminChat) {
+        getUser.adminChat?.forEach(_adminChat => {
+          // subscribe to the admin chats too, so that we can receive push notifs from messages in these chats too
+          if (_adminChat) {
+            messaging()
+              .subscribeToTopic(_adminChat.chatID)
+              .then(() => console.log('successfully subbed to admin chat topic'))
+              .catch(e => console.log('there was an error in subbing to the admin chattopic, ', e))
           }
         })
       }
