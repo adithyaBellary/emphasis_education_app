@@ -117,8 +117,14 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
           if (_class) {
             messaging()
               .subscribeToTopic(_class.chatID)
-              .then(() => console.log('successfully subbed to topic'))
-              .catch(e => console.log('there was an error in subbing to the topic, ', e))
+              .then(() => {
+                Sentry.captureMessage(`${getUser.firstName} ${getUser.lastName} successfully subbed to ${_class.chatID}`)
+                console.log('successfully subbed to topic')
+              })
+              .catch(e => {
+                Sentry.captureMessage(`${getUser.firstName} ${getUser.lastName} was not able to sub to ${_class.chatID} ${e}`)
+                console.log('there was an error in subbing to the topic, ', e)
+              })
           }
         })
       }
@@ -128,8 +134,14 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
           if (_adminChat) {
             messaging()
               .subscribeToTopic(_adminChat.chatID)
-              .then(() => console.log('successfully subbed to admin chat topic'))
-              .catch(e => console.log('there was an error in subbing to the admin chattopic, ', e))
+              .then(() => {
+                Sentry.captureMessage(`${getUser.firstName} ${getUser.lastName} successfully subbed to  admin chat ${_adminChat.chatID}`)
+                console.log('successfully subbed to admin chat topic')
+              })
+              .catch(e => {
+                Sentry.captureMessage(`${getUser.firstName} ${getUser.lastName} was not able to sub to ${_adminChat.chatID} ${e}`)
+                console.log('there was an error in subbing to the admin chattopic, ', e)
+              })
           }
         })
       }
