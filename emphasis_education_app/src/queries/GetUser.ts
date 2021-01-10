@@ -9,7 +9,6 @@ export const GET_USER = gql`
       phoneNumber
       userType
       _id
-      # chatIDs
       classes {
         displayName
         className
@@ -26,7 +25,6 @@ export const GET_USER = gql`
         chatID
       }
       groupID
-      # gender
       adminChat {
         chatID
         user {
