@@ -17,7 +17,10 @@ const requestUserPermission = async () => {
   const authStatus = await messaging().requestPermission();
   const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED || messaging.AuthorizationStatus.PROVISIONAL
   if (enabled) {
+    Sentry.captureMessage(`user has permission ${authStatus}`)
     getFCMToken();
+  } else {
+    Sentry.captureMessage(`user does not have permission ${authStatus}`)
   }
 }
 
@@ -94,6 +97,10 @@ const Wrapper: React.FC = ({ children }) => {
     })
 
     return unsub
+  }, [])
+
+  React.useEffect(() => {
+    const unsub = messaging()
   }, [])
 
   return (
