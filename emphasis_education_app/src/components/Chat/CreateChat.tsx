@@ -133,7 +133,7 @@ const CreateChat: React.FC<CreateChatProps> = ({ navigation }) => {
         }
       }, [] as ChatUserInfo[])
 
-      if (!tutorEmail || !userInfo || !selectedClasses) {throw Error}
+      if (!tutorEmail || userInfo.length == 0 || !selectedClasses) {throw Error}
       const tutorInfo: ChatUserInfo = {
         firstName: tutorFirstName,
         lastName: tutorLastName,
@@ -152,7 +152,7 @@ const CreateChat: React.FC<CreateChatProps> = ({ navigation }) => {
         variables
       })
     } catch(e) {
-      Alert.alert('Error creating this Chat. Please make sure that you have selected at least 1 tutor, 1 student, and a class')
+      Alert.alert('Error creating this Chat. Please make sure that you have selected at least 1 tutor, 1 student or parent, and a class')
     }
   }
 
