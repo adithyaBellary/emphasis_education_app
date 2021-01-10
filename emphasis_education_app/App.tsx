@@ -103,7 +103,7 @@ const wsLink = new WebSocketLink(wsClient)
 //   }
 // });
 
-console.log('the ws link is created', wsLink)
+// console.log('the ws link is created', wsLink)
 // Sentry.captureMessage(`The ws link is created i think? ${!!wsLink}`)
 // Sentry.captureMessage(`The ws link is created: ${wsLink}`)
 
@@ -120,7 +120,7 @@ const theLink = ApolloLink.from([
   link
 ])
 
-console.log('link', link)
+// console.log('link', link)
 // Sentry.captureMessage(`the link is created i think? ${!!link}`)
 // console.log('link', !!link)
 
@@ -129,7 +129,7 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   link: theLink
 });
 
-console.log('the client', client)
+// console.log('the client', client)
 // Sentry.captureMessage(`the client is created i think? ${!!client}`)
 // console.log('the client', !!client)
 
