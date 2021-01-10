@@ -57,7 +57,7 @@ const Wrapper: React.FC = ({ children }) => {
     const unsub = messaging().setBackgroundMessageHandler(async payload => {
       console.log('i am being handled by the background message handler. this is the payload', payload)
       console.log('Platform', Platform.OS)
-      Sentry.captureMessage('in the background message handler')
+      Sentry.captureMessage(`In the background message handler ${JSON.stringify(payload)}`)
       if (payload.data) {
         const { chatID, title, message } = payload.data;
         Sentry.captureMessage(`triggered the background message handler. triggering notif for chat: ${chatID}`)
