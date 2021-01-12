@@ -201,6 +201,15 @@ export type AddFamilyMemberPayload = {
   family: Array<UserInfoType>;
 };
 
+export type FcmDeviceToken = {
+  __typename?: 'FCMDeviceToken';
+  _id: Scalars['String'];
+  token: Scalars['String'];
+  email: Scalars['String'];
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
   getMessages?: Maybe<Array<Maybe<MessageType>>>;
@@ -237,6 +246,7 @@ export type QuerySearchClassesArgs = {
 
 export type QueryGetUserArgs = {
   userEmail: Scalars['String'];
+  fcmToken?: Maybe<Scalars['String']>;
 };
 
 
@@ -260,6 +270,7 @@ export type Mutation = {
   sendBugEmail: GenericResponse;
   forgotPassword: GenericResponse;
   addChatMember: GenericResponse;
+  updateFCMDeviceTokens: GenericResponse;
   updateUser: GenericResponse;
 };
 
@@ -267,6 +278,7 @@ export type Mutation = {
 export type MutationLoginArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
+  token?: Maybe<Scalars['String']>;
 };
 
 
@@ -334,6 +346,12 @@ export type MutationForgotPasswordArgs = {
 export type MutationAddChatMemberArgs = {
   email: Scalars['String'];
   chatID: Scalars['String'];
+};
+
+
+export type MutationUpdateFcmDeviceTokensArgs = {
+  email: Scalars['String'];
+  token: Scalars['String'];
 };
 
 

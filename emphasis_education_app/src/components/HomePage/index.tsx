@@ -67,9 +67,11 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
   const { setUser, notificationBadge } = React.useContext(GeneralContext);
   const { logout } = React.useContext(AuthContext);
   const changeScreens = (dest: string) => () =>  navigation.navigate(dest)
+  const fcmToken = route.params.fcmToken
   const { data, loading, error } = useQuery<{ getUser: UserInfoType }, QueryGetUserArgs>(GET_USER, {
     variables: {
-      userEmail: route.params.token
+      userEmail: route.params.token,
+      fcmToken: fcmToken
     },
     onCompleted: ({ getUser }) => {
       setUser({...getUser})
@@ -118,11 +120,11 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
             messaging()
               .subscribeToTopic(_class.chatID)
               .then(() => {
-                Sentry.captureMessage(`${getUser.firstName} ${getUser.lastName} successfully subbed to ${_class.chatID}`)
+                // Sentry.captureMessage(`${getUser.firstName} ${getUser.lastName} successfully subbed to ${_class.chatID}`)
                 console.log('successfully subbed to topic')
               })
               .catch(e => {
-                Sentry.captureMessage(`${getUser.firstName} ${getUser.lastName} was not able to sub to ${_class.chatID} ${e}`)
+                // Sentry.captureMessage(`${getUser.firstName} ${getUser.lastName} was not able to sub to ${_class.chatID} ${e}`)
                 console.log('there was an error in subbing to the topic, ', e)
               })
           }
@@ -135,11 +137,11 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
             messaging()
               .subscribeToTopic(_adminChat.chatID)
               .then(() => {
-                Sentry.captureMessage(`${getUser.firstName} ${getUser.lastName} successfully subbed to  admin chat ${_adminChat.chatID}`)
+                // Sentry.captureMessage(`${getUser.firstName} ${getUser.lastName} successfully subbed to  admin chat ${_adminChat.chatID}`)
                 console.log('successfully subbed to admin chat topic')
               })
               .catch(e => {
-                Sentry.captureMessage(`${getUser.firstName} ${getUser.lastName} was not able to sub to ${_adminChat.chatID} ${e}`)
+                // Sentry.captureMessage(`${getUser.firstName} ${getUser.lastName} was not able to sub to ${_adminChat.chatID} ${e}`)
                 console.log('there was an error in subbing to the admin chattopic, ', e)
               })
           }

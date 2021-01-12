@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { useMutation } from '@apollo/client';
 import * as Sentry from '@sentry/react-native';
+import messaging from '@react-native-firebase/messaging';
 
 import Login from './components/Login';
 import Chat from './components/Chat/Chat';
@@ -60,7 +61,7 @@ const AuthStack: ({ error, loading}: { error: boolean, loading: boolean}) => JSX
 
 const AppStackNav = createStackNavigator();
 
-const AppStack: ({ userToken}: { userToken: string}) => JSX.Element = ({ userToken }) => (
+const AppStack: ({ fcmToken, userToken}: { fcmToken: string, userToken: string}) => JSX.Element = ({ fcmToken, userToken }) => (
   <AppStackNav.Navigator initialRouteName={'Home'}>
     <AppStackNav.Screen
       name="Home"
@@ -68,7 +69,10 @@ const AppStack: ({ userToken}: { userToken: string}) => JSX.Element = ({ userTok
       options={{
         headerTitle: () => <TitleText title='Home' />
       }}
-      initialParams={{ token: userToken}}
+      initialParams={{
+        token: userToken,
+        fcmToken: fcmToken,
+      }}
     />
     <AppStackNav.Screen
       name='AboutUs'
@@ -132,10 +136,10 @@ const AppStack: ({ userToken}: { userToken: string}) => JSX.Element = ({ userTok
 )
 
 const AppRootStackNav = createStackNavigator();
-const AppRootStack = ({ userToken, ...props }) => (
+const AppRootStack = ({ fcmToken, userToken, ...props }) => (
   <AppRootStackNav.Navigator headerMode="none" mode='modal'>
     <AppRootStackNav.Screen name="App">
-      {() => <AppStack {...props} userToken={userToken} />}
+      {() => <AppStack {...props} userToken={userToken} fcmToken={fcmToken} />}
     </AppRootStackNav.Screen>
     <AppRootStackNav.Screen name='AddUserModal' component={AddMember} />
     <AppRootStackNav.Screen name='ChatInfo' component={ChatInfo} />
@@ -143,11 +147,11 @@ const AppRootStack = ({ userToken, ...props }) => (
 )
 
 const RootStackNav = createStackNavigator();
-const RootStack: ({ userToken, error, loading}: { userToken: string, error: boolean, loading: boolean }) => JSX.Element = ({ userToken, error, loading }) => (
+const RootStack: ({ fcmToken, userToken, error, loading }: { fcmToken: string, userToken: string, error: boolean, loading: boolean }) => JSX.Element = ({ fcmToken, userToken, error, loading }) => (
   <RootStackNav.Navigator headerMode="none">
     { !!userToken ? (
       <RootStackNav.Screen name='AppRoot'>
-        {_props => <AppRootStack {..._props} userToken={userToken} /> }
+        {_props => <AppRootStack {..._props} userToken={userToken} fcmToken={fcmToken} /> }
       </RootStackNav.Screen>
     ) : (
       <RootStackNav.Screen name='Auth'>
@@ -158,14 +162,15 @@ const RootStack: ({ userToken, error, loading}: { userToken: string, error: bool
 )
 
 const StackNavigation: React.FC = () => {
-  const [{authLoading, userToken}, dispatch] = React.useReducer(
+  const [{authLoading, userToken, fcmToken}, dispatch] = React.useReducer(
     (prevState, action) => {
       switch (action.type) {
         case 'CHECK_LOGIN':
           return {
             ...prevState,
             authLoading: false,
-            userToken: action.token
+            userToken: action.token,
+            fcmToken: action.fcmToken
           };
         case 'LOGIN':
           return {
@@ -177,24 +182,27 @@ const StackNavigation: React.FC = () => {
           return {
             ...prevState,
             loggingOut: true,
-            userToken: null
+            userToken: null,
+            fcmToken: null
           };
       }
     }, {
       authLoading: true,
       userToken: null,
-      loggingOut: false
+      loggingOut: false,
+      fcmToken: null
     }
   )
 
   const _checkAuth = async () => {
     let userToken;
+    const fcmToken = await messaging().getToken().then(token => token);
     try {
       userToken = await AsyncStorage.getItem(LOGIN_TOKEN)
     } catch (e) {
       console.log('checking for login failed')
     }
-    dispatch({ type: 'CHECK_LOGIN', token: userToken})
+    dispatch({ type: 'CHECK_LOGIN', token: userToken, fcmToken})
   }
 
   React.useEffect(() => {
@@ -211,10 +219,14 @@ const StackNavigation: React.FC = () => {
 
   const authContext = React.useMemo(
     () => ({
-      login: (email: string, password: string) => {
+      login: async (email: string, password: string) => {
+        // get the device token and send it here to add to the db
+        const token = await messaging().getToken().then(token => token);
+        // console.log('fcm token while logging in', token);
         _login({ variables: {
           email,
-          password
+          password,
+          token
         }})
         .then(async ({ data }) => {
           if (data?.login.res) {
@@ -260,10 +272,11 @@ const StackNavigation: React.FC = () => {
     )
   }
 
+  console.log('token down here', fcmToken)
   return (
     <AuthContext.Provider value={authContext}>
       <NavigationContainer>
-        <RootStack userToken={userToken} error={loginError} loading={loading} />
+        <RootStack fcmToken={fcmToken} userToken={userToken} error={loginError} loading={loading} />
       </NavigationContainer>
     </AuthContext.Provider>
   )

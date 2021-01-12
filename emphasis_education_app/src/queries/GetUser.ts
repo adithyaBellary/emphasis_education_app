@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export const GET_USER = gql`
-  query getUser($userEmail: String!) {
-    getUser(userEmail: $userEmail) {
+  query getUser($userEmail: String!, $fcmToken: String) {
+    getUser(userEmail: $userEmail, fcmToken: $fcmToken) {
       firstName
       lastName
       email
