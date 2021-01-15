@@ -113,6 +113,7 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
         },
         headerLeft: () => null
       })
+      // delete all this
       // subscribe to the messages (chats as well as admin chats)
       if (getUser.classes) {
         getUser.classes.forEach(_class => {
