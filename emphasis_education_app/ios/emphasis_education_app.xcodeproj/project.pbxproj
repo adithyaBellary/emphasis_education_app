@@ -883,7 +883,7 @@
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = BUZ9RX5QJ7;
 				INFOPLIST_FILE = emphasis_education_app/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 0.0.21;
 				OTHER_LDFLAGS = (
@@ -912,7 +912,7 @@
 				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = BUZ9RX5QJ7;
 				INFOPLIST_FILE = emphasis_education_app/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 0.0.21;
 				MTL_ENABLE_DEBUG_INFO = YES;
