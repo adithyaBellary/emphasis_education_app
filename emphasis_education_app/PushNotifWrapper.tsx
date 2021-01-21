@@ -63,7 +63,7 @@ const Wrapper: React.FC = ({ children }) => {
     messaging().onNotificationOpenedApp(async message => {
       console.log('we are coming from a background state', message)
       console.log('Platform', Platform.OS)
-      triggerNotif('title', 'onnotif opened app');
+      // triggerNotif('title', 'onnotif opened app');
     })
 
     // return fcn;
@@ -77,7 +77,7 @@ const Wrapper: React.FC = ({ children }) => {
       Sentry.captureMessage(`In the background message handler ${JSON.stringify(payload)}`)
       if (payload.data) {
         const { chatID, title, message } = payload.data;
-        Sentry.captureMessage(`triggered the background message handler. triggering notif for chat: ${chatID}`)
+        // Sentry.captureMessage(`triggered the background message handler. triggering notif for chat: ${chatID}`)
         incrementNotificationCounter(chatID)
         // looks like we do not need to trigger the notif ourselves.
         // we can trigger the notification from the server itself
@@ -105,19 +105,21 @@ const Wrapper: React.FC = ({ children }) => {
 
   React.useEffect(() => {
     const unsub = messaging().onMessage(async payload => {
-      Sentry.captureMessage(`in onMessage ${JSON.stringify(payload)}`)
-      console.log('in on Message', payload)
-      console.log('Platform', Platform.OS)
+      // Sentry.captureMessage(`in onMessage ${JSON.stringify(payload)}`)
+      // console.log('in on Message', payload)
+      // console.log('Platform', Platform.OS)
+      console.log('payload', payload)
       incrementNotificationCounter(payload.data!.chatID)
       setNotificationBadge(true)
+      triggerNotif('New Message', 'You received a new message');
     })
 
     return unsub
   }, [])
 
-  React.useEffect(() => {
-    const unsub = messaging()
-  }, [])
+  // React.useEffect(() => {
+  //   const unsub = messaging()
+  // }, [])
 
   return (
     <>{children}</>

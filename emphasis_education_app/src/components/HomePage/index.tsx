@@ -4,6 +4,7 @@ import { View } from 'react-native';
 import styled from 'styled-components';
 import messaging from '@react-native-firebase/messaging';
 import * as Sentry from '@sentry/react-native';
+import { gql, useApolloClient, useQuery } from '@apollo/client';
 
 import { MissionStatement, HeaderTitle, LogiImage } from './logos';
 
@@ -25,7 +26,7 @@ import {
   UserInfoType,
   QueryGetUserArgs
  } from '../../../types/schema-types';
- import { gql, useApolloClient, useQuery } from '@apollo/client';
+import { VERSION } from '../../../src/constant';
 
 interface LiftedHomeProps {
   navigation: any;
@@ -182,6 +183,12 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
         >
           Try logging out / in again
         </ThemedText>
+        <ThemedText
+          size={14}
+          type={FONT_STYLES.MAIN}
+        >
+          You are currently on app version v{VERSION}
+        </ThemedText>
         <ThemedButton
           buttonText='Back to login'
           onPress={logout}
@@ -219,7 +226,8 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
                 containerStyle={{
                   position: 'absolute',
                   top: 10,
-                  right: 10
+                  right: 10,
+                  zIndex: 100
                 }}
                 badgeStyle={{
                   height: 10,
