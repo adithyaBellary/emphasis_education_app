@@ -135,7 +135,7 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 
 const App = () => {
   const [user, setUser] = React.useState<UserInfoType>({} as UserInfoType);
-  const [notifications, incrementNotifications] = React.useState<NotificationsProps>({} as NotificationsProps);
+  const [notifications, setNotifications] = React.useState<NotificationsProps>({} as NotificationsProps);
   const [notificationBadge, setBadge] = React.useState<boolean>(false);
   const updateUser = (newUser: UserInfoType) => {
     // set Sentry user here as well
@@ -146,16 +146,18 @@ const App = () => {
     })
     setUser(newUser)
   }
-  const incrementNotificationCounter = (chatID: string) => {
-    let oldVal: number = 1;
-    if (notifications[chatID]) {
-      oldVal = notifications[chatID] + 1
-    }
-    incrementNotifications({...notifications, [chatID]: oldVal})
+  const updateNotifications = (chatID: string) => {
+    // let oldVal: number = 1;
+    // if (notifications[chatID]) {
+    //   oldVal = notifications[chatID] + 1
+    // }
+    console.log('notifications in the handler', notifications)
+    console.log('chat ID in the update notifs', chatID)
+    setNotifications({...notifications, [chatID]: true})
   }
 
   const clearNotificationCounter = (chatID: string) => {
-    incrementNotifications({ ...notifications, [chatID]: 0})
+    setNotifications({ ...notifications, [chatID]: false})
     setBadge(false)
   }
 
@@ -166,11 +168,12 @@ const App = () => {
   const value: Context = {
     loggedUser: user,
     notifications,
-    incrementNotificationCounter,
+    updateNotifications,
     clearNotificationCounter,
     setUser: updateUser,
     notificationBadge,
-    setNotificationBadge
+    setNotificationBadge,
+    setNotifications
   }
 
   return (

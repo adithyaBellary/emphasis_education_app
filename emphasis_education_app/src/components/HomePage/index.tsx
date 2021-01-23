@@ -4,6 +4,7 @@ import { View } from 'react-native';
 import styled from 'styled-components';
 import messaging from '@react-native-firebase/messaging';
 import * as Sentry from '@sentry/react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import { gql, useApolloClient, useQuery } from '@apollo/client';
 
 import { MissionStatement, HeaderTitle, LogiImage } from './logos';
@@ -26,7 +27,7 @@ import {
   UserInfoType,
   QueryGetUserArgs
  } from '../../../types/schema-types';
-import { VERSION } from '../../../src/constant';
+import { NOTIFICATIONS_KEY, VERSION } from '../../../src/constant';
 
 interface LiftedHomeProps {
   navigation: any;
@@ -65,7 +66,10 @@ const AdminIcon: React.FC<{ changeScreens (dest: string): () => void }> = ({ cha
 );
 
 const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
-  const { setUser, notificationBadge } = React.useContext(GeneralContext);
+  const { setUser, notificationBadge, loggedUser, notifications, setNotifications } = React.useContext(GeneralContext);
+  const [notifBadge, setNotifBadge] = React.useState<boolean>(false)
+  const [adminNotifBadge, setAdminNotifBadge] = React.useState<boolean>(false)
+  const [currentUser, setCurrentUser] = React.useState<UserInfoType>({} as UserInfoType)
   const { logout } = React.useContext(AuthContext);
   const changeScreens = (dest: string) => () =>  navigation.navigate(dest)
   const fcmToken = route.params.fcmToken
@@ -74,8 +78,77 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
       userEmail: route.params.token,
       fcmToken: fcmToken
     },
+    // fetchPolicy: 'no-cache',
     onCompleted: ({ getUser }) => {
       setUser({...getUser})
+      setCurrentUser(getUser)
+      const classIDs = getUser.classes?.map(_class => _class.chatID)
+      const adminIds = getUser.adminChat?.map(_adminChat => _adminChat.chatID)
+      console.log('class ids', classIDs)
+      console.log('admin ids', adminIds)
+      console.log('notifs in the home page', notifications)
+      Object.keys(notifications).map(_notifChatID => {
+        if (classIDs?.includes(_notifChatID) && notifications[_notifChatID]) {
+          setNotifBadge(true)
+        }
+        if (adminIds?.includes(_notifChatID) && notifications[_notifChatID]) {
+          setAdminNotifBadge(true)
+        }
+      })
+    }
+  })
+
+  React.useEffect(() => {
+    console.log('notifications in the use effect', notifications)
+    console.log('cur user', currentUser)
+  }, [notifications])
+
+  // React.useEffect(() => {
+  //   const updateNotifBadge = async () => {
+  //     const notifValue = await AsyncStorage.getItem(NOTIFICATIONS_KEY)
+  //     if (!!notifValue) {
+  //       const notificationDictionary = JSON.parse(notifValue)
+  //       if (Object.keys(notificationDictionary).length > 0) {
+  //         if (data && data.getUser.classes) {
+  //           const classChatIDs = data.getUser.classes.map(_class => _class.chatID)
+  //           // console.log('chatIds', classChatIDs)
+  //           Object.entries(notificationDictionary).forEach(([key, val]) => {
+  //             // console.log('obj', key, val)
+  //             if (classChatIDs.includes(key)) {
+  //               setNotifBadge(true)
+  //             }
+  //           })
+  //         }
+
+  //       }
+  //     }
+  //   }
+
+  //   updateNotifBadge();
+  // })
+
+  React.useEffect(() => {
+    const asyncFunction = async (user: UserInfoType) => {
+      const oldVal = await AsyncStorage.getItem(NOTIFICATIONS_KEY)
+      if (!!oldVal) {
+        const oldObject = JSON.parse(oldVal)
+        if (Object.keys(oldObject).length > 0) {
+          const adminClasses = user.adminChat?.map(_class => _class.chatID)
+          if (adminClasses) {
+            Object.entries(oldObject).forEach(([key, val]) => {
+              // console.log('obj', key, val)
+              if (adminClasses.includes(key)) {
+                setAdminNotifBadge(true)
+              }
+            })
+          }
+        }
+      }
+    }
+    if ( data && data?.getUser) {
+      // console.log('user', loggedUser)
+      // console.log('data', data.getUser)
+      asyncFunction(data.getUser)
       navigation.setOptions({
         headerRight: () => (
           <IconRow>
@@ -83,6 +156,22 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
               Permission.Admin
             ]}>
               <AdminIcon changeScreens={changeScreens}/>
+              {adminNotifBadge && (
+                <Badge
+                  containerStyle={{
+                    position: 'absolute',
+                    top: 0,
+                    right: 5,
+                    zIndex: 100
+                  }}
+                  badgeStyle={{
+                    height: 10,
+                    width: 10,
+                    borderRadius: 5,
+                    backgroundColor: 'green'
+                  }}
+                />
+              )}
             </PermissionedComponent>
 
             <PermissionedComponent allowedPermissions={[
@@ -95,10 +184,26 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
                   name='user'
                   type='antdesign'
                   onPress={() => navigation.navigate('Chat', {
-                    chatID: getUser.adminChat[0].chatID,
+                    chatID: data.getUser.adminChat[0].chatID,
                     className: 'Admin Chat'
                   })}
                 />
+                {adminNotifBadge && (
+                  <Badge
+                    containerStyle={{
+                      position: 'absolute',
+                      top: 5,
+                      right: 20,
+                      zIndex: 100
+                    }}
+                    badgeStyle={{
+                      height: 10,
+                      width: 10,
+                      borderRadius: 5,
+                      backgroundColor: 'green'
+                    }}
+                  />
+                )}
                 <ThemedText
                   size={14}
                   type={FONT_STYLES.MAIN}
@@ -114,41 +219,7 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
         },
         headerLeft: () => null
       })
-      // delete all this
-      // subscribe to the messages (chats as well as admin chats)
-      if (getUser.classes) {
-        getUser.classes.forEach(_class => {
-          if (_class) {
-            messaging()
-              .subscribeToTopic(_class.chatID)
-              .then(() => {
-                // Sentry.captureMessage(`${getUser.firstName} ${getUser.lastName} successfully subbed to ${_class.chatID}`)
-                console.log('successfully subbed to topic')
-              })
-              .catch(e => {
-                // Sentry.captureMessage(`${getUser.firstName} ${getUser.lastName} was not able to sub to ${_class.chatID} ${e}`)
-                console.log('there was an error in subbing to the topic, ', e)
-              })
-          }
-        })
-      }
-      if (getUser.adminChat) {
-        getUser.adminChat?.forEach(_adminChat => {
-          // subscribe to the admin chats too, so that we can receive push notifs from messages in these chats too
-          if (_adminChat) {
-            messaging()
-              .subscribeToTopic(_adminChat.chatID)
-              .then(() => {
-                // Sentry.captureMessage(`${getUser.firstName} ${getUser.lastName} successfully subbed to  admin chat ${_adminChat.chatID}`)
-                console.log('successfully subbed to admin chat topic')
-              })
-              .catch(e => {
-                // Sentry.captureMessage(`${getUser.firstName} ${getUser.lastName} was not able to sub to ${_adminChat.chatID} ${e}`)
-                console.log('there was an error in subbing to the admin chattopic, ', e)
-              })
-          }
-        })
-      }
+
     }
   })
 
@@ -221,13 +292,13 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
               onPress={changeScreens('ChatPicker')}
               reverse={true}
             />
-            {notificationBadge && (
+            {notifBadge && (
               <Badge
                 containerStyle={{
                   position: 'absolute',
                   top: 10,
                   right: 10,
-                  zIndex: 100
+                  zIndex: 10000
                 }}
                 badgeStyle={{
                   height: 10,

@@ -7,6 +7,7 @@ import {
 import { Icon } from 'react-native-elements';
 import { useLazyQuery } from '@apollo/client';
 import messaging from '@react-native-firebase/messaging';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import { GeneralContext } from '../Context/Context';
 import {
@@ -21,6 +22,7 @@ import {
 import { GET_USER } from '../../queries/GetUser';
 import { Permission, ChatUserInfo, } from '../../types';
 import { UserInfoTypeInput } from '../../../types/schema-types';
+import { NOTIFICATIONS_KEY, VERSION } from '../../../src/constant';
 
 import { EmptyChatPicker } from './common';
 import IndividualChat from './IndividualChat';
@@ -38,6 +40,7 @@ export const ChatsContain: React.FC = ({ children }) => (
 
 const ChatPicker: React.FC<ChatPickerProps> = ({ navigation }) => {
   const { loggedUser, setUser, notifications, clearNotificationCounter } = React.useContext(GeneralContext);
+  const [notifs, setNotifs] = React.useState({} as {[key: string]: boolean});
   // console.log('notifications badge', notifications);
   // console.log('logged user in chat picker', loggedUser);
   const [getUser, { data, loading, error}] = useLazyQuery(GET_USER, {
@@ -53,16 +56,16 @@ const ChatPicker: React.FC<ChatPickerProps> = ({ navigation }) => {
       // subscription code is run
 
       // console.log('getUser', getUser.classes)
-      if (getUser.classes) {
-        getUser.classes.forEach(_class => {
-          // subscribe to the class
-          // console.log('subscribing to the chat', _class.chatID)
-          messaging()
-            .subscribeToTopic(_class.chatID)
-            // .then(() => console.log('successfully subscribed to the topic'))
-            .catch(e => console.log('was not able to subscribe to the topic', e))
-        })
-      }
+      // if (getUser.classes) {
+      //   getUser.classes.forEach(_class => {
+      //     // subscribe to the class
+      //     // console.log('subscribing to the chat', _class.chatID)
+      //     messaging()
+      //       .subscribeToTopic(_class.chatID)
+      //       // .then(() => console.log('successfully subscribed to the topic'))
+      //       .catch(e => console.log('was not able to subscribe to the topic', e))
+      //   })
+      // }
 
       setUser({...getUser})
     },
@@ -72,6 +75,18 @@ const ChatPicker: React.FC<ChatPickerProps> = ({ navigation }) => {
   React.useEffect(() => {
     getClasses();
   }, [])
+
+  React.useState(() => {
+    const asyncFcn = async () => {
+      const oldVal = await AsyncStorage.getItem(NOTIFICATIONS_KEY)
+      if (oldVal) {
+        const oldDict = JSON.parse(oldVal);
+        setNotifs(oldDict);
+      }
+    }
+
+    asyncFcn()
+  })
 
   const goToChat = (sub: string, className: string, tutorInfo: ChatUserInfo, userInfo: ChatUserInfo[]) => {
     navigation.navigate(
@@ -85,10 +100,11 @@ const ChatPicker: React.FC<ChatPickerProps> = ({ navigation }) => {
     )
   }
   const goToCreateChat = () => navigation.navigate('CreateChat');
-  const getClasses = () => {
-    getUser({ variables: { userEmail: loggedUser.email}})
-  }
+  const getClasses = () => getUser({ variables: { userEmail: loggedUser.email}})
 
+  // if (notifs) {
+  //   console.log('in chat picker', notifs);
+  // }
   React.useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -147,7 +163,8 @@ const ChatPicker: React.FC<ChatPickerProps> = ({ navigation }) => {
               goToChat={goToChat}
               key={_class.chatID}
               getClasses={getClasses}
-              displayNotificationBadge={!!notifications[_class.chatID]}
+              // displayNotificationBadge={!!notifications[_class.chatID]}
+              displayNotificationBadge={!!notifs[_class.chatID]}
               clearNotificationCounter={clearNotificationCounter}
               userEmail={loggedUser.email}
             />
