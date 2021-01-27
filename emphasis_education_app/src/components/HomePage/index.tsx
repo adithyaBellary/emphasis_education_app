@@ -67,7 +67,7 @@ const AdminIcon: React.FC<{ changeScreens (dest: string): () => void }> = ({ cha
 );
 
 const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
-  const { setUser, notificationBadge, loggedUser, notifications, setNotifications } = React.useContext(GeneralContext);
+  const { setUser, notificationBadge, loggedUser, notifications, updateNotifications } = React.useContext(GeneralContext);
   const [notifBadge, setNotifBadge] = React.useState<boolean>(false)
   const [adminNotifBadge, setAdminNotifBadge] = React.useState<boolean>(false)
   const [currentUser, setCurrentUser] = React.useState<UserInfoType>({} as UserInfoType)
@@ -113,15 +113,12 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
       }
       if (adminChatNotifs.length > 0) {
         setAdminNotifBadge(true)
+        // should also set the notifications in the context for the admin chat
+        // we do not query there, only read from the logged user in the context
+        adminChatNotifs.forEach(_adminChatID => {
+          updateNotifications(_adminChatID!)
+        })
       }
-      // Object.keys(notifications).map(_notifChatID => {
-      //   if (classIDs?.includes(_notifChatID) && notifications[_notifChatID]) {
-      //     setNotifBadge(true)
-      //   }
-      //   if (adminIds?.includes(_notifChatID) && notifications[_notifChatID]) {
-      //     setAdminNotifBadge(true)
-      //   }
-      // })
     }
   })
 

@@ -5,7 +5,7 @@ import { Icon } from 'react-native-elements'
 import { GeneralContext } from '../Context/Context';
 import { IndividualResultButton } from './common';
 
-import { ThemedText, FONT_STYLES } from '../shared';
+import { ThemedText, FONT_STYLES, NotificationBadge } from '../shared';
 import { SearchResultsContain }  from '../Search/common';
 
 interface AdminChatPickerProps {
@@ -15,7 +15,8 @@ interface AdminChatPickerProps {
 
 // let us get the chats from the context
 const AdminChatPicker: React.FC<AdminChatPickerProps> = ({ navigation }) => {
-  const { loggedUser } = React.useContext(GeneralContext);
+  const { loggedUser, notifications } = React.useContext(GeneralContext);
+  console.log('notifications', notifications);
 
   if(!loggedUser.adminChat) {
     return null
@@ -35,10 +36,16 @@ const AdminChatPicker: React.FC<AdminChatPickerProps> = ({ navigation }) => {
               }
             )}
           >
-            <ThemedText size={14} type={FONT_STYLES.MAIN}>{_adminChat.user.firstName} {_adminChat.user.lastName}</ThemedText>
-            <Icon
-              name='message'
-            />
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row'
+              }}
+            >
+              <NotificationBadge />
+              <ThemedText size={14} type={FONT_STYLES.MAIN}>{_adminChat.user.firstName} {_adminChat.user.lastName}</ThemedText>
+            </View>
+            <Icon name='message' />
           </IndividualResultButton>
         ))}
       </SearchResultsContain>

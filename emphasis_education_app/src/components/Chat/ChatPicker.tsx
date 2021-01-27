@@ -21,7 +21,11 @@ import {
 } from '../shared';
 import { GET_USER } from '../../queries/GetUser';
 import { Permission, ChatUserInfo, } from '../../types';
-import { UserInfoTypeInput } from '../../../types/schema-types';
+import {
+  UserInfoType,
+  QueryGetUserArgs,
+  GetUserPayload
+ } from '../../../types/schema-types';
 import { NOTIFICATIONS_KEY, VERSION } from '../../../src/constant';
 
 import { EmptyChatPicker } from './common';
@@ -40,10 +44,11 @@ export const ChatsContain: React.FC = ({ children }) => (
 
 const ChatPicker: React.FC<ChatPickerProps> = ({ navigation }) => {
   const { loggedUser, setUser, notifications, clearNotificationCounter } = React.useContext(GeneralContext);
-  const [notifs, setNotifs] = React.useState({} as {[key: string]: boolean});
+  const [notifs, setNotifs] = React.useState<string[]>([]);
+  // const []
   // console.log('notifications badge', notifications);
   // console.log('logged user in chat picker', loggedUser);
-  const [getUser, { data, loading, error}] = useLazyQuery(GET_USER, {
+  const [getUser, { data, loading, error}] = useLazyQuery<{ getUser: GetUserPayload }, QueryGetUserArgs>(GET_USER, {
     onCompleted: ({ getUser }) => {
       // subscribe to the topics for each of the new classes
       // easiest way could just be subscribing to all classes and not
@@ -52,7 +57,7 @@ const ChatPicker: React.FC<ChatPickerProps> = ({ navigation }) => {
       // unclear how i would handle unsunscribing to the topics though
 
       // this is flawed because we need to manually refresh the page to trigger the
-      // topic subscription code. this user will not be sent push notifications until the
+      // topic subscription code. this user will not be sent push notisfications until the
       // subscription code is run
 
       // console.log('getUser', getUser.classes)
@@ -66,8 +71,14 @@ const ChatPicker: React.FC<ChatPickerProps> = ({ navigation }) => {
       //       .catch(e => console.log('was not able to subscribe to the topic', e))
       //   })
       // }
-
       setUser({...getUser.user})
+      // update notificaation badges
+      getUser.chatNotifications.forEach(_notifObject => {
+        if (!_notifObject!.isAdmin) {
+          setNotifs([...notifs, _notifObject!.chatID])
+        }
+      })
+
     },
     fetchPolicy: 'no-cache'
   })
@@ -163,8 +174,7 @@ const ChatPicker: React.FC<ChatPickerProps> = ({ navigation }) => {
               goToChat={goToChat}
               key={_class.chatID}
               getClasses={getClasses}
-              // displayNotificationBadge={!!notifications[_class.chatID]}
-              displayNotificationBadge={!!notifs[_class.chatID]}
+              displayNotificationBadge={notifs.includes(_class.chatID)}
               clearNotificationCounter={clearNotificationCounter}
               userEmail={loggedUser.email}
             />

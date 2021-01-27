@@ -19,7 +19,8 @@ import {
   HorizontalDivider,
   VerticalDivider,
   IconRow,
-  FONT_STYLES
+  FONT_STYLES,
+  NotificationBadge
  } from '../shared'
 import { theme } from '../../theme';
 import { NOTIFICATIONS_KEY } from '../../constant';
@@ -31,7 +32,6 @@ import {
   RightText,
   SpacedItemRow,
   ChatContain,
-  NotificationBadge
 } from './common';
 
 interface ChatDisplayProps {
@@ -101,12 +101,9 @@ const ChatDisplay: React.FC<ChatDisplayProps> = ({
     const oldVal = await AsyncStorage.getItem(NOTIFICATIONS_KEY)
     if (oldVal) {
       const oldDict = JSON.parse(oldVal);
-      console.log('oldDict:', oldDict);
       if (oldDict[chatID]) {
-        console.log('here')
         delete oldDict[chatID];
       }
-      console.log('oldDict after del:', oldDict);
       await AsyncStorage.setItem(NOTIFICATIONS_KEY, JSON.stringify(oldDict))
     }
     goToChat(chatID, className, tutorInfo, userInfo)
