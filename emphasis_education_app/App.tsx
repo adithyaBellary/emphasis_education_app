@@ -38,7 +38,7 @@ Sentry.init({
   release: 'emphasis-education-app@' + VERSION
 });
 
-const DEBUG = false;
+const DEBUG = true;
 
 const cache = new InMemoryCache();
 const httplink = new HttpLink({

@@ -67,7 +67,7 @@ const ChatPicker: React.FC<ChatPickerProps> = ({ navigation }) => {
       //   })
       // }
 
-      setUser({...getUser})
+      setUser({...getUser.user})
     },
     fetchPolicy: 'no-cache'
   })
@@ -76,17 +76,17 @@ const ChatPicker: React.FC<ChatPickerProps> = ({ navigation }) => {
     getClasses();
   }, [])
 
-  React.useState(() => {
-    const asyncFcn = async () => {
-      const oldVal = await AsyncStorage.getItem(NOTIFICATIONS_KEY)
-      if (oldVal) {
-        const oldDict = JSON.parse(oldVal);
-        setNotifs(oldDict);
-      }
-    }
+  // React.useState(() => {
+  //   const asyncFcn = async () => {
+  //     const oldVal = await AsyncStorage.getItem(NOTIFICATIONS_KEY)
+  //     if (oldVal) {
+  //       const oldDict = JSON.parse(oldVal);
+  //       setNotifs(oldDict);
+  //     }
+  //   }
 
-    asyncFcn()
-  })
+  //   asyncFcn()
+  // })
 
   const goToChat = (sub: string, className: string, tutorInfo: ChatUserInfo, userInfo: ChatUserInfo[]) => {
     navigation.navigate(

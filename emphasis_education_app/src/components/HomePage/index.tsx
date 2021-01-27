@@ -25,7 +25,8 @@ import { GET_USER } from '../../queries/GetUser';
 import { theme } from '../../theme';
 import {
   UserInfoType,
-  QueryGetUserArgs
+  QueryGetUserArgs,
+  GetUserPayload
  } from '../../../types/schema-types';
 import { NOTIFICATIONS_KEY, VERSION } from '../../../src/constant';
 
@@ -73,28 +74,54 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
   const { logout } = React.useContext(AuthContext);
   const changeScreens = (dest: string) => () =>  navigation.navigate(dest)
   const fcmToken = route.params.fcmToken
-  const { data, loading, error } = useQuery<{ getUser: UserInfoType }, QueryGetUserArgs>(GET_USER, {
+  const { data, loading, error } = useQuery<{ getUser: GetUserPayload }, QueryGetUserArgs>(GET_USER, {
     variables: {
       userEmail: route.params.token,
       fcmToken: fcmToken
     },
     // fetchPolicy: 'no-cache',
     onCompleted: ({ getUser }) => {
-      setUser({...getUser})
-      setCurrentUser(getUser)
-      const classIDs = getUser.classes?.map(_class => _class.chatID)
-      const adminIds = getUser.adminChat?.map(_adminChat => _adminChat.chatID)
+      setUser({...getUser.user})
+      setCurrentUser(getUser.user)
+      const classIDs = getUser.user.classes?.map(_class => _class.chatID)
+      const adminIds = getUser.user.adminChat?.map(_adminChat => _adminChat.chatID)
       console.log('class ids', classIDs)
       console.log('admin ids', adminIds)
-      console.log('notifs in the home page', notifications)
-      Object.keys(notifications).map(_notifChatID => {
-        if (classIDs?.includes(_notifChatID) && notifications[_notifChatID]) {
-          setNotifBadge(true)
-        }
-        if (adminIds?.includes(_notifChatID) && notifications[_notifChatID]) {
-          setAdminNotifBadge(true)
-        }
-      })
+      // console.log('notifs in the home page', notifications)
+      const regChatNotifIDs = getUser.chatNotifications.length > 0
+        ? getUser.chatNotifications.map(_notif => {
+          if (!_notif!.isAdmin) {
+            return _notif?.chatID
+          }
+          return null
+        }).filter(chatID => !!chatID)
+        : []
+
+      const adminChatNotifs = getUser.chatNotifications.length > 0
+        ? getUser.chatNotifications.map(_notif => {
+          if (_notif!.isAdmin) {
+            return _notif?.chatID
+          }
+          return null
+        }).filter(chatID => !!chatID)
+        : []
+
+      console.log('reg chat', regChatNotifIDs)
+      console.log('admin chat', adminChatNotifs)
+      if (regChatNotifIDs.length > 0) {
+        setNotifBadge(true)
+      }
+      if (adminChatNotifs.length > 0) {
+        setAdminNotifBadge(true)
+      }
+      // Object.keys(notifications).map(_notifChatID => {
+      //   if (classIDs?.includes(_notifChatID) && notifications[_notifChatID]) {
+      //     setNotifBadge(true)
+      //   }
+      //   if (adminIds?.includes(_notifChatID) && notifications[_notifChatID]) {
+      //     setAdminNotifBadge(true)
+      //   }
+      // })
     }
   })
 
@@ -148,7 +175,7 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
     if ( data && data?.getUser) {
       // console.log('user', loggedUser)
       // console.log('data', data.getUser)
-      asyncFunction(data.getUser)
+      // asyncFunction(data.getUser.user)
       navigation.setOptions({
         headerRight: () => (
           <IconRow>
@@ -184,7 +211,7 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
                   name='user'
                   type='antdesign'
                   onPress={() => navigation.navigate('Chat', {
-                    chatID: data.getUser.adminChat[0].chatID,
+                    chatID: data.getUser.user.adminChat[0].chatID,
                     className: 'Admin Chat'
                   })}
                 />
@@ -258,7 +285,7 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
           size={14}
           type={FONT_STYLES.MAIN}
         >
-          You are currently on app version v{VERSION}
+          You are currently on app version v{VERSION}. Try updating the app if the problem continues
         </ThemedText>
         <ThemedButton
           buttonText='Back to login'
