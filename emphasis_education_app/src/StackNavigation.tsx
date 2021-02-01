@@ -30,6 +30,8 @@ import { LOGIN } from './queries/Login';
 import { ILoginPayload } from './types';
 import { theme } from './theme';
 
+import { GeneralContext } from '../src/components/Context/Context';
+
 const AuthStackNav = createStackNavigator();
 const AuthStack: ({ error, loading}: { error: boolean, loading: boolean}) => JSX.Element = ({ error, loading }) => (
   <AuthStackNav.Navigator initialRouteName={'Login'}>
@@ -162,6 +164,8 @@ const RootStack: ({ fcmToken, userToken, error, loading }: { fcmToken: string, u
 )
 
 const StackNavigation: React.FC = () => {
+  const {clearAllNotifications} = React.useContext(GeneralContext);
+
   const [{authLoading, userToken, fcmToken}, dispatch] = React.useReducer(
     (prevState, action) => {
       switch (action.type) {
@@ -255,6 +259,8 @@ const StackNavigation: React.FC = () => {
       },
       logout: async () => {
         await AsyncStorage.clear();
+        // clear all notification messages
+        clearAllNotifications()
         // unset the user on logout
         Sentry.configureScope(scope => scope.setUser(null));
         dispatch({ type: 'LOGOUT'})

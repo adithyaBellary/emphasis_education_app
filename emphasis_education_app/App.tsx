@@ -158,6 +158,10 @@ const App = () => {
     setNotifications({...notifications, [chatID]: {chatID, isAdmin}})
   }
 
+  const clearAllNotifications = () => {
+    setNotifications({})
+  }
+
   const clearNotificationCounter = (chatID: string) => {
     console.log('old notifs before deleting', notifications)
     delete notifications[chatID]
@@ -178,7 +182,7 @@ const App = () => {
     setUser: updateUser,
     notificationBadge,
     setNotificationBadge,
-    setNotifications
+    clearAllNotifications
   }
 
   return (

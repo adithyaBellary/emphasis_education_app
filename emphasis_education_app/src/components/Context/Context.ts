@@ -20,7 +20,7 @@ export interface Context {
   setUser (user: UserInfoType): void;
   notificationBadge: boolean;
   setNotificationBadge (status: boolean): void;
-  setNotifications: any
+  clearAllNotifications (): void;
 }
 
 interface AuthContextProps {
