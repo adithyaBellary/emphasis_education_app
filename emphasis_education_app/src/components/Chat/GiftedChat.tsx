@@ -93,13 +93,15 @@ const MyGiftedChat: React.FC<GiftedChatProps> = ({
     SEND_MESSAGE,
     {
       onCompleted: data => {
-        // console.log('data after sending message', data)
+        console.log('data after sending message', data)
         setImageSelected(false)
       }
     }
   );
 
   const onSend = (props: IMessage[]) => {
+    console.log('the current user on send', curUser)
+    console.log('chatID', chatID)
     sendMessage({
       variables: {
         messages: [
@@ -142,8 +144,8 @@ const MyGiftedChat: React.FC<GiftedChatProps> = ({
     </>
   )
 
-
-  if (error) { console.log('there was an issue sending the message') }
+  if (data) { console.log('data', data)}
+  if (error) { console.log('there was an issue sending the message', error) }
 
   const renderActions = (props: ActionsProps) => (
     <Actions

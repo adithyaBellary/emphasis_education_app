@@ -17,6 +17,7 @@ interface AdminChatPickerProps {
 const AdminChatPicker: React.FC<AdminChatPickerProps> = ({ navigation }) => {
   const { loggedUser, notifications } = React.useContext(GeneralContext);
   console.log('notifications', notifications);
+  console.log('loggedUser in admin chat picker', loggedUser)
 
   if(!loggedUser.adminChat) {
     return null

@@ -98,14 +98,14 @@ const ChatDisplay: React.FC<ChatDisplayProps> = ({
     userInfo: ChatUserInfo[]
   ) => async () => {
     // clearNotificationCounter(chatID);
-    const oldVal = await AsyncStorage.getItem(NOTIFICATIONS_KEY)
-    if (oldVal) {
-      const oldDict = JSON.parse(oldVal);
-      if (oldDict[chatID]) {
-        delete oldDict[chatID];
-      }
-      await AsyncStorage.setItem(NOTIFICATIONS_KEY, JSON.stringify(oldDict))
-    }
+    // const oldVal = await AsyncStorage.getItem(NOTIFICATIONS_KEY)
+    // if (oldVal) {
+    //   const oldDict = JSON.parse(oldVal);
+    //   if (oldDict[chatID]) {
+    //     delete oldDict[chatID];
+    //   }
+    //   await AsyncStorage.setItem(NOTIFICATIONS_KEY, JSON.stringify(oldDict))
+    // }
     goToChat(chatID, className, tutorInfo, userInfo)
   }
 

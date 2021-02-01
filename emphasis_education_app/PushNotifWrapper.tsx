@@ -95,13 +95,14 @@ const Wrapper: React.FC = ({ children }) => {
       // console.log('Platform', Platform.OS)
       // Sentry.captureMessage(`In the background message handler ${JSON.stringify(payload)}`)
       if (payload.data) {
-        const { chatID, title, message } = payload.data;
+        const { chatID, isAdmin, title, message } = payload.data;
         // incrementNotificationCounter(chatID)
         // triggerNotif(title, message );
         // setNotificationBadge(true)
-        console.log('updating the local storage in the setbackground message handler')
-        updateNotifications(chatID)
-        await updateNotifStorage(chatID)
+        // console.log('updating the local storage in the setbackground message handler')
+        console.log('isadmin in setBackgroundMessageHandler', isAdmin)
+        updateNotifications(chatID, isAdmin === 'TRUE' ? true : false)
+        // await updateNotifStorage(chatID)
       }
     })
 
@@ -147,10 +148,6 @@ const Wrapper: React.FC = ({ children }) => {
 
     return unsub
   }, [])
-
-  // React.useEffect(() => {
-  //   const unsub = messaging()
-  // }, [])
 
   return (
     <>{children}</>

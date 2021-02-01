@@ -44,6 +44,7 @@ export const ChatsContain: React.FC = ({ children }) => (
 
 const ChatPicker: React.FC<ChatPickerProps> = ({ navigation }) => {
   const { loggedUser, setUser, notifications, clearNotificationCounter } = React.useContext(GeneralContext);
+  console.log('notifications in the chat picker', notifications)
   const [notifs, setNotifs] = React.useState<string[]>([]);
   // const []
   // console.log('notifications badge', notifications);
@@ -174,7 +175,8 @@ const ChatPicker: React.FC<ChatPickerProps> = ({ navigation }) => {
               goToChat={goToChat}
               key={_class.chatID}
               getClasses={getClasses}
-              displayNotificationBadge={notifs.includes(_class.chatID)}
+              // displayNotificationBadge={notifs.includes(_class.chatID)}
+              displayNotificationBadge={!!notifications[_class.chatID]}
               clearNotificationCounter={clearNotificationCounter}
               userEmail={loggedUser.email}
             />

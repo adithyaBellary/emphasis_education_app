@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Platform } from 'react-native';
 import { Icon, Badge } from 'react-native-elements';
 import { View } from 'react-native';
 import styled from 'styled-components';
@@ -79,14 +80,15 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
       userEmail: route.params.token,
       fcmToken: fcmToken
     },
-    // fetchPolicy: 'no-cache',
+    fetchPolicy: 'no-cache',
     onCompleted: ({ getUser }) => {
       setUser({...getUser.user})
       setCurrentUser(getUser.user)
-      const classIDs = getUser.user.classes?.map(_class => _class.chatID)
-      const adminIds = getUser.user.adminChat?.map(_adminChat => _adminChat.chatID)
-      console.log('class ids', classIDs)
-      console.log('admin ids', adminIds)
+      console.log('refetching here', getUser.chatNotifications)
+      // const classIDs = getUser.user.classes?.map(_class => _class.chatID)
+      // const adminIds = getUser.user.adminChat?.map(_adminChat => _adminChat.chatID)
+      // console.log('class ids', classIDs)
+      // console.log('admin ids', adminIds)
       // console.log('notifs in the home page', notifications)
       const regChatNotifIDs = getUser.chatNotifications.length > 0
         ? getUser.chatNotifications.map(_notif => {
@@ -97,6 +99,7 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
         }).filter(chatID => !!chatID)
         : []
 
+      // console.log('regChatNotifIDs', regChatNotifIDs)
       const adminChatNotifs = getUser.chatNotifications.length > 0
         ? getUser.chatNotifications.map(_notif => {
           if (_notif!.isAdmin) {
@@ -106,69 +109,62 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
         }).filter(chatID => !!chatID)
         : []
 
-      console.log('reg chat', regChatNotifIDs)
-      console.log('admin chat', adminChatNotifs)
+      // console.log('reg chat', regChatNotifIDs)
+      // console.log('admin chat', adminChatNotifs)
       if (regChatNotifIDs.length > 0) {
         setNotifBadge(true)
+        regChatNotifIDs.forEach(_regChat => {
+          updateNotifications(_regChat!, false)
+        })
       }
       if (adminChatNotifs.length > 0) {
         setAdminNotifBadge(true)
         // should also set the notifications in the context for the admin chat
         // we do not query there, only read from the logged user in the context
         adminChatNotifs.forEach(_adminChatID => {
-          updateNotifications(_adminChatID!)
+          updateNotifications(_adminChatID!, true)
         })
       }
     }
   })
 
   React.useEffect(() => {
-    console.log('notifications in the use effect', notifications)
-    console.log('cur user', currentUser)
+    // console.log('notifications in the use effect', notifications)
+    // console.log('cur user', currentUser)
+
+    // if (notifications) {
+    //   console.log('notifications fjdsalfjeas', notifications)
+    // }
+    console.log(`notifications changed in the home page ${Platform.OS}`, Object.values(notifications))
+    const admins: string[] = []
+    const regs: string[] = []
+    Object.values(notifications).forEach(({isAdmin}) => isAdmin ? admins.push('hi') : regs.push('hi') )
+    console.log('admins', admins)
+    console.log('regs', regs)
+
+    setNotifBadge(regs.length > 0)
+    setAdminNotifBadge(admins.length > 0)
+
   }, [notifications])
 
-  // React.useEffect(() => {
-  //   const updateNotifBadge = async () => {
-  //     const notifValue = await AsyncStorage.getItem(NOTIFICATIONS_KEY)
-  //     if (!!notifValue) {
-  //       const notificationDictionary = JSON.parse(notifValue)
-  //       if (Object.keys(notificationDictionary).length > 0) {
-  //         if (data && data.getUser.classes) {
-  //           const classChatIDs = data.getUser.classes.map(_class => _class.chatID)
-  //           // console.log('chatIds', classChatIDs)
-  //           Object.entries(notificationDictionary).forEach(([key, val]) => {
-  //             // console.log('obj', key, val)
-  //             if (classChatIDs.includes(key)) {
-  //               setNotifBadge(true)
-  //             }
-  //           })
-  //         }
-
-  //       }
-  //     }
-  //   }
-
-  //   updateNotifBadge();
-  // })
-
   React.useEffect(() => {
-    const asyncFunction = async (user: UserInfoType) => {
-      const oldVal = await AsyncStorage.getItem(NOTIFICATIONS_KEY)
-      if (!!oldVal) {
-        const oldObject = JSON.parse(oldVal)
-        if (Object.keys(oldObject).length > 0) {
-          const adminClasses = user.adminChat?.map(_class => _class.chatID)
-          if (adminClasses) {
-            Object.entries(oldObject).forEach(([key, val]) => {
-              // console.log('obj', key, val)
-              if (adminClasses.includes(key)) {
-                setAdminNotifBadge(true)
-              }
-            })
-          }
-        }
-      }
-    }
+    // const asyncFunction = async (user: UserInfoType) => {
+    //   const oldVal = await AsyncStorage.getItem(NOTIFICATIONS_KEY)
+    //   if (!!oldVal) {
+    //     const oldObject = JSON.parse(oldVal)
+    //     if (Object.keys(oldObject).length > 0) {
+    //       const adminClasses = user.adminChat?.map(_class => _class.chatID)
+    //       if (adminClasses) {
+    //         Object.entries(oldObject).forEach(([key, val]) => {
+    //           // console.log('obj', key, val)
+    //           if (adminClasses.includes(key)) {
+    //             setAdminNotifBadge(true)
+    //           }
+    //         })
+    //       }
+    //     }
+    //   }
+    // }
     if ( data && data?.getUser) {
       // console.log('user', loggedUser)
       // console.log('data', data.getUser)

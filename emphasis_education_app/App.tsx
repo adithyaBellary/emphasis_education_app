@@ -38,11 +38,13 @@ Sentry.init({
   release: 'emphasis-education-app@' + VERSION
 });
 
-const DEBUG = true;
+const DEBUG = false;
+const DEV = true;
 
 const cache = new InMemoryCache();
+
 const httplink = new HttpLink({
-  uri: DEBUG ? 'http://localhost:4000/' : 'https://emphasis-education-server.herokuapp.com/'
+  uri: DEBUG ? 'http://localhost:4000/' : DEV ? 'https://emphasis-server-test.herokuapp.com/' : 'https://emphasis-education-server.herokuapp.com/'
 });
 
 const errLink = onError(({ operation, graphQLErrors, networkError }) => {
@@ -66,7 +68,7 @@ const errLink = onError(({ operation, graphQLErrors, networkError }) => {
   }
 })
 
-const wsUrl = DEBUG ? 'ws://localhost:4000/graphql' : 'ws://emphasis-education-server.herokuapp.com/graphql';
+const wsUrl = DEBUG ? 'ws://localhost:4000/graphql' : DEV ? 'ws://emphasis-server-test.herokuapp.com/graphql' : 'ws://emphasis-education-server.herokuapp.com/graphql';
 const wsClient = new SubscriptionClient(
   wsUrl,
   {
@@ -146,18 +148,21 @@ const App = () => {
     })
     setUser(newUser)
   }
-  const updateNotifications = (chatID: string) => {
+  const updateNotifications = (chatID: string, isAdmin: boolean) => {
     // let oldVal: number = 1;
     // if (notifications[chatID]) {
     //   oldVal = notifications[chatID] + 1
     // }
     console.log('notifications in the handler', notifications)
     console.log('chat ID in the update notifs', chatID)
-    setNotifications({...notifications, [chatID]: true})
+    setNotifications({...notifications, [chatID]: {chatID, isAdmin}})
   }
 
   const clearNotificationCounter = (chatID: string) => {
-    setNotifications({ ...notifications, [chatID]: false})
+    console.log('old notifs before deleting', notifications)
+    delete notifications[chatID]
+    console.log('new notifications after deleting', notifications)
+    setNotifications({ ...notifications})
     setBadge(false)
   }
 
