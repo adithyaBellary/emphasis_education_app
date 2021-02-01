@@ -308,7 +308,7 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
             <Icon
               raised
               name='message'
-              color= '#ffb6a8'
+              color='#ffb6a8'
               onPress={changeScreens('ChatPicker')}
               reverse={true}
             />
@@ -318,7 +318,8 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
                   position: 'absolute',
                   top: 10,
                   right: 10,
-                  zIndex: 10000
+                  zIndex: 100,
+                  elevation: 100
                 }}
                 badgeStyle={{
                   height: 10,
