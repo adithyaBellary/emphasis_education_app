@@ -16,8 +16,21 @@ interface AdminChatPickerProps {
 // let us get the chats from the context
 const AdminChatPicker: React.FC<AdminChatPickerProps> = ({ navigation }) => {
   const { loggedUser, notifications } = React.useContext(GeneralContext);
+  const [adminChatWithNotif, setAdminChatWithNotif] = React.useState<string[]>([]);
   console.log('notifications', notifications);
   console.log('loggedUser in admin chat picker', loggedUser)
+
+  React.useEffect(() => {
+    const adminChatIDs = Object.values(notifications).map(_notif => {
+      if (_notif.isAdmin) {
+        return _notif.chatID
+      } else return ''
+    }).filter(_adminChatID => !!_adminChatID)
+
+    setAdminChatWithNotif(adminChatIDs)
+  }, [notifications])
+
+
 
   if(!loggedUser.adminChat) {
     return null
@@ -43,7 +56,9 @@ const AdminChatPicker: React.FC<AdminChatPickerProps> = ({ navigation }) => {
                 flexDirection: 'row'
               }}
             >
-              <NotificationBadge />
+              {adminChatWithNotif.includes(_adminChat.chatID) && (
+                <NotificationBadge />
+              )}
               <ThemedText size={14} type={FONT_STYLES.MAIN}>{_adminChat.user.firstName} {_adminChat.user.lastName}</ThemedText>
             </View>
             <Icon name='message' />
