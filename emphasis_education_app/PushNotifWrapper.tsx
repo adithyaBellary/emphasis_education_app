@@ -36,24 +36,24 @@ const triggerNotif = (title: string, message: string) => {
   })
 }
 
-const updateNotifStorage = async (chatID: string) => {
-  const oldVal = await AsyncStorage.getItem(NOTIFICATIONS_KEY)
-  if (oldVal) {
-    const oldDictionary = JSON.parse(oldVal);
-    if (Object.keys(oldDictionary).length > 0) {
-      const newDic = {
-        ...oldDictionary,
-        [chatID]: true
-      }
-      await AsyncStorage.setItem(NOTIFICATIONS_KEY, JSON.stringify(newDic))
-    }
-  } else {
-    const newNotifDictionary = {
-      [chatID]: true
-    }
-    await AsyncStorage.setItem(NOTIFICATIONS_KEY, JSON.stringify(newNotifDictionary))
-  }
-}
+// const updateNotifStorage = async (chatID: string) => {
+//   const oldVal = await AsyncStorage.getItem(NOTIFICATIONS_KEY)
+//   if (oldVal) {
+//     const oldDictionary = JSON.parse(oldVal);
+//     if (Object.keys(oldDictionary).length > 0) {
+//       const newDic = {
+//         ...oldDictionary,
+//         [chatID]: true
+//       }
+//       await AsyncStorage.setItem(NOTIFICATIONS_KEY, JSON.stringify(newDic))
+//     }
+//   } else {
+//     const newNotifDictionary = {
+//       [chatID]: true
+//     }
+//     await AsyncStorage.setItem(NOTIFICATIONS_KEY, JSON.stringify(newNotifDictionary))
+//   }
+// }
 
 // this is going to serve as a wrapper to request permissiong for push notis and such
 const Wrapper: React.FC = ({ children }) => {
@@ -77,16 +77,16 @@ const Wrapper: React.FC = ({ children }) => {
   // }, [])
 
   // when we open the app from a notification while the app is in the ebackground
-  React.useEffect(() => {
-    messaging().onNotificationOpenedApp(async message => {
-      console.log('we are coming from a background state', message)
-      console.log('Platform', Platform.OS)
-      setNotificationBadge(true)
-      // triggerNotif('title', 'onnotif opened app');
-    })
+  // React.useEffect(() => {
+  //   messaging().onNotificationOpenedApp(async message => {
+  //     console.log('we are coming from a background state', message)
+  //     console.log('Platform', Platform.OS)
+  //     setNotificationBadge(true)
+  //     // triggerNotif('title', 'onnotif opened app');
+  //   })
 
-    // return fcn;
-  }, [])
+  //   // return fcn;
+  // }, [])
 
   React.useEffect(() => {
     // this should not be used to update state at all
@@ -109,40 +109,42 @@ const Wrapper: React.FC = ({ children }) => {
     return unsub
   }, [])
 
-  React.useEffect(() => {
-    const initializeNotifDictionary = async () => {
-      const oldVal = await AsyncStorage.getItem(NOTIFICATIONS_KEY)
-      if (oldVal) {
-        const oldDict = JSON.parse(oldVal)
-        console.log('old dict in initialization', oldDict)
-        setNotifications(oldDict)
-      }
-    }
-    initializeNotifDictionary()
+  // React.useEffect(() => {
+  //   const initializeNotifDictionary = async () => {
+  //     const oldVal = await AsyncStorage.getItem(NOTIFICATIONS_KEY)
+  //     if (oldVal) {
+  //       const oldDict = JSON.parse(oldVal)
+  //       console.log('old dict in initialization', oldDict)
+  //       setNotifications(oldDict)
+  //     }
+  //   }
+  //   initializeNotifDictionary()
 
-  }, [])
+  // }, [])
 
   // this gets triggered when the app is quit and we click on the push notification
-  React.useEffect(() => {
-    messaging().getInitialNotification().then(async message => {
-      if (message) {
-        console.log('we are coming from a quit state', message)
-        // console.log('Platform', Platform.OS)
-        // triggerNotif('title', 'message');
-      }
-    })
-    // return unsub;
+  // React.useEffect(() => {
+  //   messaging().getInitialNotification().then(async message => {
+  //     if (message) {
+  //       console.log('we are coming from a quit state', message)
+  //       // console.log('Platform', Platform.OS)
+  //       // triggerNotif('title', 'message');
+  //     }
+  //   })
+  //   // return unsub;
 
-  }, [])
+  // }, [])
 
   React.useEffect(() => {
     const unsub = messaging().onMessage(async payload => {
       if (payload.data) {
-        const { chatID, title, message } = payload.data;
+        const { chatID, isAdmin, title, message } = payload.data;
+        // console.log('in onMessage')
         // triggerNotif('New Message', 'You received a new message');
         // incrementNotificationCounter(payload.data!.chatID)
         // setNotificationBadge(true)
-        await updateNotifStorage(chatID)
+        updateNotifications(chatID, isAdmin === 'TRUE' ? true : false)
+        // await updateNotifStorage(chatID)
       }
     })
 
