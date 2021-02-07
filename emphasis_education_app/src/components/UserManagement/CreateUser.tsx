@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { ScrollView, View } from 'react-native'
+import { ScrollView, View, Text } from 'react-native'
 import { Input } from 'react-native-elements';
 import { useForm, Controller } from "react-hook-form";
+import { Picker } from '@react-native-picker/picker';
 
 import { IUserInput, Permission } from '../../types';
 import {
@@ -16,6 +17,8 @@ import {
   FONT_STYLES,
   ThemedNumberInput
 } from '../shared';
+
+import { theme } from '../../theme'
 
 interface CreateUser {
   navigation: any;
@@ -37,6 +40,7 @@ const EmptyData: IUserInput = {
 
 const CreateUser: React.FC<CreateUser> = props => {
   const [numUser, setNumUser] = React.useState<number>(1)
+  const [picker, setPicker] = React.useState()
   const [curState, setState] = useState<IUserInput>({} as IUserInput);
 
   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -93,13 +97,10 @@ const CreateUser: React.FC<CreateUser> = props => {
   const handlePhoneNumberInput = (number: string): string => {
     const justNumbers: string = number.replace(/[^0-9]/g, '')
     if (justNumbers.length > 3 && justNumbers.length <= 6) {
-      // setState({ ...curState, 'phoneNumber': `${justNumbers.slice(0,3)}-${justNumbers.slice(3)}` })
       return `${justNumbers.slice(0,3)}-${justNumbers.slice(3)}`
     } else if (justNumbers.length > 6) {
-      // setState({ ...curState, 'phoneNumber': `${justNumbers.slice(0,3)}-${justNumbers.slice(3,6)}-${justNumbers.slice(6)}`})
       return `${justNumbers.slice(0,3)}-${justNumbers.slice(3,6)}-${justNumbers.slice(6)}`
     } else {
-      // setState({ ...curState, 'phoneNumber': justNumbers})
       return justNumbers
     }
   }
@@ -107,13 +108,10 @@ const CreateUser: React.FC<CreateUser> = props => {
   const handleDOBInput = (DOB: string): string => {
     const justNumbers: string = DOB.replace(/[^0-9]/g, '');
     if (justNumbers.length > 2 && justNumbers.length <= 4) {
-      // setState({ ...curState, 'dob': `${justNumbers.slice(0,2)}/${justNumbers.slice(2)}`})
       return `${justNumbers.slice(0,2)}/${justNumbers.slice(2)}`
     } else if (justNumbers.length > 4) {
-      // setState({ ...curState, 'dob': `${justNumbers.slice(0,2)}/${justNumbers.slice(2,4)}/${justNumbers.slice(4)}`})
       return `${justNumbers.slice(0,2)}/${justNumbers.slice(2,4)}/${justNumbers.slice(4)}`
     } else {
-      // setState({ ...curState, 'dob': justNumbers})
       return justNumbers
     }
   }
@@ -121,7 +119,7 @@ const CreateUser: React.FC<CreateUser> = props => {
   return (
     <ScrollView>
       <CenteredDiv>
-        <ThemedText size={14} type={FONT_STYLES.MAIN}>Family Member Number {numUser}</ThemedText>
+        <ThemedText size={14} type={FONT_STYLES.LIGHT}>Family Member Number {numUser}</ThemedText>
         <Controller
           control={control}
           render={({ onChange, value}) => (
@@ -140,7 +138,7 @@ const CreateUser: React.FC<CreateUser> = props => {
           rules={{
             required: 'This field is required',
             validate: {
-              onlyLetters: value => onlyLettersRe.test(value) ? 'only letters in your name' : ''
+              onlyLetters: value => onlyLettersRe.test(value) ? 'First name must only contain letters' : ''
             }
           }}
         />
@@ -162,7 +160,7 @@ const CreateUser: React.FC<CreateUser> = props => {
           rules={{
             required: 'This field is required',
             validate: {
-              onlyLetters: value => onlyLettersRe.test(value) ? 'only letters in your name' : ''
+              onlyLetters: value => onlyLettersRe.test(value) ? 'Last name must only contain letters' : ''
             }
           }}
         />
@@ -184,7 +182,7 @@ const CreateUser: React.FC<CreateUser> = props => {
           rules={{
             required: 'This field is required',
             validate: {
-              emailPattern: value => re.test(value) ? '' : 'email not properly formatted'
+              emailPattern: value => re.test(value) ? '' : 'Email is not properly formatted'
             }
           }}
         />
@@ -197,13 +195,19 @@ const CreateUser: React.FC<CreateUser> = props => {
               containerStyle={{
                 width: '95%'
               }}
+              secureTextEntry={true}
               value={value}
               errorMessage={errors.password?.message}
             />
           )}
           name='password'
           defaultValue=''
-          rules={{ required: 'This field is required'}}
+          rules={{
+            required: 'This field is required',
+            validate: {
+              minLength: value => value.trim().length < 6 ? 'Password must be at least 6 characters long' : ''
+            }
+          }}
         />
         <Controller
           control={control}
@@ -214,6 +218,7 @@ const CreateUser: React.FC<CreateUser> = props => {
               containerStyle={{
                 width: '95%'
               }}
+              secureTextEntry={true}
               value={value}
               errorMessage={errors.confirmPassword?.message}
             />
@@ -223,7 +228,7 @@ const CreateUser: React.FC<CreateUser> = props => {
           rules={{
             required: 'This field is required',
             validate: {
-              matches: value => value !== watchPassword ? 'Must match password field' : ''
+              matches: value => value.trim() !== watchPassword.trim() ? 'Must match password field' : ''
             }
           }}
         />
@@ -231,7 +236,7 @@ const CreateUser: React.FC<CreateUser> = props => {
           control={control}
           render={({ onChange, value}) => (
             <Input
-              placeholder='Enter Phone Number (###) ###-####'
+              placeholder='Enter Phone Number (###-###-####)'
               containerStyle={{
                 width: '95%',
               }}
@@ -243,13 +248,18 @@ const CreateUser: React.FC<CreateUser> = props => {
           )}
           name='phoneNumber'
           defaultValue=''
-          rules={{ required: 'This field is required'}}
+          rules={{
+            required: 'This field is required',
+            validate: {
+              length: value => value.trim().length === 12 ? '' : 'Phone number must follow the ###-###-#### format'
+            }
+          }}
         />
         <Controller
           control={control}
           render={({ onChange, value}) => (
             <Input
-              placeholder='Enter DOB MM/DD/YYYY'
+              placeholder='Enter DOB (MM/DD/YYYY)'
               containerStyle={{
                 width: '95%',
               }}
@@ -261,15 +271,43 @@ const CreateUser: React.FC<CreateUser> = props => {
           )}
           name='dob'
           defaultValue=''
-          rules={{ required: 'This field is required'}}
+          rules={{
+            required: 'This field is required',
+            validate: {
+              length: value => value.trim().length === 10 ? '' : 'DOB must follow the MM/DD/YYYY format'
+            }
+          }}
         />
-        {/* <RadioButtonGroup
-          titles={[Permission.Guardian, Permission.Student, Permission.Tutor]}
-          onSelect={handleTextChange('userType')}
-        /> */}
+        <View
+          style={{
+            zIndex: 1000,
+            alignItems: 'center'
+          }}
+        >
+          <ThemedText
+            size={16}
+            type={FONT_STYLES.MAIN}
+          >
+            Select the User Type
+          </ThemedText>
+          <Picker
+            selectedValue={picker}
+            style={{width: 120}}
+            itemStyle={{
+              height: 120,
+              fontFamily: theme.font.main
+            }}
+            onValueChange={(itemValue, itemIndex) =>
+              setPicker(itemValue)
+            }>
+            <Picker.Item label={Permission.Student} value={Permission.Student} />
+            <Picker.Item label={Permission.Guardian} value={Permission.Guardian} />
+            <Picker.Item label={Permission.Tutor} value={Permission.Tutor} />
+          </Picker>
+        </View>
       </CenteredDiv>
 
-      <GeneralSpacing u={60} r={0} d={0} l={0}>
+      <GeneralSpacing u={50} r={0} d={0} l={0}>
         <IconRow>
           <ButtonContainer>
             <ThemedButton
