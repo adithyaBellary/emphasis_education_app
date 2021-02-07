@@ -4,6 +4,7 @@ import {
   Alert,
   View,
 } from 'react-native';
+import { useForm } from "react-hook-form";
 
 import { IUserInput, IUsableUserInfo, GenericResponse } from '../../types';
 import CreateUser from './CreateUser';
@@ -26,6 +27,8 @@ const CreateUserContain: React.FC<CreateUserContainProps> = props => {
   const [userInfo, setUserInfo] = React.useState<CreateUserArr>();
   const [showConf, setShowConf] = React.useState(false);
   const [submitDisabled, setSubmitDisabled] = React.useState(false);
+
+  const { register, handleSubmit } = useForm();
 
   React.useEffect(() => {
     if (showConf) {

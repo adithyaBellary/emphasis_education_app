@@ -33,11 +33,12 @@ const EnterCode: React.FC<EnterCodeProps> = ({ navigation }) => {
 
   const [runQuery, {data, loading}] = useLazyQuery(CHECK_CODE, {
     onCompleted: ({ checkCode }) => {
-      if (checkCode.res) {
-        navigation.navigate('CreateUserContain')
-      } else {
-        setError(true)
-      }
+      navigation.navigate('CreateUserContain')
+      // if (checkCode.res) {
+      //   navigation.navigate('CreateUserContain')
+      // } else {
+      //   setError(true)
+      // }
     },
     fetchPolicy: 'no-cache'
   })
