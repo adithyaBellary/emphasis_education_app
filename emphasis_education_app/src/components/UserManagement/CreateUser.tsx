@@ -1,97 +1,125 @@
 import React, { useState } from 'react';
 import { ScrollView, View, Text } from 'react-native'
-import { Input } from 'react-native-elements';
+
 import { useForm, Controller } from "react-hook-form";
-import { Picker } from '@react-native-picker/picker';
+
 
 import { IUserInput, Permission } from '../../types';
-import {
-  CenteredDiv,
-  ButtonContainer,
-  RadioButtonGroup,
-  ThemedTextInput,
-  ThemedButton,
-  IconRow,
-  GeneralSpacing,
-  ThemedText,
-  FONT_STYLES,
-  ThemedNumberInput
-} from '../shared';
 
-import { theme } from '../../theme'
+
+
+import { IFormData } from './CreateUserContainer';
 
 interface CreateUser {
   navigation: any;
   route: any;
-  GoToConfirmationScreen(): void;
   saveUserInfo(userInfo: IUserInput): void;
+  goToNextUser(): void;
 }
 
-const EmptyData: IUserInput = {
-  firstName: '',
-  lastName: '',
-  email: '',
-  password: '',
-  confirmPassword: '',
-  phoneNumber: '',
-  userType: undefined,
-  dob: ''
+export interface CreateUserArr {
+  users: IUserInput[];
 }
 
-const CreateUser: React.FC<CreateUser> = props => {
-  const [numUser, setNumUser] = React.useState<number>(1)
-  const [picker, setPicker] = React.useState()
-  const [curState, setState] = useState<IUserInput>({} as IUserInput);
+const CreateUser: React.FC<CreateUser> = ({
+  saveUserInfo,
+  goToNextUser
+}) => {
+  // const [numUser, setNumUser] = React.useState<number>(1)
 
-  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  const onlyLettersRe = /[^a-z]+/gi
 
-  const handleTextChange = (name: string) => (text: string) => setState({...curState, [name]: text})
-  const clearData = () => setState(EmptyData);
-  const checkPassword = (): boolean => curState.password === curState.confirmPassword
-  const checkPhoneNumber = (): boolean => curState.phoneNumber.length === 12
-  const checkdob = (): boolean => curState.dob.length === 10
-  const checkEmail = (): boolean => re.test(curState.email)
+  // const [curUser, setCurUser] = React.useState<IUserInput>();
+  const [numUser, setNumUser] = React.useState<number>(0)
 
-  const { control, handleSubmit, watch, errors } = useForm<{
-    firstName: string,
-    lastName: string,
-    email: string,
-    password: string,
-    confirmPassword: string,
-    dob: string,
-    phoneNumber: string,
-  }>();
 
-  const watchPassword = watch('password')
 
-  const canSubmit = (): boolean => {
-    return (
-      !!curState.firstName &&
-      !!curState.lastName &&
-      !!curState.email &&
-      !!curState.password &&
-      !!curState.confirmPassword &&
-      !!curState.phoneNumber &&
-      !!curState.userType &&
-      !!curState.dob &&
-      checkPassword() &&
-      checkPhoneNumber() &&
-      checkdob() &&
-      checkEmail()
-    )
+
+  const { control, handleSubmit, watch, errors, reset, formState, setValue } = useForm<IFormData>();
+
+
+
+  const updateUserInfo = (newUserInfo: IUserInput): void => {
+    if (!userInfo) {
+      setUserInfo({
+        users: [
+          newUserInfo
+        ]
+      })
+      return;
+    }
+    setUserInfo({
+      users: [
+        ...userInfo.users,
+        newUserInfo
+      ]
+    })
   }
+
+  // if (errors) {
+  //   console.log('errors', errors)
+  // }
+
+  React.useEffect(() => {
+    if (userInfo && userInfo.users.length > 0) {
+      console.log('num user in useEfec', numUser)
+      console.log('userInfo in useeffect', userInfo?.users)
+      setValue('firstName', userInfo?.users[0].firstName)
+      setValue('lastName', userInfo?.users[0].lastName)
+      setValue('email', userInfo?.users[0].email)
+      setValue('password', userInfo?.users[0].password)
+      setValue('confirmPassword', '')
+      setValue('phoneNumber', userInfo?.users[0].phoneNumber)
+      setValue('dob', userInfo?.users[0].dob)
+      setPicker(userInfo?.users[0].userType as Permission)
+    }
+    if (numUser !== userInfo?.users.length - 1) {
+      setEditing(true)
+    } else {
+      setEditing(false)
+    }
+  }, [numUser])
 
   const GoToConf = () => {
-    props.saveUserInfo(curState);
-    props.GoToConfirmationScreen()
+    // props.saveUserInfo(curState);
+    // props.GoToConfirmationScreen()
+    // reset()
   }
 
-  const addMember = d => {
-    console.log('d', d)
-    // props.saveUserInfo(curState);
-    // setNumUser(numUser + 1);
-    // clearData();
+  const addMember = (formData: IFormData)  => {
+    // console.log('formData', formData)
+    // console.log('user type', picker)
+    const u: IUserInput = {
+      ...formData,
+      userType: picker,
+    }
+    // saveUserInfo(u);
+    setNumUser(numUser + 1)
+    updateUserInfo(u)
+    reset()
+    setPicker(Permission.Student)
+  }
+
+  const handleGoBack = (formData: IFormData) => {
+    // const {dirtyFields} = formState;
+    const u: IUserInput = {
+      ...formData,
+      userType: picker,
+    }
+    console.log('u in go back', u)
+    // saveUserInfo(u);
+    // reset();
+    // goToPreviousUser();
+    setNumUser(numUser - 1)
+  }
+
+  const handleGoForward = (formData: IFormData) => {
+    const u: IUserInput = {
+      ...formData,
+      userType: picker,
+    }
+    saveUserInfo(u);
+    reset();
+    goToNextUser();
   }
 
   const handlePhoneNumberInput = (number: string): string => {
@@ -117,218 +145,7 @@ const CreateUser: React.FC<CreateUser> = props => {
   }
 
   return (
-    <ScrollView>
-      <CenteredDiv>
-        <ThemedText size={14} type={FONT_STYLES.LIGHT}>Family Member Number {numUser}</ThemedText>
-        <Controller
-          control={control}
-          render={({ onChange, value}) => (
-            <Input
-              placeholder='First Name'
-              onChangeText={value => onChange(value)}
-              containerStyle={{
-                width: '95%'
-              }}
-              value={value}
-              errorMessage={errors.firstName?.message}
-            />
-          )}
-          name='firstName'
-          defaultValue=''
-          rules={{
-            required: 'This field is required',
-            validate: {
-              onlyLetters: value => onlyLettersRe.test(value) ? 'First name must only contain letters' : ''
-            }
-          }}
-        />
-        <Controller
-          control={control}
-          render={({ onChange, value}) => (
-            <Input
-              placeholder='Last Name'
-              onChangeText={value => onChange(value)}
-              containerStyle={{
-                width: '95%'
-              }}
-              value={value}
-              errorMessage={errors.lastName?.message}
-            />
-          )}
-          name='lastName'
-          defaultValue=''
-          rules={{
-            required: 'This field is required',
-            validate: {
-              onlyLetters: value => onlyLettersRe.test(value) ? 'Last name must only contain letters' : ''
-            }
-          }}
-        />
-        <Controller
-          control={control}
-          render={({ onChange, value}) => (
-            <Input
-              placeholder='Email'
-              onChangeText={value => onChange(value)}
-              containerStyle={{
-                width: '95%'
-              }}
-              value={value}
-              errorMessage={errors.email?.message}
-            />
-          )}
-          name='email'
-          defaultValue=''
-          rules={{
-            required: 'This field is required',
-            validate: {
-              emailPattern: value => re.test(value) ? '' : 'Email is not properly formatted'
-            }
-          }}
-        />
-        <Controller
-          control={control}
-          render={({ onChange, value}) => (
-            <Input
-              placeholder='Password'
-              onChangeText={value => onChange(value)}
-              containerStyle={{
-                width: '95%'
-              }}
-              secureTextEntry={true}
-              value={value}
-              errorMessage={errors.password?.message}
-            />
-          )}
-          name='password'
-          defaultValue=''
-          rules={{
-            required: 'This field is required',
-            validate: {
-              minLength: value => value.trim().length < 6 ? 'Password must be at least 6 characters long' : ''
-            }
-          }}
-        />
-        <Controller
-          control={control}
-          render={({ onChange, value}) => (
-            <Input
-              placeholder='Confirm Password'
-              onChangeText={value => onChange(value)}
-              containerStyle={{
-                width: '95%'
-              }}
-              secureTextEntry={true}
-              value={value}
-              errorMessage={errors.confirmPassword?.message}
-            />
-          )}
-          name='confirmPassword'
-          defaultValue=''
-          rules={{
-            required: 'This field is required',
-            validate: {
-              matches: value => value.trim() !== watchPassword.trim() ? 'Must match password field' : ''
-            }
-          }}
-        />
-        <Controller
-          control={control}
-          render={({ onChange, value}) => (
-            <Input
-              placeholder='Enter Phone Number (###-###-####)'
-              containerStyle={{
-                width: '95%',
-              }}
-              onChangeText={number => onChange(handlePhoneNumberInput(number))}
-              maxLength={12}
-              value={value}
-              errorMessage={errors.phoneNumber?.message}
-            />
-          )}
-          name='phoneNumber'
-          defaultValue=''
-          rules={{
-            required: 'This field is required',
-            validate: {
-              length: value => value.trim().length === 12 ? '' : 'Phone number must follow the ###-###-#### format'
-            }
-          }}
-        />
-        <Controller
-          control={control}
-          render={({ onChange, value}) => (
-            <Input
-              placeholder='Enter DOB (MM/DD/YYYY)'
-              containerStyle={{
-                width: '95%',
-              }}
-              onChangeText={number => onChange(handleDOBInput(number))}
-              value={value}
-              maxLength={10}
-              errorMessage={errors.dob?.message}
-            />
-          )}
-          name='dob'
-          defaultValue=''
-          rules={{
-            required: 'This field is required',
-            validate: {
-              length: value => value.trim().length === 10 ? '' : 'DOB must follow the MM/DD/YYYY format'
-            }
-          }}
-        />
-        <View
-          style={{
-            zIndex: 1000,
-            alignItems: 'center'
-          }}
-        >
-          <ThemedText
-            size={16}
-            type={FONT_STYLES.MAIN}
-          >
-            Select the User Type
-          </ThemedText>
-          <Picker
-            selectedValue={picker}
-            style={{width: 120}}
-            itemStyle={{
-              height: 120,
-              fontFamily: theme.font.main
-            }}
-            onValueChange={(itemValue, itemIndex) =>
-              setPicker(itemValue)
-            }>
-            <Picker.Item label={Permission.Student} value={Permission.Student} />
-            <Picker.Item label={Permission.Guardian} value={Permission.Guardian} />
-            <Picker.Item label={Permission.Tutor} value={Permission.Tutor} />
-          </Picker>
-        </View>
-      </CenteredDiv>
 
-      <GeneralSpacing u={50} r={0} d={0} l={0}>
-        <IconRow>
-          <ButtonContainer>
-            <ThemedButton
-              buttonText='Add another member'
-              loading={false}
-              onPress={handleSubmit(addMember)}
-              // disabled={!canSubmit()}
-            />
-          </ButtonContainer>
-
-          <ButtonContainer>
-            <ThemedButton
-              buttonText='Submit'
-              loading={false}
-              onPress={GoToConf}
-              disabled={!canSubmit()}
-            />
-          </ButtonContainer>
-        </IconRow>
-      </GeneralSpacing>
-    </ScrollView>
   )
 }
 
