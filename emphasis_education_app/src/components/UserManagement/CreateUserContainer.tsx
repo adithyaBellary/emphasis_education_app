@@ -83,18 +83,32 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
     if (userInfo && userInfo.users.length > 0) {
       console.log('num user in useEfec', numUser)
       console.log('userInfo in useeffect', userInfo?.users)
-      setValue('firstName', userInfo?.users[numUser]?.firstName || '')
-      setValue('lastName', userInfo?.users[numUser]?.lastName || '')
-      setValue('email', userInfo?.users[numUser]?.email || '')
-      setValue('password', userInfo?.users[numUser]?.password || '')
-      setValue('confirmPassword', '')
-      setValue('phoneNumber', userInfo?.users[numUser]?.phoneNumber || '')
-      setValue('dob', userInfo?.users[numUser]?.dob || '')
-      setPicker(userInfo?.users[numUser].userType as Permission)
+      if (numUser < (userInfo.users.length - 1)) {
+        // means we are in bounds
+        setValue('firstName', userInfo.users[numUser].firstName)
+        setValue('lastName', userInfo.users[numUser].lastName)
+        setValue('email', userInfo.users[numUser].email)
+        setValue('password', userInfo.users[numUser].password)
+        setValue('confirmPassword', '')
+        setValue('phoneNumber', userInfo.users[numUser].phoneNumber)
+        setValue('dob', userInfo.users[numUser].dob)
+        setPicker(userInfo?.users[numUser].userType as Permission)
 
-      setEditing(true)
-    } else {
-      setEditing(false)
+        setEditing(true)
+      } else {
+        console.log('we are creating a new user')
+        setValue('firstName', '')
+        setValue('lastName', '')
+        setValue('email', '')
+        setValue('password', '')
+        setValue('confirmPassword', '')
+        setValue('phoneNumber', '')
+        setValue('dob', '')
+        setPicker(Permission.Student)
+
+        setEditing(false)
+      }
+
     }
   }, [numUser])
 
@@ -166,10 +180,10 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
       userType: picker,
     }
     // saveUserInfo(u);
-    setNumUser(numUser + 1)
     updateUserInfo(u)
     reset()
-    setPicker(Permission.Student)
+    setNumUser(numUser + 1)
+    // setPicker(Permission.Student)
   }
 
   const handleGoBack = (formData: IFormData) => {
@@ -494,7 +508,7 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
               buttonText='Add another member'
               loading={false}
               onPress={handleSubmit(addMember)}
-              // disabled={!canSubmit()}
+              disabled={!saved}
             />
           </ButtonContainer>
 
