@@ -83,18 +83,19 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
     if (userInfo && userInfo.users.length > 0) {
       console.log('num user in useEfec', numUser)
       console.log('userInfo in useeffect', userInfo?.users)
-      if (numUser < (userInfo.users.length - 1)) {
+      console.log('num users', userInfo.users.length)
+      if (numUser <= (userInfo.users.length - 1)) {
         // means we are in bounds
         setValue('firstName', userInfo.users[numUser].firstName)
         setValue('lastName', userInfo.users[numUser].lastName)
         setValue('email', userInfo.users[numUser].email)
         setValue('password', userInfo.users[numUser].password)
-        setValue('confirmPassword', '')
+        setValue('confirmPassword', userInfo.users[numUser].confirmPassword)
         setValue('phoneNumber', userInfo.users[numUser].phoneNumber)
         setValue('dob', userInfo.users[numUser].dob)
         setPicker(userInfo?.users[numUser].userType as Permission)
 
-        setEditing(true)
+
       } else {
         console.log('we are creating a new user')
         setValue('firstName', '')
@@ -105,15 +106,24 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
         setValue('phoneNumber', '')
         setValue('dob', '')
         setPicker(Permission.Student)
+      }
 
+      if (numUser === (userInfo.users.length)) {
         setEditing(false)
+      } else {
+        setEditing(true)
       }
 
     }
   }, [numUser])
 
-  const handleClick = () => {
+  const handleClick = (formData: IFormData) => {
     console.log('calling handle click with ', userInfo)
+    const u: IUserInput = {
+      ...formData,
+      userType: picker,
+    }
+
   }
 
   React.useEffect(() => {
@@ -156,7 +166,7 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
 
   // make this into our own custom hook
   const updateUserInfo = (newUserInfo: IUserInput): void => {
-    if (!userInfo) {
+    if (userInfo.users.length === 0) {
       setUserInfo({
         users: [
           newUserInfo
@@ -175,15 +185,22 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
   const addMember = (formData: IFormData)  => {
     // console.log('formData', formData)
     // console.log('user type', picker)
+    if (!saved) {
+      console.log('NOT SAVED')
+    }
     const u: IUserInput = {
       ...formData,
       userType: picker,
     }
-    // saveUserInfo(u);
-    updateUserInfo(u)
-    reset()
-    setNumUser(numUser + 1)
-    // setPicker(Permission.Student)
+    // we can add a new member when we are editing.
+    // it will just push a new empty member to the stack
+    if (editing) {
+      setNumUser(userInfo.users.length)
+    } else {
+      updateUserInfo(u)
+      // reset()
+      setNumUser(numUser + 1)
+    }
   }
 
   const handleGoBack = (formData: IFormData) => {
@@ -193,7 +210,10 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
       userType: picker,
     }
     console.log('u in go back', u)
-    updateUserInfo(u)
+    // we are only going to save the current user if we are at the stop of the stack and we havent saved this user yet
+    if (numUser === (userInfo.users.length)){
+      updateUserInfo(u)
+    }
     // reset();
     // goToPreviousUser();
     setNumUser(numUser - 1)
@@ -230,20 +250,6 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
     } else {
       return justNumbers
     }
-  }
-
-  // console.log('userInfo', userInfo)
-
-  const goToPreviousUser = () => {
-    console.log('gong to previous user')
-    const newNum = numUser - 1
-    setNumUser(newNum)
-    setCurrentUser(userInfo?.users[newNum-1])
-  }
-
-  const goToNextUser = () => {
-    setNumUser(numUser + 1)
-    setCurrentUser(userInfo?.users[numUser])
   }
 
   const [createUserMut, { data, loading, error }] = useMutation(
@@ -487,7 +493,7 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
         <IconRow>
           <ButtonContainer>
             <ThemedButton
-              buttonText='Previous user'
+              buttonText='Edit Previous user'
               loading={false}
               onPress={handleSubmit(handleGoBack)}
               disabled={numUser === 0}
@@ -495,7 +501,7 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
           </ButtonContainer>
           <ButtonContainer>
             <ThemedButton
-              buttonText='Next User'
+              buttonText='Edit Next User'
               loading={false}
               onPress={handleSubmit(handleGoForward)}
               disabled={!( (userInfo.users.length > 0) && numUser !== (userInfo.users.length ))}
@@ -514,7 +520,7 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
 
           <ButtonContainer>
             <ThemedButton
-              buttonText='Save changes?'
+              buttonText='Save edits?'
               loading={false}
               onPress={handleSubmit(handleSave)}
               disabled={saved}
