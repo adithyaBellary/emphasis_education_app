@@ -3,7 +3,8 @@ import { useMutation } from '@apollo/client';
 import {
   Alert,
   View,
-  ScrollView
+  ScrollView,
+  Button
 } from 'react-native';
 import { useForm, Controller } from "react-hook-form";
 import { Input } from 'react-native-elements';
@@ -51,52 +52,96 @@ export interface CreateUserArr {
   users: IUserInput[];
 }
 
-const CreateUserContain: React.FC<CreateUserContainProps> = props => {
+const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => {
   const [userInfo, setUserInfo] = React.useState<CreateUserArr>({users: []});
-  const [showConf, setShowConf] = React.useState(false);
+  // const [showConf, setShowConf] = React.useState(false);
   const [submitDisabled, setSubmitDisabled] = React.useState(false);
-  const [numUser, setNumUser] = React.useState<number>(1)
+  const [numUser, setNumUser] = React.useState<number>(0)
   const [currentUser, setCurrentUser] = React.useState<IUserInput>();
   const [picker, setPicker] = React.useState<Permission>(Permission.Student)
   const [editing, setEditing] = React.useState<boolean>(false);
+  const [saved, setSaved] = React.useState<boolean>(true);
 
-  const { control, handleSubmit, watch, errors, reset, formState, setValue } = useForm<IFormData>();
-
-  React.useEffect(() => {
-    if (showConf) {
-      props.navigation.setOptions({
-        title: 'Create User Confirmation'
-      })
-    } else {
-      props.navigation.setOptions({
-        title: 'Create User'
-      })
+  const { control, handleSubmit, watch, errors, reset, formState, setValue } = useForm<IFormData>({
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      phoneNumber: '',
+      dob: ''
     }
-  }, [showConf])
+  });
+
+  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  const onlyLettersRe = /[^a-z]+/gi
+
+  const watchPassword = watch('password')
 
   React.useEffect(() => {
     if (userInfo && userInfo.users.length > 0) {
       console.log('num user in useEfec', numUser)
       console.log('userInfo in useeffect', userInfo?.users)
-      setValue('firstName', userInfo?.users[0].firstName)
-      setValue('lastName', userInfo?.users[0].lastName)
-      setValue('email', userInfo?.users[0].email)
-      setValue('password', userInfo?.users[0].password)
+      setValue('firstName', userInfo?.users[numUser]?.firstName || '')
+      setValue('lastName', userInfo?.users[numUser]?.lastName || '')
+      setValue('email', userInfo?.users[numUser]?.email || '')
+      setValue('password', userInfo?.users[numUser]?.password || '')
       setValue('confirmPassword', '')
-      setValue('phoneNumber', userInfo?.users[0].phoneNumber)
-      setValue('dob', userInfo?.users[0].dob)
-      setPicker(userInfo?.users[0].userType as Permission)
-    }
-    if (numUser !== userInfo?.users.length - 1) {
+      setValue('phoneNumber', userInfo?.users[numUser]?.phoneNumber || '')
+      setValue('dob', userInfo?.users[numUser]?.dob || '')
+      setPicker(userInfo?.users[numUser].userType as Permission)
+
       setEditing(true)
     } else {
       setEditing(false)
     }
   }, [numUser])
 
+  const handleClick = () => {
+    console.log('calling handle click with ', userInfo)
+  }
+
+  React.useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Button
+          title='Submit User(s)'
+          onPress={handleSubmit(handleClick)}
+        />
+      )
+    })
+  })
+
+  React.useEffect(() => {
+    if (editing) {
+      setSaved(false)
+    }
+  }, [editing])
+
+  const handleSave = (formData: IFormData) => {
+    const _index = numUser
+    const newUsers = userInfo.users.reduce<IUserInput[]>((acc, cur, index) => {
+      if (_index === index) {
+        const u: IUserInput = {
+          ...formData,
+          userType: picker,
+        }
+        return [...acc, u]
+      } else {
+        return [...acc, cur]
+      }
+    }, [])
+    console.log('new users', newUsers)
+
+    setUserInfo({
+      users: newUsers
+    })
+    setSaved(true)
+  }
+
   // make this into our own custom hook
   const updateUserInfo = (newUserInfo: IUserInput): void => {
-    setNumUser(numUser + 1)
     if (!userInfo) {
       setUserInfo({
         users: [
@@ -134,7 +179,7 @@ const CreateUserContain: React.FC<CreateUserContainProps> = props => {
       userType: picker,
     }
     console.log('u in go back', u)
-    // saveUserInfo(u);
+    updateUserInfo(u)
     // reset();
     // goToPreviousUser();
     setNumUser(numUser - 1)
@@ -145,9 +190,10 @@ const CreateUserContain: React.FC<CreateUserContainProps> = props => {
       ...formData,
       userType: picker,
     }
-    updateUserInfo(u)
-    reset();
-    goToNextUser();
+    // updateUserInfo(u)
+    // reset();
+    // goToNextUser();
+    setNumUser(numUser + 1)
   }
 
   const handlePhoneNumberInput = (number: string): string => {
@@ -215,10 +261,9 @@ const CreateUserContain: React.FC<CreateUserContainProps> = props => {
     })
   }
 
-  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  const onlyLettersRe = /[^a-z]+/gi
-
-  const watchPassword = watch('password')
+  console.log('user Info', userInfo)
+  // console.log('disabled state', (userInfo.users.length - 1) !== numUser)
+  console.log('total number of users', userInfo.users.length)
 
   return (
     <ScrollView>
@@ -228,7 +273,7 @@ const CreateUserContain: React.FC<CreateUserContainProps> = props => {
           control={control}
           render={({ onChange, value}) => (
             <Input
-              placeholder='First Name'
+              // placeholder='First Name'
               onChangeText={value => onChange(value)}
               containerStyle={{
                 width: '95%'
@@ -236,7 +281,7 @@ const CreateUserContain: React.FC<CreateUserContainProps> = props => {
               // inputStyle={{
               //   paddingTop: 10
               // }}
-              // label={'First Name'}
+              label={'First Name'}
               value={value}
               errorMessage={errors.firstName?.message}
             />
@@ -254,12 +299,13 @@ const CreateUserContain: React.FC<CreateUserContainProps> = props => {
           control={control}
           render={({ onChange, value}) => (
             <Input
-              placeholder='Last Name'
+              // placeholder='Last Name'
               onChangeText={value => onChange(value)}
               containerStyle={{
                 width: '95%'
               }}
               value={value}
+              label={'Last Name'}
               errorMessage={errors.lastName?.message}
             />
           )}
@@ -276,12 +322,13 @@ const CreateUserContain: React.FC<CreateUserContainProps> = props => {
           control={control}
           render={({ onChange, value}) => (
             <Input
-              placeholder='Email'
+              // placeholder='Email'
               onChangeText={value => onChange(value)}
               containerStyle={{
                 width: '95%'
               }}
               value={value}
+              label='Email'
               errorMessage={errors.email?.message}
             />
           )}
@@ -298,13 +345,14 @@ const CreateUserContain: React.FC<CreateUserContainProps> = props => {
           control={control}
           render={({ onChange, value}) => (
             <Input
-              placeholder='Password'
+              // placeholder='Password'
               onChangeText={value => onChange(value)}
               containerStyle={{
                 width: '95%'
               }}
               secureTextEntry={true}
               value={value}
+              label='Password'
               errorMessage={errors.password?.message}
             />
           )}
@@ -321,13 +369,14 @@ const CreateUserContain: React.FC<CreateUserContainProps> = props => {
           control={control}
           render={({ onChange, value}) => (
             <Input
-              placeholder='Confirm Password'
+              // placeholder='Confirm Password'
               onChangeText={value => onChange(value)}
               containerStyle={{
                 width: '95%'
               }}
               secureTextEntry={true}
               value={value}
+              label='Confirm Password'
               errorMessage={errors.confirmPassword?.message}
             />
           )}
@@ -344,13 +393,14 @@ const CreateUserContain: React.FC<CreateUserContainProps> = props => {
           control={control}
           render={({ onChange, value}) => (
             <Input
-              placeholder='Enter Phone Number (###-###-####)'
+              // placeholder='Enter Phone Number (###-###-####)'
               containerStyle={{
                 width: '95%',
               }}
               onChangeText={number => onChange(handlePhoneNumberInput(number))}
               maxLength={12}
               value={value}
+              label='Phone Number'
               errorMessage={errors.phoneNumber?.message}
             />
           )}
@@ -367,13 +417,14 @@ const CreateUserContain: React.FC<CreateUserContainProps> = props => {
           control={control}
           render={({ onChange, value}) => (
             <Input
-              placeholder='Enter DOB (MM/DD/YYYY)'
+              // placeholder='Enter DOB (MM/DD/YYYY)'
               containerStyle={{
                 width: '95%',
               }}
               onChangeText={number => onChange(handleDOBInput(number))}
               value={value}
               maxLength={10}
+              label='Date of Birth'
               errorMessage={errors.dob?.message}
             />
           )}
@@ -429,22 +480,12 @@ const CreateUserContain: React.FC<CreateUserContainProps> = props => {
             />
           </ButtonContainer>
           <ButtonContainer>
-            {editing ? (
-              <ThemedButton
-                buttonText='Next User'
-                loading={false}
-                onPress={handleSubmit(handleGoForward)}
-                disabled={numUser === (userInfo?.users?.length)}
-              />
-            ) : (
-              <ThemedButton
-                buttonText='dummy'
-                loading={false}
-                onPress={handleSubmit(handleGoForward)}
-                disabled={numUser === (userInfo?.users?.length)}
-              />
-            )}
-
+            <ThemedButton
+              buttonText='Next User'
+              loading={false}
+              onPress={handleSubmit(handleGoForward)}
+              disabled={!( (userInfo.users.length > 0) && numUser !== (userInfo.users.length ))}
+            />
           </ButtonContainer>
         </IconRow>
         <IconRow>
@@ -459,10 +500,10 @@ const CreateUserContain: React.FC<CreateUserContainProps> = props => {
 
           <ButtonContainer>
             <ThemedButton
-              buttonText='Submit'
+              buttonText='Save changes?'
               loading={false}
-              onPress={() => console.log('surprise')}
-              // disabled={!canSubmit()}
+              onPress={handleSubmit(handleSave)}
+              disabled={saved}
             />
           </ButtonContainer>
         </IconRow>
