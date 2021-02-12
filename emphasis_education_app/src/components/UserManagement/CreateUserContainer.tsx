@@ -313,10 +313,6 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
     })
   }
 
-  // console.log('user Info', userInfo)
-  // console.log('disabled state', (userInfo.users.length - 1) !== numUser)
-  // console.log('total number of users', userInfo.users.length)
-
   return (
     <ScrollView>
       <CenteredDiv>
@@ -325,15 +321,14 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
           control={control}
           render={({ onChange, value}) => (
             <Input
-              // placeholder='First Name'
               onChangeText={value => onChange(value)}
               containerStyle={{
                 width: '95%'
               }}
-              // inputStyle={{
-              //   paddingTop: 10
-              // }}
               label={'First Name'}
+              labelStyle={{
+                fontFamily: theme.font.main
+              }}
               value={value}
               errorMessage={errors.firstName?.message}
             />
@@ -351,7 +346,6 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
           control={control}
           render={({ onChange, value}) => (
             <Input
-              // placeholder='Last Name'
               onChangeText={value => onChange(value)}
               containerStyle={{
                 width: '95%'
@@ -359,6 +353,9 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
               value={value}
               label={'Last Name'}
               errorMessage={errors.lastName?.message}
+              labelStyle={{
+                fontFamily: theme.font.main
+              }}
             />
           )}
           name='lastName'
@@ -374,7 +371,6 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
           control={control}
           render={({ onChange, value}) => (
             <Input
-              // placeholder='Email'
               onChangeText={value => onChange(value)}
               containerStyle={{
                 width: '95%'
@@ -382,6 +378,9 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
               value={value}
               label='Email'
               errorMessage={errors.email?.message}
+              labelStyle={{
+                fontFamily: theme.font.main
+              }}
             />
           )}
           name='email'
@@ -397,7 +396,6 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
           control={control}
           render={({ onChange, value}) => (
             <Input
-              // placeholder='Password'
               onChangeText={value => onChange(value)}
               containerStyle={{
                 width: '95%'
@@ -406,6 +404,9 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
               value={value}
               label='Password'
               errorMessage={errors.password?.message}
+              labelStyle={{
+                fontFamily: theme.font.main
+              }}
             />
           )}
           name='password'
@@ -421,7 +422,6 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
           control={control}
           render={({ onChange, value}) => (
             <Input
-              // placeholder='Confirm Password'
               onChangeText={value => onChange(value)}
               containerStyle={{
                 width: '95%'
@@ -430,6 +430,9 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
               value={value}
               label='Confirm Password'
               errorMessage={errors.confirmPassword?.message}
+              labelStyle={{
+                fontFamily: theme.font.main
+              }}
             />
           )}
           name='confirmPassword'
@@ -445,7 +448,6 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
           control={control}
           render={({ onChange, value}) => (
             <Input
-              // placeholder='Enter Phone Number (###-###-####)'
               containerStyle={{
                 width: '95%',
               }}
@@ -454,6 +456,9 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
               value={value}
               label='Phone Number'
               errorMessage={errors.phoneNumber?.message}
+              labelStyle={{
+                fontFamily: theme.font.main
+              }}
             />
           )}
           name='phoneNumber'
@@ -469,7 +474,6 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
           control={control}
           render={({ onChange, value}) => (
             <Input
-              // placeholder='Enter DOB (MM/DD/YYYY)'
               containerStyle={{
                 width: '95%',
               }}
@@ -478,6 +482,9 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
               maxLength={10}
               label='Date of Birth'
               errorMessage={errors.dob?.message}
+              labelStyle={{
+                fontFamily: theme.font.main
+              }}
             />
           )}
           name='dob'
@@ -510,7 +517,6 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
             }}
             onValueChange={(itemValue, itemIndex) => {
               setPicker(itemValue as Permission)
-              // onChange(itemValue as string)
             }
             }>
             <Picker.Item label={Permission.Student} value={Permission.Student} />
@@ -521,18 +527,15 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
 
       </CenteredDiv>
 
-      <GeneralSpacing u={50} r={0} d={0} l={0}>
+      <GeneralSpacing u={35} r={0} d={0} l={0}>
         <IconRow>
-          {/* <ButtonContainer>
-            <ThemedButton
-              buttonText='Edit Previous user'
-              loading={false}
-              onPress={handleSubmit(handleGoBack)}
-              disabled={numUser === 0}
-            />
-          </ButtonContainer> */}
+
           <IconButton
-            title='Edit Prev User'
+            title='Edit prev user'
+            titleStyle={{
+              fontFamily: theme.font.main,
+              fontSize: 16
+            }}
             icon={
               <Icon
                 name='caretleft'
@@ -542,7 +545,8 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
               />
             }
             buttonStyle={{
-              backgroundColor: theme.colors.purple
+              backgroundColor: theme.colors.purple,
+              borderRadius: 10
             }}
             onPress={handleSubmit(handleGoBack)}
             disabled={numUser === 0}
@@ -551,29 +555,19 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
             name='close'
             type='antdesign'
             containerStyle={{
-              backgroundColor:'grey'
+              paddingHorizontal: 12
             }}
             onPress={handleDeleteMember}
+            size={30}
+            color='grey'
           />
-          {/* <ButtonContainer>
-            <ThemedButton
-              buttonText='Delete User'
-              loading={false}
-              onPress={handleSubmit(handleDeleteMember)}
-              disabled={userInfo.users.length === 1}
-            />
-          </ButtonContainer> */}
-          {/* <ButtonContainer>
-            <ThemedButton
-              buttonText='Edit Next User'
-              loading={false}
-              onPress={handleSubmit(handleGoForward)}
-              // if we are at the end of the stack, then there is no next to go to
-              disabled={numUser === (userInfo.users.length -1)}
-            />
-          </ButtonContainer> */}
+
           <IconButton
-            title='Edit Next User'
+            title='Edit next user'
+            titleStyle={{
+              fontFamily: theme.font.main,
+              fontSize: 16
+            }}
             iconRight={true}
             icon={
               <Icon
@@ -584,7 +578,8 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
               />
             }
             buttonStyle={{
-              backgroundColor: theme.colors.purple
+              backgroundColor: theme.colors.purple,
+              borderRadius: 10
             }}
             onPress={handleSubmit(handleGoForward)}
             disabled={numUser === (userInfo.users.length -1)}
@@ -596,7 +591,6 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
               buttonText='Add another user'
               loading={false}
               onPress={handleSubmit(addMember)}
-              // disabled={!saved}
             />
           </ButtonContainer>
 
