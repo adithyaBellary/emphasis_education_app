@@ -95,7 +95,8 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
   const watchPassword = watch('password')
 
   React.useEffect(() => {
-    console.log('we changed users', numUser)
+    // console.log('we changed users', numUser)
+    // console.log('the user we are setting', userInfo.users[numUser])
 
     setValue('firstName', userInfo.users[numUser].firstName)
     setValue('lastName', userInfo.users[numUser].lastName)
@@ -114,7 +115,7 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
     // setEditing(true)
     setSaved(false)
 
-  }, [numUser])
+  }, [numUser, userInfo]);
 
   React.useEffect(() => {
     setSaved(false)
@@ -228,18 +229,13 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
   }
 
   const deleteMember = () => {
-    // const filteredUsers = userInfo.users.reduce<IUserInput[]>((filteredUsers, currentUser) => {
 
-    // }, [])
     userInfo.users.splice(numUser, 1)
-    console.log('users after deletion', userInfo.users)
-    console.log('numUser', numUser)
-    if (numUser === 0) {
-      // setNumUser(numUser + 1)
-    } else {
+    const newUsers = userInfo.users;
+    if (numUser !== 0) {
       setNumUser(numUser - 1)
     }
-    setUserInfo(userInfo)
+    setUserInfo({users: newUsers});
   }
 
   const handleDeleteMember = () => {
