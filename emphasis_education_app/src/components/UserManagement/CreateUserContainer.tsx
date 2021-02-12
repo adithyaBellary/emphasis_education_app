@@ -11,12 +11,8 @@ import { Icon, Input, Button as IconButton } from 'react-native-elements';
 import { Picker } from '@react-native-picker/picker';
 
 import { IUserInput, IUsableUserInfo, GenericResponse, Permission } from '../../types';
-// import CreateUser from './CreateUser';
 import { CREATE_USER } from '../../queries/CreateUser';
 import { theme } from '../../theme'
-
-// import  ConfirmationScreen  from './ConfirmationScreen';
-
 import {
   CenteredDiv,
   ButtonContainer,
@@ -46,7 +42,6 @@ export interface IFormData {
   confirmPassword: string,
   dob: string,
   phoneNumber: string,
-  // userType: Permission
 }
 export interface CreateUserArr {
   users: IUserInput[];
