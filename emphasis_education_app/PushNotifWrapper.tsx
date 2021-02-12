@@ -63,7 +63,7 @@ const Wrapper: React.FC = ({ children }) => {
     messaging().onNotificationOpenedApp(async message => {
       console.log('we are coming from a background state', message)
       console.log('Platform', Platform.OS)
-      triggerNotif('title', 'onnotif opened app');
+      // triggerNotif('title', 'onnotif opened app');
     })
 
     // return fcn;

@@ -7,7 +7,7 @@ import {
   Button
 } from 'react-native';
 import { useForm, Controller } from "react-hook-form";
-import { Input } from 'react-native-elements';
+import { Icon, Input, Button as IconButton } from 'react-native-elements';
 import { Picker } from '@react-native-picker/picker';
 
 import { IUserInput, IUsableUserInfo, GenericResponse, Permission } from '../../types';
@@ -52,13 +52,21 @@ export interface CreateUserArr {
   users: IUserInput[];
 }
 
+const EmptyUserForm: IFormData = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
+  phoneNumber: '',
+  dob: ''
+}
+
 const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => {
-  const [userInfo, setUserInfo] = React.useState<CreateUserArr>({users: []});
-  // const [showConf, setShowConf] = React.useState(false);
+  const [picker, setPicker] = React.useState<Permission>(Permission.Student)
+  const [userInfo, setUserInfo] = React.useState<CreateUserArr>({users: [{...EmptyUserForm, userType: Permission.Student}]});
   const [submitDisabled, setSubmitDisabled] = React.useState(false);
   const [numUser, setNumUser] = React.useState<number>(0)
-  const [currentUser, setCurrentUser] = React.useState<IUserInput>();
-  const [picker, setPicker] = React.useState<Permission>(Permission.Student)
   const [editing, setEditing] = React.useState<boolean>(false);
   const [saved, setSaved] = React.useState<boolean>(true);
 
@@ -77,45 +85,49 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   const onlyLettersRe = /[^a-z]+/gi
 
+  // ugly, but does the job
+  const watchFirstName = watch('firstName')
+  const watchLastName = watch('lastName')
+  const watchEmail = watch('email')
+  const watchPhoneNumber = watch('phoneNumber')
+  const watchDOB = watch('dob')
+  const watchConfirmPassword = watch('confirmPassword')
   const watchPassword = watch('password')
 
   React.useEffect(() => {
-    if (userInfo && userInfo.users.length > 0) {
-      console.log('num user in useEfec', numUser)
-      console.log('userInfo in useeffect', userInfo?.users)
-      console.log('num users', userInfo.users.length)
-      if (numUser <= (userInfo.users.length - 1)) {
-        // means we are in bounds
-        setValue('firstName', userInfo.users[numUser].firstName)
-        setValue('lastName', userInfo.users[numUser].lastName)
-        setValue('email', userInfo.users[numUser].email)
-        setValue('password', userInfo.users[numUser].password)
-        setValue('confirmPassword', userInfo.users[numUser].confirmPassword)
-        setValue('phoneNumber', userInfo.users[numUser].phoneNumber)
-        setValue('dob', userInfo.users[numUser].dob)
-        setPicker(userInfo?.users[numUser].userType as Permission)
+    console.log('we changed users', numUser)
 
+    setValue('firstName', userInfo.users[numUser].firstName)
+    setValue('lastName', userInfo.users[numUser].lastName)
+    setValue('email', userInfo.users[numUser].email)
+    setValue('password', userInfo.users[numUser].password)
+    setValue('confirmPassword', userInfo.users[numUser].confirmPassword)
+    setValue('phoneNumber', userInfo.users[numUser].phoneNumber)
+    setValue('dob', userInfo.users[numUser].dob)
+    setPicker(userInfo.users[numUser].userType as Permission)
 
-      } else {
-        console.log('we are creating a new user')
-        setValue('firstName', '')
-        setValue('lastName', '')
-        setValue('email', '')
-        setValue('password', '')
-        setValue('confirmPassword', '')
-        setValue('phoneNumber', '')
-        setValue('dob', '')
-        setPicker(Permission.Student)
-      }
+    // if (numUser === (userInfo.users.length)) {
+    //   setEditing(false)
+    // } else {
+    //   setEditing(true)
+    // }
+    // setEditing(true)
+    setSaved(false)
 
-      if (numUser === (userInfo.users.length)) {
-        setEditing(false)
-      } else {
-        setEditing(true)
-      }
-
-    }
   }, [numUser])
+
+  React.useEffect(() => {
+    setSaved(false)
+  }, [
+    watchFirstName,
+    watchLastName,
+    watchEmail,
+    watchPassword,
+    watchConfirmPassword,
+    watchPhoneNumber,
+    watchDOB,
+    picker
+  ])
 
   const handleClick = (formData: IFormData) => {
     console.log('calling handle click with ', userInfo)
@@ -123,7 +135,13 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
       ...formData,
       userType: picker,
     }
-
+    console.log('current users', userInfo)
+    if (!saved) {
+      Alert.alert('Do not forget to save your user edits!')
+    } else {
+      const cleanUsers: IUsableUserInfo[] = userInfo.users.map(({confirmPassword, ...rest}) => rest )
+      navigation.navigate('ConfirmationScreen', {users: cleanUsers})
+    }
   }
 
   React.useEffect(() => {
@@ -136,12 +154,6 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
       )
     })
   })
-
-  React.useEffect(() => {
-    if (editing) {
-      setSaved(false)
-    }
-  }, [editing])
 
   const handleSave = (formData: IFormData) => {
     const _index = numUser
@@ -164,24 +176,6 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
     setSaved(true)
   }
 
-  // make this into our own custom hook
-  const updateUserInfo = (newUserInfo: IUserInput): void => {
-    if (userInfo.users.length === 0) {
-      setUserInfo({
-        users: [
-          newUserInfo
-        ]
-      })
-      return;
-    }
-    setUserInfo({
-      users: [
-        ...userInfo.users,
-        newUserInfo
-      ]
-    })
-  }
-
   const addMember = (formData: IFormData)  => {
     // console.log('formData', formData)
     // console.log('user type', picker)
@@ -192,15 +186,25 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
       ...formData,
       userType: picker,
     }
-    // we can add a new member when we are editing.
-    // it will just push a new empty member to the stack
-    if (editing) {
-      setNumUser(userInfo.users.length)
-    } else {
-      updateUserInfo(u)
-      // reset()
-      setNumUser(numUser + 1)
-    }
+
+
+    // console.log('users', userInfo.users)
+    const newUsers = userInfo.users.reduce<IUserInput[]>((acc, cur, index) => {
+      if (numUser === index) {
+        const u: IUserInput = {
+          ...formData,
+          userType: picker,
+        }
+        return [...acc, u]
+      } else {
+        return [...acc, cur]
+      }
+    }, [])
+    console.log('new users', newUsers)
+    // push a new empty user onto the stack)
+    setUserInfo({users: [...newUsers, {...EmptyUserForm, userType: Permission.Student}]})
+    setNumUser(userInfo.users.length)
+
   }
 
   const handleGoBack = (formData: IFormData) => {
@@ -210,12 +214,7 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
       userType: picker,
     }
     console.log('u in go back', u)
-    // we are only going to save the current user if we are at the stop of the stack and we havent saved this user yet
-    if (numUser === (userInfo.users.length)){
-      updateUserInfo(u)
-    }
-    // reset();
-    // goToPreviousUser();
+    handleSave(u)
     setNumUser(numUser - 1)
   }
 
@@ -224,10 +223,47 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
       ...formData,
       userType: picker,
     }
-    // updateUserInfo(u)
-    // reset();
-    // goToNextUser();
+    handleSave(u)
     setNumUser(numUser + 1)
+  }
+
+  const deleteMember = () => {
+    // const filteredUsers = userInfo.users.reduce<IUserInput[]>((filteredUsers, currentUser) => {
+
+    // }, [])
+    userInfo.users.splice(numUser, 1)
+    console.log('users after deletion', userInfo.users)
+    console.log('numUser', numUser)
+    if (numUser === 0) {
+      // setNumUser(numUser + 1)
+    } else {
+      setNumUser(numUser - 1)
+    }
+    setUserInfo(userInfo)
+  }
+
+  const handleDeleteMember = () => {
+    if (userInfo.users.length === 1) {
+      // if we have only one user, we cannot delete it
+      Alert.alert('Cannot delete this user as there is only one')
+    } else {
+      // if we have multiple, then confirm the action and then do it
+      Alert.alert(
+        'Confirm Delete',
+        'Are you sure you want to delete this user?',
+        [
+          {
+            text: 'Delete',
+            onPress: () => deleteMember()
+          },
+          {
+            text: 'Cancel',
+            onPress: () => console.log('canceled'),
+            style: 'cancel'
+          }
+        ]
+      )
+    }
   }
 
   const handlePhoneNumberInput = (number: string): string => {
@@ -281,9 +317,9 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
     })
   }
 
-  console.log('user Info', userInfo)
+  // console.log('user Info', userInfo)
   // console.log('disabled state', (userInfo.users.length - 1) !== numUser)
-  console.log('total number of users', userInfo.users.length)
+  // console.log('total number of users', userInfo.users.length)
 
   return (
     <ScrollView>
@@ -491,30 +527,80 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
 
       <GeneralSpacing u={50} r={0} d={0} l={0}>
         <IconRow>
-          <ButtonContainer>
+          {/* <ButtonContainer>
             <ThemedButton
               buttonText='Edit Previous user'
               loading={false}
               onPress={handleSubmit(handleGoBack)}
               disabled={numUser === 0}
             />
-          </ButtonContainer>
-          <ButtonContainer>
+          </ButtonContainer> */}
+          <IconButton
+            title='Edit Prev User'
+            icon={
+              <Icon
+                name='caretleft'
+                type='antdesign'
+                size={15}
+                color='white'
+              />
+            }
+            buttonStyle={{
+              backgroundColor: theme.colors.purple
+            }}
+            onPress={handleSubmit(handleGoBack)}
+            disabled={numUser === 0}
+          />
+          <Icon
+            name='close'
+            type='antdesign'
+            containerStyle={{
+              backgroundColor:'grey'
+            }}
+            onPress={handleDeleteMember}
+          />
+          {/* <ButtonContainer>
+            <ThemedButton
+              buttonText='Delete User'
+              loading={false}
+              onPress={handleSubmit(handleDeleteMember)}
+              disabled={userInfo.users.length === 1}
+            />
+          </ButtonContainer> */}
+          {/* <ButtonContainer>
             <ThemedButton
               buttonText='Edit Next User'
               loading={false}
               onPress={handleSubmit(handleGoForward)}
-              disabled={!( (userInfo.users.length > 0) && numUser !== (userInfo.users.length ))}
+              // if we are at the end of the stack, then there is no next to go to
+              disabled={numUser === (userInfo.users.length -1)}
             />
-          </ButtonContainer>
+          </ButtonContainer> */}
+          <IconButton
+            title='Edit Next User'
+            iconRight={true}
+            icon={
+              <Icon
+                name='caretright'
+                type='antdesign'
+                size={15}
+                color='white'
+              />
+            }
+            buttonStyle={{
+              backgroundColor: theme.colors.purple
+            }}
+            onPress={handleSubmit(handleGoForward)}
+            disabled={numUser === (userInfo.users.length -1)}
+          />
         </IconRow>
         <IconRow>
           <ButtonContainer>
             <ThemedButton
-              buttonText='Add another member'
+              buttonText='Add another user'
               loading={false}
               onPress={handleSubmit(addMember)}
-              disabled={!saved}
+              // disabled={!saved}
             />
           </ButtonContainer>
 
