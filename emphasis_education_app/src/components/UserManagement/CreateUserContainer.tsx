@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useMutation } from '@apollo/client';
 import {
   Alert,
   View,
@@ -10,8 +9,7 @@ import { useForm, Controller } from "react-hook-form";
 import { Icon, Input, Button as IconButton } from 'react-native-elements';
 import { Picker } from '@react-native-picker/picker';
 
-import { IUserInput, IUsableUserInfo, GenericResponse, Permission } from '../../types';
-import { CREATE_USER } from '../../queries/CreateUser';
+import { IUserInput, IUsableUserInfo, Permission } from '../../types';
 import { theme } from '../../theme'
 import {
   CenteredDiv,
@@ -30,9 +28,6 @@ interface CreateUserContainProps {
   navigation: any;
   route: any;
 }
-const SuccessMessaging: string = 'Thank you for joining Emphasis Education!';
-const ErrorMessaging: string = 'There was an issue creating this user';
-
 
 export interface IFormData {
   firstName: string,
@@ -60,12 +55,10 @@ const EmptyUserForm: IFormData = {
 const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => {
   const [picker, setPicker] = React.useState<Permission>(Permission.Student)
   const [userInfo, setUserInfo] = React.useState<CreateUserArr>({users: [{...EmptyUserForm, userType: Permission.Student}]});
-  const [submitDisabled, setSubmitDisabled] = React.useState(false);
   const [numUser, setNumUser] = React.useState<number>(0)
-  const [editing, setEditing] = React.useState<boolean>(false);
   const [saved, setSaved] = React.useState<boolean>(true);
 
-  const { control, handleSubmit, watch, errors, reset, formState, setValue } = useForm<IFormData>({
+  const { control, handleSubmit, watch, errors, setValue } = useForm<IFormData>({
     defaultValues: {
       firstName: '',
       lastName: '',
@@ -108,7 +101,7 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
     //   setEditing(true)
     // }
     // setEditing(true)
-    setSaved(false)
+    // setSaved(false)
 
   }, [numUser, userInfo]);
 
@@ -279,39 +272,13 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
     }
   }
 
-  const [createUserMut, { data, loading, error }] = useMutation(
-    CREATE_USER,
-    {
-      onCompleted: ({ createUser }) => {
-        console.log('Done running create user mutation: ', createUser)
-        const { res, message }: GenericResponse = createUser;
-        Alert.alert(res ? SuccessMessaging : message || ErrorMessaging );
-        setSubmitDisabled(true);
-      }
-    }
-  )
-
-  if(error) {
-    Alert.alert(data?.message || 'Something went wrong creating this user!!! unique')
-  }
 
 
-  const runCreateUserMut = (): void => {
-    const _users: IUsableUserInfo[] = userInfo.users.map(({confirmPassword, ...rest }) => {
-      return rest;
-    })
-    // console.log('userInfo before running mutaion', _users)
-    createUserMut({
-      variables: {
-        users: _users
-      },
-    })
-  }
 
   return (
     <ScrollView>
       <CenteredDiv>
-        <ThemedText size={14} type={FONT_STYLES.LIGHT}>Family Member Number {numUser}</ThemedText>
+        <ThemedText size={14} type={FONT_STYLES.LIGHT}>Family Member Number {numUser + 1}</ThemedText>
         <Controller
           control={control}
           render={({ onChange, value}) => (

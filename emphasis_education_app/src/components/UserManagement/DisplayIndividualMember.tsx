@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { View } from 'react-native'
 
-import { IUserInput } from '../../types';
+import { IUserInput, IUsableUserInfo } from '../../types';
 import {
   ThemedText,
   IndividualField,
@@ -11,7 +11,7 @@ import {
   HorizontalDivider
  } from '../shared';
 
-const IndividualItem: React.FC<IUserInput & {id: number}> = ({
+const IndividualItem: React.FC<IUsableUserInfo & {id: number}> = ({
   firstName,
   lastName,
   email,
@@ -19,7 +19,6 @@ const IndividualItem: React.FC<IUserInput & {id: number}> = ({
   phoneNumber,
   userType,
   id,
-  // gender,
   dob
 }) => (
   <View>
