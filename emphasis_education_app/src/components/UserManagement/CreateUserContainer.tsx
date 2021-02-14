@@ -496,13 +496,13 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
             title='Edit prev user'
             titleStyle={{
               fontFamily: theme.font.main,
-              fontSize: 16
+              fontSize: 14
             }}
             icon={
               <Icon
                 name='caretleft'
                 type='antdesign'
-                size={15}
+                size={14}
                 color='white'
               />
             }
@@ -528,14 +528,14 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
             title='Edit next user'
             titleStyle={{
               fontFamily: theme.font.main,
-              fontSize: 16
+              fontSize: 14
             }}
             iconRight={true}
             icon={
               <Icon
                 name='caretright'
                 type='antdesign'
-                size={15}
+                size={14}
                 color='white'
               />
             }

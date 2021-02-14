@@ -84,7 +84,7 @@ const ConfirmationScreen: React.FC<ConfirmationScreenProps> = ({
       <IconRow>
         <ButtonContainer>
           <ThemedButton
-            buttonText="Back to Create User"
+            buttonText="Edit Users?"
             loading={false}
             onPress={navigation.goBack}
           />
