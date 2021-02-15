@@ -68,7 +68,7 @@ const CreateChat: React.FC<CreateChatProps> = ({ navigation }) => {
     CREATE_CHAT,
     {
       onCompleted: () => {
-        Alert.alert('chat successfully made')
+        Alert.alert('Chat successfully made!')
         navigation.goBack();
       },
       onError: (e) => {

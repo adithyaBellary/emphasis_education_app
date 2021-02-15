@@ -49,7 +49,7 @@ const AuthStack: ({ error, loading}: { error: boolean, loading: boolean}) => JSX
     <AppStackNav.Screen
       name="ConfirmationScreen"
       component={ConfirmationScreen}
-      options={{ title: '' }}
+      options={{ title: 'Confirm Users' }}
     />
     <AppStackNav.Screen
       name="ForgotPassword"

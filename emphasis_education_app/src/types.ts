@@ -12,7 +12,7 @@ export interface IUserInput {
   password: string;
   confirmPassword: string;
   phoneNumber: string;
-  userType?: Permission;
+  userType: Permission;
   // gender: string;
   dob: string;
 }
