@@ -58,6 +58,9 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
   const [numUser, setNumUser] = React.useState<number>(0)
   const [saved, setSaved] = React.useState<boolean>(true);
 
+  const editPreviousDisabled = numUser === 0;
+  const editNextDisabled = numUser === (userInfo.users.length -1)
+
   const { control, handleSubmit, watch, errors, setValue } = useForm<IFormData>({
     defaultValues: {
       firstName: '',
@@ -95,14 +98,6 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
     setValue('dob', userInfo.users[numUser].dob)
     setPicker(userInfo.users[numUser].userType as Permission)
 
-    // if (numUser === (userInfo.users.length)) {
-    //   setEditing(false)
-    // } else {
-    //   setEditing(true)
-    // }
-    // setEditing(true)
-    // setSaved(false)
-
   }, [numUser, userInfo]);
 
   React.useEffect(() => {
@@ -118,6 +113,17 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
     picker
   ])
 
+  React.useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Button
+          title='Submit User(s)'
+          onPress={handleSubmit(handleClick)}
+        />
+      )
+    })
+  })
+
   const handleClick = (formData: IFormData) => {
     console.log('calling handle click with ', userInfo)
     const u: IUserInput = {
@@ -132,17 +138,6 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
       navigation.navigate('ConfirmationScreen', {users: cleanUsers})
     }
   }
-
-  React.useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <Button
-          title='Submit User(s)'
-          onPress={handleSubmit(handleClick)}
-        />
-      )
-    })
-  })
 
   const handleSave = (formData: IFormData) => {
     const _index = numUser
@@ -197,7 +192,6 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
   }
 
   const handleGoBack = (formData: IFormData) => {
-    // const {dirtyFields} = formState;
     const u: IUserInput = {
       ...formData,
       userType: picker,
@@ -217,7 +211,6 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
   }
 
   const deleteMember = () => {
-
     userInfo.users.splice(numUser, 1)
     const newUsers = userInfo.users;
     if (numUser !== 0) {
@@ -272,13 +265,10 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
     }
   }
 
-
-
-
   return (
     <ScrollView>
       <CenteredDiv>
-        <ThemedText size={14} type={FONT_STYLES.LIGHT}>Family Member Number {numUser + 1}</ThemedText>
+        <ThemedText size={14} type={FONT_STYLES.LIGHT}>Creating Family Member Number {numUser + 1}</ThemedText>
         <Controller
           control={control}
           render={({ onChange, value}) => (
@@ -498,12 +488,15 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
               fontFamily: theme.font.main,
               fontSize: 14
             }}
+            disabledTitleStyle={{
+              color: 'grey'
+            }}
             icon={
               <Icon
                 name='caretleft'
                 type='antdesign'
                 size={14}
-                color='white'
+                color={editPreviousDisabled ? 'grey' : 'white'}
               />
             }
             buttonStyle={{
@@ -511,7 +504,7 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
               borderRadius: 10
             }}
             onPress={handleSubmit(handleGoBack)}
-            disabled={numUser === 0}
+            disabled={editPreviousDisabled}
           />
           <Icon
             name='close'
@@ -530,13 +523,16 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
               fontFamily: theme.font.main,
               fontSize: 14
             }}
+            disabledTitleStyle={{
+              color: 'grey'
+            }}
             iconRight={true}
             icon={
               <Icon
                 name='caretright'
                 type='antdesign'
                 size={14}
-                color='white'
+                color={editNextDisabled ? 'grey' : 'white'}
               />
             }
             buttonStyle={{
@@ -544,7 +540,7 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
               borderRadius: 10
             }}
             onPress={handleSubmit(handleGoForward)}
-            disabled={numUser === (userInfo.users.length -1)}
+            disabled={editNextDisabled}
           />
         </IconRow>
         <IconRow>
