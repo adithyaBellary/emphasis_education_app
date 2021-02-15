@@ -33,6 +33,8 @@ const ConfirmationScreen: React.FC<ConfirmationScreenProps> = ({
   navigation,
   route
 }) => {
+  const [submitted, setSubmitted] = React.useState<boolean>(false);
+
   const users: IUsableUserInfo[] = route.params.users
   console.log('users in confirmation', users)
 
@@ -42,22 +44,23 @@ const ConfirmationScreen: React.FC<ConfirmationScreenProps> = ({
       onCompleted: ({ createUser }) => {
         console.log('Done running create user mutation: ', createUser)
         const { res, message }: GenericResponse = createUser;
+        setSubmitted(true);
         Alert.alert(res ? SuccessMessaging : message || ErrorMessaging );
       }
     }
   )
 
   if(error) {
-    Alert.alert(data?.message || 'Something went wrong creating this user!')
+    Alert.alert(data?.message || 'Something went wrong creating these users')
   }
 
   const runCreateUserMut = (): void => {
     console.log('creating users with ', users)
-    // createUserMut({
-    //   variables: {
-    //     users
-    //   },
-    // })s
+    createUserMut({
+      variables: {
+        users
+      },
+    })
   }
 
   return (
@@ -78,6 +81,7 @@ const ConfirmationScreen: React.FC<ConfirmationScreenProps> = ({
             loading={false}
             block={true}
             onPress={runCreateUserMut}
+            disabled={submitted}
           />
         </ButtonContainer>
       </IconRow>

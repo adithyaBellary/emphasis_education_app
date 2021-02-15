@@ -409,6 +409,7 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
               labelStyle={{
                 fontFamily: theme.font.main
               }}
+              keyboardType='number-pad'
             />
           )}
           name='phoneNumber'
@@ -430,11 +431,12 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
               onChangeText={number => onChange(handleDOBInput(number))}
               value={value}
               maxLength={10}
-              label='Date of Birth'
+              label='Date of Birth (MM/DD/YYYY)'
               errorMessage={errors.dob?.message}
               labelStyle={{
                 fontFamily: theme.font.main
               }}
+              keyboardType='number-pad'
             />
           )}
           name='dob'
@@ -467,8 +469,8 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
             }}
             onValueChange={(itemValue, itemIndex) => {
               setPicker(itemValue as Permission)
-            }
-            }>
+            }}
+          >
             <Picker.Item label={Permission.Student} value={Permission.Student} />
             <Picker.Item label={Permission.Guardian} value={Permission.Guardian} />
             <Picker.Item label={Permission.Tutor} value={Permission.Tutor} />
