@@ -3,7 +3,8 @@ import {
   Alert,
   View,
   ScrollView,
-  Button
+  Button,
+  Platform
 } from 'react-native';
 import { useForm, Controller } from "react-hook-form";
 import { Icon, Input, Button as IconButton } from 'react-native-elements';
@@ -14,14 +15,11 @@ import { theme } from '../../theme'
 import {
   CenteredDiv,
   ButtonContainer,
-  // RadioButtonGroup,
-  // ThemedTextInput,
   ThemedButton,
   IconRow,
   GeneralSpacing,
   ThemedText,
   FONT_STYLES,
-  // ThemedNumberInput
 } from '../shared';
 
 interface CreateUserContainProps {
@@ -266,7 +264,7 @@ const CreateUserContain: React.FC<CreateUserContainProps> = ({ navigation }) => 
   }
 
   return (
-    <ScrollView>
+    <ScrollView style={{ marginBottom: Platform.OS === 'ios' ? 50 : 0}}>
       <CenteredDiv>
         <ThemedText size={14} type={FONT_STYLES.LIGHT}>Creating Family Member Number {numUser + 1}</ThemedText>
         <Controller
