@@ -346,3 +346,11 @@ export const TitleText: React.FC<{ title: string }> = ({ title }) => (
     {title}
   </ThemedText>
 );
+
+export const NotificationBadge = styled(View)`
+  height: 20px;
+  width: 20px;
+  border-radius: 10px;
+  background-color: grey;
+  margin-right: 10px;
+`

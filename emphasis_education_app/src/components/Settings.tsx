@@ -9,6 +9,7 @@ import styled from 'styled-components';
 import { useMutation } from '@apollo/client';
 
 import { SEND_BUG_EMAIL } from '../queries/SendBugEmail';
+import { LOGOUT } from '../queries/Logout';
 import { VERSION } from '../constant'
 
 import { ThemedButton, ThemedText, FONT_STYLES, CenteredDiv } from './shared';
@@ -32,6 +33,7 @@ const Settings: React.FC<SettingsProps> = () => {
   const { loggedUser } = React.useContext(GeneralContext);
 
   const [runMutation, {loading}] = useMutation(SEND_BUG_EMAIL);
+  const [_logoutCleanup, {logoutLoading}] = useMutation(LOGOUT);
 
   const sendEmail = () => {
     console.log(loggedUser.email, message)
@@ -44,6 +46,21 @@ const Settings: React.FC<SettingsProps> = () => {
       Alert.alert('Success', 'Email is sent!')
     })
     .catch (e => console.log('error sendng the bug email, ', e))
+  }
+
+  const logoutHandler = () => {
+
+    _logoutCleanup({ variables: {
+      email: loggedUser.email
+    }})
+    .then(data => {
+      console.log('logout is successful', data)
+    })
+    .catch (e =>  {
+      console.log('logout is successful', e)
+    })
+    // this will handle logging out from the client's side
+    logout()
   }
 
   return (
@@ -68,7 +85,7 @@ const Settings: React.FC<SettingsProps> = () => {
           block={true}
           buttonText='Logout'
           loading={false}
-          onPress={() => logout()}
+          onPress={() => logoutHandler()}
         />
         <ThemedText
           size={12}

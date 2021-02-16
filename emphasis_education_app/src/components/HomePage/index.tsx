@@ -1,9 +1,12 @@
 import * as React from 'react';
+import { Platform } from 'react-native';
 import { Icon, Badge } from 'react-native-elements';
 import { View } from 'react-native';
 import styled from 'styled-components';
 import messaging from '@react-native-firebase/messaging';
 import * as Sentry from '@sentry/react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+import { gql, useApolloClient, useQuery } from '@apollo/client';
 
 import { MissionStatement, HeaderTitle, LogiImage } from './logos';
 
@@ -23,9 +26,10 @@ import { GET_USER } from '../../queries/GetUser';
 import { theme } from '../../theme';
 import {
   UserInfoType,
-  QueryGetUserArgs
+  QueryGetUserArgs,
+  GetUserPayload
  } from '../../../types/schema-types';
- import { gql, useApolloClient, useQuery } from '@apollo/client';
+import { NOTIFICATIONS_KEY, VERSION } from '../../../src/constant';
 
 interface LiftedHomeProps {
   navigation: any;
@@ -64,17 +68,119 @@ const AdminIcon: React.FC<{ changeScreens (dest: string): () => void }> = ({ cha
 );
 
 const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
-  const { setUser, notificationBadge } = React.useContext(GeneralContext);
+  const { setUser, notificationBadge, loggedUser, notifications, updateNotifications } = React.useContext(GeneralContext);
+  const [notifBadge, setNotifBadge] = React.useState<boolean>(false)
+  const [adminNotifBadge, setAdminNotifBadge] = React.useState<boolean>(false)
+  const [currentUser, setCurrentUser] = React.useState<UserInfoType>({} as UserInfoType)
   const { logout } = React.useContext(AuthContext);
   const changeScreens = (dest: string) => () =>  navigation.navigate(dest)
   const fcmToken = route.params.fcmToken
-  const { data, loading, error } = useQuery<{ getUser: UserInfoType }, QueryGetUserArgs>(GET_USER, {
+  const { data, loading, error } = useQuery<{ getUser: GetUserPayload }, QueryGetUserArgs>(GET_USER, {
     variables: {
       userEmail: route.params.token,
       fcmToken: fcmToken
     },
+    fetchPolicy: 'no-cache',
     onCompleted: ({ getUser }) => {
-      setUser({...getUser})
+      setUser({...getUser.user})
+      setCurrentUser(getUser.user)
+      console.log('refetching here', getUser.chatNotifications)
+      // const classIDs = getUser.user.classes?.map(_class => _class.chatID)
+      // const adminIds = getUser.user.adminChat?.map(_adminChat => _adminChat.chatID)
+      // console.log('class ids', classIDs)
+      // console.log('admin ids', adminIds)
+      // console.log('notifs in the home page', notifications)
+      const regChatNotifIDs = getUser.chatNotifications.length > 0
+        ? getUser.chatNotifications.map(_notif => {
+          if (!_notif!.isAdmin) {
+            return _notif?.chatID
+          }
+          return null
+        }).filter(chatID => !!chatID)
+        : []
+
+      // console.log('regChatNotifIDs', regChatNotifIDs)
+      const adminChatNotifs = getUser.chatNotifications.length > 0
+        ? getUser.chatNotifications.map(_notif => {
+          if (_notif!.isAdmin) {
+            return _notif?.chatID
+          }
+          return null
+        }).filter(chatID => !!chatID)
+        : []
+
+      // console.log('reg chat', regChatNotifIDs)
+      // console.log('admin chat', adminChatNotifs)
+      if (regChatNotifIDs.length > 0) {
+        setNotifBadge(true)
+        regChatNotifIDs.forEach(_regChat => {
+          updateNotifications(_regChat!, false, [getUser.user.email])
+        })
+      }
+      if (adminChatNotifs.length > 0) {
+        setAdminNotifBadge(true)
+        // should also set the notifications in the context for the admin chat
+        // we do not query there, only read from the logged user in the context
+        adminChatNotifs.forEach(_adminChatID => {
+          updateNotifications(_adminChatID!, true, [getUser.user.email])
+        })
+      }
+    }
+  })
+
+  React.useEffect(() => {
+    // console.log('notifications in the use effect', notifications)
+    // console.log('cur user', currentUser)
+
+    // if (notifications) {
+    //   console.log('notifications fjdsalfjeas', notifications)
+    // }
+    console.log(`notifications changed in the home page ${Platform.OS}`, Object.values(notifications))
+    const admins: string[] = []
+    const regs: string[] = []
+    Object
+      .values(notifications)
+      .forEach(notif => {
+        if (notif.emails.includes(loggedUser.email)) {
+          if (notif.isAdmin) {
+            admins.push('hi')
+          }
+          if (!notif.isAdmin) {
+            regs.push('hi')
+          }
+        }
+
+      })
+    console.log('admins', admins)
+    console.log('regs', regs)
+
+    setNotifBadge(regs.length > 0)
+    setAdminNotifBadge(admins.length > 0)
+
+  }, [notifications])
+
+  React.useEffect(() => {
+    // const asyncFunction = async (user: UserInfoType) => {
+    //   const oldVal = await AsyncStorage.getItem(NOTIFICATIONS_KEY)
+    //   if (!!oldVal) {
+    //     const oldObject = JSON.parse(oldVal)
+    //     if (Object.keys(oldObject).length > 0) {
+    //       const adminClasses = user.adminChat?.map(_class => _class.chatID)
+    //       if (adminClasses) {
+    //         Object.entries(oldObject).forEach(([key, val]) => {
+    //           // console.log('obj', key, val)
+    //           if (adminClasses.includes(key)) {
+    //             setAdminNotifBadge(true)
+    //           }
+    //         })
+    //       }
+    //     }
+    //   }
+    // }
+    if ( data && data?.getUser) {
+      // console.log('user', loggedUser)
+      // console.log('data', data.getUser)
+      // asyncFunction(data.getUser.user)
       navigation.setOptions({
         headerRight: () => (
           <IconRow>
@@ -82,6 +188,22 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
               Permission.Admin
             ]}>
               <AdminIcon changeScreens={changeScreens}/>
+              {adminNotifBadge && (
+                <Badge
+                  containerStyle={{
+                    position: 'absolute',
+                    top: 0,
+                    right: 5,
+                    zIndex: 100
+                  }}
+                  badgeStyle={{
+                    height: 10,
+                    width: 10,
+                    borderRadius: 5,
+                    backgroundColor: 'green'
+                  }}
+                />
+              )}
             </PermissionedComponent>
 
             <PermissionedComponent allowedPermissions={[
@@ -94,10 +216,26 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
                   name='user'
                   type='antdesign'
                   onPress={() => navigation.navigate('Chat', {
-                    chatID: getUser.adminChat[0].chatID,
+                    chatID: data.getUser.user.adminChat[0].chatID,
                     className: 'Admin Chat'
                   })}
                 />
+                {adminNotifBadge && (
+                  <Badge
+                    containerStyle={{
+                      position: 'absolute',
+                      top: 5,
+                      right: 20,
+                      zIndex: 100
+                    }}
+                    badgeStyle={{
+                      height: 10,
+                      width: 10,
+                      borderRadius: 5,
+                      backgroundColor: 'green'
+                    }}
+                  />
+                )}
                 <ThemedText
                   size={14}
                   type={FONT_STYLES.MAIN}
@@ -113,41 +251,7 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
         },
         headerLeft: () => null
       })
-      // delete all this
-      // subscribe to the messages (chats as well as admin chats)
-      if (getUser.classes) {
-        getUser.classes.forEach(_class => {
-          if (_class) {
-            messaging()
-              .subscribeToTopic(_class.chatID)
-              .then(() => {
-                // Sentry.captureMessage(`${getUser.firstName} ${getUser.lastName} successfully subbed to ${_class.chatID}`)
-                console.log('successfully subbed to topic')
-              })
-              .catch(e => {
-                // Sentry.captureMessage(`${getUser.firstName} ${getUser.lastName} was not able to sub to ${_class.chatID} ${e}`)
-                console.log('there was an error in subbing to the topic, ', e)
-              })
-          }
-        })
-      }
-      if (getUser.adminChat) {
-        getUser.adminChat?.forEach(_adminChat => {
-          // subscribe to the admin chats too, so that we can receive push notifs from messages in these chats too
-          if (_adminChat) {
-            messaging()
-              .subscribeToTopic(_adminChat.chatID)
-              .then(() => {
-                // Sentry.captureMessage(`${getUser.firstName} ${getUser.lastName} successfully subbed to  admin chat ${_adminChat.chatID}`)
-                console.log('successfully subbed to admin chat topic')
-              })
-              .catch(e => {
-                // Sentry.captureMessage(`${getUser.firstName} ${getUser.lastName} was not able to sub to ${_adminChat.chatID} ${e}`)
-                console.log('there was an error in subbing to the admin chattopic, ', e)
-              })
-          }
-        })
-      }
+
     }
   })
 
@@ -182,6 +286,12 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
         >
           Try logging out / in again
         </ThemedText>
+        <ThemedText
+          size={14}
+          type={FONT_STYLES.MAIN}
+        >
+          You are currently on app version v{VERSION}. Try updating the app if the problem continues
+        </ThemedText>
         <ThemedButton
           buttonText='Back to login'
           onPress={logout}
@@ -210,16 +320,18 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
             <Icon
               raised
               name='message'
-              color= '#ffb6a8'
+              color='#ffb6a8'
               onPress={changeScreens('ChatPicker')}
               reverse={true}
             />
-            {notificationBadge && (
+            {notifBadge && (
               <Badge
                 containerStyle={{
                   position: 'absolute',
                   top: 10,
-                  right: 10
+                  right: 10,
+                  zIndex: 100,
+                  elevation: 100
                 }}
                 badgeStyle={{
                   height: 10,

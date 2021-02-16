@@ -210,13 +210,25 @@ export type FcmDeviceToken = {
   lastName: Scalars['String'];
 };
 
+export type ChatNotification = {
+  __typename?: 'ChatNotification';
+  chatID: Scalars['String'];
+  isAdmin: Scalars['Boolean'];
+};
+
+export type GetUserPayload = {
+  __typename?: 'getUserPayload';
+  user: UserInfoType;
+  chatNotifications: Array<Maybe<ChatNotification>>;
+};
+
 export type Query = {
   __typename?: 'Query';
   getMessages?: Maybe<Array<Maybe<MessageType>>>;
   getFamily?: Maybe<Array<Maybe<UserInfoType>>>;
   searchUsers: Array<Maybe<UserInfoType>>;
   searchClasses: SearchClassesPayload;
-  getUser: UserInfoType;
+  getUser: GetUserPayload;
   checkCode: GenericResponse;
 };
 
@@ -271,6 +283,7 @@ export type Mutation = {
   forgotPassword: GenericResponse;
   addChatMember: GenericResponse;
   updateFCMDeviceTokens: GenericResponse;
+  logout: GenericResponse;
   updateUser: GenericResponse;
 };
 
@@ -352,6 +365,11 @@ export type MutationAddChatMemberArgs = {
 export type MutationUpdateFcmDeviceTokensArgs = {
   email: Scalars['String'];
   token: Scalars['String'];
+};
+
+
+export type MutationLogoutArgs = {
+  email: Scalars['String'];
 };
 
 

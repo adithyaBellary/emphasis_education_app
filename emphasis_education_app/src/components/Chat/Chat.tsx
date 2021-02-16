@@ -67,7 +67,7 @@ interface GetMessages {
 // `
 
 const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
-  const { loggedUser } = React.useContext(GeneralContext);
+  const { loggedUser, clearNotificationCounter } = React.useContext(GeneralContext);
   const [curState, setState] = useState<State>();
   const chatID: string = route.params.chatID;
   const className: string = route.params.className;
@@ -105,7 +105,7 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
   const { data: subData, error: subError, loading: subLoading } = useSubscription<MessageReceived>(SUB, {
     onSubscriptionData: (data) => {
       // console.log('got data', data)
-      console.log('got data in the sub!')
+      // console.log('got data in the sub!')
     },
   })
 
@@ -205,6 +205,11 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
       })
   }, [])
 
+  React.useEffect(() => {
+    console.log('clearing', chatID)
+    clearNotificationCounter(chatID)
+  }, [])
+
   const curUser: MessageUser = {
     _id: loggedUser._id,
     name: `${loggedUser.firstName} ${loggedUser.lastName}`,
@@ -241,7 +246,7 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
           curUser={curUser}
           messages={curState ? curState.messages : []}
           triggerSubToMore={() => {
-            console.log('subbing to more')
+            // console.log('subbing to more')
             // Sentry.captureMessage('triggered the subscribe to more stuff. should happen on mount', {
             //   user: {
             //     email: loggedUser.email,

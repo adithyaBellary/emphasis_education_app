@@ -4,19 +4,24 @@ import { UserInfoType } from '../../../types/schema-types';
 // This number can be used to display in the app icon.
 // in the chat picker, we can display whether there are any unread messages
 export interface NotificationsProps{
-  // this could also be a boolean instead
-  [x: string]: number
+  // [x: string]: boolean
+  [x: string]: {
+    chatID: string,
+    isAdmin: boolean,
+    emails: string[],
+  }
 }
 
 export interface Context {
   // manage number of notifications for each chat
   notifications: NotificationsProps;
   loggedUser: UserInfoType;
-  incrementNotificationCounter (chatID: string): void;
+  updateNotifications (chatID: string, isAdmin: boolean, emails: string[]): void;
   clearNotificationCounter (chatID: string): void;
   setUser (user: UserInfoType): void;
   notificationBadge: boolean;
   setNotificationBadge (status: boolean): void;
+  clearAllNotifications (): void;
 }
 
 interface AuthContextProps {

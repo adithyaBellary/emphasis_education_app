@@ -39,10 +39,12 @@ Sentry.init({
 });
 
 const DEBUG = false;
+const DEV = true;
 
 const cache = new InMemoryCache();
+
 const httplink = new HttpLink({
-  uri: DEBUG ? 'http://localhost:4000/' : 'https://emphasis-education-server.herokuapp.com/'
+  uri: DEBUG ? 'http://localhost:4000/' : DEV ? 'https://emphasis-server-test.herokuapp.com/' : 'https://emphasis-education-server.herokuapp.com/'
 });
 
 const errLink = onError(({ operation, graphQLErrors, networkError }) => {
@@ -66,7 +68,7 @@ const errLink = onError(({ operation, graphQLErrors, networkError }) => {
   }
 })
 
-const wsUrl = DEBUG ? 'ws://localhost:4000/graphql' : 'ws://emphasis-education-server.herokuapp.com/graphql';
+const wsUrl = DEBUG ? 'ws://localhost:4000/graphql' : DEV ? 'ws://emphasis-server-test.herokuapp.com/graphql' : 'ws://emphasis-education-server.herokuapp.com/graphql';
 const wsClient = new SubscriptionClient(
   wsUrl,
   {
@@ -135,7 +137,7 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 
 const App = () => {
   const [user, setUser] = React.useState<UserInfoType>({} as UserInfoType);
-  const [notifications, incrementNotifications] = React.useState<NotificationsProps>({} as NotificationsProps);
+  const [notifications, setNotifications] = React.useState<NotificationsProps>({} as NotificationsProps);
   const [notificationBadge, setBadge] = React.useState<boolean>(false);
   const updateUser = (newUser: UserInfoType) => {
     // set Sentry user here as well
@@ -146,16 +148,25 @@ const App = () => {
     })
     setUser(newUser)
   }
-  const incrementNotificationCounter = (chatID: string) => {
-    let oldVal: number = 1;
-    if (notifications[chatID]) {
-      oldVal = notifications[chatID] + 1
-    }
-    incrementNotifications({...notifications, [chatID]: oldVal})
+  const updateNotifications = (chatID: string, isAdmin: boolean, emails: string[]) => {
+    // let oldVal: number = 1;
+    // if (notifications[chatID]) {
+    //   oldVal = notifications[chatID] + 1
+    // }
+    console.log('notifications in the handler', notifications)
+    console.log('chat ID in the update notifs', chatID)
+    setNotifications({...notifications, [chatID]: {chatID, isAdmin, emails}})
+  }
+
+  const clearAllNotifications = () => {
+    setNotifications({})
   }
 
   const clearNotificationCounter = (chatID: string) => {
-    incrementNotifications({ ...notifications, [chatID]: 0})
+    console.log('old notifs before deleting', notifications)
+    delete notifications[chatID]
+    console.log('new notifications after deleting', notifications)
+    setNotifications({ ...notifications})
     setBadge(false)
   }
 
@@ -166,11 +177,12 @@ const App = () => {
   const value: Context = {
     loggedUser: user,
     notifications,
-    incrementNotificationCounter,
+    updateNotifications,
     clearNotificationCounter,
     setUser: updateUser,
     notificationBadge,
-    setNotificationBadge
+    setNotificationBadge,
+    clearAllNotifications
   }
 
   return (

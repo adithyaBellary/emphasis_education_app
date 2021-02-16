@@ -11,6 +11,7 @@ import { GeneralContext } from './src/components/Context/Context';
 import { LOGIN_TOKEN } from './src/constant';
 // import NotificationHandler, { MyNotificationHandler } from './PushNotificationHander';
 import { UPDATE_FCM_TOKENS } from './src/queries/UpdateFCMTokens';
+import { NOTIFICATIONS_KEY } from './src/constant';
 
 const getFCMToken = async () => {
   const fcmToken = await messaging().getToken().then(token => token);
@@ -35,12 +36,29 @@ const triggerNotif = (title: string, message: string) => {
   })
 }
 
-// const handler = new MyNotificationHandler();
+// const updateNotifStorage = async (chatID: string) => {
+//   const oldVal = await AsyncStorage.getItem(NOTIFICATIONS_KEY)
+//   if (oldVal) {
+//     const oldDictionary = JSON.parse(oldVal);
+//     if (Object.keys(oldDictionary).length > 0) {
+//       const newDic = {
+//         ...oldDictionary,
+//         [chatID]: true
+//       }
+//       await AsyncStorage.setItem(NOTIFICATIONS_KEY, JSON.stringify(newDic))
+//     }
+//   } else {
+//     const newNotifDictionary = {
+//       [chatID]: true
+//     }
+//     await AsyncStorage.setItem(NOTIFICATIONS_KEY, JSON.stringify(newNotifDictionary))
+//   }
+// }
 
 // this is going to serve as a wrapper to request permissiong for push notis and such
 const Wrapper: React.FC = ({ children }) => {
 
-  const { incrementNotificationCounter, setNotificationBadge } = React.useContext(GeneralContext);
+  const { updateNotifications, setNotificationBadge } = React.useContext(GeneralContext);
   // const [_mutation, {data, loading}] = useMutation(UPDATE_FCM_TOKENS);
 
   React.useEffect(() => {
@@ -59,64 +77,80 @@ const Wrapper: React.FC = ({ children }) => {
   // }, [])
 
   // when we open the app from a notification while the app is in the ebackground
-  React.useEffect(() => {
-    messaging().onNotificationOpenedApp(async message => {
-      console.log('we are coming from a background state', message)
-      console.log('Platform', Platform.OS)
-      triggerNotif('title', 'onnotif opened app');
-    })
+  // React.useEffect(() => {
+  //   messaging().onNotificationOpenedApp(async message => {
+  //     console.log('we are coming from a background state', message)
+  //     console.log('Platform', Platform.OS)
+  //     setNotificationBadge(true)
+  //     // triggerNotif('title', 'onnotif opened app');
+  //   })
 
-    // return fcn;
-  }, [])
+  //   // return fcn;
+  // }, [])
 
   React.useEffect(() => {
     // this should not be used to update state at all
     const unsub = messaging().setBackgroundMessageHandler(async payload => {
-      console.log('i am being handled by the background message handler. this is the payload', payload)
-      console.log('Platform', Platform.OS)
-      Sentry.captureMessage(`In the background message handler ${JSON.stringify(payload)}`)
+      console.log('i am being handled by the background message handler.')
+      // console.log('Platform', Platform.OS)
+      // Sentry.captureMessage(`In the background message handler ${JSON.stringify(payload)}`)
       if (payload.data) {
-        const { chatID, title, message } = payload.data;
-        Sentry.captureMessage(`triggered the background message handler. triggering notif for chat: ${chatID}`)
-        incrementNotificationCounter(chatID)
-        // looks like we do not need to trigger the notif ourselves.
-        // we can trigger the notification from the server itself
+        const { chatID, isAdmin, emails, title, message } = payload.data;
+        // incrementNotificationCounter(chatID)
         // triggerNotif(title, message );
-        setNotificationBadge(true)
+        // setNotificationBadge(true)
+        // console.log('updating the local storage in the setbackground message handler')
+        const relEmails = emails.split(',')
+        console.log('isadmin in setBackgroundMessageHandler', isAdmin)
+        updateNotifications(chatID, isAdmin === 'TRUE' ? true : false, relEmails)
+        // await updateNotifStorage(chatID)
       }
     })
 
     return unsub
   }, [])
 
-  // this does not seem to be triggered. The first message from the server wakes the
-  // app up and then the second one gets handled by the background handler
-  React.useEffect(() => {
-    messaging().getInitialNotification().then(async message => {
-      if (message) {
-        console.log('we are coming from a quit state', message)
-        console.log('Platform', Platform.OS)
-        triggerNotif('title', 'message');
-      }
-    })
-    // return unsub;
+  // React.useEffect(() => {
+  //   const initializeNotifDictionary = async () => {
+  //     const oldVal = await AsyncStorage.getItem(NOTIFICATIONS_KEY)
+  //     if (oldVal) {
+  //       const oldDict = JSON.parse(oldVal)
+  //       console.log('old dict in initialization', oldDict)
+  //       setNotifications(oldDict)
+  //     }
+  //   }
+  //   initializeNotifDictionary()
 
-  }, [])
+  // }, [])
+
+  // this gets triggered when the app is quit and we click on the push notification
+  // React.useEffect(() => {
+  //   messaging().getInitialNotification().then(async message => {
+  //     if (message) {
+  //       console.log('we are coming from a quit state', message)
+  //       // console.log('Platform', Platform.OS)
+  //       // triggerNotif('title', 'message');
+  //     }
+  //   })
+  //   // return unsub;
+
+  // }, [])
 
   React.useEffect(() => {
     const unsub = messaging().onMessage(async payload => {
-      Sentry.captureMessage(`in onMessage ${JSON.stringify(payload)}`)
-      console.log('in on Message', payload)
-      console.log('Platform', Platform.OS)
-      incrementNotificationCounter(payload.data!.chatID)
-      setNotificationBadge(true)
+      if (payload.data) {
+        const { chatID, isAdmin, emails, title, message } = payload.data;
+        console.log('in onMessage')
+        // triggerNotif('New Message', 'You received a new message');
+        // incrementNotificationCounter(payload.data!.chatID)
+        // setNotificationBadge(true)
+        const relEmails = emails.split(',')
+        updateNotifications(chatID, isAdmin === 'TRUE' ? true : false, relEmails)
+        // await updateNotifStorage(chatID)
+      }
     })
 
     return unsub
-  }, [])
-
-  React.useEffect(() => {
-    const unsub = messaging()
   }, [])
 
   return (

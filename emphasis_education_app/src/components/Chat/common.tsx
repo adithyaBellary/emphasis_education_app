@@ -66,14 +66,6 @@ export const SpacedItemRow = styled(View)`
   justify-content: space-between;
 `;
 
-export const NotificationBadge = styled(View)`
-  height: 20px;
-  width: 20px;
-  border-radius: 10px;
-  background-color: grey;
-  margin-right: 10px;
-`
-
 export const ChatContain: React.FC = ({ children }) => (
   <GeneralSpacing u={10} r={10} d={10} l={10}>
     {children}

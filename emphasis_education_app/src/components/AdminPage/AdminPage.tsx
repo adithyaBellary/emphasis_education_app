@@ -6,6 +6,8 @@ import ClassSearch from './LiftedClassSearch';
 import InviteUser from './InviteUser';
 import AdminChatPicker from './AdminChatPicker';
 
+import { theme } from '../../theme';
+
 interface AdminPageProps {
   navigation: any;
   route: any;
@@ -23,13 +25,15 @@ const AdminPage: React.FC<AdminPageProps> = () => {
           paddingVertical: 20,
           fontFamily: 'Nunito',
           fontSize: 12,
-        }
+        },
+        activeTintColor: theme.colors.purple,
+        inactiveTintColor: 'gray',
       }}
     >
       <Tab.Screen name="Users" component={Search} />
       <Tab.Screen name="Classes" component={ClassSearch} />
       <Tab.Screen name="Invite User" component={InviteUser} />
-      <Tab.Screen name="Admin Chats" component={AdminChatPicker} />
+      <Tab.Screen name="Admin Chats" component={AdminChatPicker} options={{ tabBarBadge: 3}}/>
     </Tab.Navigator>
   )
 }

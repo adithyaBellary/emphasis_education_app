@@ -5,6 +5,7 @@ import {
 } from 'react-native';
 import { useMutation } from '@apollo/client';
 import { Icon } from 'react-native-elements';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import {
   ChatUserInfo,
@@ -18,9 +19,11 @@ import {
   HorizontalDivider,
   VerticalDivider,
   IconRow,
-  FONT_STYLES
+  FONT_STYLES,
+  NotificationBadge
  } from '../shared'
 import { theme } from '../../theme';
+import { NOTIFICATIONS_KEY } from '../../constant';
 
 import {
   LoadingScreen,
@@ -29,7 +32,6 @@ import {
   RightText,
   SpacedItemRow,
   ChatContain,
-  NotificationBadge
 } from './common';
 
 interface ChatDisplayProps {
@@ -94,8 +96,16 @@ const ChatDisplay: React.FC<ChatDisplayProps> = ({
     className: string,
     tutorInfo: ChatUserInfo,
     userInfo: ChatUserInfo[]
-  ) => () => {
-    clearNotificationCounter(chatID);
+  ) => async () => {
+    // clearNotificationCounter(chatID);
+    // const oldVal = await AsyncStorage.getItem(NOTIFICATIONS_KEY)
+    // if (oldVal) {
+    //   const oldDict = JSON.parse(oldVal);
+    //   if (oldDict[chatID]) {
+    //     delete oldDict[chatID];
+    //   }
+    //   await AsyncStorage.setItem(NOTIFICATIONS_KEY, JSON.stringify(oldDict))
+    // }
     goToChat(chatID, className, tutorInfo, userInfo)
   }
 
