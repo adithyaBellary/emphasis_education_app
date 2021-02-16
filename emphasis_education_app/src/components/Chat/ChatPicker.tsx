@@ -176,7 +176,7 @@ const ChatPicker: React.FC<ChatPickerProps> = ({ navigation }) => {
               key={_class.chatID}
               getClasses={getClasses}
               // displayNotificationBadge={notifs.includes(_class.chatID)}
-              displayNotificationBadge={!!notifications[_class.chatID]}
+              displayNotificationBadge={!!notifications[_class.chatID]?.emails.includes(loggedUser.email)}
               clearNotificationCounter={clearNotificationCounter}
               userEmail={loggedUser.email}
             />

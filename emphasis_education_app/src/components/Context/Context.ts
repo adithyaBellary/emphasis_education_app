@@ -7,7 +7,8 @@ export interface NotificationsProps{
   // [x: string]: boolean
   [x: string]: {
     chatID: string,
-    isAdmin: boolean
+    isAdmin: boolean,
+    emails: string[],
   }
 }
 
@@ -15,7 +16,7 @@ export interface Context {
   // manage number of notifications for each chat
   notifications: NotificationsProps;
   loggedUser: UserInfoType;
-  updateNotifications (chatID: string, isAdmin: boolean): void;
+  updateNotifications (chatID: string, isAdmin: boolean, emails: string[]): void;
   clearNotificationCounter (chatID: string): void;
   setUser (user: UserInfoType): void;
   notificationBadge: boolean;

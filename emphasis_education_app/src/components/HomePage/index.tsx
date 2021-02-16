@@ -114,7 +114,7 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
       if (regChatNotifIDs.length > 0) {
         setNotifBadge(true)
         regChatNotifIDs.forEach(_regChat => {
-          updateNotifications(_regChat!, false)
+          updateNotifications(_regChat!, false, [getUser.user.email])
         })
       }
       if (adminChatNotifs.length > 0) {
@@ -122,7 +122,7 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
         // should also set the notifications in the context for the admin chat
         // we do not query there, only read from the logged user in the context
         adminChatNotifs.forEach(_adminChatID => {
-          updateNotifications(_adminChatID!, true)
+          updateNotifications(_adminChatID!, true, [getUser.user.email])
         })
       }
     }
@@ -138,7 +138,19 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
     console.log(`notifications changed in the home page ${Platform.OS}`, Object.values(notifications))
     const admins: string[] = []
     const regs: string[] = []
-    Object.values(notifications).forEach(({isAdmin}) => isAdmin ? admins.push('hi') : regs.push('hi') )
+    Object
+      .values(notifications)
+      .forEach(notif => {
+        if (notif.emails.includes(loggedUser.email)) {
+          if (notif.isAdmin) {
+            admins.push('hi')
+          }
+          if (!notif.isAdmin) {
+            regs.push('hi')
+          }
+        }
+
+      })
     console.log('admins', admins)
     console.log('regs', regs)
 

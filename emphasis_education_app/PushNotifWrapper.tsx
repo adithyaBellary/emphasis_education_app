@@ -58,7 +58,7 @@ const triggerNotif = (title: string, message: string) => {
 // this is going to serve as a wrapper to request permissiong for push notis and such
 const Wrapper: React.FC = ({ children }) => {
 
-  const { updateNotifications, setNotificationBadge, setNotifications } = React.useContext(GeneralContext);
+  const { updateNotifications, setNotificationBadge } = React.useContext(GeneralContext);
   // const [_mutation, {data, loading}] = useMutation(UPDATE_FCM_TOKENS);
 
   React.useEffect(() => {
@@ -95,13 +95,14 @@ const Wrapper: React.FC = ({ children }) => {
       // console.log('Platform', Platform.OS)
       // Sentry.captureMessage(`In the background message handler ${JSON.stringify(payload)}`)
       if (payload.data) {
-        const { chatID, isAdmin, title, message } = payload.data;
+        const { chatID, isAdmin, emails, title, message } = payload.data;
         // incrementNotificationCounter(chatID)
         // triggerNotif(title, message );
         // setNotificationBadge(true)
         // console.log('updating the local storage in the setbackground message handler')
+        const relEmails = emails.split(',')
         console.log('isadmin in setBackgroundMessageHandler', isAdmin)
-        updateNotifications(chatID, isAdmin === 'TRUE' ? true : false)
+        updateNotifications(chatID, isAdmin === 'TRUE' ? true : false, relEmails)
         // await updateNotifStorage(chatID)
       }
     })
@@ -138,12 +139,13 @@ const Wrapper: React.FC = ({ children }) => {
   React.useEffect(() => {
     const unsub = messaging().onMessage(async payload => {
       if (payload.data) {
-        const { chatID, isAdmin, title, message } = payload.data;
-        // console.log('in onMessage')
+        const { chatID, isAdmin, emails, title, message } = payload.data;
+        console.log('in onMessage')
         // triggerNotif('New Message', 'You received a new message');
         // incrementNotificationCounter(payload.data!.chatID)
         // setNotificationBadge(true)
-        updateNotifications(chatID, isAdmin === 'TRUE' ? true : false)
+        const relEmails = emails.split(',')
+        updateNotifications(chatID, isAdmin === 'TRUE' ? true : false, relEmails)
         // await updateNotifStorage(chatID)
       }
     })

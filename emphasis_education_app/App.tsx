@@ -148,14 +148,14 @@ const App = () => {
     })
     setUser(newUser)
   }
-  const updateNotifications = (chatID: string, isAdmin: boolean) => {
+  const updateNotifications = (chatID: string, isAdmin: boolean, emails: string[]) => {
     // let oldVal: number = 1;
     // if (notifications[chatID]) {
     //   oldVal = notifications[chatID] + 1
     // }
     console.log('notifications in the handler', notifications)
     console.log('chat ID in the update notifs', chatID)
-    setNotifications({...notifications, [chatID]: {chatID, isAdmin}})
+    setNotifications({...notifications, [chatID]: {chatID, isAdmin, emails}})
   }
 
   const clearAllNotifications = () => {
