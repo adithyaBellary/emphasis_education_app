@@ -198,6 +198,10 @@ const ChatInfo: React.FC<ChatInfoProps> = ({ navigation, route }) => {
             name='pluscircleo'
             type='antdesign'
             onPress={onPress}
+            size={20}
+            containerStyle={{
+              paddingHorizontal: 5
+            }}
           />
         </IconRow>
         {click && (
