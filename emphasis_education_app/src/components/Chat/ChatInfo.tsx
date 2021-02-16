@@ -2,8 +2,9 @@ import * as React from 'react';
 import {
   SafeAreaView,
   TouchableOpacity,
-  View,
-  Alert
+  ScrollView,
+  Alert,
+  View
 } from 'react-native';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { Icon, Input } from 'react-native-elements';
@@ -24,6 +25,7 @@ import { ADD_CHAT_MEMBER } from '../../queries/AddChatMember';
 import { IndividualResultContainer } from '../AdminPage/common';
 import { GeneralContext } from '../Context/Context';
 import { QuerySearchUsersArgs } from '../../../types/schema-types'
+import { SearchResultsContain } from '../Search/common'
 
 interface CancelProps {
   onPress (): void;
@@ -63,25 +65,23 @@ const SearchResults: React.FC<{
   results: UserInfoType[],
   addMember(email: string): () => void
 }> = ({ email, results, addMember }) => (
-  <View>
-    {
-      results.map(_result => (
-        <IndividualResultContainer>
-          <ThemedText
-            size={14}
-            type={FONT_STYLES.MAIN}
-          >
-            {_result.firstName} {_result.lastName}
-          </ThemedText>
-          <Icon
-            name={_result.email === email ? 'checkcircle' : 'pluscircleo'}
-            type='antdesign'
-            onPress={addMember(_result.email)}
-          />
-        </IndividualResultContainer>
-      ))
-    }
-  </View>
+  <ScrollView style={{ marginBottom: 500}}>
+    {results.map(_result => (
+      <IndividualResultContainer>
+        <ThemedText
+          size={14}
+          type={FONT_STYLES.MAIN}
+        >
+          {_result.firstName} {_result.lastName}
+        </ThemedText>
+        <Icon
+          name={_result.email === email ? 'checkcircle' : 'pluscircleo'}
+          type='antdesign'
+          onPress={addMember(_result.email)}
+        />
+      </IndividualResultContainer>
+    ))}
+  </ScrollView>
 )
 interface ChatInfoProps {
   navigation: any;

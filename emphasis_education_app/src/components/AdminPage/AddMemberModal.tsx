@@ -2,6 +2,7 @@ import * as React from 'react';
 import {
   Alert,
   SafeAreaView,
+  ScrollView,
   TouchableOpacity,
 } from 'react-native';
 import { Input, Icon } from 'react-native-elements';
@@ -137,6 +138,7 @@ const AddMember: React.FC<AddMemberProps> = ({ navigation, route }) => {
         Selected Users: {selectedUsers.map(_u => _u.name)},
       </ThemedText>
       <ContentContain>
+        <ScrollView>
         {userLoading ? <LoadingComponent loading={userLoading} /> : (
           userData && userData.searchUsers.map(_user => {
             let present = false;
@@ -166,6 +168,7 @@ const AddMember: React.FC<AddMemberProps> = ({ navigation, route }) => {
             )
           })
         ) }
+        </ScrollView>
       </ContentContain>
     </SafeAreaView>
     </GeneralSpacing>
