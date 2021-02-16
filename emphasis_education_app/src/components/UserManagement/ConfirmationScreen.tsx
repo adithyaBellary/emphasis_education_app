@@ -1,9 +1,14 @@
 import * as React from 'react';
 import {
+  Alert,
   View,
+  Text,
   ScrollView,
   FlatList
 } from 'react-native';
+import { useMutation } from '@apollo/client';
+
+import { CREATE_USER } from '../../queries/CreateUser';
 import {
   ButtonContainer,
   ContentContain,
@@ -13,74 +18,92 @@ import {
 import { CreateUserArr } from './CreateUserContainer';
 import IndividualItem from './DisplayIndividualMember';
 
-import { IUserInput } from '../../types';
+import { IUsableUserInfo, GenericResponse } from '../../types';
 
 interface ConfirmationScreenProps {
   navigation: any;
-  createdUsers: CreateUserArr | undefined;
-  loading: boolean;
-  submitDisabled: boolean;
-  BackToUserCreate(): void;
-  submit(): void;
+  route: any
 }
+
+const SuccessMessaging: string = 'Thank you for joining Emphasis Education!';
+const ErrorMessaging: string = 'There was an issue creating this user';
 
 // we need to be able to edit info from here
 const ConfirmationScreen: React.FC<ConfirmationScreenProps> = ({
-  createdUsers,
-  loading,
-  submit,
-  submitDisabled,
-  BackToUserCreate,
-  navigation
-}) => (
-  <ScrollView style={{ marginBottom: 30 }}>
-    <ContentContain>
-      {createdUsers && createdUsers.users.map((user: IUserInput, index: number) => (
-        <IndividualItem
-          key={index}
-          id={index + 1}
-          {...user}
-        />
-      ))}
-    </ContentContain>
-    <View
-      style={{
-        marginTop: 30
-      }}
-    >
+  navigation,
+  route
+}) => {
+  const [submitted, setSubmitted] = React.useState<boolean>(false);
+
+  const users: IUsableUserInfo[] = route.params.users
+  console.log('users in confirmation', users)
+
+  const [createUserMut, { data, loading, error }] = useMutation(
+    CREATE_USER,
+    {
+      onCompleted: ({ createUser }) => {
+        console.log('Done running create user mutation: ', createUser)
+        const { res, message }: GenericResponse = createUser;
+        setSubmitted(true);
+        Alert.alert(res ? SuccessMessaging : message || ErrorMessaging );
+      }
+    }
+  )
+
+  if(error) {
+    Alert.alert(data?.message || 'Something went wrong creating these users')
+  }
+
+  const runCreateUserMut = (): void => {
+    console.log('creating users with ', users)
+    createUserMut({
+      variables: {
+        users
+      },
+    })
+  }
+
+  return (
+    <ScrollView style={{ marginBottom: 30 }}>
+      <ContentContain>
+        {users.map((_user, index) => (
+          <IndividualItem
+            key={index}
+            id={index + 1}
+            {..._user}
+          />
+        ))}
+      </ContentContain>
       <IconRow>
-        <ButtonContainer
-          style={{
-            width: '80%'
-          }}
-        >
+        <ButtonContainer>
           <ThemedButton
-            buttonText='Submit'
-            loading={loading}
-            onPress={submit}
-            disabled={submitDisabled}
+            buttonText="Submit Users"
+            loading={false}
             block={true}
+            onPress={runCreateUserMut}
+            disabled={submitted}
           />
         </ButtonContainer>
       </IconRow>
       <IconRow>
         <ButtonContainer>
           <ThemedButton
-            buttonText='Back to create user'
+            buttonText="Edit Users?"
             loading={false}
-            onPress={BackToUserCreate}
+            onPress={navigation.goBack}
           />
         </ButtonContainer>
         <ButtonContainer>
           <ThemedButton
-            buttonText='Back to Login'
+            buttonText="Back to Login"
             loading={false}
             onPress={() => navigation.navigate('Login')}
           />
         </ButtonContainer>
       </IconRow>
-    </View>
-  </ScrollView>
-)
+    </ScrollView>
+  )
+
+}
 
 export default ConfirmationScreen;
