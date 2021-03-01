@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { useMutation } from '@apollo/client';
 import * as Sentry from '@sentry/react-native';
 import messaging from '@react-native-firebase/messaging';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 import Login from './components/Login';
 import Chat from './components/Chat/Chat';
@@ -205,6 +206,7 @@ const StackNavigation: React.FC = () => {
       userToken = await AsyncStorage.getItem(LOGIN_TOKEN)
     } catch (e) {
       console.log('checking for login failed')
+      crashlytics().log('checking for login failed')
     }
     dispatch({ type: 'CHECK_LOGIN', token: userToken, fcmToken})
   }
@@ -226,7 +228,7 @@ const StackNavigation: React.FC = () => {
       login: async (email: string, password: string) => {
         // get the device token and send it here to add to the db
         const token = await messaging().getToken().then(token => token);
-        console.log('fcm token while logging in', token);
+        // console.log('fcm token while logging in', token);
         _login({ variables: {
           email,
           password,
@@ -236,6 +238,8 @@ const StackNavigation: React.FC = () => {
           if (data?.login.res) {
             await AsyncStorage.setItem(LOGIN_TOKEN, data.login.user.email)
             setLoginError(false)
+            // set crashlytics attributes
+            crashlytics().setAttribute('email', data.login.user.email)
             dispatch({ type: 'LOGIN', token: data.login.user.email})
             console.log(data.login.user.firstName, data.login.user.lastName)
             // Sentry.captureMessage('Successful Login', {
