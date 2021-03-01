@@ -240,21 +240,11 @@ const StackNavigation: React.FC = () => {
             setLoginError(false)
             // set crashlytics attributes
             crashlytics().setAttribute('email', data.login.user.email)
+            crashlytics().log('login successful')
             dispatch({ type: 'LOGIN', token: data.login.user.email})
-            console.log(data.login.user.firstName, data.login.user.lastName)
-            // Sentry.captureMessage('Successful Login', {
-            //   user: {
-            //     email,
-            //     name: `${data.login.user.firstName} ${data.login.user.lastName}`
-            //   }
-            // })
+
           } else {
             setLoginError(true)
-            // Sentry.captureMessage('Unsuccessful Login', {
-            //   user: {
-            //     email
-            //   }
-            // })
           }
         })
         .catch(e => {
@@ -267,6 +257,7 @@ const StackNavigation: React.FC = () => {
         clearAllNotifications()
         // unset the user on logout
         Sentry.configureScope(scope => scope.setUser(null));
+        crashlytics().log('logout successful')
         dispatch({ type: 'LOGOUT'})
       },
       createUser: () => {

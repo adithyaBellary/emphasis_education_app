@@ -86,12 +86,7 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
       setUser({...getUser.user})
       setCurrentUser(getUser.user)
       console.log('refetching here', getUser.chatNotifications)
-      crashlytics().log('getUser success for')
-      // const classIDs = getUser.user.classes?.map(_class => _class.chatID)
-      // const adminIds = getUser.user.adminChat?.map(_adminChat => _adminChat.chatID)
-      // console.log('class ids', classIDs)
-      // console.log('admin ids', adminIds)
-      // console.log('notifs in the home page', notifications)
+      crashlytics().log('getUser success')
       const regChatNotifIDs = getUser.chatNotifications.length > 0
         ? getUser.chatNotifications.map(_notif => {
           if (!_notif!.isAdmin) {
@@ -101,7 +96,6 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
         }).filter(chatID => !!chatID)
         : []
 
-      // console.log('regChatNotifIDs', regChatNotifIDs)
       const adminChatNotifs = getUser.chatNotifications.length > 0
         ? getUser.chatNotifications.map(_notif => {
           if (_notif!.isAdmin) {
@@ -111,8 +105,6 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
         }).filter(chatID => !!chatID)
         : []
 
-      // console.log('reg chat', regChatNotifIDs)
-      // console.log('admin chat', adminChatNotifs)
       if (regChatNotifIDs.length > 0) {
         setNotifBadge(true)
         regChatNotifIDs.forEach(_regChat => {
