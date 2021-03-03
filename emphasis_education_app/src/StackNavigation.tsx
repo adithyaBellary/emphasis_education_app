@@ -226,9 +226,7 @@ const StackNavigation: React.FC = () => {
   const authContext = React.useMemo(
     () => ({
       login: async (email: string, password: string) => {
-        // get the device token and send it here to add to the db
         const token = await messaging().getToken().then(token => token);
-        // console.log('fcm token while logging in', token);
         _login({ variables: {
           email,
           password,

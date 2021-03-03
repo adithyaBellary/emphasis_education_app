@@ -51,7 +51,7 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
   const className: string = route.params.className;
   const tutorInfo: ChatUserInfo = route.params.tutorInfo;
   const userInfo: ChatUserInfo[] = route.params.userInfo;
-
+  console.log('classname in lifted chat', className)
   // const client = useApolloClient();
   // lets cache this data
   const {
