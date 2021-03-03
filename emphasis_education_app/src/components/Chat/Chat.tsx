@@ -51,7 +51,6 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
   const className: string = route.params.className;
   const tutorInfo: ChatUserInfo = route.params.tutorInfo;
   const userInfo: ChatUserInfo[] = route.params.userInfo;
-  console.log('classname in lifted chat', className)
   // const client = useApolloClient();
   // lets cache this data
   const {
@@ -73,7 +72,7 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
         refresh: false
 
       },
-      onError: (e) => console.log('there was an error running the getMessages query', e),
+      onError: (e) => crashlytics().log(`there was an error running the getMessages query ${e}`),
       fetchPolicy: 'no-cache',
     }
   )
@@ -81,10 +80,10 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
   if (errorMessage) { console.log('errorrrrrrrrr', errorMessage) }
 
   const { data: subData, error: subError, loading: subLoading } = useSubscription<MessageReceived>(SUB, {
-    onSubscriptionData: (data) => {
-      // console.log('got data', data)
-      // console.log('got data in the sub!')
-    },
+    // onSubscriptionData: (data) => {
+    //   // console.log('got data', data)
+    //   // console.log('got data in the sub!')
+    // },
   })
 
   const isLoading = queryLoading;
@@ -133,26 +132,6 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
       ]
     }
 
-    // it is mentioned in the documentation that changes to the cache will not be reflected in the server, but that is fine
-    // const d = client.readQuery({
-    //   query,
-    //   variables: {
-    //     chatID,
-    //     init: 0
-    //   }
-    // })
-    // client.writeQuery({
-    //   query,
-    //   data: {
-    //     getMessages: [...d.getMessages, receivedMessage]
-    //     // getMessages: [...messages, receivedMessage]
-    //   },
-    //   variables: {
-    //     chatID,
-    //     init: 0
-    //   }
-    // })
-
     setState({ messages })
 
   }, [subData])
@@ -185,7 +164,7 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
   }, [])
 
   React.useEffect(() => {
-    console.log('clearing', chatID)
+    // console.log('clearing', chatID)
     clearNotificationCounter(chatID)
   }, [])
 
@@ -225,25 +204,10 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
           curUser={curUser}
           messages={curState ? curState.messages : []}
           triggerSubToMore={() => {
-            // console.log('subbing to more')
-            // Sentry.captureMessage('triggered the subscribe to more stuff. should happen on mount', {
-            //   user: {
-            //     email: loggedUser.email,
-            //     name: `${loggedUser.firstName} ${loggedUser.lastName}`
-            //   }
-            // })
+
             subscribeToMore({
               document: SUB,
               updateQuery: (prev, data) => {
-                // console.log('prev in sub more', prev)
-                // console.log('data in sub more', data)
-
-                // Sentry.captureMessage('data received in the subscribe to more part.', {
-                //   user: {
-                //     email: loggedUser.email,
-                //     name: `${loggedUser.firstName} ${loggedUser.lastName}`
-                //   }
-                // })
                 return prev;
               }
             })

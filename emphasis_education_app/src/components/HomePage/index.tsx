@@ -85,7 +85,7 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
     onCompleted: ({ getUser }) => {
       setUser({...getUser.user})
       setCurrentUser(getUser.user)
-      console.log('refetching here', getUser.chatNotifications)
+      // console.log('refetching here', getUser.chatNotifications)
       crashlytics().setAttribute('email', getUser.user.email)
       crashlytics().log('getUser success')
       const regChatNotifIDs = getUser.chatNotifications.length > 0
@@ -130,7 +130,7 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
     // if (notifications) {
     //   console.log('notifications fjdsalfjeas', notifications)
     // }
-    console.log(`notifications changed in the home page ${Platform.OS}`, Object.values(notifications))
+    // console.log(`notifications changed in the home page ${Platform.OS}`, Object.values(notifications))
     const admins: string[] = []
     const regs: string[] = []
     Object
@@ -146,8 +146,8 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
         }
 
       })
-    console.log('admins', admins)
-    console.log('regs', regs)
+    // console.log('admins', admins)
+    // console.log('regs', regs)
 
     setNotifBadge(regs.length > 0)
     setAdminNotifBadge(admins.length > 0)

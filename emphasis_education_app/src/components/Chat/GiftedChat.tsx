@@ -147,7 +147,10 @@ const MyGiftedChat: React.FC<GiftedChatProps> = ({
   )
 
   // if (data) { console.log('data', data)}
-  if (error) { console.log('there was an issue sending the message', error) }
+  if (error) {
+    crashlytics().log(`there was an issue sending the message ${error}`)
+    console.log('there was an issue sending the message', error)
+  }
 
   const renderActions = (props: ActionsProps) => (
     <Actions
@@ -199,18 +202,20 @@ const MyGiftedChat: React.FC<GiftedChatProps> = ({
   const OpenImagePicker = () => {
     ImagePicker.showImagePicker( options, (response) => {
       if (response.didCancel) {
-        console.log('cance')
+        // console.log('cance')
       } else  if (response.error) {
         console.log('error', response.error)
+        crashlytics().log('error setting the image (response)')
       } else {
         try {
-          console.log('setting the image', response)
+          // console.log('setting the image', response)
           const _pre = `data:${response.type};base64,`;
           const source = `${_pre}${response.data}`
           setImage(source)
           setImageSelected(true)
         } catch (e) {
           console.log('didnt work', e)
+          crashlytics().log('could not set the image for some reason')
         }
       }
     })
