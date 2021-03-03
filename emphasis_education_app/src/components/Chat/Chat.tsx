@@ -164,7 +164,6 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
   }, [])
 
   React.useEffect(() => {
-    // console.log('clearing', chatID)
     clearNotificationCounter(chatID)
   }, [])
 
@@ -203,6 +202,7 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
           chatID={chatID}
           curUser={curUser}
           messages={curState ? curState.messages : []}
+          isAdminChat={className === 'Admin Chat'}
           triggerSubToMore={() => {
 
             subscribeToMore({

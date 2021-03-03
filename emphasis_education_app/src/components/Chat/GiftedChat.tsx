@@ -34,6 +34,7 @@ interface GiftedChatProps {
   chatID: string;
   curUser: MessageUser;
   messages: IMessage[] | undefined;
+  isAdminChat: boolean;
   refreshFn(): void;
   triggerSubToMore (): void;
 }
@@ -79,6 +80,7 @@ const MyGiftedChat: React.FC<GiftedChatProps> = ({
   queryLoading,
   refreshFn,
   chatID,
+  isAdminChat,
   curUser,
   messages,
   triggerSubToMore
@@ -115,7 +117,8 @@ const MyGiftedChat: React.FC<GiftedChatProps> = ({
             chatID: chatID,
             image
           }
-        ]
+        ],
+        isAdminMessage: isAdminChat
       }
     })
   }
