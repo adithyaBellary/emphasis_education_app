@@ -8,6 +8,7 @@ import {
   Input, Icon
 } from 'react-native-elements';
 import { useLazyQuery, useMutation } from '@apollo/client';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 import { SEARCH_CLASSES } from '../../queries/SearchClasses';
 import { SEARCH_USERS } from '../../queries/SearchUsers';
@@ -151,6 +152,7 @@ const CreateChat: React.FC<CreateChatProps> = ({ navigation }) => {
       createChatMutation({
         variables
       })
+      crashlytics().log('successfully created a chat')
     } catch(e) {
       Alert.alert('Error creating this Chat. Please make sure that you have selected at least 1 tutor, 1 student or parent, and a class')
     }

@@ -20,6 +20,7 @@ import {
 } from 'react-native';
 import { Icon } from 'react-native-elements';
 import ImagePicker from 'react-native-image-picker';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 import { SEND_MESSAGE } from '../../queries/SendMessage';
 import { MessageType, MessageUser } from '../../../types/schema-types';
@@ -100,8 +101,9 @@ const MyGiftedChat: React.FC<GiftedChatProps> = ({
   );
 
   const onSend = (props: IMessage[]) => {
-    console.log('the current user on send', curUser)
-    console.log('chatID', chatID)
+    // console.log('the current user on send', curUser)
+    // console.log('chatID', chatID)
+    crashlytics().log('sent a message')
     sendMessage({
       variables: {
         messages: [

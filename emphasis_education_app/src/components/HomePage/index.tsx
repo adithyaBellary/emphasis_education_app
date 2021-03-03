@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Platform } from 'react-native';
+import { Platform, Button } from 'react-native';
 import { Icon, Badge } from 'react-native-elements';
 import { View } from 'react-native';
 import styled from 'styled-components';
@@ -7,6 +7,7 @@ import messaging from '@react-native-firebase/messaging';
 import * as Sentry from '@sentry/react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { gql, useApolloClient, useQuery } from '@apollo/client';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 import { MissionStatement, HeaderTitle, LogiImage } from './logos';
 
@@ -85,11 +86,8 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
       setUser({...getUser.user})
       setCurrentUser(getUser.user)
       console.log('refetching here', getUser.chatNotifications)
-      // const classIDs = getUser.user.classes?.map(_class => _class.chatID)
-      // const adminIds = getUser.user.adminChat?.map(_adminChat => _adminChat.chatID)
-      // console.log('class ids', classIDs)
-      // console.log('admin ids', adminIds)
-      // console.log('notifs in the home page', notifications)
+      crashlytics().setAttribute('email', getUser.user.email)
+      crashlytics().log('getUser success')
       const regChatNotifIDs = getUser.chatNotifications.length > 0
         ? getUser.chatNotifications.map(_notif => {
           if (!_notif!.isAdmin) {
@@ -99,7 +97,6 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
         }).filter(chatID => !!chatID)
         : []
 
-      // console.log('regChatNotifIDs', regChatNotifIDs)
       const adminChatNotifs = getUser.chatNotifications.length > 0
         ? getUser.chatNotifications.map(_notif => {
           if (_notif!.isAdmin) {
@@ -109,8 +106,6 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
         }).filter(chatID => !!chatID)
         : []
 
-      // console.log('reg chat', regChatNotifIDs)
-      // console.log('admin chat', adminChatNotifs)
       if (regChatNotifIDs.length > 0) {
         setNotifBadge(true)
         regChatNotifIDs.forEach(_regChat => {
@@ -272,6 +267,7 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
   }
 
   if (error) {
+    crashlytics().log('getUser failed')
     return (
       <CenteredDiv>
         <ThemedText
@@ -361,6 +357,13 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
             reverse={true}
           />
         </IconContain>
+        <Button
+          title='hi'
+          onPress={() => {
+            console.log('testing crash')
+            crashlytics().crash()
+          }}
+        />
       </IconSection>
       <MissionStatement />
     </CenteredDiv>

@@ -8,6 +8,7 @@ import {
 } from '@apollo/client';
 import * as Sentry from '@sentry/react-native';
 import { IMessage } from 'react-native-gifted-chat';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 import Chat from './GiftedChat';
 import { GeneralContext } from '../Context/Context';
@@ -36,35 +37,12 @@ interface State {
   messages: IMessage[];
 }
 
-// interface MessageReceivedProps {
-//   text: string;
-//   MessageId: number;
-//   createdAt: number;
-//   user: IMessageUserType;
-//   image?: string;
-// }
-
 interface MessageReceived {
   messageReceived: MessageType
 }
 interface GetMessages {
   getMessages: MessageType[];
 }
-
-// const query = gql`
-//   query GetMessages($chatID: String!, $init: Int!) {
-//     getMessages(chatID: $chatID, init: $init){
-//       _id
-//       text
-//       createdAt
-//       user {
-//         _id
-//         name
-//       }
-//       image
-//     }
-//   }
-// `
 
 const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
   const { loggedUser, clearNotificationCounter } = React.useContext(GeneralContext);
@@ -113,6 +91,7 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
 
   useEffect(() => {
     if (!getMessages) { return }
+    crashlytics().log('successfully got the messages')
     const messages: IMessage[] = getMessages.getMessages.map(_message => {
       return {
         ..._message,
