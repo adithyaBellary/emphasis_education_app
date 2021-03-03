@@ -297,6 +297,7 @@ export type MutationLoginArgs = {
 
 export type MutationSendMessageArgs = {
   messages?: Maybe<Array<Maybe<MessageInput>>>;
+  isAdminMessage: Scalars['Boolean'];
 };
 
 
