@@ -6,6 +6,7 @@ import {
 import { useMutation } from '@apollo/client';
 import { Icon } from 'react-native-elements';
 import AsyncStorage from '@react-native-community/async-storage';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 import {
   ChatUserInfo,
@@ -71,7 +72,11 @@ const ChatDisplay: React.FC<ChatDisplayProps> = ({
 
   const options = { variables: { chatID } };
 
-  const triggerMutation = () => delChat(options)
+  const triggerMutation = () => {
+
+    delChat(options)
+    crashlytics().log('deleted chat')
+  }
 
   const triggerDeleteAlert = () =>  (
     Alert.alert(
