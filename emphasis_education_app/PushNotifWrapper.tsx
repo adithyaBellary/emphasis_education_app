@@ -5,6 +5,7 @@ import * as Sentry from '@sentry/react-native';
 import crashlytics from '@react-native-firebase/crashlytics';
 
 import { GeneralContext } from './src/components/Context/Context';
+import { UPDATE_FCM_TOKENS } from './src/queries/UpdateFCMTokens';
 
 const getFCMToken = async () => {
   const fcmToken = await messaging().getToken().then(token => token);
