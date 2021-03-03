@@ -203,15 +203,15 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
           curUser={curUser}
           messages={curState ? curState.messages : []}
           isAdminChat={className === 'Admin Chat'}
-          triggerSubToMore={() => {
+          // triggerSubToMore={() => {
 
-            subscribeToMore({
-              document: SUB,
-              updateQuery: (prev, data) => {
-                return prev;
-              }
-            })
-          }}
+          //   subscribeToMore({
+          //     document: SUB,
+          //     updateQuery: (prev, data) => {
+          //       return prev;
+          //     }
+          //   })
+          // }}
         />
       )}
     </>

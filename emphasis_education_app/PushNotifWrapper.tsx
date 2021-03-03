@@ -56,6 +56,7 @@ const Wrapper: React.FC = ({ children }) => {
       console.log('i am being handled by the background message handler.')
       if (payload.data) {
         const { chatID, isAdmin, emails } = payload.data;
+        console.log('emails in background handler', emails)
         const relEmails = emails.split(',')
         updateNotifications(chatID, isAdmin === 'TRUE' ? true : false, relEmails)
       }
@@ -68,6 +69,7 @@ const Wrapper: React.FC = ({ children }) => {
     const unsub = messaging().onMessage(async payload => {
       if (payload.data) {
         const { chatID, isAdmin, emails } = payload.data;
+        console.log('emails in on message,', emails)
         const relEmails = emails.split(',')
         updateNotifications(chatID, isAdmin === 'TRUE' ? true : false, relEmails)
       }
