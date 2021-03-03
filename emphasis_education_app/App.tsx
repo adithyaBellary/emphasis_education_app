@@ -39,7 +39,7 @@ Sentry.init({
 });
 
 const DEBUG = false;
-const DEV = true;
+const DEV = false;
 
 const cache = new InMemoryCache();
 

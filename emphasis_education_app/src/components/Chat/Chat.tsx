@@ -37,35 +37,12 @@ interface State {
   messages: IMessage[];
 }
 
-// interface MessageReceivedProps {
-//   text: string;
-//   MessageId: number;
-//   createdAt: number;
-//   user: IMessageUserType;
-//   image?: string;
-// }
-
 interface MessageReceived {
   messageReceived: MessageType
 }
 interface GetMessages {
   getMessages: MessageType[];
 }
-
-// const query = gql`
-//   query GetMessages($chatID: String!, $init: Int!) {
-//     getMessages(chatID: $chatID, init: $init){
-//       _id
-//       text
-//       createdAt
-//       user {
-//         _id
-//         name
-//       }
-//       image
-//     }
-//   }
-// `
 
 const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
   const { loggedUser, clearNotificationCounter } = React.useContext(GeneralContext);
