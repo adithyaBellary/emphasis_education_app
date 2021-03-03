@@ -85,7 +85,7 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
     onCompleted: ({ getUser }) => {
       setUser({...getUser.user})
       setCurrentUser(getUser.user)
-      console.log('refetching here', getUser.chatNotifications)
+      // console.log('refetching here', getUser.chatNotifications)
       crashlytics().setAttribute('email', getUser.user.email)
       crashlytics().log('getUser success')
       const regChatNotifIDs = getUser.chatNotifications.length > 0

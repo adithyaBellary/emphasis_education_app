@@ -50,7 +50,6 @@ const httplink = new HttpLink({
 const errLink = onError(({ operation, graphQLErrors, networkError }) => {
   if (graphQLErrors) {
     graphQLErrors.map(({ message, locations, path}) => {
-      console.log(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`)
 
       Sentry.captureMessage(
         `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
@@ -58,12 +57,10 @@ const errLink = onError(({ operation, graphQLErrors, networkError }) => {
     })
   }
   if (networkError) {
-    console.log(`[Network error!]: ${networkError}`)
     Sentry.captureMessage(`[Network error!]: ${networkError}`)
   }
 
   if (operation) {
-    console.log(`operationName: ${operation.operationName}`)
     Sentry.captureMessage(`[Operation name]: ${operation.operationName}`)
   }
 })
@@ -74,11 +71,6 @@ const wsClient = new SubscriptionClient(
   {
     reconnect: true,
     lazy: true,
-    // connectionCallback: (error, result) => {
-    //   console.log('connectionCallback error', error)
-    //   console.log('connectionCallback result', result)
-    //   Sentry.captureMessage(`Subscription callback ${!!error} ${!!result}`)
-    // },
     connectionParams: {
       authToken: '123'
     }
@@ -86,28 +78,6 @@ const wsClient = new SubscriptionClient(
 )
 
 const wsLink = new WebSocketLink(wsClient)
-
-// const wsLink = new WebSocketLink({
-//   uri: 'ws://emphasis-education-server.herokuapp.com/graphql',
-//   // uri: 'ws://localhost:4000/graphql',
-//   options: {
-//     reconnect: true,
-//     // timeout: 10000,
-//     lazy: true,
-//     connectionCallback: (error, result) => {
-//       console.log('connectionCallback error', error)
-//       console.log('connectionCallback result', result)
-//       Sentry.captureMessage(`Subscription callback ${!!error} ${!!result}`)
-//     },
-//     connectionParams: {
-//       authToken: '123'
-//     }
-//   }
-// });
-
-// console.log('the ws link is created', wsLink)
-// Sentry.captureMessage(`The ws link is created i think? ${!!wsLink}`)
-// Sentry.captureMessage(`The ws link is created: ${wsLink}`)
 
 const link = split(({ query }) => {
   const definition = getMainDefinition(query);
@@ -122,18 +92,10 @@ const theLink = ApolloLink.from([
   link
 ])
 
-// console.log('link', link)
-// Sentry.captureMessage(`the link is created i think? ${!!link}`)
-// console.log('link', !!link)
-
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache,
   link: theLink
 });
-
-// console.log('the client', client)
-// Sentry.captureMessage(`the client is created i think? ${!!client}`)
-// console.log('the client', !!client)
 
 const App = () => {
   const [user, setUser] = React.useState<UserInfoType>({} as UserInfoType);
@@ -149,12 +111,6 @@ const App = () => {
     setUser(newUser)
   }
   const updateNotifications = (chatID: string, isAdmin: boolean, emails: string[]) => {
-    // let oldVal: number = 1;
-    // if (notifications[chatID]) {
-    //   oldVal = notifications[chatID] + 1
-    // }
-    console.log('notifications in the handler', notifications)
-    console.log('chat ID in the update notifs', chatID)
     setNotifications({...notifications, [chatID]: {chatID, isAdmin, emails}})
   }
 
@@ -163,9 +119,7 @@ const App = () => {
   }
 
   const clearNotificationCounter = (chatID: string) => {
-    console.log('old notifs before deleting', notifications)
     delete notifications[chatID]
-    console.log('new notifications after deleting', notifications)
     setNotifications({ ...notifications})
     setBadge(false)
   }

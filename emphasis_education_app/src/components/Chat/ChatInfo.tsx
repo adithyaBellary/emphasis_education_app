@@ -119,7 +119,7 @@ const ChatInfo: React.FC<ChatInfoProps> = ({ navigation, route }) => {
   const tutorInfo: ChatUserInfo = route.params.tutorInfo;
   const userInfo: ChatUserInfo[] = route.params.userInfo;
   const chatID: string = route.params.chatID;
-
+  console.log('classname', className)
   const [click, setClick] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState('');
   const [stateEmail, setStateEmail] = React.useState<string | null>(null);
