@@ -357,13 +357,6 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
             reverse={true}
           />
         </IconContain>
-        <Button
-          title='hi'
-          onPress={() => {
-            console.log('testing crash')
-            crashlytics().crash()
-          }}
-        />
       </IconSection>
       <MissionStatement />
     </CenteredDiv>
