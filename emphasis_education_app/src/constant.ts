@@ -1,6 +1,6 @@
 import { Dimensions } from 'react-native';
 
-export const VERSION = '0.0.21'
+export const VERSION = '1.0.0'
 export const LOGIN_TOKEN: string = 'LOGIN';
 export const NOTIFICATIONS_KEY = 'NOTIFICATIONS';
 
