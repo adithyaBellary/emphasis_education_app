@@ -211,7 +211,7 @@ const StackNavigation: React.FC = () => {
       console.log('checking for login failed')
       crashlytics().log('checking for login failed')
     }
-    // setSplash(false);
+    setSplash(false);
     dispatch({ type: 'CHECK_LOGIN', token: userToken, fcmToken})
   }
 
