@@ -31,6 +31,8 @@ import { LOGIN } from './queries/Login';
 import { ILoginPayload } from './types';
 import { theme } from './theme';
 
+import SplashScreen from './SplashScreen';
+
 import { GeneralContext } from '../src/components/Context/Context';
 
 const AuthStackNav = createStackNavigator();
@@ -166,6 +168,7 @@ const RootStack: ({ fcmToken, userToken, error, loading }: { fcmToken: string, u
 
 const StackNavigation: React.FC = () => {
   const {clearAllNotifications} = React.useContext(GeneralContext);
+  const [splash, setSplash] = React.useState<boolean>(true);
 
   const [{authLoading, userToken, fcmToken}, dispatch] = React.useReducer(
     (prevState, action) => {
@@ -208,6 +211,7 @@ const StackNavigation: React.FC = () => {
       console.log('checking for login failed')
       crashlytics().log('checking for login failed')
     }
+    // setSplash(false);
     dispatch({ type: 'CHECK_LOGIN', token: userToken, fcmToken})
   }
 
@@ -264,6 +268,12 @@ const StackNavigation: React.FC = () => {
     }),
     []
   );
+
+  if (splash) {
+    return (
+      <SplashScreen />
+    )
+  }
 
   if (authLoading) {
     return (
