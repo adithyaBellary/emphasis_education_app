@@ -5,7 +5,7 @@ import { View } from 'react-native';
 import styled from 'styled-components';
 import messaging from '@react-native-firebase/messaging';
 import * as Sentry from '@sentry/react-native';
-import AsyncStorage from '@react-native-community/async-storage';
+// import AsyncStorage from '@react-native-community/async-storage';
 import { gql, useApolloClient, useQuery } from '@apollo/client';
 import crashlytics from '@react-native-firebase/crashlytics';
 

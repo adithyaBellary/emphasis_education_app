@@ -5,7 +5,7 @@ import {
 } from 'react-native';
 import { useMutation } from '@apollo/client';
 import { Icon } from 'react-native-elements';
-import AsyncStorage from '@react-native-community/async-storage';
+// import AsyncStorage from '@react-native-community/async-storage';
 import crashlytics from '@react-native-firebase/crashlytics';
 
 import {
@@ -24,7 +24,7 @@ import {
   NotificationBadge
  } from '../shared'
 import { theme } from '../../theme';
-import { NOTIFICATIONS_KEY } from '../../constant';
+// import { NOTIFICATIONS_KEY } from '../../constant';
 
 import {
   LoadingScreen,
