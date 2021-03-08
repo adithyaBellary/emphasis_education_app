@@ -170,7 +170,7 @@ const RootStack: ({ fcmToken, userToken, error, loading }: { fcmToken: string, u
 
 const StackNavigation: React.FC = () => {
   const {clearAllNotifications} = React.useContext(GeneralContext);
-  const [splash, setSplash] = React.useState<boolean>(true);
+  // const [splash, setSplash] = React.useState<boolean>(true);
 
   const [{authLoading, userToken, fcmToken}, dispatch] = React.useReducer(
     (prevState, action) => {
@@ -209,9 +209,9 @@ const StackNavigation: React.FC = () => {
   const _checkAuth = async () => {
     const fcmToken = await messaging().getToken().then(token => token);
     const userToken = await AsyncStorage.getItem(LOGIN_TOKEN)
-    console.log('token', userToken);
+    // console.log('token', userToken);
     // console.log('fcm token', fcmToken);
-    Sentry.captureMessage(`userToken: ${userToken || 'no tokrn'}, fcm: ${fcmToken}`);
+    // Sentry.captureMessage(`userToken: ${userToken || 'no tokrn'}, fcm: ${fcmToken}`);
     dispatch({ type: 'CHECK_LOGIN', token: userToken, fcmToken})
   }
 
@@ -275,7 +275,7 @@ const StackNavigation: React.FC = () => {
     []
   );
 
-  console.log('auth_loading', authLoading)
+  // console.log('auth_loading', authLoading)
 
   if (authLoading) {
     return (
