@@ -210,16 +210,15 @@ const StackNavigation: React.FC = () => {
     const fcmToken = await messaging().getToken().then(token => token);
     const userToken = await AsyncStorage.getItem(LOGIN_TOKEN)
     console.log('token', userToken);
-    console.log('fcm token', fcmToken);
+    // console.log('fcm token', fcmToken);
     Sentry.captureMessage(`userToken: ${userToken || 'no tokrn'}, fcm: ${fcmToken}`);
     dispatch({ type: 'CHECK_LOGIN', token: userToken, fcmToken})
-    console.log('dispatched')
   }
 
-  if (!authLoading) {
-    console.log('authloading is false!!!')
-    Sentry.captureMessage('authloading is false!!!');
-  }
+  // if (!authLoading) {
+  //   console.log('authloading is false!!!')
+  //   Sentry.captureMessage('authloading is false!!!');
+  // }
 
   React.useEffect(() => {
 

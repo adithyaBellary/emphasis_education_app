@@ -41,6 +41,7 @@ const Wrapper: React.FC = ({ children }) => {
       }
     })
     .then(( { data }) => {
+      console.log('data in update mutation', data)
       if (data?.updateFCMDeviceTokens.res) {
         crashlytics().log('update fcm tokens called')
       } else {
@@ -50,6 +51,10 @@ const Wrapper: React.FC = ({ children }) => {
   }
 
   React.useEffect(() => {
+    console.log('logged in user', loggedUser.email)
+    if (!loggedUser) {
+      return
+    }
     return messaging().onTokenRefresh(token => {
       onRefreshToken(loggedUser.email, token)
     })

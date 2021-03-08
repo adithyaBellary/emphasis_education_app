@@ -15,12 +15,6 @@ const Splash: React.FC<{ authLoading: boolean, token: string}> = ({ authLoading,
       }}
     >
       <LogiImage />
-      <Text>
-        authloading: {authLoading ? 'true' : 'false'}
-      </Text>
-      <Text>
-        token: {token}
-      </Text>
     </View>
   )
 }
