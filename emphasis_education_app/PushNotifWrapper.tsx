@@ -16,10 +16,10 @@ const requestUserPermission = async () => {
   const authStatus = await messaging().requestPermission();
   const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED || messaging.AuthorizationStatus.PROVISIONAL
   if (enabled) {
-    Sentry.captureMessage(`user has permission ${authStatus}`)
+    // Sentry.captureMessage(`user has permission ${authStatus}`)
     const t = getFCMToken();
   } else {
-    Sentry.captureMessage(`user does not have permission ${authStatus}`)
+    // Sentry.captureMessage(`user does not have permission ${authStatus}`)
   }
 }
 
@@ -41,6 +41,7 @@ const Wrapper: React.FC = ({ children }) => {
       }
     })
     .then(( { data }) => {
+      console.log('data in update mutation', data)
       if (data?.updateFCMDeviceTokens.res) {
         crashlytics().log('update fcm tokens called')
       } else {
@@ -50,6 +51,10 @@ const Wrapper: React.FC = ({ children }) => {
   }
 
   React.useEffect(() => {
+    console.log('logged in user', loggedUser.email)
+    if (!loggedUser) {
+      return
+    }
     return messaging().onTokenRefresh(token => {
       onRefreshToken(loggedUser.email, token)
     })

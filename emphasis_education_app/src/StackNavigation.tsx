@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import AsyncStorage from '@react-native-community/async-storage';
+// import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { useMutation } from '@apollo/client';
 import * as Sentry from '@sentry/react-native';
@@ -23,7 +24,7 @@ import AddMember from './components/AdminPage/AddMemberModal';
 import ChatInfo from './components/Chat/ChatInfo';
 import ForgotPassword from './components/UserManagement/ForgotPassword';
 import { AuthContext } from './components/Context/Context';
-import { TitleText, LoadingComponent } from './components/shared';
+import { TitleText } from './components/shared';
 
 import { LOGIN_TOKEN } from './constant';
 import { LOGIN } from './queries/Login';
@@ -31,7 +32,10 @@ import { LOGIN } from './queries/Login';
 import { ILoginPayload } from './types';
 import { theme } from './theme';
 
+import SplashScreen from './SplashScreen';
+
 import { GeneralContext } from '../src/components/Context/Context';
+import { Alert } from 'react-native';
 
 const AuthStackNav = createStackNavigator();
 const AuthStack: ({ error, loading}: { error: boolean, loading: boolean}) => JSX.Element = ({ error, loading }) => (
@@ -166,13 +170,14 @@ const RootStack: ({ fcmToken, userToken, error, loading }: { fcmToken: string, u
 
 const StackNavigation: React.FC = () => {
   const {clearAllNotifications} = React.useContext(GeneralContext);
+  // const [splash, setSplash] = React.useState<boolean>(true);
 
   const [{authLoading, userToken, fcmToken}, dispatch] = React.useReducer(
     (prevState, action) => {
       switch (action.type) {
         case 'CHECK_LOGIN':
           return {
-            ...prevState,
+            // ...prevState,
             authLoading: false,
             userToken: action.token,
             fcmToken: action.fcmToken
@@ -180,13 +185,15 @@ const StackNavigation: React.FC = () => {
         case 'LOGIN':
           return {
             ...prevState,
-            loggingOut: false,
+            authLoading: false,
+            // loggingOut: false,
             userToken: action.token
           };
         case 'LOGOUT':
           return {
             ...prevState,
-            loggingOut: true,
+            authLoading: false,
+            // loggingOut: true,
             userToken: null,
             fcmToken: null
           };
@@ -194,24 +201,27 @@ const StackNavigation: React.FC = () => {
     }, {
       authLoading: true,
       userToken: null,
-      loggingOut: false,
+      // loggingOut: false,
       fcmToken: null
     }
   )
 
   const _checkAuth = async () => {
-    let userToken;
     const fcmToken = await messaging().getToken().then(token => token);
-    try {
-      userToken = await AsyncStorage.getItem(LOGIN_TOKEN)
-    } catch (e) {
-      console.log('checking for login failed')
-      crashlytics().log('checking for login failed')
-    }
+    const userToken = await AsyncStorage.getItem(LOGIN_TOKEN)
+    // console.log('token', userToken);
+    // console.log('fcm token', fcmToken);
+    // Sentry.captureMessage(`userToken: ${userToken || 'no tokrn'}, fcm: ${fcmToken}`);
     dispatch({ type: 'CHECK_LOGIN', token: userToken, fcmToken})
   }
 
+  // if (!authLoading) {
+  //   console.log('authloading is false!!!')
+  //   Sentry.captureMessage('authloading is false!!!');
+  // }
+
   React.useEffect(() => {
+
     _checkAuth()
   }, [])
 
@@ -265,9 +275,14 @@ const StackNavigation: React.FC = () => {
     []
   );
 
+  // console.log('auth_loading', authLoading)
+
   if (authLoading) {
     return (
-      <LoadingComponent loading={authLoading} />
+      <SplashScreen
+        authLoading={authLoading}
+        token={fcmToken}
+      />
     )
   }
 

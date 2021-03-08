@@ -1,13 +1,13 @@
 import * as React from 'react';
 import {
   View,
-  Text,
+  // Text,
   SafeAreaView,
 } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { useLazyQuery } from '@apollo/client';
-import messaging from '@react-native-firebase/messaging';
-import AsyncStorage from '@react-native-community/async-storage';
+// import messaging from '@react-native-firebase/messaging';
+// import AsyncStorage from '@react-native-community/async-storage';
 
 import { GeneralContext } from '../Context/Context';
 import {
@@ -22,11 +22,11 @@ import {
 import { GET_USER } from '../../queries/GetUser';
 import { Permission, ChatUserInfo, } from '../../types';
 import {
-  UserInfoType,
+  // UserInfoType,
   QueryGetUserArgs,
   GetUserPayload
  } from '../../../types/schema-types';
-import { NOTIFICATIONS_KEY, VERSION } from '../../../src/constant';
+// import { NOTIFICATIONS_KEY, VERSION } from '../../../src/constant';
 
 import { EmptyChatPicker } from './common';
 import IndividualChat from './IndividualChat';
