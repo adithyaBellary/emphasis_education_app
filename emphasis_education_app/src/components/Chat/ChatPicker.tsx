@@ -2,12 +2,14 @@ import * as React from 'react';
 import {
   View,
   // Text,
+  ScrollView,
   SafeAreaView,
 } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { useLazyQuery } from '@apollo/client';
 // import messaging from '@react-native-firebase/messaging';
 // import AsyncStorage from '@react-native-community/async-storage';
+import styled from 'styled-components';
 
 import { GeneralContext } from '../Context/Context';
 import {
@@ -41,6 +43,10 @@ export const ChatsContain: React.FC = ({ children }) => (
     {children}
   </GeneralSpacing>
 );
+
+const ChatPickerScroll = styled(ScrollView)`
+  margin-bottom: 25px;
+`;
 
 const ChatPicker: React.FC<ChatPickerProps> = ({ navigation }) => {
   const { loggedUser, setUser, notifications, clearNotificationCounter } = React.useContext(GeneralContext);
@@ -164,26 +170,27 @@ const ChatPicker: React.FC<ChatPickerProps> = ({ navigation }) => {
     return  <EmptyChatPicker />
   }
   return (
-    <SafeAreaView>
-      <ChatsContain>
-        {
-          loggedUser.classes && loggedUser.classes.map(_class => (
-            <IndividualChat
-              chatID={_class.chatID}
-              userType={loggedUser.userType}
-              classObject={_class}
-              goToChat={goToChat}
-              key={_class.chatID}
-              getClasses={getClasses}
-              // displayNotificationBadge={notifs.includes(_class.chatID)}
-              displayNotificationBadge={!!notifications[_class.chatID]?.emails.includes(loggedUser.email)}
-              clearNotificationCounter={clearNotificationCounter}
-              userEmail={loggedUser.email}
-            />
-          ))
-        }
-      </ChatsContain>
-    </SafeAreaView>
+    <View style={{ flex: 1}} >
+      <ChatPickerScroll>
+        <ChatsContain>
+          {
+            loggedUser.classes && loggedUser.classes.map(_class => (
+              <IndividualChat
+                chatID={_class.chatID}
+                userType={loggedUser.userType}
+                classObject={_class}
+                goToChat={goToChat}
+                key={_class.chatID}
+                getClasses={getClasses}
+                displayNotificationBadge={!!notifications[_class.chatID]?.emails.includes(loggedUser.email)}
+                clearNotificationCounter={clearNotificationCounter}
+                userEmail={loggedUser.email}
+              />
+            ))
+          }
+        </ChatsContain>
+      </ChatPickerScroll>
+    </View>
   )
 }
 
