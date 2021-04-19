@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-// import AsyncStorage from '@react-native-community/async-storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { useMutation } from '@apollo/client';
@@ -35,7 +34,6 @@ import { theme } from './theme';
 import SplashScreen from './SplashScreen';
 
 import { GeneralContext } from '../src/components/Context/Context';
-import { Alert } from 'react-native';
 
 const AuthStackNav = createStackNavigator();
 const AuthStack: ({ error, loading}: { error: boolean, loading: boolean}) => JSX.Element = ({ error, loading }) => (
@@ -170,7 +168,6 @@ const RootStack: ({ fcmToken, userToken, error, loading }: { fcmToken: string, u
 
 const StackNavigation: React.FC = () => {
   const {clearAllNotifications} = React.useContext(GeneralContext);
-  // const [splash, setSplash] = React.useState<boolean>(true);
 
   const [{authLoading, userToken, fcmToken}, dispatch] = React.useReducer(
     (prevState, action) => {
@@ -186,14 +183,12 @@ const StackNavigation: React.FC = () => {
           return {
             ...prevState,
             authLoading: false,
-            // loggingOut: false,
             userToken: action.token
           };
         case 'LOGOUT':
           return {
             ...prevState,
             authLoading: false,
-            // loggingOut: true,
             userToken: null,
             fcmToken: null
           };
@@ -201,27 +196,22 @@ const StackNavigation: React.FC = () => {
     }, {
       authLoading: true,
       userToken: null,
-      // loggingOut: false,
       fcmToken: null
     }
   )
 
   const _checkAuth = async () => {
+    // Sentry.captureMessage('in check auth')
     const fcmToken = await messaging().getToken().then(token => token);
+    // Sentry.captureMessage(`got fcm token ${fcmToken}`);
     const userToken = await AsyncStorage.getItem(LOGIN_TOKEN)
-    // console.log('token', userToken);
-    // console.log('fcm token', fcmToken);
-    // Sentry.captureMessage(`userToken: ${userToken || 'no tokrn'}, fcm: ${fcmToken}`);
+    // Sentry.captureMessage(`auth token: ${userToken}`)
+
     dispatch({ type: 'CHECK_LOGIN', token: userToken, fcmToken})
   }
 
-  // if (!authLoading) {
-  //   console.log('authloading is false!!!')
-  //   Sentry.captureMessage('authloading is false!!!');
-  // }
-
   React.useEffect(() => {
-
+    // Sentry.captureMessage('checking auth')
     _checkAuth()
   }, [])
 
@@ -274,8 +264,6 @@ const StackNavigation: React.FC = () => {
     }),
     []
   );
-
-  // console.log('auth_loading', authLoading)
 
   if (authLoading) {
     return (
