@@ -99,7 +99,8 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 
 const App = () => {
   const [user, setUser] = React.useState<UserInfoType>({} as UserInfoType);
-  const [notifications, setNotifications] = React.useState<NotificationsProps>({} as NotificationsProps);
+  // const [notifications, setNotifications] = React.useState<NotificationsProps>({} as NotificationsProps);
+  const [notifications, setNotifications] = React.useState<Map<string, {chatID: string, isAdmin: boolean, emails: string[]}>>(new Map<string, {chatID: string, isAdmin: boolean, emails: string[]}>());
   const [notificationBadge, setBadge] = React.useState<boolean>(false);
   const updateUser = (newUser: UserInfoType) => {
     // set Sentry user here as well
@@ -111,16 +112,31 @@ const App = () => {
     setUser(newUser)
   }
   const updateNotifications = (chatID: string, isAdmin: boolean, emails: string[]) => {
-    setNotifications({...notifications, [chatID]: {chatID, isAdmin, emails}})
+
+    console.log('new chat ID', chatID)
+    // console.log('setting v1', {...notifications, [chatID]: {chatID, isAdmin, emails}})
+    console.log('notifications before', notifications)
+    // const no = new Map<string, {chatID: string, isAdmin: boolean, emails: string[]}>()
+    // no[chatID] = {chatID, isAdmin, emails}
+    notifications.set(chatID, {chatID, isAdmin, emails})
+    // notifications[chatID] = {chatID, isAdmin, emails}
+    console.log('notifications after', notifications)
+    // setNotifications(notifications)
+    setNotifications(notifications)
+    // setNotifications({...notifications, [chatID]: {chatID, isAdmin, emails}})
   }
 
   const clearAllNotifications = () => {
-    setNotifications({})
+    setNotifications(new Map<string, {chatID: string, isAdmin: boolean, emails: string[]}>())
   }
 
   const clearNotificationCounter = (chatID: string) => {
-    delete notifications[chatID]
-    setNotifications({ ...notifications})
+    console.log('old notifs in delete', notifications)
+    // delete notifications[chatID]
+    notifications.delete(chatID)
+    // setNotifications({ ...notifications})
+    console.log('new notifications in delete', notifications)
+    setNotifications(notifications)
     setBadge(false)
   }
 

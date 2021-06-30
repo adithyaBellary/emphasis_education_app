@@ -2771,13 +2771,6 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/masked-view/-/masked-view-0.1.10.tgz#5dda643e19e587793bc2034dd9bf7398ad43d401"
   integrity sha512-rk4sWFsmtOw8oyx8SD3KSvawwaK7gRBSEIy2TAwURyGt+3TizssXP1r8nx3zY+R7v2vYYHXZ+k2/GULAT/bcaQ==
 
-"@react-native-community/push-notification-ios@^1.4.0":
-  version "1.6.1"
-  resolved "https://registry.yarnpkg.com/@react-native-community/push-notification-ios/-/push-notification-ios-1.6.1.tgz#44c33f5a0218d027a0beed0bfe60d7ebad0c4cd0"
-  integrity sha512-70SeYM3nffwe2SdOHELptDHcqhayM+BHRr7vRgBqcOfN1qNWl5DteRNJOliVJsE1ve6SRO9OGxNHrZQOkSjvew==
-  dependencies:
-    invariant "^2.2.4"
-
 "@react-native-firebase/analytics@10.4.0":
   version "10.4.0"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/analytics/-/analytics-10.4.0.tgz#6f29e73cf360a73eff3b9a5b1cdb5997f963bc76"
@@ -3459,10 +3452,10 @@
   resolved "https://registry.yarnpkg.com/@types/range-parser/-/range-parser-1.2.3.tgz#7ee330ba7caafb98090bece86a5ee44115904c2c"
   integrity sha512-ewFXqrQHlFsgc09MK5jP5iR7vumV/BYayNC6PgJO2LPe8vrnNFyjQjSppfEngITi0qvfKtzFvgKymGheFM9UOA==
 
-"@types/react-native-push-notification@^5.0.1":
-  version "5.0.5"
-  resolved "https://registry.yarnpkg.com/@types/react-native-push-notification/-/react-native-push-notification-5.0.5.tgz#a84efdeb15af414a89b1291f4df631266d6a4330"
-  integrity sha512-rdpEb+YZtTmGJ7qEhwENjNkICU6pnwlCV2U+kvU6cAhuQxeQFgxFTKijN3kqOWL9SW8l0PeW29QREx6mvdeurg==
+"@types/react-native-push-notification@^7.3.0":
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/@types/react-native-push-notification/-/react-native-push-notification-7.3.0.tgz#5c998134347c1e8a2ddb28524349acf12cfbb243"
+  integrity sha512-11p6U/6atLJQcuBiwO+QR5NzAWyxowj9yiQ5hcRwfH9lwD06jKyG2nr/b4MUT7HALMF3JUZUn/qZ1gR6DgfnFQ==
 
 "@types/react-native-vector-icons@^6.4.5":
   version "6.4.6"
@@ -11425,6 +11418,11 @@ lodash.xorby@^4.7.0:
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
   integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
 
+lodash@^4.17.21:
+  version "4.17.21"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
+  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
+
 log-symbols@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/log-symbols/-/log-symbols-1.0.2.tgz#376ff7b58ea3086a0f09facc74617eca501e1a18"
@@ -14428,12 +14426,10 @@ react-native-parsed-text@0.0.22:
   dependencies:
     prop-types "^15.7.x"
 
-react-native-push-notification@^5.1.0:
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/react-native-push-notification/-/react-native-push-notification-5.1.1.tgz#104572ddc8c73b1a3a95c90e26d05800c51b12c5"
-  integrity sha512-CJmKqzM2P/s+a9PImoaiUN4TP1+K4YfmG1B0uUbavgFdGhTtRPTLLwDfFk2h3J6VmTXNak82rUz2iGwyptHm5w==
-  dependencies:
-    "@react-native-community/push-notification-ios" "^1.4.0"
+react-native-push-notification@^7.3.1:
+  version "7.3.1"
+  resolved "https://registry.yarnpkg.com/react-native-push-notification/-/react-native-push-notification-7.3.1.tgz#1495feacd25169b998446dcf7b448a197ae5dca0"
+  integrity sha512-5kSKPvDU23uZRmzgKTsGhbwGNvB2tidu1VnInBHP53ZD0VEPSBl5fbpuTfHH98ED+Gp1SCcT2/e6bJWkIspKvg==
 
 react-native-radio-buttons-group@^1.0.7:
   version "1.0.7"
