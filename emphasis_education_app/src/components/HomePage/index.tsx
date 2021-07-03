@@ -143,7 +143,7 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
     setNotifBadge(regs.length > 0)
     setAdminNotifBadge(admins.length > 0)
 
-    return () => {}
+    // return () => {}
 
   }, [notifications])
 

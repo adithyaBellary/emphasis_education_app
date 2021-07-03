@@ -122,7 +122,7 @@ const App = () => {
     // notifications[chatID] = {chatID, isAdmin, emails}
     console.log('notifications after', notifications)
     // setNotifications(notifications)
-    setNotifications(notifications)
+    setNotifications(new Map(notifications))
     // setNotifications({...notifications, [chatID]: {chatID, isAdmin, emails}})
   }
 
@@ -136,7 +136,8 @@ const App = () => {
     notifications.delete(chatID)
     // setNotifications({ ...notifications})
     console.log('new notifications in delete', notifications)
-    setNotifications(notifications)
+    // setNotifications(notifications)
+    setNotifications(new Map(notifications))
     setBadge(false)
   }
 

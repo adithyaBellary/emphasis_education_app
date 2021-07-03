@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {
   View,
-  // Text,
+  Text,
   ScrollView,
   SafeAreaView,
 } from 'react-native';
@@ -81,7 +81,7 @@ const ChatPicker: React.FC<ChatPickerProps> = ({ navigation }) => {
     }, [] as string[])
 
     setUnreadBadges(badges)
-  }, [notifications, updateNotifications])
+  }, [notifications])
 
   React.useEffect(() => {
     getClasses();
@@ -114,9 +114,6 @@ const ChatPicker: React.FC<ChatPickerProps> = ({ navigation }) => {
   const goToCreateChat = () => navigation.navigate('CreateChat');
   const getClasses = () => getUser({ variables: { userEmail: loggedUser.email}})
 
-  // if (notifs) {
-  //   console.log('in chat picker', notifs);
-  // }
   React.useEffect(() => {
     navigation.setOptions({
       headerRight: () => (

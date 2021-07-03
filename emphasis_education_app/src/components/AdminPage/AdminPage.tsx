@@ -23,16 +23,13 @@ const AdminPage: React.FC<AdminPageProps> = () => {
   const [adminChatBadge, setAdminChatBadge] = React.useState<boolean>(false);
 
   React.useEffect(() => {
-    const admins: string[] = []
-    Object
-      .values(notifications)
-      .forEach(notif => {
-        if (notif.emails.includes(loggedUser.email)) {
-          if (notif.isAdmin) {
-            admins.push('hi')
-          }
-        }
-      })
+    const admins: string[] = [...notifications.values()].map(n => {
+      if (n.isAdmin) {
+        return n.chatID
+      }
+      return ''
+    }).filter(n => !!n)
+
     setAdminChatBadge(admins.length > 0)
 
   }, [notifications]);
