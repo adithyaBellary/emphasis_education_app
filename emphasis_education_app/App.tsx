@@ -99,7 +99,6 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 
 const App = () => {
   const [user, setUser] = React.useState<UserInfoType>({} as UserInfoType);
-  // const [notifications, setNotifications] = React.useState<NotificationsProps>({} as NotificationsProps);
   const [notifications, setNotifications] = React.useState<Map<string, {chatID: string, isAdmin: boolean, emails: string[]}>>(new Map<string, {chatID: string, isAdmin: boolean, emails: string[]}>());
   const [notificationBadge, setBadge] = React.useState<boolean>(false);
   const updateUser = (newUser: UserInfoType) => {
@@ -112,18 +111,8 @@ const App = () => {
     setUser(newUser)
   }
   const updateNotifications = (chatID: string, isAdmin: boolean, emails: string[]) => {
-
-    console.log('new chat ID', chatID)
-    // console.log('setting v1', {...notifications, [chatID]: {chatID, isAdmin, emails}})
-    console.log('notifications before', notifications)
-    // const no = new Map<string, {chatID: string, isAdmin: boolean, emails: string[]}>()
-    // no[chatID] = {chatID, isAdmin, emails}
     notifications.set(chatID, {chatID, isAdmin, emails})
-    // notifications[chatID] = {chatID, isAdmin, emails}
-    console.log('notifications after', notifications)
-    // setNotifications(notifications)
     setNotifications(new Map(notifications))
-    // setNotifications({...notifications, [chatID]: {chatID, isAdmin, emails}})
   }
 
   const clearAllNotifications = () => {
@@ -131,12 +120,7 @@ const App = () => {
   }
 
   const clearNotificationCounter = (chatID: string) => {
-    console.log('old notifs in delete', notifications)
-    // delete notifications[chatID]
     notifications.delete(chatID)
-    // setNotifications({ ...notifications})
-    console.log('new notifications in delete', notifications)
-    // setNotifications(notifications)
     setNotifications(new Map(notifications))
     setBadge(false)
   }

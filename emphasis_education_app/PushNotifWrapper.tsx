@@ -51,7 +51,6 @@ const Wrapper: React.FC = ({ children }) => {
   }
 
   React.useEffect(() => {
-    // console.log('logged in user', loggedUser.email)
     if (!loggedUser) {
       return
     }
@@ -85,10 +84,6 @@ const Wrapper: React.FC = ({ children }) => {
 
     return unsub
   }, [])
-
-  // React.useEffect(() => {
-  //   messaging().getInitialNotification().then(message => console.log('the message', message))
-  // }, [])
 
   return (
     <>{children}</>

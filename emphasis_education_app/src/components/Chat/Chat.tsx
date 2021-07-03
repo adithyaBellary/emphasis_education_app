@@ -164,10 +164,6 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
       })
   }, [])
 
-  // React.useEffect(() => {
-  //   clearNotificationCounter(chatID)
-  // }, [])
-
   useFocusEffect(React.useCallback(() => {
     clearNotificationCounter(chatID)
   }, []))

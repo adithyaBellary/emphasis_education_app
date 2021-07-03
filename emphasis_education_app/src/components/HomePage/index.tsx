@@ -122,13 +122,10 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
       }
     }
   })
-  console.log('notifs outside of useEffect', notifications)
+
   React.useEffect(() => {
     const admins: string[] = []
     const regs: string[] = []
-    console.log('notifs changed in home', notifications)
-    // const notificationValues = new Array(notifications.entries())
-    // notificationValues.forEach(v => console.log('value', v))
     notifications.forEach(notif => {
       if (notif.emails.includes(loggedUser.email)) {
         if (notif.isAdmin) {
