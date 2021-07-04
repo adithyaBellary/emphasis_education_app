@@ -124,9 +124,10 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
   })
 
   React.useEffect(() => {
-    const admins: string[] = []
-    const regs: string[] = []
-    notifications.forEach(notif => {
+    const admins: string[] = [];
+    const regs: string[] = [];
+
+    [...notifications.values()].forEach(notif => {
       if (notif.emails.includes(loggedUser.email)) {
         if (notif.isAdmin) {
           admins.push('hi')
