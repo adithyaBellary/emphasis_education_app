@@ -1,12 +1,13 @@
 import * as React from 'react';
 import {
   View,
-  // Text,
+  Text,
   ScrollView,
   SafeAreaView,
 } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { useLazyQuery } from '@apollo/client';
+import { useFocusEffect } from '@react-navigation/native';
 // import messaging from '@react-native-firebase/messaging';
 // import AsyncStorage from '@react-native-community/async-storage';
 import styled from 'styled-components';
@@ -49,35 +50,15 @@ const ChatPickerScroll = styled(ScrollView)`
 `;
 
 const ChatPicker: React.FC<ChatPickerProps> = ({ navigation }) => {
-  const { loggedUser, setUser, notifications, clearNotificationCounter } = React.useContext(GeneralContext);
+  const { loggedUser, setUser, notifications, updateNotifications, clearNotificationCounter } = React.useContext(GeneralContext);
   // console.log('notifications in the chat picker', notifications)
   const [notifs, setNotifs] = React.useState<string[]>([]);
+  const [unreadBadges, setUnreadBadges] = React.useState<string[]>([]);
   // const []
   // console.log('notifications badge', notifications);
   // console.log('logged user in chat picker', loggedUser);
   const [getUser, { data, loading, error}] = useLazyQuery<{ getUser: GetUserPayload }, QueryGetUserArgs>(GET_USER, {
     onCompleted: ({ getUser }) => {
-      // subscribe to the topics for each of the new classes
-      // easiest way could just be subscribing to all classes and not
-      // worrying which ones we have already subscribed to
-
-      // unclear how i would handle unsunscribing to the topics though
-
-      // this is flawed because we need to manually refresh the page to trigger the
-      // topic subscription code. this user will not be sent push notisfications until the
-      // subscription code is run
-
-      // console.log('getUser', getUser.classes)
-      // if (getUser.classes) {
-      //   getUser.classes.forEach(_class => {
-      //     // subscribe to the class
-      //     // console.log('subscribing to the chat', _class.chatID)
-      //     messaging()
-      //       .subscribeToTopic(_class.chatID)
-      //       // .then(() => console.log('successfully subscribed to the topic'))
-      //       .catch(e => console.log('was not able to subscribe to the topic', e))
-      //   })
-      // }
       setUser({...getUser.user})
       // update notificaation badges
       getUser.chatNotifications.forEach(_notifObject => {
@@ -91,20 +72,33 @@ const ChatPicker: React.FC<ChatPickerProps> = ({ navigation }) => {
   })
 
   React.useEffect(() => {
+    console.log('notifs changed in the chat picker', notifications)
+    const badges = [...notifications.values()].reduce((acc, cur) => {
+      if (cur.emails.includes(loggedUser.email)) {
+        return [...acc, cur.chatID]
+      }
+      return acc
+    }, [] as string[])
+
+    setUnreadBadges(badges)
+  }, [notifications])
+
+  React.useEffect(() => {
     getClasses();
   }, [])
 
-  // React.useState(() => {
-  //   const asyncFcn = async () => {
-  //     const oldVal = await AsyncStorage.getItem(NOTIFICATIONS_KEY)
-  //     if (oldVal) {
-  //       const oldDict = JSON.parse(oldVal);
-  //       setNotifs(oldDict);
-  //     }
-  //   }
+  useFocusEffect(React.useCallback(() => {
+    // console.log('arriving to chat picker')
+    // console.log('notifications in chat picker', notifications);
+    const badges = [...notifications.values()].reduce((acc, cur) => {
+      if (cur.emails.includes(loggedUser.email)) {
+        return [...acc, cur.chatID]
+      }
+      return acc
+    }, [] as string[])
 
-  //   asyncFcn()
-  // })
+    setUnreadBadges(badges)
+  }, [notifications]))
 
   const goToChat = (sub: string, className: string, tutorInfo: ChatUserInfo, userInfo: ChatUserInfo[]) => {
     navigation.navigate(
@@ -120,9 +114,6 @@ const ChatPicker: React.FC<ChatPickerProps> = ({ navigation }) => {
   const goToCreateChat = () => navigation.navigate('CreateChat');
   const getClasses = () => getUser({ variables: { userEmail: loggedUser.email}})
 
-  // if (notifs) {
-  //   console.log('in chat picker', notifs);
-  // }
   React.useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -182,7 +173,7 @@ const ChatPicker: React.FC<ChatPickerProps> = ({ navigation }) => {
                 goToChat={goToChat}
                 key={_class.chatID}
                 getClasses={getClasses}
-                displayNotificationBadge={!!notifications[_class.chatID]?.emails.includes(loggedUser.email)}
+                displayNotificationBadge={unreadBadges.includes(_class.chatID)}
                 clearNotificationCounter={clearNotificationCounter}
                 userEmail={loggedUser.email}
               />

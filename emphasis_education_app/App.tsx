@@ -99,7 +99,7 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
 
 const App = () => {
   const [user, setUser] = React.useState<UserInfoType>({} as UserInfoType);
-  const [notifications, setNotifications] = React.useState<NotificationsProps>({} as NotificationsProps);
+  const [notifications, setNotifications] = React.useState<Map<string, {chatID: string, isAdmin: boolean, emails: string[]}>>(new Map<string, {chatID: string, isAdmin: boolean, emails: string[]}>());
   const [notificationBadge, setBadge] = React.useState<boolean>(false);
   const updateUser = (newUser: UserInfoType) => {
     // set Sentry user here as well
@@ -111,16 +111,17 @@ const App = () => {
     setUser(newUser)
   }
   const updateNotifications = (chatID: string, isAdmin: boolean, emails: string[]) => {
-    setNotifications({...notifications, [chatID]: {chatID, isAdmin, emails}})
+    notifications.set(chatID, {chatID, isAdmin, emails})
+    setNotifications(new Map(notifications))
   }
 
   const clearAllNotifications = () => {
-    setNotifications({})
+    setNotifications(new Map<string, {chatID: string, isAdmin: boolean, emails: string[]}>())
   }
 
   const clearNotificationCounter = (chatID: string) => {
-    delete notifications[chatID]
-    setNotifications({ ...notifications})
+    notifications.delete(chatID)
+    setNotifications(new Map(notifications))
     setBadge(false)
   }
 

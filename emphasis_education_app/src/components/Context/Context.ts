@@ -14,7 +14,8 @@ export interface NotificationsProps{
 
 export interface Context {
   // manage number of notifications for each chat
-  notifications: NotificationsProps;
+  // notifications: NotificationsProps;
+  notifications: Map<string, {chatID: string, isAdmin: boolean, emails: string[]}>;
   loggedUser: UserInfoType;
   updateNotifications (chatID: string, isAdmin: boolean, emails: string[]): void;
   clearNotificationCounter (chatID: string): void;

@@ -51,7 +51,6 @@ const Wrapper: React.FC = ({ children }) => {
   }
 
   React.useEffect(() => {
-    console.log('logged in user', loggedUser.email)
     if (!loggedUser) {
       return
     }
@@ -76,6 +75,7 @@ const Wrapper: React.FC = ({ children }) => {
   React.useEffect(() => {
     const unsub = messaging().onMessage(async payload => {
       if (payload.data) {
+        // console.log('in onMessage')
         const { chatID, isAdmin, emails } = payload.data;
         const relEmails = emails.split(',')
         updateNotifications(chatID, isAdmin === 'TRUE' ? true : false, relEmails)

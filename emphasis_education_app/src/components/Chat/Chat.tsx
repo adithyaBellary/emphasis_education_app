@@ -9,6 +9,7 @@ import {
 import * as Sentry from '@sentry/react-native';
 import { IMessage } from 'react-native-gifted-chat';
 import crashlytics from '@react-native-firebase/crashlytics';
+import { useFocusEffect } from '@react-navigation/native';
 
 import Chat from './GiftedChat';
 import { GeneralContext } from '../Context/Context';
@@ -163,9 +164,9 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
       })
   }, [])
 
-  React.useEffect(() => {
+  useFocusEffect(React.useCallback(() => {
     clearNotificationCounter(chatID)
-  }, [])
+  }, []))
 
   const curUser: MessageUser = {
     _id: loggedUser._id,

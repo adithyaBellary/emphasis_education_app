@@ -1,13 +1,13 @@
 import * as React from 'react';
-import { Platform, Button } from 'react-native';
+// import { Platform, Button } from 'react-native';
 import { Icon, Badge } from 'react-native-elements';
 import { View } from 'react-native';
 import styled from 'styled-components';
-import messaging from '@react-native-firebase/messaging';
-import * as Sentry from '@sentry/react-native';
-// import AsyncStorage from '@react-native-community/async-storage';
+// import messaging from '@react-native-firebase/messaging';
+// import * as Sentry from '@sentry/react-native';
 import { gql, useApolloClient, useQuery } from '@apollo/client';
 import crashlytics from '@react-native-firebase/crashlytics';
+import { useFocusEffect } from '@react-navigation/native';
 
 import { MissionStatement, HeaderTitle, LogiImage } from './logos';
 
@@ -124,58 +124,52 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
   })
 
   React.useEffect(() => {
-    // console.log('notifications in the use effect', notifications)
-    // console.log('cur user', currentUser)
-
-    // if (notifications) {
-    //   console.log('notifications fjdsalfjeas', notifications)
-    // }
-    // console.log(`notifications changed in the home page ${Platform.OS}`, Object.values(notifications))
     const admins: string[] = []
     const regs: string[] = []
-    Object
-      .values(notifications)
-      .forEach(notif => {
-        if (notif.emails.includes(loggedUser.email)) {
-          if (notif.isAdmin) {
-            admins.push('hi')
-          }
-          if (!notif.isAdmin) {
-            regs.push('hi')
-          }
+    notifications.forEach(notif => {
+      if (notif.emails.includes(loggedUser.email)) {
+        if (notif.isAdmin) {
+          admins.push('hi')
         }
-
-      })
-    // console.log('admins', admins)
-    // console.log('regs', regs)
+        if (!notif.isAdmin) {
+          regs.push('hi')
+        }
+      }
+    })
 
     setNotifBadge(regs.length > 0)
     setAdminNotifBadge(admins.length > 0)
 
+    // return () => {}
+
   }, [notifications])
 
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     console.log('arrived in the home page')
+  //     console.log('notifications in the callback (home)', notifications)
+
+  //     const admins: string[] = []
+  //     const regs: string[] = []
+
+  //     notifications.forEach(notif => {
+  //       if (notif.emails.includes(loggedUser.email)) {
+  //         if (notif.isAdmin) {
+  //           admins.push('hi')
+  //         }
+  //         if (!notif.isAdmin) {
+  //           regs.push('hi')
+  //         }
+  //       }
+  //     })
+
+  //     setNotifBadge(regs.length > 0)
+  //     setAdminNotifBadge(admins.length > 0)
+  //   }, [notifications])
+  // )
+
   React.useEffect(() => {
-    // const asyncFunction = async (user: UserInfoType) => {
-    //   const oldVal = await AsyncStorage.getItem(NOTIFICATIONS_KEY)
-    //   if (!!oldVal) {
-    //     const oldObject = JSON.parse(oldVal)
-    //     if (Object.keys(oldObject).length > 0) {
-    //       const adminClasses = user.adminChat?.map(_class => _class.chatID)
-    //       if (adminClasses) {
-    //         Object.entries(oldObject).forEach(([key, val]) => {
-    //           // console.log('obj', key, val)
-    //           if (adminClasses.includes(key)) {
-    //             setAdminNotifBadge(true)
-    //           }
-    //         })
-    //       }
-    //     }
-    //   }
-    // }
     if ( data && data?.getUser) {
-      // console.log('user', loggedUser)
-      // console.log('data', data.getUser)
-      // asyncFunction(data.getUser.user)
       navigation.setOptions({
         headerRight: () => (
           <IconRow>

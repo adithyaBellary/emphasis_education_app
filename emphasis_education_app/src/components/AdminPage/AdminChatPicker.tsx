@@ -17,11 +17,9 @@ interface AdminChatPickerProps {
 const AdminChatPicker: React.FC<AdminChatPickerProps> = ({ navigation }) => {
   const { loggedUser, notifications } = React.useContext(GeneralContext);
   const [adminChatWithNotif, setAdminChatWithNotif] = React.useState<string[]>([]);
-  console.log('notifications', notifications);
-  console.log('loggedUser in admin chat picker', loggedUser)
 
   React.useEffect(() => {
-    const adminChatIDs = Object.values(notifications).map(_notif => {
+    const adminChatIDs = [...notifications.values()].map(_notif => {
       if (_notif.isAdmin) {
         return _notif.chatID
       } else return ''
