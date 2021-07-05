@@ -174,7 +174,6 @@ const StackNavigation: React.FC = () => {
       switch (action.type) {
         case 'CHECK_LOGIN':
           return {
-            // ...prevState,
             authLoading: false,
             userToken: action.token,
             fcmToken: action.fcmToken
@@ -200,18 +199,14 @@ const StackNavigation: React.FC = () => {
     }
   )
 
-  const _checkAuth = async () => {
-    // Sentry.captureMessage('in check auth')
-    const fcmToken = await messaging().getToken().then(token => token);
-    // Sentry.captureMessage(`got fcm token ${fcmToken}`);
-    const userToken = await AsyncStorage.getItem(LOGIN_TOKEN)
-    // Sentry.captureMessage(`auth token: ${userToken}`)
-
-    dispatch({ type: 'CHECK_LOGIN', token: userToken, fcmToken})
-  }
-
   React.useEffect(() => {
-    // Sentry.captureMessage('checking auth')
+    const _checkAuth = async () => {
+      const fcmToken = await messaging().getToken().then(token => token);
+      const userToken = await AsyncStorage.getItem(LOGIN_TOKEN)
+
+      dispatch({ type: 'CHECK_LOGIN', token: userToken, fcmToken})
+    }
+
     _checkAuth()
   }, [])
 
