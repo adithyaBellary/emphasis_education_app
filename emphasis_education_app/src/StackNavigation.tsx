@@ -201,10 +201,14 @@ const StackNavigation: React.FC = () => {
 
   React.useEffect(() => {
     const _checkAuth = async () => {
+
+      Sentry.captureMessage('Checking auth')
       const fcmToken = await messaging().getToken().then(token => token);
       const userToken = await AsyncStorage.getItem(LOGIN_TOKEN)
 
+      Sentry.captureMessage(`The token: ${userToken}`)
       dispatch({ type: 'CHECK_LOGIN', token: userToken, fcmToken})
+      Sentry.captureMessage('dispatched')
     }
 
     _checkAuth()

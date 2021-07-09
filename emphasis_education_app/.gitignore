@@ -84,3 +84,5 @@ config/
 .env
 
 .jest/
+
+android/java_*

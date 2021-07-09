@@ -23,14 +23,15 @@ module.exports = {
     "@typescript-eslint/no-use-before-define": "error",
     "@typescript-eslint/no-inferrable-types": "error",
     "@typescript-eslint/consistent-type-assertions": "error",
-    "@typescript-eslint/typedef": [
-      "error",
-      {
-        "arrayDestructuring": true,
-        "objectDestructuring": true,
-        "variableDeclaration": true,
-      }
-    ]
+    "@typescript-eslint/explicit-function-return-type": "off",
+    // "@typescript-eslint/typedef": [
+    //   "error",
+    //   {
+    //     "arrayDestructuring": true,
+    //     "objectDestructuring": true,
+    //     "variableDeclaration": true,
+    //   }
+    // ]
 
   },
   settings: {
