@@ -36,7 +36,7 @@ import SplashScreen from './SplashScreen';
 import { GeneralContext } from '../src/components/Context/Context';
 
 const AuthStackNav = createStackNavigator();
-const AuthStack: ({ error, loading}: { error: boolean, loading: boolean}) => JSX.Element = ({ error, loading }) => (
+const AuthStack: ({ error, loading}: { error: boolean; loading: boolean}) => JSX.Element = ({ error, loading }) => (
   <AuthStackNav.Navigator initialRouteName={'Login'}>
     <AuthStackNav.Screen name='Login' options={{ headerShown: false}}>
       {_props => <Login {..._props} error={error} loading={loading}/>}
@@ -66,7 +66,7 @@ const AuthStack: ({ error, loading}: { error: boolean, loading: boolean}) => JSX
 
 const AppStackNav = createStackNavigator();
 
-const AppStack: ({ fcmToken, userToken}: { fcmToken: string, userToken: string}) => JSX.Element = ({ fcmToken, userToken }) => (
+const AppStack: ({ fcmToken, userToken}: { fcmToken: string; userToken: string}) => JSX.Element = ({ fcmToken, userToken }) => (
   <AppStackNav.Navigator initialRouteName={'Home'}>
     <AppStackNav.Screen
       name="Home"
@@ -152,7 +152,7 @@ const AppRootStack = ({ fcmToken, userToken, ...props }) => (
 )
 
 const RootStackNav = createStackNavigator();
-const RootStack: ({ fcmToken, userToken, error, loading }: { fcmToken: string, userToken: string, error: boolean, loading: boolean }) => JSX.Element = ({ fcmToken, userToken, error, loading }) => (
+const RootStack: ({ fcmToken, userToken, error, loading }: { fcmToken: string; userToken: string; error: boolean; loading: boolean }) => JSX.Element = ({ fcmToken, userToken, error, loading }) => (
   <RootStackNav.Navigator headerMode="none">
     { !!userToken ? (
       <RootStackNav.Screen name='AppRoot'>
@@ -173,6 +173,7 @@ const StackNavigation: React.FC = () => {
     (prevState, action) => {
       switch (action.type) {
         case 'CHECK_LOGIN':
+          Sentry.captureMessage(`in CHECK_LOGIN: authloading: ${authLoading}, usertoken: ${action.token}`)
           return {
             authLoading: false,
             userToken: action.token,
@@ -268,7 +269,7 @@ const StackNavigation: React.FC = () => {
     return (
       <SplashScreen
         authLoading={authLoading}
-        token={fcmToken}
+        token={userToken}
       />
     )
   }
