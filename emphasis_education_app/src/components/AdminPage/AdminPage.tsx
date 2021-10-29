@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { View } from 'react-native';
-import { Icon, Badge } from 'react-native-elements';
+import { Badge } from 'react-native-elements';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import Search from './LiftedSearch';
@@ -9,7 +8,7 @@ import InviteUser from './InviteUser';
 import AdminChatPicker from './AdminChatPicker';
 
 import { theme } from '../../theme';
-import { AuthContext, GeneralContext } from '../Context/Context';
+import { GeneralContext } from '../Context/Context';
 
 interface AdminPageProps {
   navigation: any;
@@ -19,7 +18,7 @@ interface AdminPageProps {
 const Tab = createBottomTabNavigator();
 
 const AdminPage: React.FC<AdminPageProps> = () => {
-  const { setUser, notificationBadge, loggedUser, notifications, updateNotifications } = React.useContext(GeneralContext);
+  const { notifications } = React.useContext(GeneralContext);
   const [adminChatBadge, setAdminChatBadge] = React.useState<boolean>(false);
 
   React.useEffect(() => {

@@ -28,7 +28,7 @@ import { onError } from '@apollo/client/link/error';
 import { SENTRY_DSN } from './config/sentry';
 import { VERSION } from './src/constant'
 import { theme } from './src/theme';
-import { Context, GeneralContext, NotificationsProps } from './src/components/Context/Context';
+import { Context, GeneralContext } from './src/components/Context/Context';
 import StackNavigation from './src/StackNavigation';
 import PushNotifWrapper from './PushNotifWrapper';
 import { UserInfoType } from './types/schema-types';
@@ -97,10 +97,15 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   link: theLink
 });
 
+interface NotificationProps {
+  chatID: string;
+  isAdmin: boolean;
+  emails: string[]
+}
+
 const App = () => {
   const [user, setUser] = React.useState<UserInfoType>({} as UserInfoType);
-  const [notifications, setNotifications] = React.useState<Map<string, {chatID: string, isAdmin: boolean, emails: string[]}>>(new Map<string, {chatID: string, isAdmin: boolean, emails: string[]}>());
-  const [notificationBadge, setBadge] = React.useState<boolean>(false);
+  const [notifications, setNotifications] = React.useState<Map<string, NotificationProps>>(new Map<string, NotificationProps>());
   const updateUser = (newUser: UserInfoType) => {
     // set Sentry user here as well
     Sentry.setUser({
@@ -111,22 +116,30 @@ const App = () => {
     setUser(newUser)
   }
   const updateNotifications = (chatID: string, isAdmin: boolean, emails: string[]) => {
+    // Sentry.captureMessage(`notifs before update ${JSON.stringify([...notifications.keys()])}`)
     notifications.set(chatID, {chatID, isAdmin, emails})
-    setNotifications(new Map(notifications))
+    // Sentry.captureMessage(`notifs after update ${JSON.stringify([...newMap.keys()])}`)
+
+    setNotifications(prev => {
+      return new Map<string, NotificationProps>([...prev, [chatID, {chatID, isAdmin, emails}]])
+    })
   }
 
   const clearAllNotifications = () => {
-    setNotifications(new Map<string, {chatID: string, isAdmin: boolean, emails: string[]}>())
+    setNotifications(prev => new Map())
   }
 
   const clearNotificationCounter = (chatID: string) => {
+    // Sentry.captureMessage(`notifs before delete ${JSON.stringify([...notifications.keys()])}`)
     notifications.delete(chatID)
-    setNotifications(new Map(notifications))
-    setBadge(false)
-  }
+    // Sentry.captureMessage(`notifs after delete ${JSON.stringify([...newMap.keys()])}`)
 
-  const setNotificationBadge = (status: boolean) => {
-    setBadge(status)
+    setNotifications(prev => {
+      const newMap = new Map<string, NotificationProps>(prev)
+      newMap.delete(chatID)
+      return newMap
+
+    })
   }
 
   const value: Context = {
@@ -135,8 +148,6 @@ const App = () => {
     updateNotifications,
     clearNotificationCounter,
     setUser: updateUser,
-    notificationBadge,
-    setNotificationBadge,
     clearAllNotifications
   }
 
