@@ -52,7 +52,6 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
   const className: string = route.params.className;
   const tutorInfo: ChatUserInfo = route.params.tutorInfo;
   const userInfo: ChatUserInfo[] = route.params.userInfo;
-  // const client = useApolloClient();
   // lets cache this data
   const {
     data: getMessages,
@@ -164,9 +163,9 @@ const LiftedChat: React.FC<ChatProps> = ({ navigation, route }) => {
       })
   }, [])
 
-  useFocusEffect(React.useCallback(() => {
+  React.useEffect(() => {
     clearNotificationCounter(chatID)
-  }, []))
+  }, [])
 
   const curUser: MessageUser = {
     _id: loggedUser._id,

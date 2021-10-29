@@ -1,13 +1,10 @@
 import * as React from 'react';
-// import { Platform, Button } from 'react-native';
 import { Icon, Badge } from 'react-native-elements';
 import { View } from 'react-native';
 import styled from 'styled-components';
-// import messaging from '@react-native-firebase/messaging';
-// import * as Sentry from '@sentry/react-native';
-import { gql, useApolloClient, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import crashlytics from '@react-native-firebase/crashlytics';
-import { useFocusEffect } from '@react-navigation/native';
+import { useIsFocused } from '@react-navigation/native';
 
 import { MissionStatement, HeaderTitle, LogiImage } from './logos';
 
@@ -30,7 +27,7 @@ import {
   QueryGetUserArgs,
   GetUserPayload
  } from '../../../types/schema-types';
-import { NOTIFICATIONS_KEY, VERSION } from '../../../src/constant';
+import { VERSION } from '../../../src/constant';
 
 interface LiftedHomeProps {
   navigation: any;
@@ -69,11 +66,13 @@ const AdminIcon: React.FC<{ changeScreens (dest: string): () => void }> = ({ cha
 );
 
 const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
-  const { setUser, notificationBadge, loggedUser, notifications, updateNotifications } = React.useContext(GeneralContext);
+  const { setUser, loggedUser, notifications, updateNotifications } = React.useContext(GeneralContext);
   const [notifBadge, setNotifBadge] = React.useState<boolean>(false)
   const [adminNotifBadge, setAdminNotifBadge] = React.useState<boolean>(false)
   const [currentUser, setCurrentUser] = React.useState<UserInfoType>({} as UserInfoType)
   const { logout } = React.useContext(AuthContext);
+  const isFocused = useIsFocused();
+
   const changeScreens = (dest: string) => () =>  navigation.navigate(dest)
   const fcmToken = route.params.fcmToken
   const { data, loading, error } = useQuery<{ getUser: GetUserPayload }, QueryGetUserArgs>(GET_USER, {
@@ -85,7 +84,6 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
     onCompleted: ({ getUser }) => {
       setUser({...getUser.user})
       setCurrentUser(getUser.user)
-      // console.log('refetching here', getUser.chatNotifications)
       crashlytics().setAttribute('email', getUser.user.email)
       crashlytics().log('getUser success')
       const regChatNotifIDs = getUser.chatNotifications.length > 0
@@ -126,14 +124,13 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
   React.useEffect(() => {
     const admins: string[] = [];
     const regs: string[] = [];
-
     [...notifications.values()].forEach(notif => {
       if (notif.emails.includes(loggedUser.email)) {
         if (notif.isAdmin) {
-          admins.push('hi')
+          admins.push(notif.chatID)
         }
         if (!notif.isAdmin) {
-          regs.push('hi')
+          regs.push(notif.chatID)
         }
       }
     })
@@ -141,33 +138,7 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
     setNotifBadge(regs.length > 0)
     setAdminNotifBadge(admins.length > 0)
 
-    // return () => {}
-
-  }, [notifications])
-
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     console.log('arrived in the home page')
-  //     console.log('notifications in the callback (home)', notifications)
-
-  //     const admins: string[] = []
-  //     const regs: string[] = []
-
-  //     notifications.forEach(notif => {
-  //       if (notif.emails.includes(loggedUser.email)) {
-  //         if (notif.isAdmin) {
-  //           admins.push('hi')
-  //         }
-  //         if (!notif.isAdmin) {
-  //           regs.push('hi')
-  //         }
-  //       }
-  //     })
-
-  //     setNotifBadge(regs.length > 0)
-  //     setAdminNotifBadge(admins.length > 0)
-  //   }, [notifications])
-  // )
+  }, [notifications, isFocused])
 
   React.useEffect(() => {
     if ( data && data?.getUser) {
@@ -241,7 +212,6 @@ const Home: React.FC<LiftedHomeProps> = ({ navigation, route }) => {
         },
         headerLeft: () => null
       })
-
     }
   })
 

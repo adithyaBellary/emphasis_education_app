@@ -110,7 +110,6 @@ const CreateChat: React.FC<CreateChatProps> = ({ navigation }) => {
   })
 
   const createChat = () => {
-    // console.log('creating a new chat with', selectedClasses, selectedUsers)
     try {
       let tutorEmail: string = '';
       let tutorFirstName: string = '';
@@ -140,8 +139,7 @@ const CreateChat: React.FC<CreateChatProps> = ({ navigation }) => {
         lastName: tutorLastName,
         email: tutorEmail
       }
-      // console.log('tutor stuff', tutorInfo)
-      // console.log('user stuff', userInfo)
+
       const variables: ICreateChatInput = {
         displayName: 'Test Display Name',
         className: selectedClasses,
@@ -190,15 +188,6 @@ const CreateChat: React.FC<CreateChatProps> = ({ navigation }) => {
   return (
     <>
       <Input
-        placeholder='Select Class'
-        onChangeText={onClassTextChange}
-        leftIcon={
-          <Icon
-            name='search'
-          />
-        }
-      />
-      <Input
         placeholder='Select User'
         onChangeText={onUserTextChage}
         leftIcon={
@@ -207,12 +196,20 @@ const CreateChat: React.FC<CreateChatProps> = ({ navigation }) => {
           />
         }
       />
+      <Input
+        placeholder='Select Class'
+        onChangeText={onClassTextChange}
+        leftIcon={
+          <Icon
+            name='search'
+          />
+        }
+      />
       <GeneralSpacing u={0} r={20} d={10} l={20}>
-        <ChatText>Selected Class: {selectedClasses}</ChatText>
         <ChatText>Selected Users: {selectedUsers.map(u => `${u.firstName}, `)}</ChatText>
+        <ChatText>Selected Class: {selectedClasses}</ChatText>
       </GeneralSpacing>
       <SearchResultsContain>
-        {/* let us display the results here so that we can easily have state over them */}
         { userLoading ? <LoadingComponent loading={userLoading} /> : (
           userData ? userData.searchUsers.map((u, index) => {
             let present = false;

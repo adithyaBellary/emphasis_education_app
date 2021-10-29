@@ -1,15 +1,11 @@
 import * as React from 'react';
 import {
   View,
-  Text,
   ScrollView,
-  SafeAreaView,
 } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { useLazyQuery } from '@apollo/client';
-import { useFocusEffect } from '@react-navigation/native';
-// import messaging from '@react-native-firebase/messaging';
-// import AsyncStorage from '@react-native-community/async-storage';
+import { useIsFocused } from '@react-navigation/native';
 import styled from 'styled-components';
 
 import { GeneralContext } from '../Context/Context';
@@ -25,11 +21,9 @@ import {
 import { GET_USER } from '../../queries/GetUser';
 import { Permission, ChatUserInfo, } from '../../types';
 import {
-  // UserInfoType,
   QueryGetUserArgs,
   GetUserPayload
  } from '../../../types/schema-types';
-// import { NOTIFICATIONS_KEY, VERSION } from '../../../src/constant';
 
 import { EmptyChatPicker } from './common';
 import IndividualChat from './IndividualChat';
@@ -51,12 +45,10 @@ const ChatPickerScroll = styled(ScrollView)`
 
 const ChatPicker: React.FC<ChatPickerProps> = ({ navigation }) => {
   const { loggedUser, setUser, notifications, updateNotifications, clearNotificationCounter } = React.useContext(GeneralContext);
-  // console.log('notifications in the chat picker', notifications)
   const [notifs, setNotifs] = React.useState<string[]>([]);
   const [unreadBadges, setUnreadBadges] = React.useState<string[]>([]);
-  // const []
-  // console.log('notifications badge', notifications);
-  // console.log('logged user in chat picker', loggedUser);
+  const isFocused = useIsFocused();
+
   const [getUser, { data, loading, error}] = useLazyQuery<{ getUser: GetUserPayload }, QueryGetUserArgs>(GET_USER, {
     onCompleted: ({ getUser }) => {
       setUser({...getUser.user})
@@ -81,24 +73,11 @@ const ChatPicker: React.FC<ChatPickerProps> = ({ navigation }) => {
     }, [] as string[])
 
     setUnreadBadges(badges)
-  }, [notifications])
+  }, [notifications, isFocused])
 
   React.useEffect(() => {
     getClasses();
   }, [])
-
-  useFocusEffect(React.useCallback(() => {
-    // console.log('arriving to chat picker')
-    // console.log('notifications in chat picker', notifications);
-    const badges = [...notifications.values()].reduce((acc, cur) => {
-      if (cur.emails.includes(loggedUser.email)) {
-        return [...acc, cur.chatID]
-      }
-      return acc
-    }, [] as string[])
-
-    setUnreadBadges(badges)
-  }, [notifications]))
 
   const goToChat = (sub: string, className: string, tutorInfo: ChatUserInfo, userInfo: ChatUserInfo[]) => {
     navigation.navigate(

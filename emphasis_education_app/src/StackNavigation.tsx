@@ -173,7 +173,7 @@ const StackNavigation: React.FC = () => {
     (prevState, action) => {
       switch (action.type) {
         case 'CHECK_LOGIN':
-          Sentry.captureMessage(`in CHECK_LOGIN: authloading: ${authLoading}, usertoken: ${action.token}`)
+          // Sentry.captureMessage(`in CHECK_LOGIN: authloading: ${authLoading}, usertoken: ${action.token}`)
           return {
             authLoading: false,
             userToken: action.token,
@@ -202,14 +202,10 @@ const StackNavigation: React.FC = () => {
 
   React.useEffect(() => {
     const _checkAuth = async () => {
-
-      Sentry.captureMessage('Checking auth')
       const fcmToken = await messaging().getToken().then(token => token);
       const userToken = await AsyncStorage.getItem(LOGIN_TOKEN)
 
-      Sentry.captureMessage(`The token: ${userToken}`)
       dispatch({ type: 'CHECK_LOGIN', token: userToken, fcmToken})
-      Sentry.captureMessage('dispatched')
     }
 
     _checkAuth()
@@ -250,10 +246,11 @@ const StackNavigation: React.FC = () => {
         })
       },
       logout: async () => {
-        await AsyncStorage.clear();
+        await AsyncStorage.removeItem(LOGIN_TOKEN);
         // clear all notification messages
         clearAllNotifications()
         // unset the user on logout
+        Sentry.captureMessage('Logging out')
         Sentry.configureScope(scope => scope.setUser(null));
         crashlytics().log('logout successful')
         dispatch({ type: 'LOGOUT'})
